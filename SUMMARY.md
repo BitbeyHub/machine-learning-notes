@@ -75,7 +75,7 @@
 * [主题模型](content/machine-learning/topic-model/topic-model.md)
     * [LDA隐狄利克雷分布](content/machine-learning/topic-model/latent-dirichlet-allocation.md)
 * [机器学习算法总结](content/machine-learning/machine-learning-algorithm-summary/machine-learning-algorithm-summary.md)
-* [深度学习概论](content/deep-learning-introduction/deep-learning-introduction.md)
+* [深度学习概论](content/deep-learning/deep-learning-introduction/deep-learning-introduction.md)
 * [ANN人工神经网络](content/deep-learning/artificial-neural-network/artificial-neural-network.md)
 * [CNN卷积神经网络](content/deep-learning/convolutional-neural-network/convolutional-neural-network.md)
 * [RNN循环神经网络](content/deep-learning/recurrent-neural-network/recurrent-neural-network.md)
