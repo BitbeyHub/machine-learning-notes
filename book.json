@@ -1,0 +1,75 @@
+{
+	"title" : "machine-learning-note",
+	
+	"author" : "LuWei",
+
+	"description" : "机器学习笔记",
+	
+	"language" : "zh-hans",
+	
+    "plugins": [
+		"-lunr",
+		"-search",
+		"search-pro",
+		"katex@^1.1.3",
+		"splitter",
+		"sharing",
+		"toggle-chapters",
+		"fontsettings",
+		"disqus",
+		"emphasize",
+		"include-codeblock",
+		"tbfed-pagefooter",
+		"simple-page-toc",
+		"anchor-navigation-ex",
+		"edit-link",
+		"copy-code-button",
+		"alerts",
+		"sectionx",
+		"donate"
+	],
+	
+	"pluginsConfig": {
+		"disqus": {
+			"shortName": "machine-learning-note"
+		},
+		"search-pro": {
+			"cutWordLib": "nodejieba",
+			"defineWord" : ["机器学习"]
+		},
+		"include-codeblock": {
+            "template": "ace",
+            "unindent": true,
+            "theme": "monokai"
+        },
+		"tbfed-pagefooter": {
+			"copyright":"Copyright LuWei 2017",
+			"modify_label": "本节创建/修改时间：",
+			"modify_format": "YYYY-MM-DD HH:mm:ss"
+		},
+		"simple-page-toc": {
+            "maxDepth": 3,
+            "skipFirstH1": true
+        },
+		"anchor-navigation-ex": {
+            "isShowTocTitleIcon": true,
+            "tocLevel1Icon": "fa fa-hand-o-right",
+            "tocLevel2Icon": "fa fa-hand-o-right",
+            "tocLevel3Icon": "fa fa-hand-o-right"
+        },
+		"edit-link": {
+			"base": "https://github.com/luweikxy/machine-learning-notes/tree/master",
+			"label": "Edit This Page"
+		},
+		"donate": {
+			"wechat": "https://wx3.sinaimg.cn/mw690/006f01Rgly1fm2756adoqj30bz0bvmxt.jpg",
+			"alipay": "https://wx2.sinaimg.cn/mw690/006f01Rgly1fm2759w5psj30d60d8abf.jpg",
+			"title": "",
+			"button": "赏",
+			"alipayText": "支付宝打赏",
+			"wechatText": "微信打赏"
+		}
+		
+		
+	}
+}
