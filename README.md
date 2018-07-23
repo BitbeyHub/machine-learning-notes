@@ -4,9 +4,9 @@
 
 
 
-请点击目录打开GitBook目录：
+请点击GitBook目录阅读：
 
-## [《GitBook》目录](https://luweikxy.gitbooks.io/machine-learning-notes/content/)
+## [《GitBook》目录](https://luweikxy.gitbooks.io/machine-learning-notes/content/content/SUMMARY.html)
 
 ps：如果打不开GitBook，则可能需要翻墙，或者阅读GitHub（但GitHub不会显示公式）。
 
