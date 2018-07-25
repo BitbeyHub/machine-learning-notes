@@ -1,7 +1,7 @@
 # 马尔科夫决策过程
 
 * [返回顶层目录](../SUMMARY.md#目录)
-* [学习地图](#学习地图)
+* [本章在学习地图中的位置](#本章在学习地图中的位置)
 * [马尔科夫决策过程简介](#马尔科夫决策过程简介)
 * [符号约定](#符号约定)
 * [马尔科夫过程](#马尔科夫过程)
@@ -24,11 +24,38 @@
     * [针对例子的贝尔曼方程](#针对例子的贝尔曼方程)
     * [贝尔曼方程的矩阵形式](#贝尔曼方程的矩阵形式)
 * [马尔科夫决策过程](#马尔科夫决策过程)
+  * [马尔科夫决策过程的定义](#马尔科夫决策过程的定义)
+    * [MDPs例子](#MDPs例子)
+  * [策略](#策略)
+  * [MDPs和MRPs之间的关系](#MDPs和MRPs之间的关系)
+  * [MDPs中的值函数](#MDPs中的值函数)
+  * [贝尔曼期望方程](#贝尔曼期望方程)
+    * [V函数与Q函数之间的相互转化](#V函数与Q函数之间的相互转化)
+    * [贝尔曼期望方程—V函数](#贝尔曼期望方程—V函数)
+    * [贝尔曼期望方程—Q函数](#贝尔曼期望方程—Q函数)
+    * [贝尔曼期望方程例子](#贝尔曼期望方程例子)
+    * [贝尔曼期望方程的矩阵形式](#贝尔曼期望方程的矩阵形式)
+  * [最优值函数](#最优值函数)
+    * [最优V函数](#最优V函数)
+    * [最优Q函数](#最优Q函数)
+  * [最优策略](#最优策略)
+    * [最优策略定理](#最优策略定理)
+    * [怎么得到最优策略](#怎么得到最优策略)
+    * [最优策略例子](#最优策略例子)
+  * [v\*与q\*的相互转化](#v\*与q\*的相互转化)
+  * [贝尔曼最优方程](#贝尔曼最优方程)
+    * [最优V函数](#最优V函数)
+    * [最优Q函数](#最优Q函数)
+    * [和贝尔曼期望方程的关系](#和贝尔曼期望方程的关系)
+    * [解贝尔曼最优方程](#解贝尔曼最优方程)
 * [MDPs的扩展](#MDPs的扩展)
+  * [无穷或连续MDPs](#无穷或连续MDPs)
+  * [部分可观测MDPs](#部分可观测MDPs)
+  * [无衰减MDPs](#无衰减MDPs)
 
 
 
-# 学习地图
+# 本章在学习地图中的位置
 
 ![learning-map](pic/learning-map.png)
 
@@ -66,6 +93,8 @@
   $$
   S,A,P
   $$
+
+
 
 
 
@@ -145,6 +174,8 @@ $$
 
 
 
+
+
 ## 马尔科夫过程
 
 一个马尔科夫过程（Markov process， MP）是一个无记忆的随机过程，即一些马尔科夫状态的序列
@@ -159,6 +190,8 @@ $$
   $$
   {P}_{ss'}=\mathbb{P}[S_{t+1}=s'|S_t=s]
   $$
+
+
 
 
 
@@ -258,6 +291,8 @@ $$
 
 
 
+
+
 ## 马尔科夫奖励过程例子
 
 ![markov-reward-process-example1](pic/markov-reward-process-example1.png)
@@ -286,6 +321,8 @@ $$
   &=\sum_{k=0}^{\infty}\gamma^kR_{t+k+1}
   \end{aligned}
   $$
+
+
 
 
 
@@ -378,6 +415,8 @@ $$
   &=-4.4214...
   \end{aligned}
   $$
+
+
 
 
 
@@ -579,6 +618,8 @@ $$
 
 
 
+
+
 注：注意由于策略π代表：1，一个动作；2，一个动作分布，所以有时候，π和a会存在一定的混淆。
 
 ## MDPs中的值函数
@@ -643,7 +684,7 @@ $$
 \end{bmatrix}
 $$
 
-## V函数与Q函数之间的相互转化
+### V函数与Q函数之间的相互转化
 
 ![v-q-convert](pic/v-q-convert.png)
 $$
@@ -656,7 +697,7 @@ $$
 q_{\pi}(s,a)={R}(s,a)+\gamma\sum_{s'\in S}{P}_{ss'}^av_{\pi}(s')
 $$
 
-## 贝尔曼期望方程-V函数
+### 贝尔曼期望方程—V函数
 
 ![v-q-v-convert](pic/v-q-v-convert.png)
 $$
@@ -671,7 +712,7 @@ v_{\pi}(s)=\mathbb{E}_{\pi}[R_{t+1}+\gamma v_{\pi}(S_{t+1})|S_t=s]
 $$
 为什么？
 
-## 尔曼期望方程-Q函数
+### 贝尔曼期望方程—Q函数
 
 ![q-v-q-convert](pic/q-v-q-convert.png)
 $$
@@ -683,7 +724,7 @@ q_{\pi}(s,a)=\mathbb{E}[R_{t+1}+\gamma q_{\pi}(S_{t+1},A_{t+1})|S_t=s,A_t=a]
 $$
 ，为什么？
 
-## 贝尔曼期望方程例子
+### 贝尔曼期望方程例子
 
 当γ=1，π(a|s)=0.5时
 $$
@@ -691,7 +732,7 @@ $$
 $$
 ![MDPs-bellman-expectation-equation-example2](pic/MDPs-bellman-expectation-equation-example2.png)
 
-## 贝尔曼期望方程的矩阵形式
+### 贝尔曼期望方程的矩阵形式
 
 MDPs下的贝尔曼期望方程和MRP的形式相同。
 $$
@@ -739,10 +780,146 @@ $$
 
 ## 最优策略
 
+为了比较不同策略的好坏，我们首先应该定义策略的比较关系
+$$
+\pi\geq\pi'\quad\text{if}\quad v_{\pi}(s)\geq v_{\pi'}(s),\ \forall s
+$$
+
+### 最优策略定理
+
+对于任何MDPs问题
+
+* 总**存在**一个策略π*，要好于或等于其他所有的策略，π\*>π，∀π
+
+* **所有**的最优策略都能够实现最优的V函数
+  $$
+  v_{\pi*}(s)=v_*(s)
+  $$
+
+* **所有**的最优策略都能够实现最优的Q函数
+  $$
+  q_{\pi*}(s,a)=q_*(s,a)
+  $$
 
 
 
+注：具体证明参考[《Total Expected Discounted Reward MDPs: Existence of Optimal Policies 》](http://www.ams.sunysb.edu/~feinberg/public/enc_dis.pdf)
 
+### 怎么得到最优策略
 
+我们已知了最优Q函数之后，我们能够马上求出最优策略，只要根据q*(s,a)选择相应的动作即可。
+$$
+\begin{aligned}
+\pi_*(a|s)=
+\left\{\begin{matrix}
+&1\quad&\text{if  a = arg }\mathop{\text{max}}_{a\in \cal{A}}q_*(s,a)\\ 
+&0\quad&\text{otherwise}
+\end{matrix}\right.
+\end{aligned}
+$$
+
+* 可以看出对于任何MDPs问题，总存在一个确定性的最优策略
+* 如果一直最优V函数，能不能找到最优策略呢？
+
+### 最优策略例子
+
+当γ=1时的最优策略π*(a|s)
+
+![optimal-policies-example](pic/optimal-policies-example.png)
+
+## v\*与q\*的相互转化
+
+* 之前我们已经讨论了vπ(s)和qπ(s,a)之前的关系——贝尔曼期望方程
+* 同样地，v\*(s)和q\*(s,a)也存在着递归的关系——贝尔曼**最优**方程
+
+**v->q：**
+
+![bellman-optical-equition](pic/bellman-optical-equition.png)
+$$
+v_*(s)=\mathop{\text{max}}_a\ q_*(s,a)
+$$
+和贝尔曼期望方程的关系：
+$$
+v_*(s)=v_{\pi*}(s)=\sum_{a\in \cal{A}}\pi_*(a|s)q_{\pi}(s,a)=\mathop{\text{max}}_a\ q_{\pi*}(s,a)
+$$
+上式很好理解，因为最优动作对应的概率为1嘛。
+
+**q->v：**
+
+![bellman-optical-equition-2](pic/bellman-optical-equition-2.png)
+$$
+q_*(s,a)=\cal{R}(s,a)+\gamma\sum_{s'\in S}\cal{P}_{ss'}^av_*(s')
+$$
+
+## 贝尔曼最优方程
+
+### 最优V函数
+
+![bellman-optical-equition-V-function](pic/bellman-optical-equition-V-function.png)
+$$
+v_*(s)=\mathop{\text{max}}_a[\cal{R}(s,a)+\gamma\sum_{s'\in S}\cal{P}_{ss'}^av_*(s')]
+$$
+
+### 最优Q函数
+
+![bellman-optical-equition-Q-function](pic/bellman-optical-equition-Q-function.png)
+$$
+q_*(s,a)=\cal{R}(s,a)+\gamma\sum_{s'\in\cal{S}}\cal{P}_{ss'}^a\ \mathop{\text{max}}_{a}\ q_*(s',a')
+$$
+
+### 和贝尔曼期望方程的关系
+
+* 贝尔曼最优方程本质上就是利用了π*的特点，将求期望的算子转化成了max_a
+* 在贝尔曼期望方程中，π是已知的。而贝尔曼最优方程中，π*是未知的。
+* 解贝尔曼期望方程的过程即对应了**评价**，解贝尔曼最优方程的过程即对应了**优化**。
+
+### 解贝尔曼最优方程
+
+* 贝尔曼最优方程不是线性的
+* 一般很难有闭式的解
+* 可以使用迭代优化的方法去解
+  * 值迭代
+  * 策略迭代
+  * Q学习
+  * SARSA
+  * ...
 
 # MDPs的扩展
+
+* 无穷或连续MDPs
+* 部分可观测MDPs（Partially observable MDPs, POMDPs）
+* 无衰减MDPs
+
+## 无穷或连续MDPs
+
+* 动作空间或状态空间无限可数
+* 动作空间或状态空间无限不可数 (连续)
+* 时间连续 
+
+## 部分可观测MDPs
+
+* 此时观测不等于状态Ot≠St
+
+* POMDPs由七元组成
+  $$
+  <\cal(S,A,O,P,R,Z,\gamma)>
+  $$
+
+* 其中**Z**是观测函数
+  $$
+  Z_{s'o}^a=\mathbb{P}[O_{t+1}=o|S_{t+1}=s',A_t=a]
+  $$
+
+* 观测不满足马尔科夫性，因此也不满足贝尔曼方程
+
+* 状态未知，隐马尔科夫过程
+
+* 有时对于POMDPs来说，最优的策略是随机性的
+
+## 无衰减MDPs
+
+* 用于各态历经马尔科夫决策过程
+  * 各态历经性：平稳随机过程的一种特性
+* 存在独立于状态的平均奖赏ρ^π
+* 求值函数时，需要减去该平均奖赏，否则有可能奖赏爆炸
+
