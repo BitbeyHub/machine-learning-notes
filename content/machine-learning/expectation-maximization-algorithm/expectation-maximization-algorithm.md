@@ -24,6 +24,10 @@ EM算法当做最大似然估计的拓展，解决难以给出解析解的最大
 
 
 
+[EM算法存在的意义是什么？](https://www.zhihu.com/question/40797593/answer/453111693)
+
+
+
 # 1如何感性地理解EM算法？
 
 https://www.jianshu.com/p/1121509ac1dc
