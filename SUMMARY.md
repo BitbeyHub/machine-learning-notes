@@ -1,7 +1,17 @@
 # Summary
 
+---
+
+# 目录
+
 * [封面](README.md)
 * [目录](content/SUMMARY.md)
+
+
+---
+
+# 前言
+
 * [前言](content/perface/perface/perface.md)
 * [机器学习](content/perface/machine-learning-perface/machine-learning-perface.md)
     * [什么是机器学习和模式识别](content/perface/machine-learning-perface/machine-learning-perface.md#什么是机器学习和模式识别)
@@ -13,6 +23,12 @@
     * [机器学习的学习路径](content/perface/machine-learning-perface/machine-learning-perface.md#机器学习的学习路径)
     * [深度学习的学习路径](content/perface/machine-learning-perface/machine-learning-perface.md#深度学习的学习路径)
     * [互联网机器学习特定岗位所需技能](content/perface/machine-learning-perface/machine-learning-perface.md#互联网机器学习特定岗位所需技能)
+
+
+---
+
+# 数学基础
+
 * [微积分](content/mathematics/calculus/calculus.md)
     * [泰勒展开](content/mathematics/calculus/taylor-expansion.md)
     * [e的直观认识](content/mathematics/calculus/intuition-of-e.md)
@@ -39,6 +55,12 @@
     * [等式约束的拉格朗日乘子法](content/mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
     * [凸优化](content/mathematics/numerical-calculation-and-optimization/convex-optimization.md)
     * [不等式约束的KKT条件](content/mathematics/numerical-calculation-and-optimization/karush-kuhn-tucker-conditions.md)
+
+
+---
+
+# 编程基础
+
 * [python](content/coding/python/python.md)
     * [python语法](content/coding/python/python-grammar.md)
     * [numpy](content/coding/python/numpy.md)
@@ -47,6 +69,12 @@
     * [matplotlib](content/coding/python/matplotlib.md)
     * [python基础综合实践](content/coding/python/python-basic-comprehensive-practice.md)
     * [scikit-learn](content/coding/python/scikit-learn.md)
+
+
+---
+
+# 机器学习
+
 * [机器学习概论](content/machine-learning/machine-learning-introduction/machine-learning-introduction.md)
 * [特征工程](content/machine-learning/feature-engineering/feature-engineering.md)
     * [主成分分析PCA](content/machine-learning/feature-engineering/principal-component-analysis.md)
@@ -75,12 +103,28 @@
 * [主题模型](content/machine-learning/topic-model/topic-model.md)
     * [LDA隐狄利克雷分布](content/machine-learning/topic-model/latent-dirichlet-allocation.md)
 * [机器学习算法总结](content/machine-learning/machine-learning-algorithm-summary/machine-learning-algorithm-summary.md)
+
+
+---
+
+# 深度学习
+
 * [深度学习概论](content/deep-learning/deep-learning-introduction/deep-learning-introduction.md)
 * [ANN人工神经网络](content/deep-learning/artificial-neural-network/artificial-neural-network.md)
 * [CNN卷积神经网络](content/deep-learning/convolutional-neural-network/convolutional-neural-network.md)
 * [RNN循环神经网络](content/deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](content/deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
+
+
+---
+
+# 强化学习
+
 * [强化学习概论](content/reinforcement-learning/reinforcement-learning-introduction/reinforcement-learning-introduction.md)
 * [马尔科夫决策过程](content/reinforcement-learning/markov-decision-processes/markov-decision-processes.md)
 * [动态规划](content/reinforcement-learning/dynamic-programming/dynamic-programming.md)
+* [无模型方法一：蒙特卡洛](content/reinforcement-learning/model-free-methods-1-monte-carlo/model-free-methods-1-monte-carlo.md)
+
+
+
 
