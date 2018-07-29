@@ -102,6 +102,7 @@
 
 
 
+
 # 马尔科夫过程
 
 ## 马尔科夫性
@@ -176,6 +177,7 @@ $$
 
 
 
+
 ## 马尔科夫过程
 
 一个马尔科夫过程（Markov process， MP）是一个无记忆的随机过程，即一些马尔科夫状态的序列
@@ -190,6 +192,7 @@ $$
   $$
   {P}_{ss'}=\mathbb{P}[S_{t+1}=s'|S_t=s]
   $$
+
 
 
 
@@ -293,6 +296,7 @@ $$
 
 
 
+
 ## 马尔科夫奖励过程例子
 
 ![markov-reward-process-example1](pic/markov-reward-process-example1.png)
@@ -321,6 +325,7 @@ $$
   &=\sum_{k=0}^{\infty}\gamma^kR_{t+k+1}
   \end{aligned}
   $$
+
 
 
 
@@ -415,6 +420,7 @@ $$
   &=-4.4214...
   \end{aligned}
   $$
+
 
 
 
@@ -620,6 +626,7 @@ $$
 
 
 
+
 注：注意由于策略π代表：1，一个动作；2，一个动作分布，所以有时候，π和a会存在一定的混淆。
 
 ## MDPs中的值函数
@@ -803,6 +810,7 @@ $$
 
 
 
+
 注：具体证明参考[《Total Expected Discounted Reward MDPs: Existence of Optimal Policies 》](http://www.ams.sunysb.edu/~feinberg/public/enc_dis.pdf)
 
 ### 怎么得到最优策略
@@ -923,3 +931,9 @@ $$
 * 存在独立于状态的平均奖赏ρ^π
 * 求值函数时，需要减去该平均奖赏，否则有可能奖赏爆炸
 
+
+# 参考文献
+
+- [《强化学习理论与实践》第二章：马尔科夫决策过程](http://www.shenlanxueyuan.com/my/course/96)
+
+本文主要参考此视频课程。

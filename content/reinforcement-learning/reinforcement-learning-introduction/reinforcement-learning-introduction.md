@@ -269,6 +269,7 @@ $$
 
 
 
+
 ### 环境状态和智能体状态对比
 
 * 机器人控制
@@ -499,8 +500,9 @@ https://github.com/gabrieledcjr/TicTacToe/blob/master/tictactoeRL.py
 
 (f) 你所认为的最佳策略应该是确定性的还是随机性的？
 
-# 参考资料
+# 参考文献
 
-* [强化学习理论与实践-深蓝学院](http://www.shenlanxueyuan.com/course/96)
+- [《强化学习理论与实践》第一章：强化学习概述](http://www.shenlanxueyuan.com/my/course/96)
 
-本文主要参考此课程的ppt。
+本文主要参考此视频课程。
+

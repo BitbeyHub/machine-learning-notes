@@ -120,6 +120,7 @@
   $$
 
 
+
 ## 重要性采样
 
 * 重要性采样是一种估计概率分布期望值的技术，它使用了来自其他概率分布的样本。
@@ -149,6 +150,7 @@
   &=\mathbb{E}_{X\sim Q}[\frac{P(X)}{Q(X)}f(X)]
   \end{aligned}
   $$
+
 
 
 ## 离策略学习中的重要性采样
@@ -208,6 +210,7 @@ $$
   $$
   \rho\sim \pi
   $$
+
 
 
 ## 蒙特卡洛策略评价
@@ -293,6 +296,7 @@ $$
   $$
 
 
+
 ## MC的特点小结
 
 * 偏差为0，是无偏估计
@@ -318,6 +322,7 @@ $$
   &=\mu_{k-1}+\frac{1}{k}(x_k-\mu_{k-1})
   \end{aligned}
   $$
+
 
 
 ## 增量式MC更新
@@ -389,6 +394,7 @@ $$
   $$
   \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in \cal{A}}Q(s,a)
   $$
+
 
 
 ## 问题二：贪婪策略提升？
@@ -518,7 +524,11 @@ GLIE蒙特卡洛优化能收敛到最优的Q函数
 
 ![everytime-MC-optical-algorithm](pic/everytime-MC-optical-algorithm.png)
 
+# 参考文献
 
+* [《强化学习理论与实践》第四章：无模型方法一：蒙特卡洛](http://www.shenlanxueyuan.com/my/course/96)
+
+本文主要参考此视频课程。
 
 
 
