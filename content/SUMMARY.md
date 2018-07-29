@@ -96,5 +96,6 @@
 ## 强化学习
 * [强化学习概论](reinforcement-learning/reinforcement-learning-introduction/reinforcement-learning-introduction.md)
 * [马尔科夫决策过程](reinforcement-learning/markov-decision-processes/markov-decision-processes.md)
+* [动态规划](reinforcement-learning/dynamic-programming/dynamic-programming.md)
 
 
