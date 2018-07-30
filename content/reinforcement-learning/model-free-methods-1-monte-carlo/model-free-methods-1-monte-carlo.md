@@ -219,7 +219,7 @@ $$
 
 * 过去的方法使用了贝尔曼期望方程
   $$
-  v_{\pi}(s)=\sum_{a\in \cal{A}}\left(\cal{R}(s,a)+\gamma\sum_{s'\in S}\cal{P}_{ss'}^av_{\pi}(s')\right)
+  v_{\pi}(s)=\sum_{a\in A}\left(R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^av_{\pi}(s')\right)
   $$
 
   * 直接解
@@ -387,12 +387,12 @@ $$
 
 * 在V函数上做贪婪恶略提升要求环境模型
   $$
-  \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in \cal{A}}\cal{R}(s,a)
+  \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in A}R(s,a)
   $$
 
 * 在Q函数上做贪婪策略提升是无模型的
   $$
-  \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in \cal{A}}Q(s,a)
+  \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in A}Q(s,a)
   $$
 
 
@@ -425,7 +425,7 @@ $$
   $$
   \begin{aligned}
   \pi(a|s)=\left\{\begin{matrix}
-  &\epsilon/m+1-\epsilon\quad&\text{if  }a=\text{arg }\mathop{\text{max}}_{a\in \cal{A}}Q(s,a)\\ 
+  &\epsilon/m+1-\epsilon\quad&\text{if  }a=\text{arg }\mathop{\text{max}}_{a\in A}Q(s,a)\\ 
   &\epsilon/m\quad&\text{otherwise}
   \end{matrix}\right.
   \end{aligned}
@@ -444,10 +444,10 @@ $$
 证明如下：
 $$
 \begin{aligned}
-q_{\pi}(s,\pi'(s))&=\sum_{a\in \cal{A}}\pi'(a|s)q_{\pi}(s,a)\\
-&=\frac{\epsilon}{m}\sum_{a\in \cal{A}}q_{\pi}(s,a)+(1-\epsilon)\mathop{\text{max}}_{a\in \cal{A}}q_{\pi}(s,a)\\
-&\geq\frac{\epsilon}{m}\sum_{a\in \cal{A}}q_{\pi}(s,a)+(1-\epsilon)\frac{\pi(a|s)-\epsilon/m}{1-\epsilon}q_{\pi}(s,a)\\
-&=\sum_{a\in \cal{A}}\pi(a|s)q_{\pi}(s,a)\\
+q_{\pi}(s,\pi'(s))&=\sum_{a\in A}\pi'(a|s)q_{\pi}(s,a)\\
+&=\frac{\epsilon}{m}\sum_{a\in A}q_{\pi}(s,a)+(1-\epsilon)\mathop{\text{max}}_{a\in A}q_{\pi}(s,a)\\
+&\geq\frac{\epsilon}{m}\sum_{a\in A}q_{\pi}(s,a)+(1-\epsilon)\frac{\pi(a|s)-\epsilon/m}{1-\epsilon}q_{\pi}(s,a)\\
+&=\sum_{a\in A}\pi(a|s)q_{\pi}(s,a)\\
 &=v_{\pi}(s)\\
 \end{aligned}
 $$
@@ -485,7 +485,7 @@ $$
 
 * 极限贪婪：在极限的情况下，策略会收敛到一个贪婪的策略
   $$
-  \lim_{k\rightarrow\infty}\pi_k(a|s)=1,\ \left(a=\text{arg }\mathop{\text{max}}_{a'\in\cal{A}}Q_k(s,a')\right)
+  \lim_{k\rightarrow\infty}\pi_k(a|s)=1,\ \left(a=\text{arg }\mathop{\text{max}}_{a'\in A}Q_k(s,a')\right)
   $$
 
 * 设置ε逐渐衰减到0，比如εk=1/k，ε-贪婪策略是GLI的。

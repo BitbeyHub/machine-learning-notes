@@ -106,7 +106,7 @@
 
 * 直接解：
   $$
-  v_{\pi}=(I-\gamma\cal{P}^{\pi})^{-1}R^{\pi}
+  v_{\pi}=(I-\gamma P^{\pi})^{-1}R^{\pi}
   $$
 
   * 可以直接求得精确解
@@ -123,13 +123,13 @@
 
 贝尔曼期望方程，表明了我们能够**通过后继状态 s‘ 更新s**。
 $$
-v_{\pi}=\sum_{a\in \cal{A}}\pi(a|s)\left(\cal{R}(s,a)+\gamma\sum_{s'\in \cal{S}}\cal{P}^a_{ss'}v_{\pi}(s') \right)
+v_{\pi}=\sum_{a\in A}\pi(a|s)\left(R(s,a)+\gamma\sum_{s'\in S}P^a_{ss'}v_{\pi}(s') \right)
 $$
 因此，可以得到如下的迭代式子
 $$
 \begin{aligned}
-&v_{k+1}=\sum_{a\in \cal{A}}\pi(a|s)\left(\cal{R}(s,a)+\gamma\sum_{s'\in \cal{S}}\cal{P}^a_{ss'}v_{k}(s') \right)\\
-&v^{k+1}=\cal{R}^{\pi}+\gamma\cal{P}^{\pi}v^k
+&v_{k+1}=\sum_{a\in A}\pi(a|s)\left(R(s,a)+\gamma\sum_{s'\in S}P^a_{ss'}v_{k}(s') \right)\\
+&v^{k+1}=R^{\pi}+\gamma P^{\pi}v^k
 \end{aligned}
 $$
 

@@ -103,6 +103,7 @@
 
 
 
+
 # 马尔科夫过程
 
 ## 马尔科夫性
@@ -171,13 +172,6 @@ $$
 
 
 
-
-
-
-
-
-
-
 ## 马尔科夫过程
 
 一个马尔科夫过程（Markov process， MP）是一个无记忆的随机过程，即一些马尔科夫状态的序列
@@ -192,13 +186,6 @@ $$
   $$
   {P}_{ss'}=\mathbb{P}[S_{t+1}=s'|S_t=s]
   $$
-
-
-
-
-
-
-
 
 
 
@@ -292,11 +279,6 @@ $$
 
 
 
-
-
-
-
-
 ## 马尔科夫奖励过程例子
 
 ![markov-reward-process-example1](pic/markov-reward-process-example1.png)
@@ -325,11 +307,6 @@ $$
   &=\sum_{k=0}^{\infty}\gamma^kR_{t+k+1}
   \end{aligned}
   $$
-
-
-
-
-
 
 
 
@@ -420,11 +397,6 @@ $$
   &=-4.4214...
   \end{aligned}
   $$
-
-
-
-
-
 
 
 
@@ -622,11 +594,6 @@ $$
 
 
 
-
-
-
-
-
 注：注意由于策略π代表：1，一个动作；2，一个动作分布，所以有时候，π和a会存在一定的混淆。
 
 ## MDPs中的值函数
@@ -811,6 +778,7 @@ $$
 
 
 
+
 注：具体证明参考[《Total Expected Discounted Reward MDPs: Existence of Optimal Policies 》](http://www.ams.sunysb.edu/~feinberg/public/enc_dis.pdf)
 
 ### 怎么得到最优策略
@@ -820,7 +788,7 @@ $$
 \begin{aligned}
 \pi_*(a|s)=
 \left\{\begin{matrix}
-&1\quad&\text{if  a = arg }\mathop{\text{max}}_{a\in \cal{A}}q_*(s,a)\\ 
+&1\quad&\text{if  a = arg }\mathop{\text{max}}_{a\in A}q_*(s,a)\\ 
 &0\quad&\text{otherwise}
 \end{matrix}\right.
 \end{aligned}
@@ -848,7 +816,7 @@ v_*(s)=\mathop{\text{max}}_a\ q_*(s,a)
 $$
 和贝尔曼期望方程的关系：
 $$
-v_*(s)=v_{\pi*}(s)=\sum_{a\in \cal{A}}\pi_*(a|s)q_{\pi}(s,a)=\mathop{\text{max}}_a\ q_{\pi*}(s,a)
+v_*(s)=v_{\pi*}(s)=\sum_{a\in A}\pi_*(a|s)q_{\pi}(s,a)=\mathop{\text{max}}_a\ q_{\pi*}(s,a)
 $$
 上式很好理解，因为最优动作对应的概率为1嘛。
 
@@ -856,7 +824,7 @@ $$
 
 ![bellman-optical-equition-2](pic/bellman-optical-equition-2.png)
 $$
-q_*(s,a)=\cal{R}(s,a)+\gamma\sum_{s'\in S}\cal{P}_{ss'}^av_*(s')
+q_*(s,a)=R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^av_*(s')
 $$
 
 ## 贝尔曼最优方程
@@ -865,14 +833,14 @@ $$
 
 ![bellman-optical-equition-V-function](pic/bellman-optical-equition-V-function.png)
 $$
-v_*(s)=\mathop{\text{max}}_a[\cal{R}(s,a)+\gamma\sum_{s'\in S}\cal{P}_{ss'}^av_*(s')]
+v_*(s)=\mathop{\text{max}}_a[R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^av_*(s')]
 $$
 
 ### 最优Q函数
 
 ![bellman-optical-equition-Q-function](pic/bellman-optical-equition-Q-function.png)
 $$
-q_*(s,a)=\cal{R}(s,a)+\gamma\sum_{s'\in\cal{S}}\cal{P}_{ss'}^a\ \mathop{\text{max}}_{a}\ q_*(s',a')
+q_*(s,a)=R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^a\ \mathop{\text{max}}_{a}\ q_*(s',a')
 $$
 
 ### 和贝尔曼期望方程的关系
@@ -910,7 +878,7 @@ $$
 
 * POMDPs由七元组成
   $$
-  <\cal(S,A,O,P,R,Z,\gamma)>
+  <S,A,O,P,R,Z,\gamma>
   $$
 
 * 其中**Z**是观测函数
