@@ -11,7 +11,7 @@
 
 [拉普拉斯变换的物理意义是什么？](https://www.zhihu.com/question/22102732/answer/290339137?group_id=934197907310129152#comment-381616429)
 
-
+https://www.zhihu.com/question/22102732/answer/369089156
 
 
 

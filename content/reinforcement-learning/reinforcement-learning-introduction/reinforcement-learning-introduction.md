@@ -191,9 +191,14 @@ $$
 
 **回报值**
 
-* $w_{t+n}=1,\forall n$
+* ：
+  $$
+  w_{t+n}=1,\forall n
+  $$
+
   * 我们将所有时刻的奖励看成一样重要的
   * 这样的$G_t$是**无衰减回报值（undiscounted return）**
+
 * $w_{t+n}=\gamma^n,\gamma\in[0,1]$
   * $G_t=R_t+\gamma R_{t+1}+\gamma^2 R_{t+2}+...$
   * $\gamma=0$时，退化成赌博机问题
@@ -263,6 +268,7 @@ $$
   $$
   S_t^a=f(H_t)
   $$
+
 
 
 

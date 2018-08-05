@@ -124,6 +124,7 @@
 * [马尔科夫决策过程](content/reinforcement-learning/markov-decision-processes/markov-decision-processes.md)
 * [动态规划](content/reinforcement-learning/dynamic-programming/dynamic-programming.md)
 * [无模型方法一：蒙特卡洛](content/reinforcement-learning/model-free-methods-1-monte-carlo/model-free-methods-1-monte-carlo.md)
+* [无模型方法二：时间差分](content/reinforcement-learning/model-free-methods-2-time-difference/model-free-methods-2-time-difference.md)
 
 
 
