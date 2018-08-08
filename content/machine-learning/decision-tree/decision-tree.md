@@ -653,9 +653,9 @@ $$
 。假定我们为每一个样本x赋予一个权重$w_x$，并定义
 $$
 \begin{aligned}
-\rho&=\frac{\sum_{x\in \tilde{D}}w_x}{{\sum_{x\in D}w_x}}\\
-\tilde p_k&=\frac{\sum_{x\in \tilde{D}_k}w_x}{{\sum_{x\in \tilde{D}}w_x}}\quad (1\leqslant k\leqslant|y|)\\
-\tilde r_v&=\frac{\sum_{x\in \tilde{D}^v}w_x}{{\sum_{x\in \tilde{D}}w_x}}\quad (1\leqslant v \leqslant V)\\
+\rho&=\frac{\sum_{x\in \tilde{D}}w_x}{\sum_{x\in D}w_x}\\
+\tilde p_k&=\frac{\sum_{x\in \tilde{D}_k}w_x}{\sum_{x\in \tilde{D}}w_x}\quad (1\leqslant k\leqslant|y|)\\
+\tilde r_v&=\frac{\sum_{x\in \tilde{D}^v}w_x}{\sum_{x\in \tilde{D}}w_x}\quad (1\leqslant v \leqslant V)\\
 \end{aligned}
 $$
 直观地看，对属性A，
