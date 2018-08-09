@@ -43,7 +43,7 @@
             "theme": "monokai"
         },
 		"tbfed-pagefooter": {
-			"copyright":"Copyright LuWei 2017",
+			"copyright":"Copyright LuWei 2018",
 			"modify_label": "本节创建/修改时间：",
 			"modify_format": "YYYY-MM-DD HH:mm:ss"
 		},
