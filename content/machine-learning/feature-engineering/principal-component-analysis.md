@@ -3,6 +3,10 @@
 * [返回顶层目录](../../SUMMARY.md#目录)
 * [返回上层目录](feature-engineering.md)
 
+
+
+[【直观详解】什么是PCA、SVD](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247486147&idx=1&sn=ae6c99fbd00c9ea7de31d691472dd21c&chksm=ebb43217dcc3bb01fe10d278b51fd44777a6c00ce95107698d6ab4df021856b3885154c07b0b&mpshare=1&scene=1&srcid=12267viOFiJ7XY3qIl9gSt89#rd)
+
 主成分分析（Principal Component Analysis）：一种统计方法，它对多变量表示数据点集合寻找尽可能少的正交矢量表征数据信息特征。
 
 PCA既是一种压缩数据的方式，也是一种学习数据表示的无监督学习方法。《深度学习》5.8.1 P92
@@ -32,6 +36,10 @@ https://zhuanlan.zhihu.com/p/32412043
 
 
 [理解主成分分析 (PCA)](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247484754&idx=1&sn=b2c0d6798f44e13956bb42373e51d18c&chksm=fdb698c5cac111d3e3dca24c50aafbfb61e5b05c5df5b603067bb7edec8db049370b73046b24&mpshare=1&scene=1&srcid=06081PBJlyXnPpa3Clj5AOCM#rd)
+
+
+
+[hinton对pca的理解](https://www.zhihu.com/question/30094611/answer/275172932)
 
 
 

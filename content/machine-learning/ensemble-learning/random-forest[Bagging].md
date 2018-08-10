@@ -8,15 +8,12 @@
 
 
 
-[算法杂货铺——分类算法之决策树(Decision tree)](http://www.cnblogs.com/leoo2sk/archive/2010/09/19/decision-tree.html)
-
-[机器学习算法之决策树](https://www.jianshu.com/p/6eecdeee5012)
 
 [决策树与随机森林](http://www.cnblogs.com/fionacai/p/5894142.html)
 
 [集成学习算法总结----Boosting和Bagging](http://lib.csdn.net/article/machinelearning/35135)
 
-
+[Bagging与随机森林算法原理小结](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247487987&idx=2&sn=9389a64487c53fd59f09dd6b541ee9bc&chksm=ebb42927dcc3a03154332989ae6e07ce84af69b45f8120f8852f6111c655898472a752664fd3&mpshare=1&scene=1&srcid=0711bsXANeXJTAHrLxFmlBIn#rd)
 
 随机森林就是bagging，用bagging的方法生成很多cart树，就是随机森林。
 

@@ -6,7 +6,9 @@
 
 
 
+偏差和方差有什么区别？
 
+https://www.zhihu.com/question/20448464/answer/339471179
 
 
 
