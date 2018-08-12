@@ -20,9 +20,18 @@
     - [资格迹（Eligibility Traces）](#资格迹（Eligibility Traces）)
     - [后向视角的TD(λ)](#后向视角的TD(λ))
   - [TD(λ)的两种视角的关系](#TD(λ)的两种视角的关系)
+    - [TD(λ)与TD(0)](#TD(λ)与TD(0))
+    - [TD(λ)和蒙特卡洛](#TD(λ)和蒙特卡洛)
+    - [TD(1)和蒙特卡洛](#TD(1)和蒙特卡洛)
+    - [对TD(λ)化简](#对TD(λ)化简)
+    - [前向视角和后向视角的TD(λ)](#前向视角和后向视角的TD(λ))
+    - [两种视角下的等价性](#两种视角下的等价性)
+    - [TD(λ)前后向视角关系小结](#TD(λ)前后向视角关系小结)
 - [TD(λ)优化方法](#TD(λ)优化方法)
-
-
+  - [n步SARSA](#n步SARSA)
+  - [前向视角的SARSA(λ)](#前向视角的SARSA(λ))
+  - [后向视角的SARSA(λ)](#后向视角的SARSA(λ))
+  - [SARSA(λ)算法](#SARSA(λ)算法)
 
 
 
@@ -98,7 +107,7 @@
   $$
   \begin{aligned}
   &n=1\quad(\text{TD})\quad &G_t^{(1)}=R_{t+1}+\gamma V(S_{t+1})\\
-  &n=2\quad&G_t^{(2)}=R_{t+1}+\gamma R_{t+2}+\gamma^2V(S_{T+2})\\
+  &n=2\quad&G_t^{(2)}=R_{t+1}+\gamma R_{t+2}+\gamma^2V(S_{t+2})\\
   &n=\infty\quad(\text{MC})\quad&G_t^{(\infty)}=R_{t+1}+\gamma R_{t+2}+...+\gamma^{T-t-1}R_T\\
   \end{aligned}
   $$
@@ -112,6 +121,7 @@
   $$
   V(S_t)\leftarrow V(S_t)+\alpha\left(G_t^{(n)}-V(S_t)\right)
   $$
+
 
 
 **那n步到底具体是几步最好呢？**
@@ -185,6 +195,7 @@ TD(λ)的备份图如下图：
   $$
 
 
+
 **TD(λ)的加权函数：**
 
 如下图所示，各系数是以指数衰减的形式去求和的。
@@ -219,7 +230,7 @@ $$
 
 * 前向视角使用将来的数据$R_{t+1},S_{t+1},...$来计算$G_t^{\lambda}$
 
-* 类似于蒙特卡洛，只能从完整的片段学习
+* 类似于蒙特卡洛，只能从完整的片段学习。TD(λ)和n步TD是不同的。n步TD看n步就行了，TD(λ)中包含了蒙特卡洛项，所以必须要完整片段。
 
   **必须等到片段结束后才能进行学习**，这就是为什么前向视角没用的原因，因为这和解蒙特卡洛是一样的，只是说还要多算几步回报值而已，反而还增加了计算量。所以在使用TD(λ)算法的时候，我们会更多地采用资格迹。
 
@@ -244,6 +255,8 @@ $$
     **在新更新**：做一步，就更新一次。智能体和环境发生一次交互，就马上更新。效率会比较高。因为做一次就更新依次，那么就意味着我的策略有可能就已经得到提升，我下一步就能得到一个改进，不需要等到整个片段给做完了，才有一次改进，我每一步都可能有改进，这就会导致，哪怕是一个片段中，我都会越做越好。在线更新的好处就是虽然这个任务做不完，但是在一边做的过程中，我就在优化我的算法，即便是连续性任务，我也可以越做越好。
 
   * 每步更新
+
+    在线更新指一边跟环境交互，一边更新。有时候不一定是每步的，比如每2步，每3步等。
 
   * 从不完整状态（片段）更新
 
@@ -313,97 +326,265 @@ $$
 
 
 
-
-
-
-
-
-
 ## TD(λ)的两种视角的关系
 
 前向视角帮助我们理解TD(λ)和蒙特卡洛和TD(0)的关系，后向视角是我们实际在项目中用到的方法。
 
+下面我们用TD(λ)的后向视角来看。
 
+### TD(λ)与TD(0)
+
+* 当λ=0时，只有当前状态会被更新
+  $$
+  \begin{aligned}
+  E_t(s)&=I(S_t=s)\\
+  V(s)&\leftarrow V(s)+\alpha\delta_tE_t(s)\\
+  \end{aligned}
+  $$
+  资格迹只考虑当前状态，上一时刻的资格迹会马上衰减到0。所以只有当前的状态被更新资格迹，其他的状态都会是零。
+
+* 等价于TD(0)的更新公式
+  $$
+  V(S_t)\leftarrow V(S_t)+\alpha\delta_t
+  $$
+
+
+### TD(λ)和蒙特卡洛
+
+* 当λ=1时，信度分配会被延迟到终止状态
+
+* 这里考虑片段性任务，而且考虑离线更新
+
+* 考虑一个片段**整体**的情况下，TD(1)**总更新量**等于蒙特卡洛
+
+  * 在每一步更新上可能有差距
+
+* 对s的总更新量
+
+  * TD(λ)前向视角：
+    $$
+    \sum_{t=1}^T\alpha\left(G_t^{\lambda}-V(S_t)\right)I(S_t=s)
+    $$
+
+  * TD(λ)后向视角
+    $$
+    \sum_{t=1}^T\alpha\delta_tE_t(s)
+    $$
+
+  * 不论是前向视角还是后向视角，被更新的总更新量是一样的。
+
+### TD(1)和蒙特卡洛
+
+* 考虑一个片段，其中在时间k处，状态s会被访问
+
+* TD(1)算法中，对s的资格迹如下
+  $$
+  \begin{aligned}
+  E_t(s)&=\gamma E_{t-1}(s)+I(S_t=s)\\
+  &=\left\{\begin{matrix}
+  &0,\quad &\text{if }\ t<k\\ 
+  &\gamma^{t-k},\quad &\text{if }\ t \geqslant k\\ 
+  \end{matrix}\right.
+  \end{aligned}
+  $$
+
+* TD(1)在线更新累积误差
+  $$
+  \sum_{t=1}^{T-1}\alpha\delta_tE_t(s)=\alpha\sum_{t=k}^{T-1}\gamma^{t-k}\delta_t=\alpha(G_k-V(S_k))
+  $$
+  上式中的右侧的等号为什么会成立？下面马上证明。最右侧的式子就是蒙特卡洛的更新量。
+
+* 一直到片段结束。把上式中间的式子写开的话，就是下面的形式：
+  $$
+  \delta_k+\gamma\delta_{k+1}+\gamma^2\delta_{k+2}+...+\gamma^{T-1-k}\delta_{T-1}
+  $$
+
+* 当λ=1的时候，时间差分误差的和能够简化为蒙特卡洛误差
+  $$
+  \begin{aligned}
+  &\delta_t+\gamma\delta_{t+1}+\gamma^2\delta_{t+2}+...+\gamma^{T-1-t}\delta_{T-1}\\
+  =&R_{t+1}+\gamma V(S_{t+1})-V(S_t)\\
+  &+\gamma R_{t+2}+\gamma^2 V(S_{t+2})-\gamma V(S_{t+1})\\
+  &+\gamma^2 R_{t+2}+\gamma^3 V(S_{t+2})-\gamma^2 V(S_{t+1})\\
+  &\vdots\\
+  &+\gamma^{T-1-t} R_T+\gamma^{T-t} V(S_T)-\gamma^{T-1-t} V(S_{T-1})\\
+  =&R_{t+1}+\gamma R_{t+2}+\gamma^2 R_{t+3}+...+\gamma^{T-1-t}R_T-V(S_t)\\
+  =&G_t-V(S_t)\\
+  \end{aligned}
+  $$
+
+* TD(1)等价于每次拜访的蒙特卡洛算法
+
+  因为资格迹，状态在一个轨迹里面每出现一次，就加1。而如果是首次拜访的蒙特卡洛的话，对一个轨迹里面重复出现的状态，只算一次，它们两个就不等价了。
+
+* 区别是：
+
+  * TD(1)是在线误差累计，是每步更新的。
+  * 而如果TD(1)也等到片段结束后离线更新，那么TD(1)就是蒙特卡洛。因为其累计更新量和蒙特卡洛的目标值的更新量，是一模一样的。
+
+### 对TD(λ)化简
+
+刚说的TD(λ)，如果λ=0，就是TD(0)，如果λ=1，如果是离线更新，那就和蒙特卡洛是一模一样的，如果是在线更新，那么和每次拜访的蒙特卡洛是等价的。
+
+当λ不等于0，在0和1之间，那么前向视角和后向视角是不是一个等价的关系呢？
+
+**前向视角和后向视角下的误差等价**
+$$
+\begin{aligned}
+G_t^{\lambda}-V(S_t)=&-V(S_t)\\
+&+(1-\lambda)\lambda^0(R_{t+1}+\gamma V(S_{t+1}))\\
+&+(1-\lambda)\lambda^1(R_{t+1}+\gamma R(S_{t+2})+\gamma^2 V(S_{t+3}))\\
+&+(1-\lambda)\lambda^2(R_{t+1}+\gamma R(S_{t+2})+\gamma^2 R(S_{t+3})+\gamma^3 V(S_{t+3}))\\
+&+\dots\\
+=&-V(S_t)\\
+&+(\gamma\lambda)^0(R_{t+1}+\gamma V(S_{t+1})-\gamma\lambda V(S_{t+1}))\\
+&+(\gamma\lambda)^1(R_{t+2}+\gamma V(S_{t+2})-\gamma\lambda V(S_{t+2}))\\
+&+(\gamma\lambda)^2(R_{t+3}+\gamma V(S_{t+3})-\gamma\lambda V(S_{t+3}))\\
+&+\dots\\
+=&\quad\ (\gamma\lambda)^0(R_{t+1}+\gamma V(S_{t+1})-V(S_t))\\
+&+(\gamma\lambda)^1(R_{t+2}+\gamma V(S_{t+2})-V(S_{t+1}))\\
+&+(\gamma\lambda)^2(R_{t+3}+\gamma V(S_{t+3})-V(S_{t+2}))\\
+&+\dots\\
+=&\delta_t+\gamma\lambda\delta_{t+1}+(\gamma\lambda)^2\delta_{t+2}+...
+\end{aligned}
+$$
+
+### 前向视角和后向视角的TD(λ)
+
+* 考虑一个片段，其中在时间k处，状态s会被访问
+
+* TD(λ)的资格迹
+  $$
+  \begin{aligned}
+  E_t(s)&=\gamma\lambda E_{t-1}(s)+I(S_t=s)\\
+  &=\left\{\begin{matrix}
+  &0,\quad &\text{if }\ t<k\\ 
+  &(\gamma\lambda)^{t-k},\quad &\text{if }\ t \geqslant k\\ 
+  \end{matrix}\right.
+  \end{aligned}
+  $$
+
+* 后向视角TD(λ)在线更新累积误差和前向视角的总更新量是等价的
+  $$
+  \sum_{t=1}^T\alpha\delta_tE_t(s)=\alpha\sum_{t=k}^T(\gamma\lambda)^{t-k}\delta_t=\alpha(G_k^{\lambda}-V(S_k))
+  $$
+
+* 截止到片段结束时，能收集到λ回报值误差都是等价的
+
+* 对s的多次拜访，Et(s)会收集多次误差
+
+### 两种视角下的等价性
+
+上面说的等价是离线更新等价。
+
+* **离线**更新
+
+  * 在整个片段里累积更新误差
+  * 在片段结束后统一更新
+  * 离线更新下，前向视角和后向视角等价
+
+* **在线**更新
+
+  * TD(λ)在片段的每一步更新
+
+  * 此时前向视角和后向视角有一点不同。
+
+    因为每优化一步，策略就已经发生变化了，和环境交互的采样，就已经发生变化了。
+
+  * 这个差别可以通过资格迹进行一些修正，使两者完全等价
+
+  * 这个差别怎么找一种在线更新的后向视角的TD(λ)算法去和前向视角TD(λ)是等价的呢？
+
+    这个有个papper，是2014年提出来的。找到了另外一种在线更新的后向视角的TD(λ)实现算法，可以实现真正意义上的等价。
+
+    True Online TD(λ) - Harm van Seijen, Richard S. Sutton
+
+### TD(λ)前后向视角关系小结
+
+![forward-backward-view-relationship-summary](pic/forward-backward-view-relationship-summary.png)
 
 # TD(λ)优化方法
 
 这里主要介绍SARSA(λ)，即在上节课所介绍的SARSA算法上，去做一个提升，或者说做一个更通用的方法。
 
+本节不会涉及TD(λ)的离策略版本，因为比较复杂，使用起来也不太方便。因为在TD(λ)基础上还要去结合一个重要性采样，这个就让使用变得非常复杂。
 
+SARSA(λ)唯一区别就是把之前n步回报值的V函数的回报值换成Q函数的回报值。
 
+## n步SARSA
 
+- 考虑下面的n步回报值，对于n=1,2,...,∞
+  $$
+  \begin{aligned}
+  &n=1\quad(\text{SARSA})\quad &q_t^{(1)}=R_{t+1}+\gamma Q(S_{t+1},A_{t+1})\\
+  &n=2\quad&q_t^{(2)}=R_{t+1}+\gamma R_{t+2}+\gamma^2Q(S_{t+2},A_{t+2})\\
+  &n=\infty\quad(\text{MC})\quad&q_t^{(\infty)}=R_{t+1}+\gamma R_{t+2}+...+\gamma^{T-t-1}R_T\\
+  \end{aligned}
+  $$
 
+- 我们可以定义**n步Q回报值**
+  $$
+  q_t^{(n)}=R_{t+1}+\gamma R_{t+2}+...+\gamma^{n-1}R_{t+n}+\gamma^nQS_{t+n},A_{t+n})
+  $$
 
+- n步SARSA使用n步回报值更新Q(s,a)
+  $$
+  Q(S_t,A_t)\leftarrow Q(S_t,A_t)+\alpha\left(q_t^{(n)}-Q(S_t,A_t)\right)
+  $$
 
 
+## 前向视角的SARSA(λ)
 
+SARSA(λ)的备份图如下图：
 
+![SARSA-lambda-backup](pic/SARSA-lambda-backup.png)
 
+- **qλ回报值混合了所有的n步Q回报值**
+  $$
+  q_t^{(n)}
+  $$
 
+- 使用了权重
+  $$
+  (1-\lambda)\lambda^{n-1}
+  $$
 
+  $$
+  q_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}q_t^{(n)}
+  $$
 
 
 
+- 得到了前向视角SARSA(λ)
+  $$
+  Q(S_t,A_t)\leftarrow Q(S_t,A_t)+\alpha\left(q_t^{\lambda}-Q(S_t,A_t)\right)
+  $$
 
 
+## 后向视角的SARSA(λ)
 
+* 使用资格迹在线更新
 
+* 但是这里的资格迹是针对\<s,a\>
+  $$
+  \begin{aligned}
+  E_0(s,a)&=0\\
+  E_t(s,a)&=\gamma\lambda E_{t-1}(s,a)+I(S_t=s,A_t=a)\\
+  \end{aligned}
+  $$
 
+* 对**所有的s,a**更新Q(s,a)
 
+* 利用资格迹和时间差分误差更新
+  $$
+  \begin{aligned}
+  \delta _t&=R_{t+1}+\gamma Q(S_{t+1},A_{t+1})-Q(S_t，A_t)\\
+  Q(s,a)&\leftarrow Q(s,a)+\alpha\delta_tE_t(s,a)\\
+  \end{aligned}
+  $$
 
 
+## SARSA(λ)算法
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![SARSA(lambda)-algorithm](pic/SARSA(lambda)-algorithm.png)
 
