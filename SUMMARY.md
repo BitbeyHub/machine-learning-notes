@@ -54,7 +54,6 @@
     * [随机梯度下降SGD](content/mathematics/numerical-calculation-and-optimization/stochastic-gradient-desent.md)
     * [等式约束的拉格朗日乘子法](content/mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
     * [凸优化](content/mathematics/numerical-calculation-and-optimization/convex-optimization.md)
-    * [不等式约束的KKT条件](content/mathematics/numerical-calculation-and-optimization/karush-kuhn-tucker-conditions.md)
 
 
 ---
