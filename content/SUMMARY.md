@@ -72,8 +72,8 @@
   * [最大熵模型](machine-learning/linear-model/maximum-entropy-model.md)
   * [指数族分布与广义线性模型](machine-learning/linear-model/exponential-family-distribution-and-generalized-linear-model.md)
   * [线性回归](machine-learning/linear-model/linear-regression.md#线性回归)
-  * [Ridge回归（岭回归）](machine-learning/linear-model/linear-regression.md#Ridge回归（岭回归）)
-  * [Lasso回归](machine-learning/linear-model/linear-regression.md#Lasso回归)
+    * [Ridge回归（岭回归）](machine-learning/linear-model/linear-regression.md#Ridge回归（岭回归）)
+    * [Lasso回归](machine-learning/linear-model/linear-regression.md#Lasso回归)
   * [Logistic回归-对数几率回归](machine-learning/linear-model/logistic-regression.md)
 
 
