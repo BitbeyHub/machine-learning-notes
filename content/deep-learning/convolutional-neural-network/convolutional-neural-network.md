@@ -200,7 +200,7 @@ Convolution Kernel 具有的一个属性就是局部性。即它只关注局部�
 
 
 
-
+[[CV] 通俗理解『卷积』——从傅里叶变换到滤波器](https://zhuanlan.zhihu.com/p/28478034)
 
 # 池化
 
@@ -229,6 +229,10 @@ https://zhuanlan.zhihu.com/p/32685118
 
 
 # CNN训练原理
+
+[卷积神经网络算法的实现](https://blog.csdn.net/qq_31780525/article/details/71389982)
+
+
 
 《[Notes on Convolutional Neural Networks](http://web.mit.edu/jvb/www/papers/cnn_tutorial.pdf)》，这是Jake Bouvrie在2006年写的关于CNN的训练原理，虽然文献老了点，不过对理解经典CNN的训练过程还是很有帮助的。该作者是剑桥的研究认知科学的。本文参照了这篇翻译《[Notes on Convolutional Neural Networks翻译](https://blog.csdn.net/zouxy09/article/details/9993371)》，并在此基础上增加了自己的修改。
 
