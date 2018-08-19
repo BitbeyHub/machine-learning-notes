@@ -207,12 +207,12 @@ $$
 
 首先将原问题重新描述为一个无约束问题
 $$
-\text{minimize}\quad f_0(x)+\sum_{i=1}^mI\text{_}(f_i(x))+\sum_{i=1}^pI_0(h_i(x))
+\text{minimize}\quad f_0(x)+\sum_{i=1}^mI\_(f_i(x))+\sum_{i=1}^pI_0(h_i(x))
 $$
 其中，I_是非正实数集的示性函数
 $$
 \begin{aligned}
-I\text{_}(u)=
+I\_(u)=
 \left\{\begin{matrix}
 &0\quad &u\leqslant 0\\ 
 &\infty\quad &u>0
@@ -229,7 +229,7 @@ $$
 
 显然，用线性函数λiu去逼近I\_(u)是远远不够的。然而，线性函数至少可以看成是示性含糊的一个下估计。这是因为对任意u，有
 $$
-\lambda_iu\leqslant I\text{_}(u),\quad \nu_iu\leqslant I_0(u)
+\lambda_iu\leqslant I\_(u),\quad \nu_iu\leqslant I_0(u)
 $$
 ，我们随之可以得到，**对偶函数是原问题最优函数值的一个下界**。
 
@@ -290,7 +290,7 @@ $$
 &\text{subject to}\quad &\lambda\geqslant0
 \end{aligned}
 $$
-上述问题称为问原始问题的**Lagrange对偶问题**。原始问题也被称为原问题。若解(λ\*,ν\*)是对偶问题的最优解，则称解(λ\*,ν\*)是**对偶最优解**或者是**最优Lagrange乘子**。
+上述问题称为原始问题的**Lagrange对偶问题**。原始问题也被称为原问题。若解(λ\*,ν\*)是对偶问题的最优解，则称解(λ\*,ν\*)是**对偶最优解**或者是**最优Lagrange乘子**。
 
 Lagrange对偶问题是一个凸优化问题，这是因为极大化的目标函数是凹函数（因为它包含负的共轭函数，而共轭函数是凸函数），且约束集合是凸集。因此，对偶问题的凸性和原问题是否是凸优化问题无关。
 
@@ -578,6 +578,7 @@ $$
   =0
   \end{aligned}
   $$
+
 
 
 
