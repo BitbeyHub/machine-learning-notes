@@ -372,31 +372,62 @@ $$
 $$
 。这意味着我们可以**将原问题的最优值写成如下形式**：
 
+$$
+p^*=\mathop{\text{inf }}_x\mathop{\text{sup}}_{\lambda\geqslant 0}L(x,\lambda)
+$$
+根据对偶函数的定义，有
+$$
+d^*=\mathop{\text{sup }}_{\lambda\geqslant 0}\mathop{\text{inf}}_{x}L(x,\lambda)
+$$
+因此弱对偶性可以表述为下述不等式
+$$
+d^*=\mathop{\text{sup }}_{\lambda\geqslant 0}\mathop{\text{inf}}_{x}L(x,\lambda)\leqslant\mathop{\text{inf }}_x\mathop{\text{sup}}_{\lambda\geqslant 0}L(x,\lambda)=p^*
+$$
+强对偶性可以表述为下述不等式
+$$
+d^*=\mathop{\text{sup }}_{\lambda\geqslant 0}\mathop{\text{inf}}_{x}L(x,\lambda)=\mathop{\text{inf }}_x\mathop{\text{sup}}_{\lambda\geqslant 0}L(x,\lambda)=p^*
+$$
+==========================================================
 
+**强对偶性意味着对x求极小和对λ≥0求极大可以互换而不影响结果**。
 
+==========================================================
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+事实上，上面的不等式是否成立和L的性质无关：对任意f，下式成立：
+$$
+\mathop{\text{sup }}_{z\in Z}\mathop{\text{inf}}_{w\in W}f(w,z)\leqslant\mathop{\text{inf }}_{w\in W}\mathop{\text{sup}}_{z\in Z}f(w,z)
+$$
+这个一般性的等式称为**极大极小不等式**。若等式成立，即
+$$
+\mathop{\text{sup }}_{z\in Z}\mathop{\text{inf}}_{w\in W}f(w,z)=\mathop{\text{inf }}_{w\in W}\mathop{\text{sup}}_{z\in Z}f(w,z)
+$$
+我们称f（以及W和Z）满足**强**极大极小性质或者**鞍点**性质。当然，强极大极小性质只在特殊情况下成立，例如函数f是满足**强**对偶性问题的Lagrange函数。
 
 ### 鞍点解释
 
+![saddle-point](pic/saddle-point.jpg)
 
-
-
+我们称一对
+$$
+\tilde{w}\in W,\ \tilde{z}\in Z
+$$
+是函数f（以及W和Z）的**鞍点**，如果对任意w∈W和z∈Z下式成立
+$$
+f(\tilde{w},z)\leqslant f(\tilde{w},\tilde{z})\leqslant f(w,\tilde{z})
+$$
+换言之，$f(w,\tilde{z})$在$\tilde{w}$处取得最小值（关于变量w∈W），$f(\tilde{w},z)$在$\tilde{z}$处取得最大值（关于变量z∈Z）：
+$$
+f(\tilde{w},\tilde{z})=\mathop{\text{inf}}_{w\in W}\ f(w,\tilde{z}),\quad f(\tilde{w},\tilde{z})=\mathop{\text{sup}}_{z\in Z}\ f(\tilde{w},z)
+$$
+其中，
+$$
+f(w,\tilde{z})=\mathop{\text{sup}}_{z\in Z}f(w,z),\quad f(\tilde{w},z)=\mathop{\text{inf}}_{w\in W}f(w,z)
+$$
+所以，上式意味着强极大极小性质成立，且共同值为
+$$
+f(\tilde{w},\tilde{z})
+$$
+回到我们关于Lagrange对偶的讨论，如果x\*和λ\*分别是原问题和对偶问题的最优解，且强对偶性成立，则它们是Lagrange函数的一个鞍点。反过来同样成立：如果(x,λ)是Lagrange函数的一个鞍点，那么x是原问题的最优解，λ是对偶问题的最优解，且最优对偶间隙为零。
 
 ### 对策解释
 
@@ -578,6 +609,7 @@ $$
   =0
   \end{aligned}
   $$
+
 
 
 
