@@ -5,7 +5,7 @@
 
 [理解凸优化](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247484439&idx=1&sn=4fa8c71ae9cb777d6e97ebd0dd8672e7&chksm=fdb69980cac110960e08c63061e0719a8dc7945606eeef460404dc2eb21b4f5bdb434fb56f92&mpshare=1&scene=1&srcid=0518tlWFr2se8CueI9c0wSTe#rd)
 
-
+* [凸优化](#凸优化)
 
 参考：
 
@@ -114,11 +114,93 @@ end
 
 # 凸优化问题
 
+## 优化问题
 
+我们用
+$$
+\begin{aligned}
+&\text{minimize}\quad &f_0(x)\quad&\\
+&\text{subject to}\quad &f_i(x)\leqslant0,\quad &i=1,...,m\\
+&&h_i(x)=0,\quad&i=1,...,p
+\end{aligned}
+$$
+描述在所有满足
+$$
+\begin{aligned}
+ &f_i(x)\leqslant0,\quad i=1,...,m\\
+&h_i(x)=0,\quad i=1,...,p
+\end{aligned}
+$$
+的x中寻找极小化f0(x)的x的问题。
 
+我们称
 
+* x为**优化变量**
+* 函数f0为**目标函数**或**费用函数**
+* 不等式fi(x)≤0成为**不等式约束**，相应的函数fi称为**不等式约束函数**
+* 方程组hi(x)=0称为**等式约束**，相应的函数hi称为**等式约束函数**
+* 如果没有约束，我们称问题为**无约束**问题
 
+对目标和所有约束函数有定义的点的集合
+$$
+\mathbb{D}=\bigcap_{i=0}^{m}\text{dom}\ f_i\ \cap\ \bigcap_{i=1}^{p}\text{dom}\ h_i
+$$
+称为上述优化问题的**定义域**。当点x∈D满足约束
+$$
+\begin{aligned}
+ &f_i(x)\leqslant0,\quad i=1,...,m\\
+&h_i(x)=0,\quad i=1,...,p
+\end{aligned}
+$$
+时，x是**可行**的。当上述优化问题至少有一个可行点时，我们称为是**可行**的，否则称为**不可行**。所有可行点的集合称为**可行集**或**约束集**。
 
+上述优化问题的最优值p\*定义为
+$$
+p^*=\text{inf}\left\{ f_0(x)|f_i(x)\leqslant0,\ i=1,...,m,\quad h_i(x)=0,\ i=1,...,p \right\}
+$$
+如果x\*是可行的，并且f0(x\*)=p\*，我们称x\*为**最优点**，或x\*解决了上述优化问题。所有解的集合称为**最优集**，记为
+$$
+X_{\text{opt}}=\left\{ x|f_i(x)\leqslant0,\ i=1,...,m,\quad h_i(x)=0,\ i=1,...,p,\ f_0(x)=p^* \right\}
+$$
+如果上述优化问题存在最优解，我们称最优值是**可得**或**可达**的，称问题**可解**。如果Xopt是空集，我们称最优值是不可得或者不可达的（这种情况常在问题无下界时发生）。
+
+## 凸优化问题定义
+
+**凸优化问题**是形如
+$$
+\begin{aligned}
+&\text{minimize}\quad &f_0(x)\quad&\\
+&\text{subject to}\quad &f_i(x)\leqslant0,\quad &i=1,...,m\\
+&&h_i(x)=0,\quad&i=1,...,p
+\end{aligned}
+$$
+的问题，其中f0,...,fm为凸函数。
+
+对比上式的问题和上届的一般的优化问题，凸优化问题有三个附加的要求：
+
+* 目标函数必须是**凸**的
+
+* 不等式约束函数必须是**凸**的
+
+* 等式约束函数
+  $$
+  h_i(x)=a_i^Tx-b_i
+  $$
+  必须是**仿射**的
+
+我们立即注意到一个重要的性质：凸优化问题的可行集是凸的，因为它是问题定义域
+$$
+\mathbb{D}=\bigcap_{i=0}^{m}\text{dom}\ f_i
+$$
+（这是一个凸集）、m个（凸的）下水平集
+$$
+\{x|f_i(x)\leqslant0\}
+$$
+以及p个超平面
+$$
+\left\{ x|a_i^Tx=b_i \right\}
+$$
+的交集。因此，在一个凸优化问题中，我们是**在一个凸集上极小化一个凸的目标函数**。
 
 # 对偶
 
@@ -431,9 +513,52 @@ $$
 
 ### 对策解释
 
+我们可以通过一个连续**零和对策**来理解上面的**极大极小不等式，极大极小等式**（如下式所示），以及鞍点性质（如下图所示）。
+$$
+\begin{aligned}
+\mathop{\text{sup }}_{z\in Z}\mathop{\text{inf}}_{w\in W}f(w,z)\leqslant\mathop{\text{inf }}_{w\in W}\mathop{\text{sup}}_{z\in Z}f(w,z)\\
+\mathop{\text{sup }}_{z\in Z}\mathop{\text{inf}}_{w\in W}f(w,z)=\mathop{\text{inf }}_{w\in W}\mathop{\text{sup}}_{z\in Z}f(w,z)
+\end{aligned}
+$$
+![saddle-point](pic/saddle-point.jpg)
 
+如果局中人甲选择w∈W，局中人乙选择z∈Z。那么甲支付给乙支付额f(w,z)。甲希望极小化f，而乙当然希望极大化f了，因为想要拿更多的钱嘛。
 
+设甲先做出选择，乙知道甲的选择后，再做出选择。
 
+乙希望极大化支付额f(w,z)，因此选择z∈Z来极大化f(w,z)。所产生的支付额为
+$$
+\mathop{\text{sup}}_{z\in Z}f(w,z)
+$$
+，由甲的选择w决定。
+
+而甲知道乙将基于自己选择的w∈W来采取此措施，所以，甲会选择w∈W使得最坏情况下的支付额尽可能得小。因此甲选择w为
+$$
+\mathop{\text{arg min}}_{w\in W}\ \mathop{\text{sup}}_{z\in Z}f(w,z)
+$$
+，这样甲付给乙的支付额为
+$$
+\mathop{\text{inf}}_{w\in W}\ \mathop{\text{sup}}_{z\in Z}f(w,z)
+$$
+现在假设对策的顺序反过来：乙先做出选择z∈Z，甲随后选择w∈W（甲已经知道了乙的选择z）。那么，类似地，乙在先做出选择的时候，就肯定会让甲选择的最小值最大化，即如果选择最优策略，乙必须选择z∈Z来极大化
+$$
+\mathop{\text{inf}}_{w\in W}f(w,z)
+$$
+，这样甲需付给乙的支付额为
+$$
+\mathop{\text{sup }}_{z\in Z}\mathop{\text{inf}}_{w\in W}f(w,z)
+$$
+极大极小不等式说明（直观上显然）这样一个事实，**后选择的人具有优势**，即如果在选择的时候，已经知道对手的选择，则更具有优势。换言之，如果甲必须先做出选择，乙获得的支付额更大。当鞍点性质成立时，做出选择的顺序对最后的支付额没有影响。
+
+如果
+$$
+(\tilde{w},\tilde{z})
+$$
+是函数f（在W和Z上）的一个**鞍点**，那么称它为对策的一个解；$\tilde{w}$称为甲的最优选择或对策，$\tilde{z}$称为乙的最优选择或对策。在这种情况下，**后选择没有任何优势**。
+
+现在考虑一种特殊的情况，支付额函数是Lagrange函数。此时，甲选择原变量x，乙选择对偶变量λ≥0。根据前面的讨论，如果乙必须先选择，其最优方案是任意对偶最优解λ\*，乙所获得的支付额此时为d\*。反过来，如果甲必须先选择，其最优选择是任意原问题的最优解x\*，相应的支付额为p\*。
+
+**此问题的最优对偶间隙恰是后选择的局中人所具有的优势，即当知道对手的选择后再做出选择的优势。如果强对偶性成立，知晓对手的选择不会带来任何优势。**
 
 ## 最优性条件
 
@@ -609,6 +734,7 @@ $$
   =0
   \end{aligned}
   $$
+
 
 
 
