@@ -71,11 +71,66 @@ $$
 
 ## 凸函数定义
 
+**函数f是凸的**，如果dom f是凸集，且对于任意x, y ∈ dom f和任意0≤θ≤1，有
+$$
+f(\theta x+(1-\theta)y)\leqslant\theta f(x)+(1-\theta)f(y)
+$$
+从几何意义上看，上述不等式意味着点(x,f(x))和(y,f(y))之间的线段，即**从x到y的弦，在函数f的上方**，如下图所示。
 
+![convex-function](pic/convex-function.png)
+
+### 一阶条件
+
+假设f可微（即其梯度▽f在开集dom f内处处存在），则函数f是凸函数的充要条件是dom f是凸集且对于任意x, y ∈ dom f，下式成立
+$$
+f(y)\geqslant f(x)+\bigtriangledown f(x)^T(y-x)
+$$
+下图描述了上述不等式。
+
+![convex-function-first-order-derivative](pic/convex-function-first-order-derivative.png)
+
+
+
+上述不等式表明，对于一个凸函数，其一阶Taylor近似实质上是原函数的一个全局下估计。反之，如果某个函数的一阶Taylor近似总是其全局下估计，那么这个函数是凸的。
+
+上述不等式说明从一个凸函数的局部信息（即其在某点的函数值及导数），我们可以得到一些全局信息（如它的全局下估计）。这也许是凸函数的最重要的信息，由此可以解释凸函数以及凸优化问题的一些非常重要的性质。
+
+下面是一个简单的例子，由上述不等式可知，如果▽f(x)=0，那么对于所有的y ∈  dom f，存在f(y)≥f(x)，即x是函数f的全局极小点。
+
+### 二阶条件
+
+现在假设函数f二阶可微，即对于开集dom f内的任意一点，它的Hessian矩阵或者二阶导数▽^2f存在，则函数f是凸函数的充要条件是，其Hessian矩阵是半正定阵：即对于所有的x ∈ dom f，有
+$$
+\bigtriangledown^2f(x)\geqslant 0
+$$
+对于R上的函数，上式可以简化为一个简单的条件f''(x)≥0（dom是凸的，即一个区间），此条件说明函数f是非减的。二阶导数大于等于零从几何上可以理解为函数图像在点x处具有正（向上）的曲率。
 
 ## Jensen不等式
 
-
+基本不等式
+$$
+f(\theta x+(1-\theta )y)\leqslant \theta f(x)+(1-\theta)f(y)
+$$
+有时也称作Jesen不等式。此不等式可以很方便地扩展到更多点的凸组合：如果函数f是凸函数，x1,...,xk ∈  dom f，θ1,...,θk≥0且θ1+...+θk=1，则下式成立
+$$
+f(\theta_1x_1+...+\theta_kx_k)\leqslant\theta_1f(x_1)+...+\theta_kf(x_k)
+$$
+考虑凸集时，此不等式可以扩展到无穷和、积分以及期望。例如，如果在S⊆ dom f上p(x)≥0且
+$$
+\int_Sp(x)dx=1
+$$
+，则当相应的积分存在时，下式成立
+$$
+f\left( \int_Sp(x)xdx \right)\leqslant \int_Sf(x)p(x)dx
+$$
+如果x是随机变量，事件x ∈ dom f发生的概率为1，函数f是凸函数，当相应的期望存在时，我们有
+$$
+f(\mathbb{E}x)\leqslant\mathbb{E}f(x)
+$$
+上述所有不等式均被称为Jensen不等式，而实际上最初由Jessen提出的不等式相当简单
+$$
+f\left( \frac{x+y}{2} \right)\leqslant \frac{f(x)+f(y)}{2}
+$$
 
 ## 共轭函数
 
@@ -780,6 +835,7 @@ $$
   =0
   \end{aligned}
   $$
+
 
 
 
