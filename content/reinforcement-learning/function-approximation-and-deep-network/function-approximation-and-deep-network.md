@@ -28,8 +28,24 @@
   - [策略评价时的收敛性](#策略评价时的收敛性)
   - [策略优化时的收敛性](#策略优化时的收敛性)
 - [神经网络](#神经网络)
+  - [神经网络单元](#神经网络单元)
+  - [激活函数](#激活函数)
+  - [多层神经网络](#多层神经网络)
+  - [反向传播](#反向传播)
+  - [网络的大小和深度](#网络的大小和深度)
+  - [正则化](#正则化)
+  - [本课程对神经网络的要求](#本课程对神经网络的要求)
 - [卷积神经网络](#卷积神经网络)
+  - [卷积神经网络的整体结构](#卷积神经网络的整体结构)
+  - [卷积](#卷积)
+  - [卷积层](#卷积层)
+  - [池化层（Pooling）](#池化层（Pooling）)
+  - [全连接层](#全连接层)
 - [其他](#其他)
+  - [LeNet5](#LeNet5)
+  - [AlexNet](#AlexNet)
+  - [ResNet](#ResNet)
+  - [深度学习的其他拓展](#深度学习的其他拓展)
 
 
 
@@ -257,6 +273,7 @@
 
 
 
+
 ### 表格检索特征
 
 还有一种特征，也是线性模型。
@@ -331,6 +348,7 @@
 
 
 
+
 ### 值函数近似下的蒙特卡洛
 
 * 回报值Gt是真实值函数vπ(St)的**无偏估计**
@@ -347,6 +365,7 @@
   &=\alpha(G_t-\hat{v}(S_tw))x(S_t)\quad \text{(in linear condition)}
   \end{aligned}
   $$
+
 
 
 
@@ -370,6 +389,7 @@
   &=\alpha\delta x(S)\quad \text{(in linear condition)}\\
   \end{aligned}
   $$
+
 
 
 
@@ -404,6 +424,7 @@
   \bigtriangleup w&=\alpha\delta_tE_t\\
   \end{aligned}
   $$
+
 
 
 
@@ -447,6 +468,7 @@
 
 
 
+
 ### 线性Q函数近似
 
 * 用一个特征向量表示某一个具体的S,A。
@@ -475,6 +497,7 @@
   \bigtriangleup w&=\alpha(q_{\pi}(S,A)-\hat{q}(S,A,w))x(S,A)\\
   \end{aligned}
   $$
+
 
 
 
@@ -516,6 +539,7 @@ $$
 
 
 
+
 # 收敛性简介
 
 ## 策略评价时的收敛性
@@ -545,21 +569,243 @@ Q学习是离策略的，收敛性会更差一点。虽然收敛性不好，但�
 
 # 神经网络
 
+参考资料：
 
+由于神经网络和卷积神经网络并不是我们这门课的重点，因此这里主要是简述，具体大家可以参考如下的资料
+
+* UFLDL 教程，有关神经网络和反向传播算法
+
+  http://ufldl.stanford.edu/wiki/index.php/UFLDL_Tutorial (可以选择中文)
+
+* CS231
+
+  http://cs231n.github.io/ 
+
+## 神经网络单元
+
+![neural-network-unit](pic/neural-network-unit.png)
+
+本质上是一个线性特征组合 + 一个非线性激活函数。在这里 
+$$
+h_{W,b}(x)=f(W^Tx+b)=f\left( \sum_{i=1}^3 W_ix_i+b\right)
+$$
+
+* 其中函数f：R→R称为“激活函数”
+* W,b表示这个神经元的参数
+* 通过W,b对输入的特征进行了特征组合，然后经过非线性映射，将输入投射到新的空间
+
+## 激活函数
+
+为什么要靠激活函数？
+
+* 特征组合运算都是线性运算
+* 分割不同的神经网络层
+
+常用的激活函数
+
+* sigmoid
+  $$
+  f(z)=\frac{1}{1+e^{-z}}
+  $$
+
+* tanh
+  $$
+  f(z)=tanh(z)=\frac{e^z-e^{-z}}{e^z-e^{-z}}
+  $$
+
+* ReLU(Rectified Linear Unit)
+  $$
+  f(z)=ReLU(z)=max(0,z)
+  $$
+
+
+![activation-function](pic/activation-function.png)
+
+* sigmoid和tanh形式不同，取值范围有所差别。([0,1],[-1,1])
+
+* 激活函数除了要求非线性外，还要求容易求导
+
+  * sigmoid：
+    $$
+    f'(z)=f(z)(1-f(z))
+    $$
+
+  * tanh：
+    $$
+    f'(z)=1-(f(z))^2
+    $$
+
+  * sigmiod和tanh具有饱和效应，不适用于太深的神经网络。
+
+## 多层神经网络
+
+![multilayer-neural-network](pic/multilayer-neural-network.png)
+
+* 输入层，输出层，隐藏层
+
+* 每一层的输出本质上是将输入特征进行了变换
+
+* 如果用向量的形式表示
+  $$
+  f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]
+  $$
+  ，且用$W^{(l)}, b^{(l)}$表示第l层的权重和偏置
+  $$
+  \begin{aligned}
+  a^{(2)}=f(W^{(1)}x+b^{(1)})\\
+  a^{(3)}=f(W^{(2)}a^{(2)}+b^{(2)})
+  \end{aligned}
+  $$
+
+* 上述过程叫做前向传播——给定第l层的输出，可以计算l+1层的输出
+
+## 反向传播
+
+神经网络中最重要的概念之一就是反向传播
+
+* 前向传播指的是从前往后一次计算输出的过程
+
+* 反向传播指的是从后往前一次计算梯度的过程
+
+* 损失函数
+  $$
+  J=\frac{1}{2}||h_{W,b}(x)-y||^2
+  $$
+
+* 如果要更新参数
+  $$
+  W^{(1)},b^{(1)},W^{(2)},b^{(2)}
+  $$
+  ，那么就需要计算相应的梯度
+  $$
+  \bigtriangledown_{w^{(1)}}J,\bigtriangledown_{b^{(1)}}J,\bigtriangledown_{w^{(2)}}J,\bigtriangledown_{b^{(2)}}J,...
+  $$
+
+* 反向传播本质上就是利用了求导的链式法则
+  $$
+  \begin{aligned}\\
+  \frac{\partial y}{\partial x}&=\frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\\
+  \frac{\partial J}{\partial W^{(2)}}&=\frac{\partial J}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial W^{(2)}}\\
+  \frac{\partial J}{\partial W^{(1)}}&=\frac{\partial J}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial W^{(1)}}\\
+  \end{aligned}
+  $$
+
+
+## 网络的大小和深度
+
+* 多层神经网络集合可以拟合任意连续函数
+* 网络越大越深，模型复杂度越高，对函数的拟合能力越强
+* 网络越大越深，参数也会越多，容易导致过拟合
+
+![network-size-and-depth](pic/network-size-and-depth.png)
+
+## 正则化
+
+为了防止过拟合，出了修改网络大小之外，还可以在损失函数里加正则化项
+$$
+J_{\text{with regularization}}=J+\frac{\lambda}{2}\sum_{l}\sum_j\sum_j\left( W_{ji}^{(l)} \right)^2
+$$
+![regularization](pic/regularization.png)
+
+## 本课程对神经网络的要求
+
+* 对于本门课而言
+  * 神经网络是工具的一种
+  * 要求知道如何使用
+  * 深度学习框架可以自动求导
+* 不过要真正地深入了解深度强化学习，深度学习，神经网络的知识必不可少 
 
 # 卷积神经网络
 
+## 卷积神经网络的整体结构
 
+* 常规的神经网络每一层都是一维向量
+
+* 卷积神经网络的每一层是三维数据：高，宽，深
+
+  ![CNN-structur](pic/CNN-structur.png)
+
+* 由宽和高组成的平面称为特征图 (feature map)
+
+* 深度表示特征图的个数, 也叫做通道 (channal) 数
+
+* 特别地，当输入是一个图像时，它表示深度为3(RGB) 的特征图 
+
+## 卷积
+
+* 局部连接
+* 参数共享
+* 关键概念
+  * 卷积核、步长（stride）、pad
+
+![convolution](pic/convolution.png)
+
+## 卷积层
+
+* 对于每一个卷积核
+  * 使用一个滑动窗口在输入层滑动
+  * 每滑动一次，就会得到一个输出值
+  * 滑动完整个输入层就得到一个输出的特征图
+* 每有一个卷积核就提取一种特征，得到一个特征图
+* 使用多个卷积核就能得到多个特征图 
+
+![convolution-layer](pic/convolution-layer.png)
+
+http://cs231n.github.io/convolutional-networks/
+
+## 池化层（Pooling）
+
+* 池化层本质上是一种降采样
+* 降低特征图大小
+
+![Pooling](pic/Pooling.png)
+
+## 全连接层
+
+* 全连接层就是传统神经网络中的连接方式
+* 每一层是一个一维向量
+* 也可以用从三维的角度去看待全连接层
+  * 即宽和高均为1的层
+* 一般卷积神经网络的最后几层是全连接层
+  * 输出不同类别的概率
+  * 输出不同动作所对应的Q值 (RL问题中) 
 
 # 其他
 
 
 
+## LeNet5
+
+1994年Yann LeCun 
+
+![LeNet5](pic/LeNet5.png)
+
+* Conv, Ave-pooling, sigmoid 
+
+## AlexNet
 
 
 
+![AlexNet](pic/AlexNet.png)
+
+* 2012年引发深度学习热潮
+* 使用了多个GPU分布式训练
+* 使用了ReLU，数据增广，dropout
+
+## ResNet
 
 
 
+![ResNet](pic/ResNet.png)
 
+* 提出残差结构，使得超深的网络训练成为现实
+* 2015 年152层的结构，导致识别率超过人类
+* 2016 CVPR best paper 
+
+## 深度学习的其他拓展
+
+* 循环神经网络 RNN, LSTM
+* Attention 结构
+* 可微分存储器
+* … 
 
