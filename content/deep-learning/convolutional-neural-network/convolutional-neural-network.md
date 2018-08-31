@@ -367,6 +367,7 @@ $$
 其中，
 $$
 \begin{aligned}
+& l\text{层有}n\text{个神经元,}l+1\text{层有}m\text{个神经元}\\
 &W^{l+1}\text{为}[m\times n]\text{维向量,}\text{是}l+1\text{层神经元的输入权重,}m\text{是}l+1\text{层神经元的个数,}n\text{是}l\text{层神经元的个数;}\\
 &\delta^{l+1}\text{为}[m\times 1]\text{维向量,}m\text{是}l+1\text{层神经元的个数;}\\
 &f'(u^l)\text{是}[n\times 1]\text{维向量了}\\
