@@ -534,9 +534,9 @@ $$
 线性不可分的线性支持向量机的学习问题变成如下凸二次规划问题（**原始问题**）：
 $$
 \begin{aligned}
-&\mathop{\text{min}}_{w,b,\xi}\quad \frac{1}{2}||w||^2+C\sum_{i=1}^N\xi_i&\\
-&\text{s.t.}\ \quad y_i(w\cdot x_i+b)\geqslant 1-\xi_i,\ i=1,2,...,N\\
-&\ \ \quad \quad \xi_i\geqslant 0,\ i=1,2,...,N\\
+&\mathop{\text{min}}_{w,b,\xi}\quad \frac{1}{2}||w||^2+C\sum_{i=1}^N\xi_i\\
+&\text{s.t.}\ \ \quad y_i(w\cdot x_i+b)\geqslant 1-\xi_i,\ i=1,2,...,N\\
+&\ \ \ \quad \quad \xi_i\geqslant 0,\ i=1,2,...,N\\
 \end{aligned}
 $$
 原始问题是一个凸二次规划问题，因而关于(w,b,ξ)的解是存在的。可以证明w的解是唯一的，但b的解并不唯一，b的解存在于一个区间。
@@ -557,7 +557,180 @@ $$
 
 ## 线性支持向量机学习的对偶算法
 
+原始问题的对偶问题是
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+下面我们来具体说明上述对偶问题是怎么得出的：
 
+原始最优化问题的**拉格朗日函数**是
+$$
+L(w,b,\xi,\alpha,\mu)=\frac{1}{2}||w||^2+C\sum_{i=1}^N\xi_i-\sum_{i=1}^N\alpha_i(y_i(w\cdot x_i+b)-1+\xi_i)-\sum_{i=1}^N\mu_i\xi_i
+$$
+其中，
+$$
+\alpha_i\geqslant0,\quad \mu_i\geqslant0
+$$
+对偶问题是拉格朗日函数的极大极小问题。
+
+首先求L(w,b,ξ,α,μ)**对w,b,ξ的极小**，由
+$$
+\begin{aligned}
+&\bigtriangledown_wL(w,b,\xi,\alpha,\mu)=w-\sum_{i=1}^N\alpha_iy_ix_i=0\\
+&\bigtriangledown_bL(w,b,\xi,\alpha,\mu)=-\sum_{i=1}^N\alpha_iy_i=0\\
+&\bigtriangledown_{\xi_i}L(w,b,\xi,\alpha,\mu)=C-\alpha_i-\mu=0
+\end{aligned}
+$$
+得
+$$
+\begin{aligned}
+&w=\sum_{i=1}^N\alpha_iy_ix_i\\
+&\sum_{i=1}^N\alpha_iy_i=0\\
+&C-\alpha_i-\mu=0\\
+\end{aligned}
+$$
+将上式代入上面的拉格朗日函数，得
+$$
+\mathop{\text{min}}_{w,b,\xi}L(w,b,\xi,\alpha,\mu)=-\frac{1}{2}\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)+\sum_{i=1}^N\alpha_i
+$$
+再对极小（上式）求**α的极大**，即得**对偶问题**：
+$$
+\begin{aligned}
+&\mathop{\text{max}}_{\alpha}\quad -\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)+\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad C-\alpha_i-\mu_i=0\\
+&\ \ \ \quad \quad \alpha_i\geqslant0\\
+&\ \ \ \quad \quad \mu_i\geqslant0,\ i=1,2,...,N\\
+\end{aligned}
+$$
+将对偶最优化问题（上式）进行变换：利用等式约束（上式第二项约束）消去μi，从而只留下变量αi，并将约束（上式第后三项约束）写成
+$$
+0\leqslant\alpha_i\leqslant C
+$$
+下面具体来说明上式不等式是怎么得到的：
+$$
+\begin{aligned}
+&C-\alpha_i-\mu_i=0 \Rightarrow \mu_i=C-\alpha_i\\
+&u_i\geqslant0 \Rightarrow C-\alpha_i\geqslant0 \Rightarrow \alpha_i\leqslant C\\
+&\alpha_i\geqslant0 \Rightarrow 0\leqslant \alpha_i\leqslant C
+\end{aligned}
+$$
+再通过取负，将对目标函数求极大转换为求极小，于是得到对偶问题
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+可以**通过求解对偶问题而得到原始问题的解(w\*,b\*)，进而确定分离超平面和决策函数**。为此，我们以定理的形式叙述原始问题的最优解(w\*,b\*)和对偶问题的最优解α\*的关系。
+
+**定理：原始问题的最优解(w\*,b\*)和对偶问题的最优解α\*的关系：**
+
+设
+$$
+\alpha^*=\{\alpha_1^*, \alpha_2^*, ..., \alpha_N^*\}
+$$
+是上述对偶问题的一个解，若存在α\*的一个分量αj\*，0<αj\*<C，则原始问题的解(w\*,b\*)可按下式求得：
+$$
+\begin{aligned}
+&w^*=\sum_{i=1}^N\alpha_i^*y_ix_i\\
+&b^*=y_j-\sum_{i=1}^Ny_i\alpha_i^*(x_i\cdot x_j)\\
+\end{aligned}
+$$
+证明：
+
+原始问题是凸二次规划问题，满足强对偶问题（凸函数+Slater条件），所以原函数问题和对偶问题等价，则解满足KKT条件。即得
+$$
+\begin{aligned}
+&\bigtriangledown_wL(w,b,\xi,\alpha,\mu)=w-\sum_{i=1}^N\alpha_iy_ix_i=0\\
+&\bigtriangledown_bL(w,b,\xi,\alpha,\mu)=-\sum_{i=1}^N\alpha_iy_i=0\\
+&\bigtriangledown_{\xi_i}L(w,b,\xi,\alpha,\mu)=C-\alpha_i-\mu=0\\
+&\alpha_i^*(y_i(w^*\cdot x_i+b^*)-1+\xi_i)=0\\
+&\mu_i^*\xi_i^*=0\\
+&y_i(w^*\cdot x_i+b^*)-1+\xi_i^*\geqslant 0\\
+&\xi_i^*\geqslant0\\
+&\alpha_i^*\geqslant0\\
+&\mu_i^*\geqslant 0,\quad i=1,2,...,N\\
+\end{aligned}
+$$
+解释下上式所述的KKT条件：前三项是一阶偏导等于零，**第四五项是互补松弛条件（强对偶性决定的）**，第六七项是原始问题的约束条件，最后两项是对偶问题的约束条件。
+
+由上式KKT条件中的第一项可知，原始问题的解中的第一项成立，即
+$$
+w^*=\sum_{i=1}^N\alpha_i^*y_ix_i
+$$
+再由KKT的互补松弛条件（第四五项）得，若存在αj\*，0<αj\*<C，则
+$$
+y_i(w^*\cdot x_i+b^*)-1=0
+$$
+。**这里具体是怎么得到的呢？**
+
+**由互补松弛条件的第一项可知，当αj\*>0时，该项括号内才等于零，即**
+$$
+y_i(w^*\cdot x_i+b^*)-1+\xi_i^*=0
+$$
+**里面还有个ξi\*未知，那怎么消去这个ξi\*呢？由互补松弛条件的第二项可知，当μi\*>0时，ξi\*=0，这时候就能消去ξi\*了。那么当μi\*>0时，αj\*必须满足什么条件呢？或者说，当αj\*满足什么条件时，才能保证μi\*>0？我们知道，对偶问题的条件中有一个C-αi-μi=0，即μi=C-αi>0，则αi<C，这时，上式中的ξi\*=0。也就是说，当0<αj\*<C时，ξi\*=0，则有**
+$$
+y_i(w^*\cdot x_i+b^*)-1=0
+$$
+即由此即得原始问题的解中的第二项（注意上式中1可以写成yi的平方，然后可消去yi，求得b\*），即
+$$
+b^*=y_j-\sum_{i=1}^Ny_i\alpha_i^*(x_i\cdot x_j)
+$$
+。由此定理可知，分离超平面可以写成
+$$
+\sum_{i=1}^N\alpha_i^*y_i(x\cdot x_i)+b^*=0
+$$
+分类决策函数可以写成
+$$
+f(x)=\text{sign}\left( \sum_{i=1}^N\alpha_i^*y_i(x\cdot x_i)+b^* \right)
+$$
+上式为**线性支持向量机的对偶形式**。
+
+综合前面的结果，有下面的算法。
+
+**线性支持向量机学习算法**
+
+输入：训练数据集T=\{ (x1,y1),(x2,y2),...,(xN,yN) \}，其中，xi∈X=R^n，yi∈Y=\{-1,+1\}，i=1,2,...,N；
+
+输出：分离超平面和分类决策函数。
+
+（1）选择惩罚参数C>0，构造并求解凸二次规划问题（**对偶问题**）
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+求得最优解
+$$
+\alpha^*=\{\alpha_1^*, \alpha_2^*, ..., \alpha_N^*\}
+$$
+（2）计算原问题的最优解的参数w\*和b\*。
+$$
+w^*=\sum_{i=1}^N\alpha_i^*y_ix_i
+$$
+选择α\*的一个满足条件0<αj\*<C的分量αj\* ，计算
+$$
+b^*=y_j-\sum_{i=1}^Ny_i\alpha_i^*(x_i\cdot x_j)
+$$
+（3）求得分离超平面和分类决策函数
+
+分离超平面：
+$$
+w^*\cdot x+b^*=0
+$$
+分类决策函数：
+$$
+f(x)=\text{sign}(w^*\cdot x+b^*)
+$$
+上述步骤（2）中，对任一符合条件0<αj\*<C的αj\*，按照该算法求b\*的公式都可以求出b\*，但是由于原始问题对b的解并不唯一，所以实际计算时，可以取在所有符合条件的样本点上的平均值。
 
 ## 支持向量
 
