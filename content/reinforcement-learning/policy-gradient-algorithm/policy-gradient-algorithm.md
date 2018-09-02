@@ -3,14 +3,41 @@
 - [返回顶层目录](../../SUMMARY.md#目录)
 - [本章在学习地图中的位置](#本章在学习地图中的位置)
 - [本章简介](#本章简介)
+  - [基于策略的强化学习](#基于策略的强化学习)
+  - [强化学习分类](#强化学习分类)
+  - [为什么要使用策略梯度算法](#为什么要使用策略梯度算法)
+  - [策略模型的建模方式](#策略模型的建模方式)
+  - [策略梯度算法的优缺点](#策略梯度算法的优缺点)
+  - [随机策略](#随机策略)
+  - [策略退化](#策略退化)
+  - [收敛性对比](#收敛性对比)
 - [策略梯度定理](#策略梯度定理)
+  - [策略梯度目标函数](#策略梯度目标函数)
+  - [数值法求梯度](#数值法求梯度)
+  - [策略梯度算法](#策略梯度算法)
+  - [策略梯度的推导](#策略梯度的推导)
+  - [对目标函数的几点说明](#对目标函数的几点说明)
+  - [求解▽θU(θ)](#求解▽θU(θ))
+  - [从似然率的角度](#从似然率的角度)
+  - [从重要性采样的角度](#从重要性采样的角度)
+  - [似然率梯度的理解](#似然率梯度的理解)
+  - [将轨迹分解成状态和动作](#将轨迹分解成状态和动作)
+  - [似然率梯度估计](#似然率梯度估计)
 - [减少方差](#减少方差)
+  - [引入基线](#引入基线)
+  - [怎么选基线](#怎么选基线)
+  - [修改回报函数R(τ)](#修改回报函数R(τ))
 - [Actor-Critic](#Actor-Critic)
+  - [实际更新算法](#实际更新算法)
+  - [蒙特卡洛策略梯度（REINFORCE）](#蒙特卡洛策略梯度（REINFORCE）)
+  - [使用Critic函数减小方差](#使用Critic函数减小方差)
+  - [使用优势函数减小方差](#使用优势函数减小方差)
+  - [使用TD误差替代优势函数](#使用TD误差替代优势函数)
+  - [带资格迹的策略梯度](#带资格迹的策略梯度)
+  - [小结](#小结)
+  - [A2C](#A2C)
 - [引申](#引申)
-
-
-
-
+  - [其他策略梯度算法](#其他策略梯度算法)
 
 
 
@@ -182,6 +209,10 @@
 ![stochastic-strategy](pic/stochastic-strategy.png)
 
 * 假设灰色区域是部分观测的
+
+  灰色区域是部分观测的，这个部分观测怎么理解呢？是指在这个区域本身看不到上下左右（眼睛被蒙上了，看不见环境），还是在这个灰色环境下，看到的两边都是同样的白色，没有差异（眼睛好着，但是看到的环境都一样）？
+
+  其实两者都可以。都属于部分观测的。对于这个问题来说，两个灰色区域明显是不同的，如果能看到整个地图导致能够明显区分，那么就是全观测的。对于这个问题，只要是因为观测问题，导致无法知道自己处于什么位置，都可以认为是部分观测。
 
 * 因此两个灰色区域是等价的
 
@@ -569,7 +600,7 @@ $$
 
 * 如果所有的R(τ)都是正的，那么所有动作出现的概率都会增加
 
-  这就导致谁先被采样到，谁就获利
+  这就导致谁先被采样到，谁就获利，这不公平，显然是bug
 
 我们可以通过以下的方法去减小方差
 
@@ -589,14 +620,21 @@ $$
 
 ## 引入基线
 
-首先要证明引入基线，不影响策略梯度
+首先要证明引入基线baseline，不影响策略梯度
 $$
 \begin{aligned}
 \bigtriangledown_{\theta}U(\theta)&\approx \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)R(\tau)\\
 &= \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)(R(\tau)-b)\\
 \end{aligned}
 $$
-1
+比如有的轨迹的回报值是200，有的轨迹的回报值是2，那么baseline就取成100。则可让低于100的，其轨迹出现概率更低一些。
+
+引入baseline的好处：
+
+- 减小方差
+- R(τ)都有正有负
+
+现在我们要证明上式中的分量（如下式所示）等于零，那么上式的等号就能够成立。
 $$
 \begin{aligned}
 \mathbb{E}\left[\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)b\right]
@@ -608,25 +646,262 @@ $$
 &=0
 \end{aligned}
 $$
-
+所以，引入baseline是不影响策略梯度的。
 
 ## 怎么选基线
 
+两种选法
+
+* 选择回报值函数的期望值，即m条轨迹的平均值
+  $$
+  b=\mathbb{E}\left[ R(\tau) \right]\approx \frac{1}{m}\sum_{i=1}^mR(\tau^{(i)})
+  $$
+
+* 最小方差
+  $$
+  b=\frac{\sum_{i=1}^m\left[ \left( \sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t^{(i)}|s_t^{(i)}) \right)^2R(\tau^{(i)}) \right]}
+  {\sum_{i=1}^m\left[ \left( \sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t^{(i)}|s_t^{(i)}) \right)^2 \right]}
+  $$
 
 
-## 最小方差
+上面的公式为什么就是最小方差了呢？
 
+下面是一个求最小方差的简单推导：
 
+令
+$$
+X=\frac{1}{m}\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau^{(i)}-b)
+$$
+，则方差为
+$$
+\text{Var}(X)=\mathbb{E}(X-\bar{X})^2=\mathbb{E}\left[ X^2 \right]-\bar{X}^2
+$$
+方差最小时即导数为零：（X的平均值与b无关，因为它已经是一个数，或者，你将它当成含b的变量，但是上面已经证明了，其含b的期望值为零）
+$$
+\frac{\partial \text{Var}(X)}{\partial b}=\text{E}\left( X\frac{\partial X}{\partial b} \right)=0
+$$
+则
+$$
+b=\frac{\sum_{i=1}^m\left[ \left( \sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t^{(i)}|s_t^{(i)}) \right)^2R(\tau^{(i)}) \right]}
+{\sum_{i=1}^m\left[ \left( \sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t^{(i)}|s_t^{(i)}) \right)^2 \right]}
+$$
 
-## 修改回报函数
+## 修改回报函数R(τ)
 
+除了引入baseline减小方差，还可以通过修改回报函数R(τ)来减小方差。
 
+为什么呢？
 
+因为R(τ)是对于一条轨迹的回报值，可以减少一些点的采样，来减小方差，以为采样越多，带来的方差就越大。比如前面一条轨迹，前面五步是已知的，那就只利用后面的五步去求解，这样的方差是比计算整条轨迹的十步是要小的。尤其是TD(0)，只利用了一次采样，那方差肯定会更小。
+
+策略梯度可用下面的估计去表达：
+
+当前的估计值
+$$
+\begin{aligned}
+\hat{\eta}&= \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)(R(\tau)-b)\\
+&= \frac{1}{m}\sum_{i=1}^m\left(\sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}\left( a_t^{(i)}|s_t^{(i)} \right)\right)
+\left(\sum_{t=0}^TR\left( s_t^{(i)},a_t^{(i)} \right)-b\right)\\
+\end{aligned}
+$$
+
+* 将来的动作不依赖过去的奖励，因此我们可以修改回报值来降低方差
+  $$
+  \frac{1}{m}\sum_{i=1}^m\sum_{t=0}^T\left[\bigtriangledown_{\theta}\text{log}\pi_{\theta}\left( a_t^{(i)}|s_t^{(i)} \right)\left(\sum_{k=t}^TR\left( s_k^{(i)},a_k^{(i)} \right)-b\left(s_k^{(i)}\right)\right)\right]
+  $$
 
 
 # Actor-Critic
 
+真正实用的方法就是Actor-Critic方法，是策略梯度和值函数的结合，Actor指策略网络，Critic指值函数网络。
 
+## 实际更新算法
+
+实际采样的时候，不可能m条轨迹全部采样完再去更新，而是每一步都去更新一次。
+
+实际更新时，会做一些简化
+
+* 考虑单条轨迹，而不是采样m条轨迹
+  $$
+  \hat{\eta}=\sum_{t=0}^T\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)\left( \sum_{k=t}^T\gamma^{k-t}R(s_k,a_k) \right) \right]
+  $$
+
+* 考虑单步更新，即单条轨迹里每一步的更新值
+  $$
+  \hat{\eta}=\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)\left( \sum_{k=t}^T\gamma^{k-t}R(s_k,a_k) \right)
+  $$
+
+
+## 蒙特卡洛策略梯度（REINFORCE）
+
+对于上式中等号右边的括号内的值，该怎么估计呢？其实就相当于V函数，第一种方法就是用蒙特卡洛的方法去估计。
+
+* 使用梯度上升算法更新参数θ
+
+* 使用采样回报值gt估计真实回报值
+  $$
+  \Delta\theta_t=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)g_t
+  $$
+
+
+**REINFORCE算法**
+
+特点是，把每一条轨迹切片成多条，分别进行更新。
+
+![REINFORCE-algorithom](pic/REINFORCE-algorithom.png)
+
+该算法的方差比较大，是因为蒙特卡洛的原因。
+
+那么能不能减小方差呢：
+
+## 使用Critic函数减小方差
+
+* 我们可以使用critic函数（值函数估计）来估计回报值减小方差
+  $$
+  Q_w\left( s_k,a_k \right)\approx \sum_{t=k}^T\left( \gamma^{t-k}R(s_k,a_k) \right)
+  $$
+  也就是说，不用蒙特卡洛采样出来，而是用Q函数估计出来，因为已经给定动作a了，所以就相当于Q嘛
+
+  我们用w为参数建立一个线性模型或者神经网络模型去拟合Q。我们同时去更新π和Q的模型。
+
+  也就是，**用Q模型（线性模型或者神经网络模型）去替代策略梯度里的回报值，就是Actor-Critic方法**
+
+* Actor-Critic算法维持两个参数
+
+  * Critic更新Q函数的参数w
+  * Actor使用Critic的方向更新策略参数θ
+
+* Actor-Critic算法本质上还是利用Actor方法（策略网络）去做，用Critic方法去指导Actor的更新，Actor的更新用的是策略梯度，策略梯度中有一项需要算回报值，回报值怎么算，就用Critic算，虽然回报值可以用采样才出来，但是方差 太大，所以就用Critic去估计回报值。
+
+* 近似策略梯度
+  $$
+  \Delta\theta=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)Q_w(s,a)
+  $$
+
+
+## 使用优势函数减小方差
+
+即使使用Actor-Critic算法，仍然需要进一步减小方差。可以把baseline加进来，怎么加？我们这里不用reinforce的方法，因为reinforce要去采样m条轨迹，那怎么引入baseline呢？可以引入V函数做baseline，用Q函数减去V函数。
+
+之前的baseline描述的是不同的轨迹的差异，现在的baseline描述的是不同的动作的差异。有些动作表示的是正的，有些又是负的，则有些动作下优势函数是正的，有些动作下优势函数是负的。
+
+优势函数
+$$
+A^{\pi_{\theta}}(s,a)=Q^{\pi_{\theta}}(s,a)-V^{\pi_{\theta}}(s)
+$$
+即通过V函数估计基线，用Q函数估计回报函数
+
+再引入一个V模型来估计真实的V函数，这样我们就有了三个模型了：第一个是策略模型π(θ)，第二个是Q的模型Q(w)，第三个是V模型V(v)
+$$
+\begin{aligned}
+V_v(s)&\approx V^{\pi_{\theta}}(s)\\
+Q_w(s,a)&\approx Q^{\pi_{\theta}}(s,a)\\
+A(s,a)&=Q_w(s,a)-V_v(s)\\
+\end{aligned}
+$$
+近似策略梯度
+$$
+\bigtriangleup\theta=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)A(s,a)
+$$
+上式的优势函数A包含了两个参数，一个是Q(w)，一个是V(v)。
+
+## 使用TD误差替代优势函数
+
+优势函数A有两个参数还比较麻烦，我们把两个参数合二为一，用TD误差来提到优势函数A。
+
+* 对于真实的值函数
+  $$
+  V^{\pi_{\theta}}(s)
+  $$
+  ，TD误差为TD目标值减去V函数
+  $$
+  \delta^{\pi_{\theta}}=r+\gamma V^{\pi_{\theta}}(s')-V^{\pi_{\theta}}(s)
+  $$
+
+* TD误差是优势函数的无偏估计
+  $$
+  \begin{aligned}
+  \mathbb{E}_{\pi_{\theta}}\left[ \delta^{\pi_{\theta}}|s,a \right]&=\mathbb{E}_{\pi_{\theta}}\left[ r+\gamma V^{\pi_{\theta}}(s')|s,a \right]-V^{\pi_{\theta}(s)}\\
+  &=Q^{\pi_{\theta}}(s,a)-V^{\pi_{\theta}}(s)\\
+  &=A^{\pi_{\theta}}(s,a)
+  \end{aligned}
+  $$
+
+* 使用TD误差来计算策略梯度
+  $$
+  \bigtriangledown_{\theta}\text{log}\pi_{\theta}(s,a)\delta^{\pi_{\theta}}
+  $$
+
+* 实际使用中，使用近似的TD误差
+  $$
+  \delta_v=r+\gamma V_v(s')-V_v(s)
+  $$
+
+* 通过这样的方法，我们只需要一个critic参数v
+
+## 带资格迹的策略梯度
+
+把TD误差换成了带资格迹的TD(λ)误差
+
+* 前向视角TD(λ)，用λ回报值去估计优势函数
+
+  TD(λ)误差为TD(λ)目标值减去V函数
+  $$
+  \bigtriangleup\theta=\alpha\left( G_t^{\lambda}-V_v(s_t) \right)\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)
+  $$
+
+* 这里
+  $$
+  G_t^{\lambda}-V_v(s_t)
+  $$
+  是优势函数的有偏估计
+
+* 后向视角TD(λ)
+  $$
+  \begin{aligned}
+  \delta&=r_{t+1}+\gamma V_v(S_{t+1})-V_v(s_t)\\
+  e_t&=\lambda e_{t-1}+\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)\\
+  \bigtriangleup \theta&=\alpha\delta e_t\\
+  \end{aligned}
+  $$
+
+
+## 小结
+
+* **策略梯度**有多种形式
+  $$
+  \begin{aligned}
+  \bigtriangledown_{\theta}J(\theta)&=\mathbb{E}_{\pi_{\theta}}\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)g_t \right]\quad \text{REINFORCE MC}\\
+  &=\mathbb{E}_{\pi_{\theta}}\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)Q_w(s,a) \right]\quad \text{Q Actor-Crtic}\\
+  &=\mathbb{E}_{\pi_{\theta}}\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)A_{w,v}(s,a) \right]\quad \text{Adavanced Actor-Crtic}\\
+  &=\mathbb{E}_{\pi_{\theta}}\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)\delta_v \right]\quad \text{TD Actor-Crtic}\\
+  &=\mathbb{E}_{\pi_{\theta}}\left[ \bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)\delta_ve \right]\quad \text{TD(}\lambda\text{) Actor-Crtic}\\
+  \end{aligned}
+  $$
+
+* 每种形式都能推导出随机梯度上升算法
+
+* Critic（值函数估计）使用了策略评价（蒙特卡洛MC或者时间差分TD）来估计
+  $$
+  Q^{\pi}(s,a), A^{\pi}(s,a), V^{\pi}(s)
+  $$
+
+
+## A2C
+
+OenAI提出的A2C（即Advantage-Actor-Critic的简称），该算法使用多进程。这里省略掉多进程，给出一个使用的算法片段。
+
+![Advantage-Actor-Critic](pic/Advantage-Actor-Critic.png)
+
+上面的Actor πθ和Critic Vv分别是两个神经网络。
 
 # 引申
+
+## 其他策略梯度算法
+
+* 自然梯度算法
+* 信赖域策略优化算法（TRPO）
+* 近端策略优化（PPO）
+* 确定性策略梯度算法（DPG）
+* ...
 
