@@ -852,6 +852,39 @@ $$
 
 
 
+什么是Gram矩阵？
+
+**Gram矩阵定义**：n维欧式空间中任意k(k≤n)个向量α1,α2,...,αk的内积欧组成的矩阵
+$$
+\begin{aligned}
+\bigtriangleup(\alpha_1,\alpha_2,...,\alpha_k)=
+\begin{bmatrix}
+(\alpha_1,\alpha_1)&  (\alpha_1,\alpha_2)& ... & (\alpha_1,\alpha_k)\\ 
+(\alpha_2,\alpha_1)&  (\alpha_2,\alpha_2)& ... & (\alpha_2,\alpha_k)\\ 
+...& ...& ... & ...\\ 
+(\alpha_k,\alpha_1)&  (\alpha_k,\alpha_2)& ... & (\alpha_k,\alpha_k)\\ 
+\end{bmatrix}
+\end{aligned}
+$$
+称为k个向量α1,α2,...,αk的格拉姆（Gram）矩阵，它的行列式称为Gram行列式。
+
+举例：正例样本点是x1=(3, 3)T，x2=(4, 3)T，负例样本点是x3=(1, 1)T，则Gram矩阵为
+$$
+\begin{aligned}
+\bigtriangleup(\alpha_1,\alpha_2,...,\alpha_k)=
+\begin{bmatrix}
+18&  21&6\\ 
+21&  25&7\\ 
+6&  7& 2\\ 
+\end{bmatrix}
+\end{aligned}
+$$
+
+
+
+
+
+
 ## 常用核函数
 
 
