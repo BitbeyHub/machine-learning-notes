@@ -334,6 +334,7 @@
   $$
 
 
+
 当不知道策略模型和目标函数有什么关系的时候，可用数值法求解。
 
 数值梯度法：
@@ -664,6 +665,7 @@ $$
   $$
 
 
+
 上面的公式为什么就是最小方差了呢？
 
 下面是一个求最小方差的简单推导：
@@ -711,6 +713,7 @@ $$
   $$
 
 
+
 # Actor-Critic
 
 真正实用的方法就是Actor-Critic方法，是策略梯度和值函数的结合，Actor指策略网络，Critic指值函数网络。
@@ -732,6 +735,7 @@ $$
   $$
 
 
+
 ## 蒙特卡洛策略梯度（REINFORCE）
 
 对于上式中等号右边的括号内的值，该怎么估计呢？其实就相当于V函数，第一种方法就是用蒙特卡洛的方法去估计。
@@ -742,6 +746,7 @@ $$
   $$
   \Delta\theta_t=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)g_t
   $$
+
 
 
 **REINFORCE算法**
@@ -777,6 +782,7 @@ $$
   $$
   \Delta\theta=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)Q_w(s,a)
   $$
+
 
 
 ## 使用优势函数减小方差
@@ -866,6 +872,7 @@ $$
   $$
 
 
+
 ## 小结
 
 * **策略梯度**有多种形式
@@ -887,6 +894,7 @@ $$
   $$
 
 
+
 ## A2C
 
 OenAI提出的A2C（即Advantage-Actor-Critic的简称），该算法使用多进程。这里省略掉多进程，给出一个使用的算法片段。
@@ -905,3 +913,9 @@ OenAI提出的A2C（即Advantage-Actor-Critic的简称），该算法使用多�
 * 确定性策略梯度算法（DPG）
 * ...
 
+
+# 参考资料
+
+- [《强化学习理论与实践》第八章-策略梯度算法](http://www.shenlanxueyuan.com/my/course/96)
+
+本章内容是该课程这节课的笔记。

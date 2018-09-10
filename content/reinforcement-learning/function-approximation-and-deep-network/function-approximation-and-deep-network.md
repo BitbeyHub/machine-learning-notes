@@ -274,6 +274,7 @@
 
 
 
+
 ### 表格检索特征
 
 还有一种特征，也是线性模型。
@@ -349,6 +350,7 @@
 
 
 
+
 ### 值函数近似下的蒙特卡洛
 
 * 回报值Gt是真实值函数vπ(St)的**无偏估计**
@@ -365,6 +367,7 @@
   &=\alpha(G_t-\hat{v}(S_tw))x(S_t)\quad \text{(in linear condition)}
   \end{aligned}
   $$
+
 
 
 
@@ -389,6 +392,7 @@
   &=\alpha\delta x(S)\quad \text{(in linear condition)}\\
   \end{aligned}
   $$
+
 
 
 
@@ -424,6 +428,7 @@
   \bigtriangleup w&=\alpha\delta_tE_t\\
   \end{aligned}
   $$
+
 
 
 
@@ -469,6 +474,7 @@
 
 
 
+
 ### 线性Q函数近似
 
 * 用一个特征向量表示某一个具体的S,A。
@@ -497,6 +503,7 @@
   \bigtriangleup w&=\alpha(q_{\pi}(S,A)-\hat{q}(S,A,w))x(S,A)\\
   \end{aligned}
   $$
+
 
 
 
@@ -536,6 +543,7 @@ $$
   \bigtriangleup w&=\alpha\delta_tE_t\\
   \end{aligned}
   $$
+
 
 
 
@@ -619,6 +627,7 @@ $$
   $$
 
 
+
 ![activation-function](pic/activation-function.png)
 
 * sigmoid和tanh形式不同，取值范围有所差别。([0,1],[-1,1])
@@ -689,6 +698,7 @@ $$
   \frac{\partial J}{\partial W^{(1)}}&=\frac{\partial J}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial W^{(1)}}\\
   \end{aligned}
   $$
+
 
 
 ## 网络的大小和深度
@@ -809,3 +819,9 @@ http://cs231n.github.io/convolutional-networks/
 * 可微分存储器
 * … 
 
+
+# 参考资料
+
+- [《强化学习理论与实践》第七章-函数近似与深度网络](http://www.shenlanxueyuan.com/my/course/96)
+
+本章内容是该课程这节课的笔记。

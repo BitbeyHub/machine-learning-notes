@@ -127,5 +127,6 @@
 * [无模型方法三：多步自举](content/reinforcement-learning/model-free-methods-3-multi-step-bootstrap/model-free-methods-3-multi-step-bootstrap.md)
 * [函数近似和深度网络](content/reinforcement-learning/function-approximation-and-deep-network/function-approximation-and-deep-network.md)
 * [策略梯度算法](content/reinforcement-learning/policy-gradient-algorithm/policy-gradient-algorithm.md)
+* [深度强化学习](content/reinforcement-learning/deep-reinforcement-learning/deep-reinforcement-learning.md)
 
 

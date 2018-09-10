@@ -126,6 +126,7 @@
 
 
 
+
 **那n步到底具体是几步最好呢？**
 
 需要自己实验，经验认为3-10步左右，要好于TD(0)和MC。
@@ -195,6 +196,7 @@ TD(λ)的备份图如下图：
   $$
   V(S_t)\leftarrow V(S_t)+\alpha\left(G_t^{\lambda}-V(S_t)\right)
   $$
+
 
 
 
@@ -351,6 +353,7 @@ $$
   $$
   V(S_t)\leftarrow V(S_t)+\alpha\delta_t
   $$
+
 
 
 
@@ -543,6 +546,7 @@ SARSA(λ)唯一区别就是把之前n步回报值的V函数的回报值换成Q�
 
 
 
+
 ## 前向视角的SARSA（λ）
 
 SARSA(λ)的备份图如下图：
@@ -567,10 +571,12 @@ SARSA(λ)的备份图如下图：
 
 
 
+
 - 得到了前向视角SARSA(λ)
   $$
   Q(S_t,A_t)\leftarrow Q(S_t,A_t)+\alpha\left(q_t^{\lambda}-Q(S_t,A_t)\right)
   $$
+
 
 
 
@@ -600,7 +606,13 @@ SARSA(λ)的备份图如下图：
 
 
 
+
 ## SARSA（λ）算法
 
 ![SARSA(lambda)-algorithm](pic/SARSA(lambda)-algorithm.png)
 
+# 参考资料
+
+- [《强化学习理论与实践》第六章-无模型方法三：多步自举](http://www.shenlanxueyuan.com/my/course/96)
+
+本章内容是该课程这节课的笔记。

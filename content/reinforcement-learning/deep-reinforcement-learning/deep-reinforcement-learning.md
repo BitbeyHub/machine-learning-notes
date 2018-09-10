@@ -3,9 +3,27 @@
 - [返回顶层目录](../SUMMARY.md#目录)
 - [本章在学习地图中的位置](#本章在学习地图中的位置)
 - [本章简介](#本章简介)
+  - [深度强化学习简介](#深度强化学习简介)
+  - [讲解流程](#讲解流程)
 - [Value-based DRL](#Value-based DRL)
+  - [DQN](#DQN)
+  - [Double DQN](#Double DQN)
+  - [Dueling DQN](#Dueling DQN)
+  - [Prioritized Experience Replay](#Prioritized Experience Replay)
+  - [Q learning到各DQN变体的演变](#Q learning到各DQN变体的演变)
+  - [Rainbow](#Rainbow)
 - [Policy-based DRL](#Policy-based DRL)
+  - [DPG](#DPG)
+  - [DDPG](#DDPG)
+  - [A3C](#A3C)
+  - [A2C](#A2C)
+  - [策略梯度到基于策略DRL的演化](#策略梯度到基于策略DRL的演化)
 - [Trust Region based DRL](Trust Region based DRL)
+  - [简要介绍](#简要介绍)
+  - [一些基础](#一些基础)
+  - [TRPO](#TRPO)
+  - [PPO](#PPO)
+  - [其他信赖域算法](#其他信赖域算法)
 
 
 
@@ -430,8 +448,6 @@ Rainbow是上面这条线，明显比别的DQN变种都很强。
 
 每一个进程更新完，就马上把收集到的梯度推送到主进程，让主进程去更新网络。这更多的是一个工程的实现方法。A3C可以拓展到超大规模的强化学习，有好多台服务器，每台服务器开一个进程去更新，然后将参数的梯度用异步通信的方式推送到参数服务器上
 
-
-
 ## A2C
 
 * Openai Blog(https://blog.openai.com/baselines-acktr-a2c/)
@@ -458,24 +474,30 @@ Rainbow是上面这条线，明显比别的DQN变种都很强。
 
 基于深度强化学习的信赖域优化，这个其实是在基于策略的深度强化学习里面占据主要部分。主要是解决基于策略的深度强化学习中步长收敛的问题。但这里把它单独拉出来作为一条线，主要是因为现在很多好的算法和方法都是用了这样的方法，所以单独拉出来详细讲解。
 
-
+信赖域的理论是相当复杂的，这里讲的只是凤毛麟角。如果你的优化理论学得不好，没有一个完备的优化理论体系，这里无论怎么讲，你都是不理解的。所以这里干脆只讲它到底做了什么事，为什么要做这个事，它到底有什么用。至于它到底怎么做的，那就要恶补很多知识才能看懂。
 
 ## 简要介绍
+
+之前只是推导了梯度更新的方向，但是有个关键点就是它的步长。这个非常非常关键，和值函数方法是不一样的。值函数方法本质上还是监督学习的方法，还是去构造了一些样本，输入是状态，输出是TD target，即用TD目标值的样本去更新，就是说，假设这一步迈大了，则Q值会比以前更小，就会把Q拉回来。但是策略梯度情况下，就很容易这一步迈大了之后，一更新，就把整个策略变掉了。而在Q学习中，只是把这个状态下的Q函数给变了，影响不是很大，是慢慢来的，是交替进行的，即更新一次Q，就做一次策略提升，哪怕这不没走好，因下个也不是很大。但是策略梯度的问题在于，一旦把策略变掉了，后面的采样轨迹就完完全全发生了变化。
+
+举个例子理解：走迷宫，这个迷宫相当于二叉树，一次改变，差别就很大。
 
 策略梯度算法的更新步长很重要
 
 * 步长太小，导致更新效率低下
 * 步长太大，导致参数更新的策略比上次更差，通过更差的策略采样得到的样本更差，导致学习再次更新的参数会更差，最终崩溃
 
-如何选择一个合适的步长，使得每次更新得到的新策略所实现的回报值单调不减
+如何选择一个合适的步长，使得每次更新得到的新策略所实现的回报值单调不减：可限定一个信赖域，在信赖域中更新，会保证得到的新策略的表现不会比以前更差，即至少单调不减。
 
 * 信赖域(Trust Region)方法指在该区域内更新，策略所实现的回报值单调不减
 
 ## 一些基础
 
+下面的内容其实已经超出这门课的范围了。
+
 * 自然梯度：Natural Gradient Works Efciently in Learning, 1998
 
-  * 在黎曼空间里面，最快的下降方向不是梯度方向，而是自然梯度方向
+  * 在黎曼空间（神经网络参数空间）里面，它不是正交空间，最快的下降方向不是梯度方向，而是自然梯度方向
     $$
     G^{-1}(\theta)J(\theta)
     $$
@@ -486,32 +508,55 @@ Rainbow是上面这条线，明显比别的DQN变种都很强。
 
   * 其中G为Reimannian metric tensor
 
-  * 统计问题中， G可以用Hessian矩阵去计算 
+  * 统计问题中， G可以用Hessian矩阵去计算 。类似于牛顿法
 
-* 保守策略迭代, CPI: Approximately Optimal Approximate Reinforcement Learning, 2002
+* 保守策略迭代，CPI: Approximately Optimal Approximate Reinforcement Learning, 2002
 
   * 给出策略性能增长的条件
-    * 策略更新后的所有优势函数非负
+    * 策略更新后的所有优势函数非负，就能保证新策略不会比老策略差
     * 使用混合更新的方式更新策略 
 
 ## TRPO
 
+在信赖域优化里，一个重要的工作就是TRPO，就是结合了上界所说的自然梯度和CPI，以及信赖域方法，把三者做结合得到的，非常重要。有了这个更算法，策略梯度在很多复杂的（尤其是机器人控制）问题上才真正表现得比较好。
+
+有了TRPO，就可以保证策略梯度的更新比较稳定，但实现起来很复杂，尤其是还要求共轭梯度（每次更新还要迭代求梯度）。
+
 * Trust Region Policy Optimization, ICML2015
-* 以CPI为基础，推导出策略更新后性能的下界, 通过优化下界优化
+
+* 以CPI为基础，推导出策略更新后性能的下界, 通过优化**下界**优化
   原函数
+
 * 实际操作时用KL散度作为约束
+
+  优化下界比较难，就把下界变成了KL散度
+
 * 求解带约束的优化问题时，利用自然梯度
+
 * 实际求解是利用了共轭梯度+线性搜索的方法, 避免求自然梯度
 
 ![TRPO](PIC/TRPO.png)
 
 ## PPO
 
+真正在实践当中用到信赖域方法，这里推荐PPO
+
+OpenAI做的打dota的也是用PPO实现的。自从OpenAI推出了PPO，整个OpenAI都会把它作为一个默认的算法。基本上什么算法都会用PPO去做。主要原始是PPO结合了策略梯度的一些优点，学习起来又比较稳定，执行起来也比较方便，速度也比较快，在大规模的情况下实现起来特别好。
+
 * Proximal Policy Optimization Algorithms, 2017
+
 * Openai blog(https://blog.openai.com/openai-baselines-ppo/)
+
+  具体参考此博客
+
 * TRPO太复杂，普通PG效果又不好
+
 * PPO本质上是TRPO的简化版
+
 * 移除了KL惩罚项和交替更新
+
+  把TRPO的KL约束和交替更新去掉，搞成一个等价的方式，写到LOSS函数里面，加了一个正则项。则更新方式就和以前一模一样了，无非就是在Loss函数里加一项
+
 * 由于性能好，且容易实现，已经成为默认的OPENAI算法
 
 ![PPO](PIC/PPO.png)
@@ -522,8 +567,16 @@ Rainbow是上面这条线，明显比别的DQN变种都很强。
 
 ## 其他信赖域算法
 
+信赖域方法还有很多很多，下面列几个：
+
 * ACKTR: Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation
 * ACER: Sample Efcient Actor-Critic with Experience Replay
 * GAE: High-Dimensional Continuous Control Using Generalized Advantage Estimation
 * … 
 
+
+# 参考资料
+
+* [《强化学习理论与实践》第九章-深度强化学习](http://www.shenlanxueyuan.com/my/course/96)
+
+本章内容是该课程这节课的笔记。
