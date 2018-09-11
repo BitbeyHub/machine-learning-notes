@@ -312,6 +312,8 @@ $$
 $$
 \mathop{\text{min}}_{w,b}L(w,b,\alpha)=-\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)+\sum_{i=1}^N\alpha_i
 $$
+**拉格朗日对偶的重要作用是将w的计算提前并消除w，使得优化函数变为拉格朗日乘子的单一参数优化问题**。
+
 （2）求
 $$
 \mathop{\text{min}}_{w,b}L(w,b,\alpha)
@@ -607,6 +609,8 @@ $$
 &\ \ \ \quad \quad \mu_i\geqslant0,\ i=1,2,...,N\\
 \end{aligned}
 $$
+**拉格朗日对偶的重要作用是将w的计算提前并消除w，使得优化函数变为拉格朗日乘子的单一参数优化问题**。
+
 将对偶最优化问题（上式）进行变换：利用等式约束（上式第二项约束）消去μi，从而只留下变量αi，并将约束（上式第后三项约束）写成
 $$
 0\leqslant\alpha_i\leqslant C
@@ -936,7 +940,174 @@ $$
 \phi(x)=\left( (x^{(1)})^2,\ x^{(1)}x^{(2)},\ x^{(1)}x^{(2)},\ (x^{(2)})^2 \right)^T
 $$
 
+### 对核函数的理解
+
+考虑我们最初在“线性回归”中提出的问题，特征是房子的面积x，这里的x是实数，结果y是房子的价格。假设我们从样本点的分布中看到x和y符合3次曲线，那么我们希望使用x的三次多项式来逼近这些样本点。那么首先需要将特征x扩展到三维(x,x^2,x^3)，然后寻找特征和结果之间的模型。我们将这种特征变换称作特征映射（feature mapping）。映射函数称作Φ，在这个例子中
+$$
+\begin{aligned}
+\phi(x)=
+\begin{bmatrix}
+x\\ 
+x^2\\
+x^3
+\end{bmatrix}
+\end{aligned}
+$$
+我们希望将得到的特征映射后的特征用于SVM分类，而不是最初的特征。这样，我们需要将前面线性可分SVM的w·x+b公式中的内积从\<x^(i), x\>，映射到\<Φ(x^(i)),Φ(x)\>。
+
+至于为什么需要映射后的特征而不是最初的特征来参与计算，上面提到的（为了更好地拟合）是其中一个原因，另外的一个重要原因是样例可能存在线性不可分的情况，而将特征映射到高维空间后，往往就可分了。（在《数据挖掘导论》Pang-Ning Tan等人著的《支持向量机》那一章有个很好的例子说明）
+
+将核函数形式化定义，如果原始特征内积是\<x,z\>，映射后为\<Φ(x),Φ(z)\>，那么定义核函数（Kernel）为
+$$
+K(x,z)=\phi(x)^T\phi(z)
+$$
+到这里，我们可以得出结论，如果要实现该节开头的效果，只需先计算Φ(x)，然后计算即可Φ(x)Φ(z)，然而这种计算方式是非常低效的。比如最初的特征是n维的，我们将其映射到n^2维，然后再计算，这样需要O(n^2)的时间。那么我们能不能想办法减少计算时间呢？
+
+先看一个例子，假设x和z都是n维的，
+$$
+K(x,z)=(x^Tz)^2
+$$
+展开后，得
+$$
+\begin{aligned}
+K(x,z)&=(x^Tz)^2\\
+&=\left( \sum_{i=1}^nx_iz_i \right)\left( \sum_{i=1}^nx_iz_i \right)\\
+&=\sum_{i=1}^n\sum_{j=1}^nx_ix_jz_iz_j\\
+&=\sum_{i=1}^n\sum_{j=1}^n(x_ix_j)(z_iz_j)\\
+&=\phi(x)^T\phi(z)
+\end{aligned}
+$$
+这个时候发现我们可以只计算原始特征x和z内积的平方（时间复杂度是O(n)），就等价与计算映射后特征的内积。也就是说我们不需要花O(n^2)时间了。
+
+现在看一下映射函数（n=3时），根据上面的公式，得到
+$$
+\begin{aligned}
+\phi(x)=
+\begin{bmatrix}
+x_1x_1\\ 
+x_1x_2\\
+x_1x_3\\
+x_2x_1\\
+x_2x_2\\
+x_2x_3\\
+x_3x_1\\
+x_3x_2\\
+x_3x_3
+\end{bmatrix}
+\end{aligned}
+$$
+也就是说核函数
+$$
+K(x,z)=(x^Tz)^2
+$$
+只能在选择这样的Φ作为映射函数时才能够等价于映射后特征的内积。  再看一个核函数
+$$
+\begin{aligned}
+K(x,z)&=(x^Tz+c)^2\\
+&=\sum_{i=1}^n\sum_{j=1}^n(x_ix_j)(z_iz_j)+\sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i)+c^2
+\end{aligned}
+$$
+对应的映射函数（n=3时）是
+$$
+\begin{aligned}
+\phi(x)=
+\begin{bmatrix}
+x_1x_1\\ 
+x_1x_2\\
+x_1x_3\\
+x_2x_1\\
+x_2x_2\\
+x_2x_3\\
+x_3x_1\\
+x_3x_2\\
+x_3x_3\\
+\sqrt{2c}x_1\\
+\sqrt{2c}x_2\\
+\sqrt{2c}x_3\\
+c
+\end{bmatrix}
+\end{aligned}
+$$
+更一般地，核函数
+$$
+K(x,z)=(x^Tz+c)^d
+$$
+对应的映射特征维度为
+$$
+\binom{n+d}{d}
+$$
+。（求解方法参见<http://zhidao.baidu.com/question/16706714.html>）。
+
+由于计算的是内积，我们可以想到余弦相似度，如果x和z向量夹角越小，那么核函数值越大，反之，越小。因此，**核函数值是Φ(x)和Φ(z)的相似度**。
+
+再看另外一个核函数
+$$
+K(x,z)=\text{exp}\left( -\frac{||x-z||^2}{2\sigma^2} \right)
+$$
+。这时，如果x和z很相近（||x-z||≈0），那么核函数值为1，如果x和z相差很大（||x-z||>>0），那么核函数值约等于0。由于这个函数类似于高斯分布，因此称为**高斯核函数**，也叫做**径向基函数(Radial Basis Function 简称RBF)**。**它能够把原始特征映射到无穷维**。
+
+既然高斯核函数能够比较x和z的相似度，并映射到0到1，回想logistic回归，sigmoid函数可以，因此还有**sigmoid核函数**等等。
+
+下面有张图说明在低维线性不可分时，映射到高维后就可分了，使用高斯核函数。
+
+![gaussian-kernal-function-example](pic/gaussian-kernal-function-example.png)
+
+这里举一个**核函数把低维空间映射到高维空间**的例子。
+
+下面这张图位于第一、二象限内。我们关注红色的门，以及“北京四合院”这几个字下面的紫色的字母。我们把**红色的门**上的点看成是“+”数据，**紫色字母**上的点看成是“-”数据，它们的横、纵坐标是两个特征。显然，在这个二维空间内，“+”“-”两类数据不是线性可分的。
+
+![kernel-function-mapping](pic/kernel-function-mapping.jpg)
+
+我们现在考虑核函数
+$$
+K(x,z)=<x,z>^2
+$$
+，即“内积平方”。
+
+这里面
+$$
+x=(x_1,x_2),z=(z_1,z_2)
+$$
+是二维空间中的两个点。
+
+这个核函数对应着一个二维空间到三维空间的映射，它的表达式是：
+$$
+\phi(x)=(x_1^2,\sqrt{2}x_1x_2,x_2^2)
+$$
+可以验证，
+$$
+\begin{aligned}
+<\phi(x), \phi(z)>&=<(x_1^2,\sqrt{2}x_1x_2,x_2^2),(z_1^2,\sqrt{2}z_1z_2,z_2^2)>\\
+&=x_1^2z_1^2+2x_1x_2z_1z_2+x_2^2z_2^2\\
+&=(x_1z_1+x_2z_2)^2\\
+&=<x,z>^2\\
+&=K(x,z)\\
+\end{aligned}
+$$
+在Φ的映射下，原来二维空间中的图在三维空间中的像是这个样子：
+
+![kernel-function-mapping-2](pic/kernel-function-mapping-2.jpg)
+
+（前后轴为x轴，左右轴为y轴，上下轴为z轴）
+
+注意到绿色的平面可以完美地分割红色和紫色，也就是说，两类数据在三维空间中变成线性可分的了。
+
+而三维中的这个判决边界，再映射回二维空间中是这样的：
+
+![kernel-function-mapping-3](pic/kernel-function-mapping-3.jpg)
+
+这是一条**双曲线，它不是线性的**。
+
+核函数的作用就是**隐含着一个从低维空间到高维空间的映射**，而这个映射可以**把低维空间中线性不可分的两类点变成线性可分**的。
+
+当然，举的这个具体例子强烈地依赖于数据在原始空间中的位置。
+事实中使用的核函数往往比这个例子复杂得多。它们对应的映射并不一定能够显式地表达出来；它们映射到的高维空间的维数也比我举的例子（三维）高得多，甚至是无穷维的。这样，就可以期待原来并不线性可分的两类点变成线性可分的了。
+
+在实用中，很多使用者都是盲目地试验各种核函数，并扫描其中的参数，选择效果最好的。至于什么样的核函数适用于什么样的问题，大多数人都不懂。
+
 ### 核技巧在支持向量空间中的应用
+
+这里首先要明白：kernel在SVM中的应用真心只是冰山一角，做kernel的人基本不关心在SVM上怎么用的问题，就像用SVM的人也不关心kernel是啥一样。kernel和SVM完全是两个正交的概念，早在SVM提出以前，reproducing kernel Hilbert space（RKHS）的应用就比较广泛了。（更详细的说明点[这里](https://www.zhihu.com/question/24627666/answer/35507744)）
 
 **我们注意到在线性支持向量机的对偶问题中，无论是目标函数还是决策函数（分离超平面）都只涉及输入实例与实例之间的内积。**
 
@@ -955,7 +1126,7 @@ $$
 
 也就是说，在核函数K(x,z)给定的条件下，可以利用解线性分类问题的方法求解非线性分类问题的支持向量机。**学习是隐式地在特征空间中进行的，不需要显式地定义特征空间和映射函数**。这样的技巧成为**核技巧**，它是巧妙地**利用线性分类学习方法与核函数解决非线性问题**的技术。在实际应用中，往往**依赖领域知识直接选择核函数**，核函数选择的有效性需要通过实验验证。
 
-## (正定)核函数有效性判定
+## （正定）核函数有效性判定
 
 这里先提前说明一个**Gram矩阵的概念**，接下来会用到。什么是Gram矩阵？
 
@@ -1048,6 +1219,10 @@ Mercer定理表明为了证明K是有效的核函数，那么我们不用去寻�
 
 许多其他的教科书在Mercer定理证明过程中使用了L2数和再生希尔伯特空间等概念，但在特征是n维的情况下，这里给出的证明是等价的。
 
+使用SVM的很多人甚至都不知道这个Mercer定理，也不关心它；有些不满足该条件的函数也被拿来当核函数用。
+
+**这里为什么要求核矩阵是半正定的呢？因为在svm里面核函数的作用是计算两个数据点在另一个高维空间的inner product，而核函数是半正定的话能保证这个高维空间的存在，也就是保证计算得到的核函数的值真的是在某一个空间里的inner product。**
+
 核函数不仅仅用在SVM上，但凡在一个模型后算法中出现了\<x,z\>，我们都可以常使用K(x,z)去替换，这可能能够很好地改善我们的算法。
 
 总结一下上面的证明过程，我们有
@@ -1080,7 +1255,7 @@ $$
 
 
 
-
+[我所理解的 SVM 2——核函数的应用](https://zhuanlan.zhihu.com/p/24291579)
 
 
 
@@ -1137,6 +1312,40 @@ $$
 
 
 
+
+
+[机器学习技法笔记3：核函数SVM](https://zhuanlan.zhihu.com/p/30895378)
+
+
+
+[机器学习：支持向量机SVM之核函数](https://zhuanlan.zhihu.com/p/30299603)
+
+
+
+[如何理解高斯核函数的公式？](https://www.zhihu.com/question/46587416/answer/343002184)
+
+
+
+### 核函数的选取
+
+在不知道特征映射的形式时，我们并不知道什么样的核函数是合适的，而核函数也仅隐式地定义了这个特征空间，于是“核函数选择”称为支持向量机最大的变数。
+
+
+
+https://www.zhihu.com/question/21883548/answer/19693213
+
+
+
+
+
+[用实验理解SVM的核函数和参数](https://zhuanlan.zhihu.com/p/37189815)
+
+
+
+
+
+
+
 ## 非线性支持向量分类机
 
 
@@ -1149,7 +1358,11 @@ $$
 
 # 序列最小最优化算法SMO
 
+[SMO优化算法（Sequential minimal optimization）](https://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html)
 
+[理解支持向量机（三）SMO算法](https://blog.csdn.net/shijing_0214/article/details/51017029)
+
+[【分类战车SVM】第六话：SMO算法（像smoke一样简单！）](https://mp.weixin.qq.com/s?__biz=MjM5MDEzNDAyNQ==&mid=207384849&idx=6&sn=872955558bde98e49e11aa70da2c2c97#rd)
 
 ## 两个变量二次规划的求解方法
 
@@ -1201,37 +1414,64 @@ $$
 
 
 
+
+
+
+
+
+
+
+
 # 参考资料
+
+* 《统计学习方法》李航
+
+本章的结构和大部分内容均参考此书对应章节。
+
+* [支持向量机（三）核函数](https://www.cnblogs.com/jerrylead/archive/2011/03/18/1988406.html)
+
+"对核函数的理解"和“（正定）核函数有效性判定”这两节参考此博客。
 
 * [史上最全面的正则化技术总结与分析--part2](https://zhuanlan.zhihu.com/p/35432128)
 
 “SVM的正则化”参考此知乎专栏文章。
 
----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* [支持向量机通俗导论（理解SVM的三层境界）](https://blog.csdn.net/v_july_v/article/details/7624837)
+
+待看
+
+* [支持向量机SVM（一）](https://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html)
 
 这份材料从前几节讲的logistic回归出发，引出了SVM，既揭示了模型间的联系，也让人觉得过渡更自然。
 
-https://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html
+* [攀登传统机器学习的珠峰-SVM (上)](https://zhuanlan.zhihu.com/p/36332083)
 
+111
 
+* [理解SVM的核函数和参数](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247484495&idx=1&sn=4f3a6ce21cdd1a048e402ed05c9ead91&chksm=fdb699d8cac110ce53f4fc5e417e107f839059cb76d3cbf640c6f56620f90f8fb4e7f6ee02f9&mpshare=1&scene=1&srcid=0522xo5euTGK36CZeLB03YGi#rd)
 
+111
 
+* [规则化和不可分情况处理（Regularization and the non-separable case）](https://www.cnblogs.com/jerrylead/archive/2011/03/18/1988415.html)
 
-攀登传统机器学习的珠峰-SVM (上)
+正则化可能会用到
 
-https://zhuanlan.zhihu.com/p/36332083
+* [【分类战车SVM】附录：用Python做SVM模型](https://mp.weixin.qq.com/s?__biz=MjM5MDEzNDAyNQ==&mid=207384849&idx=7&sn=eda3ef452c5b07cf741e8e01e813a516#rd)
 
-
-
-理解SVM的核函数和参数
-
-https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247484495&idx=1&sn=4f3a6ce21cdd1a048e402ed05c9ead91&chksm=fdb699d8cac110ce53f4fc5e417e107f839059cb76d3cbf640c6f56620f90f8fb4e7f6ee02f9&mpshare=1&scene=1&srcid=0522xo5euTGK36CZeLB03YGi#rd
-
-
-
-[零基础学SVM—Support Vector Machine(一)](https://zhuanlan.zhihu.com/p/24638007)
-
-
-
-[SVM原理及推导](https://mp.weixin.qq.com/s?__biz=MzU1NTUxNTM0Mg==&mid=2247488814&idx=1&sn=8d48873a2ac4d41fe0bdb1809865bed7&chksm=fbd2798fcca5f099906c24fa09c6574a0ede8b963638fea62abcc1fb33a6502cdfe423ce163d&scene=0#rd)
-
+这属于项目实践部分，以后有时间了再写吧
