@@ -1353,23 +1353,8 @@ $$
   $$
 
 
+
 关于核方法的理论部分涉及到泛函分析、微积分等等，水比较深，推荐一本书：《Kernel Methods for Pattern Analysi》(模式分析的核方法)，作者是：John Shawe-Taylor和Nello Cristianini 。
-
-
-
-
-
-[机器学习技法笔记3：核函数SVM](https://zhuanlan.zhihu.com/p/30895378)
-
-
-
-[机器学习：支持向量机SVM之核函数](https://zhuanlan.zhihu.com/p/30299603)
-
-
-
-[如何理解高斯核函数的公式？](https://www.zhihu.com/question/46587416/answer/343002184)
-
-
 
 ### 线性核
 
@@ -1442,7 +1427,7 @@ $$
 $$
 \begin{aligned}
 K(x,z)&=\text{exp}\left( -\frac{||x-z||^2}{2\sigma^2} \right)\\
-&=\text{exp}( -x^2)\text{exp}( -z^2)\text{exp}(2xz)\quad \text{（省略常数项）}\\
+&=\text{exp}( -x^2)\text{exp}( -z^2)\text{exp}(2xz)\quad \text{(ignore constant term)}\\
 &=\text{exp}( -x^2)\text{exp}( -z^2)\left( \sum_{i=0}^{\infty}\frac{(2xz)^i}{i!} \right)\quad \text{(Tylor)}\\
 &=\sum_{i=0}^{\infty}\left(\text{exp}( -x^2)\text{exp}( -z^2)\sqrt{\frac{2^i}{i!}}\sqrt{\frac{2^i}{i!}}x^iz^i\right)\\
 &=\phi(x)^T\phi(z)\\
@@ -1492,23 +1477,49 @@ SVM关键是选取核函数的类型，主要有线性内核，多项式内核�
 
   如果不满足上述两点，即特征维数少，样本数量正常，可以使用高斯核的SVM
 
-### 理解核函数的参数调整
-
-[用实验理解SVM的核函数和参数](https://zhuanlan.zhihu.com/p/37189815)
-
-
-
-
-
-
-
 ## 非线性支持向量分类机
 
+如上所述，利用核技巧，可以将线性分类的学习方法应用到非线性分类问题上。将线性支持向量机扩展到非线性支持向量机，只需要**将线性支持向量机对偶形式中的内积换成核函数**。
 
+**非线性支持向量机**
 
+从非线性分类训练集，通过和函数与软间隔最大化，或凸二次规划，学习得到的分类决策函数
+$$
+f(x)=\text{sign}\left( \sum_{i=1}^N\alpha_i^*y_iK(x,x_i)+b^* \right)
+$$
+称为非线性支持向量，K(x,z)是正定核函数。
 
+下面叙述非线性支持向量机学习算法
 
+**非线性支持向量机学习算法**
 
+输入：训练数据集
+$$
+T=\{ (x_1,y_1),(x_2,y_2),...,(x_N,y_N) \}
+$$
+，其中，xi∈X=R^n，yi∈Y=\{+1,-1\}，i=1,2,...,N
+
+输出：分类决策函数。
+
+（1）选取适当的核函数K(x,z)和适当的参数C，构造并求解最优化问题
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jK(x_i, x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+求得最优解α\*=(α1\*, α2\*, ... , αN\*)^T。
+
+（2）选择α\*的一个正分量0<αj\*<C，计算
+$$
+b^*=y_j-\sum_{i=1}^N\alpha_i^*y_iK(x_i, x_j)
+$$
+（3）构造决策函数：
+$$
+f(x)=\text{sign}\left( \sum_{i=1}^N\alpha_i^*y_iK(x, x_i)+b^* \right)
+$$
+当K(x,z)是正定核函数时，上述最优化问题是凸二次规划函数，解是存在的。
 
 # 序列最小最优化算法SMO
 
