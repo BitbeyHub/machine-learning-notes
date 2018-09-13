@@ -1355,6 +1355,7 @@ $$
 
 
 
+
 关于核方法的理论部分涉及到泛函分析、微积分等等，水比较深，推荐一本书：《Kernel Methods for Pattern Analysi》(模式分析的核方法)，作者是：John Shawe-Taylor和Nello Cristianini 。
 
 ### 线性核
@@ -1532,9 +1533,44 @@ $$
 
 终于到SVM的实现部分了。那么神奇和有效的东西还得回归到实现才可以展示其强大的功力。SVM有效而且存在很高效的训练算法，这也是工业界非常青睐SVM的原因。
 
+我们知道，支持向景机的学习问题可以形式化为求解凸二次规划问题。这样的**凸二次规划问题具有全局最优解**，并且有许多最优化算法可以用于这一问题的求解。但是当训练样本容最很大时，这些算法往往变得非常低效，以致无法使用。所以，如何高效地实现支持向量机学习就成为一个重要的问题。目前人们己提出许多快速实现算法，本节讲述其中的序列最小最优化（sequential minimal optimization，SMO）算法，这种算法1998年由Platt提出。
 
+前面讲到，SVM的学习问题可以转化为下面的对偶问题：
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+在这个问题中，变量是拉格朗日乘子，一个变量αi对应于一个样本(xi,yi)；变量的总数等于训练样本容量N。
 
+上述对偶问题需要满足的KKT条件：
+$$
+\begin{aligned}
+\alpha_i=0&\Rightarrow y^{(i)}(w^Tx^{(i)}+b)\geqslant1\\
+\alpha_i=C&\Rightarrow y^{(i)}(w^Tx^{(i)}+b)\leqslant1\\
+0<\alpha_i<C&\Rightarrow y^{(i)}(w^Tx^{(i)}+b)=1\\
+\end{aligned}
+$$
+也就是说找到一组αi可以满足上面的这些条件的就是该目标的一个最优解。所以我们的优化目标是找到一组最优的αi\*。一旦求出这些αi\*，就很容易计算出权重向量**w\***和b，并得到分隔超平面了。
 
+这是个凸二次规划问题，它具有全局最优解，一般可以通过现有的工具来优化。但当训练样本非常多的时候，这些优化算法往往非常耗时低效，以致无法使用。从SVM提出到现在，也出现了很多优化训练的方法。其中，非常出名的一个是1982年由Microsoft Research的John C. Platt在论文《Sequential Minimal Optimization: A Fast Algorithm for TrainingSupport Vector Machines》中提出的Sequential Minimal Optimization序列最小化优化算法，简称SMO算法。SMO算法的思想很简单，它将大优化的问题分解成多个小优化的问题。这些小问题往往比较容易求解，并且对他们进行顺序求解的结果与将他们作为整体来求解的结果完全一致。在结果完全一致的同时，SMO的求解时间短很多。
+
+SMO算法是一种启发式算法，其基本思路是：**如果所有变量的解都满足此最优化问题的KKT条件（Karush-Kuhn-Tucker conditions)，那么这个最优化问题的解就得到了。因为KKT条件是该最优化问题的充分必要条件**。否则，选择两个变量，固定其他变量，针对这两个变量构建一个二次规划问题。这个二次规划问题关于这两个变量的解应该更接近原始二次规划问题的解，因为这会使得原始二次规划问题的目标函数值变得更小。重要的是，这时子问题可以通过解析方法求解，这样就可以大大提高整个算法的计算速度。子问题有两个变量，一个是违反KKT条件最严重的那一个，另一个由约束条件自动确定。如此，SMO算法将原问题不断分解为子问题并对子问题求解，进而达到求解原问题的目的。
+
+注意，子问题的两个变童中只有一个是自由变量。假设α1，α2为两个变最，α3，α4，...，αN固定，那么由上面的等式约束可知
+$$
+\alpha_1=-y\sum_{i=2}^N\alpha_iy_i
+$$
+如果α2确定，那么α1也随之确定，所以子问题中同时更新两个变量。
+
+整个SMO算法包括两个部分：
+
+* 求解两个变量二次规划的解析方法
+* 选择变量的启发式方法
+
+在深入SMO算法之前，我们先来了解下坐标下降这个算法，SMO其实基于这种简单的思想的。
 
 ## 坐标下降（上升）法
 
@@ -1562,6 +1598,23 @@ $$
 
 ## 两个变量二次规划的求解方法
 
+不失一般性，假设选择的两个变量是α1，α2，其他变量αi(i=3,4,...,N)是固定的，于是SMO的最优化问题
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha}\quad \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_j(x_i\cdot x_j)-\sum_{i=1}^N\alpha_i\\
+&\text{s.t.}\ \quad \sum_{i=1}^N\alpha_iy_i=0\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2,...,N\\
+\end{aligned}
+$$
+其指令的两个变量的子问题可以写成：
+$$
+\begin{aligned}
+&\mathop{\text{min}}_{\alpha_1,\alpha_2}\quad  W(\alpha_2,\alpha_2)=\frac{1}{2}K_{11}\alpha_1^2+\frac{1}{2}K_{22}\alpha_2^2+y_1y_2\alpha_1\alpha_2\\
+&\ \ \quad \quad \quad \quad  \quad \quad \quad \quad -(\alpha_1+\alpha_2)+y_1\alpha_1\sum_{i=3}^Ny_i\alpha_iK_{i1}+y_2\alpha_2\sum_{i=3}^Ny_i\alpha_iK_{i2}\\
+&\text{s.t.}\ \quad \alpha_1y_1+\alpha_2y_2=-\sum_{i=3}^Ny_i\alpha_i=\zeta\\
+&\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2\\
+\end{aligned}
+$$
 
 
 ## 变量的选择方法
@@ -1658,11 +1711,17 @@ $$
 
 "核函数的选取"参考了此知乎回答。
 
+* [机器学习算法与Python实践之（四）支持向量机（SVM）实现](https://blog.csdn.net/zouxy09/article/details/17292011)
+
+"SMO算法"参考了此博客。
+
 * [史上最全面的正则化技术总结与分析--part2](https://zhuanlan.zhihu.com/p/35432128)
 
 “SVM的正则化”参考此知乎专栏文章。
 
+* [坐标上升/下降算法](https://blog.csdn.net/u010626937/article/details/75044343)
 
+"坐标下降（上升）法"参考了此博客。
 
 
 
