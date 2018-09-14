@@ -1356,6 +1356,7 @@ $$
 
 
 
+
 关于核方法的理论部分涉及到泛函分析、微积分等等，水比较深，推荐一本书：《Kernel Methods for Pattern Analysi》(模式分析的核方法)，作者是：John Shawe-Taylor和Nello Cristianini 。
 
 ### 线性核
@@ -1555,7 +1556,7 @@ $$
 $$
 也就是说找到一组αi可以满足上面的这些条件的就是该目标的一个最优解。所以我们的优化目标是找到一组最优的αi\*。一旦求出这些αi\*，就很容易计算出权重向量**w\***和b，并得到分隔超平面了。
 
-这是个凸二次规划问题，它具有全局最优解，一般可以通过现有的工具来优化。但当训练样本非常多的时候，这些优化算法往往非常耗时低效，以致无法使用。从SVM提出到现在，也出现了很多优化训练的方法。其中，非常出名的一个是1982年由Microsoft Research的John C. Platt在论文《Sequential Minimal Optimization: A Fast Algorithm for TrainingSupport Vector Machines》中提出的Sequential Minimal Optimization序列最小化优化算法，简称SMO算法。SMO算法的思想很简单，它将大优化的问题分解成多个小优化的问题。这些小问题往往比较容易求解，并且对他们进行顺序求解的结果与将他们作为整体来求解的结果完全一致。在结果完全一致的同时，SMO的求解时间短很多。
+这是个凸二次规划问题，它具有全局最优解，一般可以通过现有的工具来优化。但当训练样本非常多的时候，这些优化算法往往非常耗时低效，以致无法使用。从SVM提出到现在，也出现了很多优化训练的方法。其中，非常出名的一个是1982年由Microsoft Research的John C. Platt在论文《Sequential Minimal Optimization: A Fast Algorithm for TrainingSupport Vector Machines》（这也是学习SMO最好的资料）中提出的Sequential Minimal Optimization序列最小化优化算法，简称SMO算法，并成为最快的二次规划优化算法，特别针对线性SVM和数据稀疏时性能更优。SMO算法的思想很简单，它将大优化的问题分解成多个小优化的问题。这些小问题往往比较容易求解，并且对他们进行顺序求解的结果与将他们作为整体来求解的结果完全一致。在结果完全一致的同时，SMO的求解时间短很多。
 
 SMO算法是一种启发式算法，其基本思路是：**如果所有变量的解都满足此最优化问题的KKT条件（Karush-Kuhn-Tucker conditions)，那么这个最优化问题的解就得到了。因为KKT条件是该最优化问题的充分必要条件**。否则，选择两个变量，固定其他变量，针对这两个变量构建一个二次规划问题。这个二次规划问题关于这两个变量的解应该更接近原始二次规划问题的解，因为这会使得原始二次规划问题的目标函数值变得更小。重要的是，这时子问题可以通过解析方法求解，这样就可以大大提高整个算法的计算速度。子问题有两个变量，一个是违反KKT条件最严重的那一个，另一个由约束条件自动确定。如此，SMO算法将原问题不断分解为子问题并对子问题求解，进而达到求解原问题的目的。
 
@@ -1563,7 +1564,19 @@ SMO算法是一种启发式算法，其基本思路是：**如果所有变量的
 $$
 \alpha_1=-y\sum_{i=2}^N\alpha_iy_i
 $$
-如果α2确定，那么α1也随之确定，所以子问题中同时更新两个变量。
+如果α2确定，那么α1也随之确定，所以子问题中同时更新两个变量。因此，我们需要一次选取两个参数做优化，比如α1和α2，此时α1可以由α2和其他参数表示出来。这样回代入W中，W就只是关于α2的函数了，这时候就可以只对α2进行优化了。在这里就是对α2进行求导，令导数为0就可以解出这个时候最优的α2了。然后也可以得到α1。这就是一次的迭代过程，一次迭代只调整两个拉格朗日乘子α1和α2。SMO之所以高效就是因为在固定其他参数后，对一个参数优化过程很高效（对一个参数的优化可以通过解析求解，而不是迭代。虽然对一个参数的一次最小优化不可能保证其结果就是所优化的拉格朗日乘子的最终结果，但会使目标函数向极小值迈进一步，这样对所有的乘子做最小优化，直到所有满足KKT条件时，目标函数达到最小）。
+
+总结下来是：
+
+重复下面过程直到收敛\{
+
+（1）选择两个拉格朗日乘子αi和αj；
+
+（2）固定其他拉格朗日乘子αk(k不等于i和j)，只对αi和αj优化w(**α**);
+
+（3）根据优化后的αi和αj，更新截距b的值；
+
+\}
 
 整个SMO算法包括两个部分：
 
@@ -1583,7 +1596,7 @@ $$
 \begin{aligned}
 &\text{Loop until convergence:\{}\\
 &\quad \quad \text{For i = 1,...,m \{}\\
-&\quad \quad \quad \quad alpha_i:=\text{arg }\mathop{\text{max}}_{\hat{\alpha_i}} W(\alpha_1,...,\alpha_{i-1},\hat{\alpha_{i}},\alpha_{i+1},...,\alpha_m)\\
+&\quad \quad \quad \quad \alpha_i:=\text{arg }\mathop{\text{max}}_{\hat{\alpha_i}} W(\alpha_1,...,\alpha_{i-1},\hat{\alpha_{i}},\alpha_{i+1},...,\alpha_m)\\
 &\quad \quad \text{\}}\\
 &\text{\}}\\
 \end{aligned}
@@ -1609,17 +1622,259 @@ $$
 其指令的两个变量的子问题可以写成：
 $$
 \begin{aligned}
-&\mathop{\text{min}}_{\alpha_1,\alpha_2}\quad  W(\alpha_2,\alpha_2)=\frac{1}{2}K_{11}\alpha_1^2+\frac{1}{2}K_{22}\alpha_2^2+y_1y_2\alpha_1\alpha_2\\
+&\mathop{\text{min}}_{\alpha_1,\alpha_2}\quad  W(\alpha_2,\alpha_2)=\frac{1}{2}K_{11}\alpha_1^2+\frac{1}{2}K_{22}\alpha_2^2+y_1y_2K_{12}\alpha_1\alpha_2\\
 &\ \ \quad \quad \quad \quad  \quad \quad \quad \quad -(\alpha_1+\alpha_2)+y_1\alpha_1\sum_{i=3}^Ny_i\alpha_iK_{i1}+y_2\alpha_2\sum_{i=3}^Ny_i\alpha_iK_{i2}\\
 &\text{s.t.}\ \quad \alpha_1y_1+\alpha_2y_2=-\sum_{i=3}^Ny_i\alpha_i=\zeta\\
 &\ \ \ \quad \quad 0\leqslant\alpha_i\leqslant C,\ i=1,2\\
 \end{aligned}
 $$
 
+其中，Kij=K(xi,yi)，i,j=1,2,...,N，ζ是常数，上式的优化目标函数中省略了不含是α1，α2的常数项。
+
+为了求解两个变量的二次规划问题，首先分析约束条件，然后在此约束条件下求极小。
+
+由于只有两个变量(α1, α2)，约束可以用二维空间的图形表示：
+
+![two-variable-optimization-constraint](pic/two-variable-optimization-constraint.png)
+
+上式（SMO优化问题）的不等式约束使得(α1, α2)在盒子[0, C]x[0, C]内，等式约束使得(α1, α2)在平行于盒子[0, C]x[0, C]的对角线的直线上。因此要**求的是目标函数在一条平行于对角线的线段上的最优值**。这使得**两个变量的最优化问题成为实质上的单变量的最优化问题**，不妨考虑为变量α2的最优化问题。
+
+假设问题的初始可行解为α1(old)，α2(old)，最优解为α1(new)，α2(new)，并且假设在沿着约束方向未经剪辑时α2的最优解为α2(new,unc)。
+
+由于α2(new)需满足不等式约束，所以最优值α2(new)的取值范围必须满足条件
+$$
+L\leqslant\alpha_2^{new}\leqslant H
+$$
+其中，L与H是α2(new)所在对角线断点的界。如果y1≠y2（如上图左图所示），则
+$$
+L=\text{max}(0,\alpha_2^{old}-\alpha_1^{old}),\quad H=\text{min}(C,C+\alpha_2^{old}-\alpha_1^{old})
+$$
+如果y1=y2（如上图右图所示），则
+$$
+L=\text{max}(0,\alpha_2^{old}+\alpha_1^{old}-C),\quad H=\text{min}(C,\alpha_2^{old}+\alpha_1^{old})
+$$
+下面，首先求沿着约束方向未经剪辑即未考虑约束时α2的最优解α2(new,unc)；然后再求剪辑后α2的解α2(new)。我们用定理来叙述这个结果。为了叙述简单，记
+$$
+g(x)=\sum_{i=1}^N\alpha_iy_iK(x_i,x)+b
+$$
+令
+$$
+E_i=g(x_i)-y_i=\left( \sum_{j=1}^N\alpha_jy_jK(x_j,x_i)+b \right)-y_i,\quad i=1,2
+$$
+当i=1,2时，Ei为函数g(x)对输入xi的预测值与真实值输出yi之差。
+
+**定理**
+
+上述最优化问题沿着约束方向未经剪辑时的解是
+$$
+\alpha_2^{\text{new,unc}}=\alpha_2^{\text{old}}+\frac{y_2(E_1-E_2)}{\eta}
+$$
+其中，
+$$
+\eta=K_{11}+K_{22}-2K_{12}=||\phi(x_!)-\phi(x_2)||^2
+$$
+Φ(x)是输入空间到特征空间的映射，Ei，i=1,2，上面已经给出。
+
+经剪辑后α2的解是
+$$
+\begin{aligned}
+\alpha_2^{\text{new}}=
+\left\{\begin{matrix}
+&H, &\alpha_2^{\text{new,unc}}>H\\
+&\alpha_2^{\text{new,unc}},&L\leqslant\alpha_2^{\text{new,unc}}\leqslant H\\ 
+&L, &\alpha_2^{\text{new,unc}}<L\\
+\end{matrix}\right.
+\end{aligned}
+$$
+由α2(new)求得α1(new)是
+$$
+\alpha_1^{\text{new}}=\alpha_1^{\text{old}}+y_1y_2(\alpha_2^{\text{old}}-\alpha_2^{\text{new}})
+$$
+**证明**
+
+引进记号
+$$
+v_i=\sum_{j=3}^N\alpha_jy_jK(x_i,x_j)=g(x_i)-\sum_{j=1}^2\alpha_jy_jK(x_i,x_j)-b,\quad i=1,2
+$$
+目标函数可以写成
+$$
+\begin{aligned}
+W(\alpha_1,\alpha_2)=&\frac{1}{2}K_{11}\alpha_1^2+\frac{1}{2}K_{22}\alpha_2^2+y_1y_2K_{12}\alpha_1\alpha_2\\
+&-(\alpha_1+\alpha_2)+y_1v_1\alpha_1+y_2v_2\alpha_2\\
+\end{aligned}
+$$
+由α1y1=ζ-α2y2及yi^2=1，可将α1表示为
+$$
+\alpha_1=(\zeta-y_2\alpha_2)y_1
+$$
+带入上上式，得到只是α2的函数的目标函数：
+$$
+\begin{aligned}
+W(\alpha_2)=&\frac{1}{2}K_{11}(\zeta-\alpha_2y_2)^2+\frac{1}{2}K_{22}\alpha_2^2+y_2K_{12}(\zeta-\alpha_2y_2)\alpha_2\\
+&-(\zeta-\alpha_2y_2)y_1-\alpha_2+v_1(\zeta-\alpha_2y_2)+y_2v_2\alpha_2\\
+\end{aligned}
+$$
+上式对α2求导数
+$$
+\begin{aligned}
+\frac{\partial W}{\partial \alpha_2}=&K_{11}\alpha_2+K_{22}\alpha_2-2K_{12}\alpha_2\\
+&-K_{11}\zeta y_2+K_{12}\zeta y_2+y_1y_2-1-v_1y_2+y_2v_2
+\end{aligned}
+$$
+令其为0，得到
+$$
+\begin{aligned}
+(K_{11}+K_{22}-2K_{12})\alpha_2=&y_2(y_2-y_1+\zeta K_{11}-\zeta K_{12}+v_1-v_2)\\
+=&y_2[ y_2-y_1+\zeta K_{11} -\zeta K_{12}+\left( g(x_1)-\sum_{j=1}^2y_j\alpha_jK_{1j}-b \right)\\
+&-\left( g(x_2)-\sum_{j=1}^2y_j\alpha_jK_{2j}-b \right)]
+\end{aligned}
+$$
+将
+$$
+\zeta=\alpha_1^{\text{old}}y_1+\alpha_2^{\text{old}}y_2
+$$
+代入，得到
+$$
+\begin{aligned}
+(K_{11}+K_{22}-2K_{12})\alpha_2^{\text{new,unc}}=&y_2((K_{11}+K_{22}-2K_{12})\alpha_2^{\text{old}}y_2+y_2-y_1+g(x_1)-g(x_2))\\
+&=(K_{11}+K_{22}-2K_{12})\alpha_2^{\text{old}}+y_2(E_1-E_2)
+\end{aligned}
+$$
+将
+$$
+\eta=K_{11}+K_{22}-2K_{12}
+$$
+代入，于是得到
+$$
+\alpha_2^{\text{new,unc}}=\alpha_2^{\text{old}}+\frac{y_2(E_1-E_2)}{\eta}
+$$
+要使其满足不等式约束必须将其限制在区间[L,H]内，从而得到α2(new)的表达式（就是上面的定理）。具体求解如下：
+
+由SMO的优化问题的等式约束
+$$
+\alpha_1y_1+\alpha_2y_2=\zeta
+$$
+得到
+$$
+\begin{aligned}
+&\alpha_1^{\text{new}}y_1+\alpha_2^{\text{new}}y_2=\alpha_1^{\text{old}}y_1+\alpha_2^{\text{old}}y_2\\
+\Rightarrow &\alpha_1^{\text{new}}=y_1(\alpha_1^{\text{old}}y_1+\alpha_2^{\text{old}}y_2-\alpha_2^{\text{new}}y_2)\\
+\Rightarrow &\alpha_1^{\text{new}}=\alpha_1^{\text{old}}+y_1y_2(\alpha_2^{\text{old}}-\alpha_2^{\text{new}})\\
+\end{aligned}
+$$
+于是就得到了SMO的优化问题的解
+$$
+(\alpha_1^{\text{new}},\alpha_2^{\text{new}})
+$$
+
+### α2须取临界值的情况
+
+大部分情况下，有
+$$
+\eta=K_{11}+K_{22}-2K_{12}>0
+$$
+。但是在如下几种情况下，α2(new)需要取临界值L或者H。
+
+* η<0，当核函数K不满足Mercer定理时，K矩阵负定
+* η=0，样本x1与x2输入特征相同
+
+也可以如下理解，对SMO的优化问题的目标值W(α1,α2)求二阶导数就是η=K11+K22-2K12
+
+* 当η<0时，目标函数W为凸函数，没有极小值，极值在定义域边界处取得
+* 当η=0时，目标函数W为单调函数，同样在边界处取极值
+
+计算方法：
+
+即把α2(new)=L和α2(new)=H分别带入
+$$
+\alpha_1^{\text{new}}=\alpha_1^{\text{old}}+y_1y_2(\alpha_2^{\text{old}}-\alpha_2^{\text{new}})
+$$
+中，计算出α1(new)=L1和α1(new)=H1，如下式所示：
+$$
+\begin{aligned}
+&L1=\alpha_1^{\text{old}}+y_1y_2(\alpha2^{\text{old}}-L)\\
+&H1=\alpha_1^{\text{old}}+y_1y_2(\alpha2^{\text{old}}-H)\\
+\end{aligned}
+$$
+然后将(α1(new)=L1, α2(new)=L)和(α1(new)=H1, α2(new)=H)带入目标函数W内，比较W(α1(new)=L1, α2(new)=L)和W(α1(new)=H1, α2(new)=H)的大小。 α2取小的函数值对应的边界点。
 
 ## 变量的选择方法
 
+SMO算法在每个子问题中选择两个变量优化，其中至少一个变量是违反KKT条件的。
 
+### 第一个变量的选择
+
+SMO称选择呢第一个变量的过程为外层循环。**外层循环在训练样本中选取违反KKT条件最严重的样本点**，并将其对应的变量作为第1个变量。具体地，检验训练样本点(xi,yi)是否满足KKT条件，即
+$$
+\begin{aligned}
+\alpha_i=0&\Leftrightarrow  y_ig(x_i)\geqslant1\\
+0<\alpha_i<C&\Leftrightarrow  y_ig(x_i)=1\\
+\alpha_i=C&\Leftrightarrow  y_ig(x_i)\leqslant1\\
+\end{aligned}
+$$
+其中，
+$$
+g(x_i)=\sum_{j=1}^N\alpha_jy_jK(x_i,x_j)+b
+$$
+该检验是在ε范围内进行的。在检验过程中，**外层循环首先优先遍历所有满足条件0<αi<C的样本点，即在将间隔边界上的支持向量点，检验他们是否满足KKT条件**，因为在界上（αi为0或C）的样例对应的系数αi一般不会更改。如果这些样本点都满足KKT 条件，那么遍历整个训练集。
+
+### 第二个变量的选择
+
+SMO称选择第二个变量的过称谓内层循环。假设在外层循环中已经找到第1个变量α1，现在要在内层循环中找到第2个变量α2。**第二个变量选择的标准是希望能使α2有足够大的变化**。
+
+由下式
+$$
+\alpha_2^{\text{new,unc}}=\alpha_2^{\text{old}}+\frac{y_2(E_1-E_2)}{\eta}
+$$
+可知，α2(new)是依赖于|E1-E2|的，为了加快计算速度，以中间打的做法是选择α2，使其对应的|E1-E2|最大。因为α1已定，E1也确定了。如果E1是正的，那么选择最小的Ei作为E2；如果E1是负的，那么选择最大的Ei作为E2。为了节省计算时间，将所有的Ei值保存在一个列表中。
+
+在特殊情况下，如果内层循环通过以上方法选择的α2不能使目标函数有足够的下降，那么采用一下启发式规则继续选择α2。遍历在间隔边界上的支持向量点，依次将其对应的变量作为α2试用，知道目标函数有足够的下降。若找不到合适的α2，那么遍历训练数据集；若仍然找不到合适的α2，则放弃第一个α1，再通过外层循环寻求另外的α1。
+
+至此，迭代关系式出了b的推导式以外，都已经推出。
+
+### 计算阈值b和插值Ei
+
+在每次完成两个变量的优化后，都要重新计算阈值b，也就是说b每一步都要更新，因为前面的KKT条件指出αi和yi·g(xi)的关系，而g(xi)和b有关，在每一步计算出αi后，根据KKT条件来调整b。
+
+当0<α1(new)<C时，由KKT条件可知：
+$$
+\sum_{i=1}^N\alpha_iy_iK_{i1}+b=y_1
+$$
+于是，
+$$
+b_1^{\text{new}}=y_1-\sum_{i=3}^N\alpha_iy_iK_{i1}-\alpha_1^{\text{new}}y_1K_{11}-\alpha_2^{\text{new}}y_2K_{21}
+$$
+由前面的E1定义
+$$
+E_i=g(x_i)-y_i=\left( \sum_{j=1}^N\alpha_jy_jK(x_j,x_i)+b \right)-y_i,\quad i=1,2
+$$
+有
+$$
+E_i=\sum_{i=3}^N\alpha_iy_iK_{i1}+\alpha_1^{\text{old}}y_1K_{11}+\alpha_2^{\text{old}}y_2K_{21}+b^{\text{old}}-y_1
+$$
+计算b1(new)的上上上式的前两项由上式可写成：
+$$
+y_1-\sum_{i=3}^N\alpha_iy_iK_{i1}=-E_i+\alpha_1^{\text{old}}y_1K_{11}+\alpha_2^{\text{old}}y_2K_{21}+b^{\text{old}}
+$$
+并将上式带入计算b1(new)的式子（上上上上式）中，可得
+$$
+b_1^{\text{new}}=-E_1-y_1K_{11}(\alpha_1^{\text{new}}-\alpha_1^{\text{old}})-y_2K_{21}(\alpha_2^{\text{new}}-\alpha_2^{\text{old}})+b^{\text{old}}
+$$
+同样，如果0<α2(new)<C，那么，
+$$
+b_2^{\text{new}}=-E_2-y_1K_{12}(\alpha_1^{\text{new}}-\alpha_1^{\text{old}})-y_2K_{22}(\alpha_2^{\text{new}}-\alpha_2^{\text{old}})+b^{\text{old}}
+$$
+如果α1(new)，α2(new)同时满足条件0<αi(new)<C，i=1,2，那么b1(new)=b2(new)。如果α1(new)，α2(new)是0或者C，那么b1(new)和b2(new)以及它们之间的数都是符合KKT条件的阈值，这时选择它们的中点作为b(new)。
+
+在每次完成两个变量的优化之后，还必须更新对应的Ei值，并将它们保存在列表中，Ei值的更新要用到b(new)值，以及所有支持向量对应的对应的αj：
+$$
+E_i^{\text{new}}=\sum_Sy_j\alpha_jK(x_i,x_j)+b^{\text{new}}-y_i
+$$
+其中，S是所有支持向量xj的集合。
+
+**个人理解：注意，每次更新的只有三个变量：αi,Ei(实际上是ui,即当前模型的预测值,因为每个样本点的真实值是不会改变的),b.**
+
+**更新的变量里没有w,因为计算过程中不需要w的参与,我们并不需要计算出w再来计算每个样本点的预测值，因为从w的计算公式可以看出来，只需计算那些支持向量与样本点的内积即可，之所以这样做，而不是计算出w，再计算每个样本点的预测值，是因为引入核函数之后，就不需要，也很难计算w的值了，w对应的将是一个高维向量，计算起来相当麻烦，而且我们用到w的地方全都可以用低维空间的内积和核函数来代替，所以不更新w。**
 
 ## 凸优化问题终止条件
 
@@ -1629,21 +1884,48 @@ SMO算法的基本思路是：如果说有变量的解都满足此最优化问�
 
 ## SMO算法
 
+输入：训练数据集T
+$$
+T=\{ (x_1,y_1),(x_2,y_2),...,(x_N,y_N) \}
+$$
+其中，xi∈X=R^n，yi∈Y=\{+1,-1\}，i=1,2,...,N，精度ε；
 
+输出：近似解
+$$
+\hat{\alpha}
+$$
+（1）取初始值α(0)=0，令k=0；
 
+（2）选取优化变量α1(k),α2(k)，解析求解两个变量的最优化问题（如前面所示），求得最优解α1(k+1)，α2(k+1)，更新α为α(k+1)；
 
+（3）若在精度ε范围内满足停止条件：
+$$
+\begin{aligned}
+&\sum_{i=1}^N\alpha_iy_i=0\\
+&0\leqslant\alpha_i\leqslant C,\quad i=1,2,...,N\\
+&y_i\cdot g(x_i)=
+\left\{\begin{matrix}
+&\geqslant 1,\quad &\{ x_i|\alpha_i=0 \}\\ 
+&= 1,\quad &\{ x_i|0<\alpha_i<C \}\\ 
+&\leqslant 1,\quad &\{ x_i|\alpha_i=C \}\\ 
+\end{matrix}\right.
+\end{aligned}
+$$
+其中，
+$$
+g(x_i)=\sum_{j=1}^N\alpha_jy_jK(x_i,x_j)+b
+$$
+则转（4），否则令k=k+1，转（2）；
 
+（4）取
+$$
+\hat{\alpha}=\alpha^{(k+1)}
+$$
+**建议参看SMO原文的伪代码**
 
+这里再总结下SMO算法：
 
-
-
-
-
-
-
-
-
-
+SMO算法是支持向量机学习的一种快速方法，其特点是不断地将元二次规划问题分解为只有两个变量的二次规划问题，并对子问题进行解析求解，知道所有变量满足KKT条件为止。这样通过启发式的方法得到原二次规划问题的最优解。因为子问题有解析解，所以每次计算子问题都很快，虽然计算子问题次数很多，但在总体上还是高效的。
 
 # SVM的正则化
 
@@ -1669,21 +1951,77 @@ $$
 
 [LR与SVM的区别与联系](https://zhuanlan.zhihu.com/p/31403164)
 
+逻辑回归是广义的线性回归，通过S型函数变化而已，取一个阈值作为分类标志，在行业的应用中很多直接用概率值解决放贷或者营销策略，不同概率值使用不同策略，逻辑回归便于实施易于解释都是业务常用的。逻辑回归常用于处理大数据，而SVM则正好相反。
+
+支持向量机通过超平面分割数据，追求的是分类结果。SVM的理论性强，最nb的地方是核函数的引入，可以来逼近非线性目标函数。不过如果非线性的话，工业界GBDT用得更广些。
+
+两者的不同具体表现在：
+
+* 损失函数不一样，逻辑回归的损失函数是log loss，svm的损失函数是hinge loss
+
+  损失函数的不同，导致了逻辑回归侧重于所有点，svm侧重于超平面边缘的点
+
+  即SVM考虑分界面处的局部点（不关心已经确定远离的点），而逻辑回归考虑全局（已经远离的点可能通过调整中间线使其能够更加远离）
+
+* 损失函数的优化方法不一样，逻辑回归用梯度下降法优化，svm用smo方法进行优化
+
+* 对非线性问题的处理方式不同。LR主要靠特征构造，必须组合交叉特征，特征离散化。SVM也可以这样，还可以通过kernel。
+
+* 处理的数据规模不同。**LR一般用来处理大规模的学习问题**。如十亿级别的样本，亿级别的特征。
+
+**为什么逻辑回归和SVM的本质区别在于损失函数？**
+
+逻辑回归和支持向量机之间的区别也经常被问到的，特地找了一些相关资料看了下。
+
+我们先来看一下SVM 和正则化的逻辑回归它们的**损失函数**：
+$$
+\begin{aligned}
+&\text{SVM: } &\frac{1}{n}\sum_{i=1}^n(1-y_i\left[ w_0+x_i^Tw_1 \right])^++\lambda||w_1||/2\\
+&\text{Logistic: } &\frac{1}{n}\sum_{i=1}^n-\text{log }g(y_i\left[ w_0+x_i^Tw_1 \right])+\lambda||w_1||/2\\
+\end{aligned}
+$$
+其中，g(z)是Sigmoid函数，即
+$$
+g(z)=\frac{1}{1+\text{exp}(-z)}
+$$
+可以将逻辑回归和SVM统一起来：
+$$
+\text{Both: } \frac{1}{n}\sum_{i=1}^n\text{Loss}(y_i\left[ w_0+x_i^Tw_1 \right])+\lambda||w_1||/2
+$$
+**也就是说，他们的区别在于逻辑回归采用的是log loss（对数损失函数），SVM采用的是hinge loss（E(z)=max(0,1-z)）。**
+
+也即
+
+* SVM损失函数：
+  $$
+  \text{Loss}(z)=(1-z)^+
+  $$
+
+* LR损失函数：
+  $$
+  \text{Loss}(z)=\text{log}(1+\text{exp}(-z))
+  $$
 
 
+![SVM-LR-loss](pic/SVM-LR-loss.png)
 
+其实，这两个损失函数的目的都是增加对分类影响较大的数据点的权重，减少与分类关系较小的数据点的权重。SVM的处理方法是只考虑**support vectors**，也就是和分类最相关的少数点，去学习分类器。而逻辑回归通过非线性映射，大大减小了离分类平面较远的点的权重，相对提升了与分类最相关的数据点的权重，**两者的根本目的都是一样的**。
 
-- [支持向量机通俗导论（理解SVM的三层境界）](https://blog.csdn.net/v_july_v/article/details/7624837)
+svm考虑**局部**（支持向量），而logistic回归考虑**全局**，就像大学里的辅导员和教师间的区别：
 
-待看
+>辅导员关心的是挂科边缘的人，常常找他们谈话，告诫他们一定得好好学习，不要浪费大好青春，挂科了会拿不到毕业证、学位证等等，相反，对于那些相对优秀或者良好的学生，他们却很少去问，因为辅导员相信他们一定会按部就班的做好分内的事；而大学里的教师却不是这样的，他们关心的是班里的整体情况，大家是不是基本都理解了，平均分怎么样，至于某个人的分数是59还是61，他们倒不是很在意。
 
-- [支持向量机SVM（一）](https://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html)
+如果给SVM换用其他的Loss函数的话，SVM就不再是SVM了。正是因为Hinge Loss的零区域对应的正是非支持向量的普通样本，从而所有的普通样本都不参与最终超平面的决定，这才是支持向量机最大的优势所在，对训练样本数目的依赖大大减少，而且提高了训练效率。
 
-这份材料从前几节讲的logistic回归出发，引出了SVM，既揭示了模型间的联系，也让人觉得过渡更自然。
+# 总结
 
+这份SVM的讲义重点概括了SVM的基本概念和基本推导，中规中矩却又让人醍醐灌顶。起初让我最头疼的是拉格朗日对偶和SMO，后来逐渐明白拉格朗日对偶的重要作用是将w的计算提前并消除w，使得优化函数变为拉格朗日乘子的单一参数优化问题。而SMO里面迭代公式的推导也着实让我花费了不少时间。
 
+对比这么复杂的推导过程，SVM的思想确实那么简单。它不再像logistic回归一样企图去拟合样本点（中间加了一层sigmoid函数变换），而是就在样本中去找分隔线，为了评判哪条分界线更好，引入了几何间隔最大化的目标。
 
+之后所有的推导都是去解决目标函数的最优化上了。在解决最优化的过程中，发现了w可以由特征向量内积来表示，进而发现了核函数，仅需要调整核函数就可以将特征进行低维到高维的变换，在低维上进行计算，实质结果表现在高维上。由于并不是所有的样本都可分，为了保证SVM的通用性，进行了软间隔的处理，导致的结果就是将优化问题变得更加复杂，然而惊奇的是松弛变量没有出现在最后的目标函数中。最后的优化求解问题，也被拉格朗日对偶和SMO算法化解，使SVM趋向于完美。
 
+对于非线性SVM：SVM通过一个非线性映射Φ(x)，把样本空间映射到一个高维乃至无穷维的特征空间中（Hilbert空间），使得在原来的样本空间中非线性可分的问题转化为在特征空间中的线性可分的问题．简单地说，就是升维和线性化。作为分类、回归等问题来说，很可能在低维样本空间无法线性处理的样本集，在高维特征空间中却可以通过一个线性超平面实现线性划分（或回归）。一般的升维都会带来计算的复杂化，但SVM方法巧妙地应用核函数的展开定理简化了计算，不需要知道非线性映射的显式表达式。简单来说，SVM是在高维特征空间中建立线性学习机，几乎不增加计算的复杂性，并且在某种程度上避免了“维数灾难”，这一切要归功于核函数的展开和计算理论．
 
 # 参考资料
 
@@ -1715,27 +2053,37 @@ $$
 
 "SMO算法"参考了此博客。
 
+- [坐标上升/下降算法](https://blog.csdn.net/u010626937/article/details/75044343)
+
+"坐标下降（上升）法"参考了此博客。
+
+* [【机器学习详解】SMO算法剖析](https://blog.csdn.net/luoshixian099/article/details/51227754)
+
+"α2须取临界值的情况"参考了此博客。
+
+* [SMO算法(比较好的讲解)](https://blog.csdn.net/aiaiai010101/article/details/73350990)
+
+"变量的选择方法"最后的个人理解参考了此博客。
+
+* [支持向量机（五）SMO算法](https://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html)
+
+"SMO算法"参考了此博客。
+
 * [史上最全面的正则化技术总结与分析--part2](https://zhuanlan.zhihu.com/p/35432128)
 
 “SVM的正则化”参考此知乎专栏文章。
 
-* [坐标上升/下降算法](https://blog.csdn.net/u010626937/article/details/75044343)
+- [支持向量机SVM（一）](https://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html)
 
-"坐标下降（上升）法"参考了此博客。
+这份材料从前几节讲的logistic回归出发，引出了SVM，既揭示了模型间的联系，也让人觉得过渡更自然。“逻辑回归和SVM的区别”一节参考了此博客。
 
+* [逻辑回归和SVM的区别是什么？各适用于解决什么问题？](https://www.zhihu.com/question/24904422)
 
+“逻辑回归和SVM的区别”一节参考了此博客。
 
+---
 
-
-
-
-
-
-
-
-
-
-
+以下待仔细研究：
 
 * [支持向量机通俗导论（理解SVM的三层境界）](https://blog.csdn.net/v_july_v/article/details/7624837)
 
