@@ -239,15 +239,7 @@ $$
 $$
 y_i(w\cdot x_i+b)-1=0
 $$
-对yi=+1的正例点，支持向量在超平面
-$$
-H_1:\ w\cdot x+b=1
-$$
-上，对yi=-1的负例点，支持向量在超平面
-$$
-H_2:\ w\cdot x+b=-1
-$$
-上，如下图所示，在H1和H2上的点就是支持向量。
+对yi=+1的正例点，支持向量在超平面H1: w·x+b=1上，对yi=-1的负例点，支持向量在超平面H2: w·x+b=-1上。如下图所示，在H1和H2上的点就是支持向量。
 
 ![support-vector](pic/support-vector.png)
 
@@ -1116,13 +1108,7 @@ $$
 $$
 K(x,z)=<x,z>^2
 $$
-，即“内积平方”。
-
-这里面
-$$
-x=(x_1,x_2),z=(z_1,z_2)
-$$
-是二维空间中的两个点。
+，即“内积平方”。这里面x=(x1,x2), z=(z1,z2)是二维空间中的两个点。
 
 这个核函数对应着一个二维空间到三维空间的映射，它的表达式是：
 $$
@@ -1323,41 +1309,11 @@ $$
 
 ## 常用核函数
 
-我们可以自己构造一个核函数，但是往往比较复杂，因为我们要证明k是对称的、K是半正定的这两个充分必要条件。所以，我们往往是用已经有的有效的核函数去解决问题。
-
-在支持向量机中常用的几种核函数是
-
-* 线性核
-  $$
-  K(x,z)=x^Tz
-  $$
-
-* 多项式核（Polynomial Kernel）
-  $$
-  K(x,z)=(x^Tz+1)^p
-  $$
-
-* 径向基函数核(Radial basis function kernel，又叫高斯核，简称 RBF）
-  $$
-  K(x,z)=\text{exp}\left( -\frac{||x-z||^2}{2\sigma^2} \right)
-  $$
-
-* 拉普拉斯核
-  $$
-  K(x,z)=\text{exp}\left( -\frac{||x-z||}{\sigma} \right)
-  $$
-
-* 逻辑核（ Sigmoid Kernel）
-  $$
-  K(x,z)=\text{tanh}(\beta x^Tz+\theta)
-  $$
-
-
-
-
-
+我们可以自己构造一个核函数，但是往往比较复杂，因为我们要证明K是对称的、K是半正定的这两个充分必要条件。所以，我们往往是用已经有的有效的核函数去解决问题。
 
 关于核方法的理论部分涉及到泛函分析、微积分等等，水比较深，推荐一本书：《Kernel Methods for Pattern Analysi》(模式分析的核方法)，作者是：John Shawe-Taylor和Nello Cristianini 。
+
+在支持向量机中常用的几种核函数是：
 
 ### 线性核
 
@@ -1451,6 +1407,18 @@ SVM关键是选取核函数的类型，主要有线性内核，多项式内核�
 * 与多项式核函数相比，RBF需要确定的参数要少，核函数参数的多少直接影响函数的复杂程度。另外，当多项式的阶数比较高时，核矩阵的元素值将趋于无穷大或无穷小，而RBF则在上，会减少数值的计算困难。
 * 对于某些参数，RBF和sigmoid具有相似的性能。
 
+### 拉普拉斯核
+
+$$
+K(x,z)=\text{exp}\left( -\frac{||x-z||}{\sigma} \right)
+$$
+
+### 逻辑核（ Sigmoid Kernel）
+
+$$
+K(x,z)=\text{tanh}(\beta x^Tz+\theta)
+$$
+
 ### 核函数的选取
 
 在不知道特征映射的形式时，我们并不知道什么样的核函数是合适的，而核函数也仅隐式地定义了这个特征空间，于是“核函数选择”称为支持向量机最大的变数。
@@ -1496,10 +1464,8 @@ $$
 
 **非线性支持向量机学习算法**
 
-输入：训练数据集
-$$
-T=\{ (x_1,y_1),(x_2,y_2),...,(x_N,y_N) \}
-$$
+输入：训练数据集\{(x1,y1),(x2,y2), ... ,(xN,yN)\}
+
 ，其中，xi∈X=R^n，yi∈Y=\{+1,-1\}，i=1,2,...,N
 
 输出：分类决策函数。
@@ -1525,12 +1491,6 @@ $$
 当K(x,z)是正定核函数时，上述最优化问题是凸二次规划函数，解是存在的。
 
 # 序列最小最优化算法SMO
-
-[SMO优化算法（Sequential minimal optimization）](https://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html)
-
-[理解支持向量机（三）SMO算法](https://blog.csdn.net/shijing_0214/article/details/51017029)
-
-[【分类战车SVM】第六话：SMO算法（像smoke一样简单！）](https://mp.weixin.qq.com/s?__biz=MjM5MDEzNDAyNQ==&mid=207384849&idx=6&sn=872955558bde98e49e11aa70da2c2c97#rd)
 
 终于到SVM的实现部分了。那么神奇和有效的东西还得回归到实现才可以展示其强大的功力。SVM有效而且存在很高效的训练算法，这也是工业界非常青睐SVM的原因。
 
@@ -1643,15 +1603,15 @@ $$
 
 由于α2(new)需满足不等式约束，所以最优值α2(new)的取值范围必须满足条件
 $$
-L\leqslant\alpha_2^{new}\leqslant H
+L\leqslant\alpha_2^{\text{new}}\leqslant H
 $$
 其中，L与H是α2(new)所在对角线断点的界。如果y1≠y2（如上图左图所示），则
 $$
-L=\text{max}(0,\alpha_2^{old}-\alpha_1^{old}),\quad H=\text{min}(C,C+\alpha_2^{old}-\alpha_1^{old})
+L=\text{max}(0,\alpha_2^{\text{old}}-\alpha_1^{\text{old}}),\quad H=\text{min}(C,C+\alpha_2^{\text{old}}-\alpha_1^{\text{old}})
 $$
 如果y1=y2（如上图右图所示），则
 $$
-L=\text{max}(0,\alpha_2^{old}+\alpha_1^{old}-C),\quad H=\text{min}(C,\alpha_2^{old}+\alpha_1^{old})
+L=\text{max}(0,\alpha_2^{\text{old}}+\alpha_1^{\text{old}}-C),\quad H=\text{min}(C,\alpha_2^{\text{old}}+\alpha_1^{\text{old}})
 $$
 下面，首先求沿着约束方向未经剪辑即未考虑约束时α2的最优解α2(new,unc)；然后再求剪辑后α2的解α2(new)。我们用定理来叙述这个结果。为了叙述简单，记
 $$
@@ -1671,7 +1631,7 @@ $$
 $$
 其中，
 $$
-\eta=K_{11}+K_{22}-2K_{12}=||\phi(x_!)-\phi(x_2)||^2
+\eta=K_{11}+K_{22}-2K_{12}=||\phi(x_1)-\phi(x_2)||^2
 $$
 Φ(x)是输入空间到特征空间的映射，Ei，i=1,2，上面已经给出。
 
@@ -1721,15 +1681,7 @@ $$
 &-K_{11}\zeta y_2+K_{12}\zeta y_2+y_1y_2-1-v_1y_2+y_2v_2
 \end{aligned}
 $$
-令其为0，得到
-$$
-\begin{aligned}
-(K_{11}+K_{22}-2K_{12})\alpha_2=&y_2(y_2-y_1+\zeta K_{11}-\zeta K_{12}+v_1-v_2)\\
-=&y_2[ y_2-y_1+\zeta K_{11} -\zeta K_{12}+\left( g(x_1)-\sum_{j=1}^2y_j\alpha_jK_{1j}-b \right)\\
-&-\left( g(x_2)-\sum_{j=1}^2y_j\alpha_jK_{2j}-b \right)]
-\end{aligned}
-$$
-将
+令其为0，
 $$
 \zeta=\alpha_1^{\text{old}}y_1+\alpha_2^{\text{old}}y_2
 $$
@@ -1931,7 +1883,7 @@ SMO算法是支持向量机学习的一种快速方法，其特点是不断地�
 
 支持向量机SVM优化目的为寻找一个超平面，使得正负样本能够以最大间隔分离开，从而得到更好的泛化性能，其通过引入核函数来将低维线性不可分的样本映射到高维空间从而线性可分，通过引入惩罚参数C(类似于正则化参数)来对错分样本进行惩罚，从而减少模型复杂度，提高泛化能力，其优化目标如下：
 $$
-\mathop{min}_{\theta,b}\frac{1}{n}\sum_{i=1}^n\text{max}(1-y_i(\theta^Tx_i+b),0)+\frac{1}{2CN}\theta^T\theta
+\mathop{\text{min}}_{\theta,b}\frac{1}{n}\sum_{i=1}^n\text{max}(1-y_i(\theta^Tx_i+b),0)+\frac{1}{2CN}\theta^T\theta
 $$
 其中，正则项系数为
 $$
@@ -1946,10 +1898,6 @@ $$
 
 
 # 逻辑回归和SVM的区别
-
-[逻辑回归和SVM的区别是什么？各适用于解决什么问题？](https://www.zhihu.com/question/24904422)
-
-[LR与SVM的区别与联系](https://zhuanlan.zhihu.com/p/31403164)
 
 逻辑回归是广义的线性回归，通过S型函数变化而已，取一个阈值作为分类标志，在行业的应用中很多直接用概率值解决放贷或者营销策略，不同概率值使用不同策略，逻辑回归便于实施易于解释都是业务常用的。逻辑回归常用于处理大数据，而SVM则正好相反。
 
@@ -1976,7 +1924,7 @@ $$
 我们先来看一下SVM 和正则化的逻辑回归它们的**损失函数**：
 $$
 \begin{aligned}
-&\text{SVM: } &\frac{1}{n}\sum_{i=1}^n(1-y_i\left[ w_0+x_i^Tw_1 \right])^++\lambda||w_1||/2\\
+&\text{SVM: } &\frac{1}{n}\sum_{i=1}^n(1-y_i\left[ w_0+x_i^Tw_1 \right])^{\text{+}}+\lambda||w_1||/2\\
 &\text{Logistic: } &\frac{1}{n}\sum_{i=1}^n-\text{log }g(y_i\left[ w_0+x_i^Tw_1 \right])+\lambda||w_1||/2\\
 \end{aligned}
 $$
@@ -1994,13 +1942,17 @@ $$
 
 * SVM损失函数：
   $$
-  \text{Loss}(z)=(1-z)^+
+  \text{Loss}(z)=(1-z)^{\text{+}}
   $$
 
 * LR损失函数：
   $$
   \text{Loss}(z)=\text{log}(1+\text{exp}(-z))
   $$
+
+
+
+
 
 
 ![SVM-LR-loss](pic/SVM-LR-loss.png)
