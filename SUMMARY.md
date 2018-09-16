@@ -90,10 +90,14 @@
 * [决策树](content/machine-learning/decision-tree/decision-tree.md)
 * [支持向量机](content/machine-learning/support-vector-machine/support-vector-machine.md)
 * [集成学习](content/machine-learning/ensemble-learning/ensemble-learning.md)
-    * [随机森林[Bagging]](content/machine-learning/ensemble-learning/random-forest[Bagging].md)
-    * [AdaBoost[Boosting]](content/machine-learning/ensemble-learning/AdaBoost[Boosting].md)
-    * [GBDT[GradientBoosting]](content/machine-learning/ensemble-learning/GBDT[GradientBoosting].md)
-    * [XgBoost[GradientBoosting]](content/machine-learning/ensemble-learning/XgBoost[GradientBoosting].md)
+    * Bagging
+        * [随机森林](content/machine-learning/ensemble-learning/random-forest.md)
+    * Boosting
+        * [AdaBoost](content/machine-learning/ensemble-learning/AdaBoost.md)
+        * GradientBoosting
+            * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
+            * [XgBoost](content/machine-learning/ensemble-learning/XgBoost.md)
+    * Stacking
 * [EM算法](content/machine-learning/expectation-maximization-algorithm/expectation-maximization-algorithm.md)
 * [HMM隐马尔科夫模型](content/machine-learning/hidden-markov-model/hidden-markov-model.md)
 * [CRF条件随机场](content/machine-learning/conditional-random-field/conditional-random-field.md)

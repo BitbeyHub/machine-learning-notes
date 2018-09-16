@@ -1,4 +1,4 @@
-# XGBoost[GradientBoosting]
+# XGBoost
 
 * [返回顶层目录](../../SUMMARY.md#目录)
 * [返回上层目录](ensemble-learning.md)
