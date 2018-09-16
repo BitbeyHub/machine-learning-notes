@@ -6,6 +6,7 @@
 * [AdaBoost算法](#AdaBoost算法)
 * [AdaBoost算法的训练误差分析](#AdaBoost算法的训练误差分析)
 * [AdaBoost算法的解释](#AdaBoost算法的解释)
+* [AdaBoost算法的优点](#AdaBoost算法的优点)
 * [提升树](#提升树)
 
 
@@ -128,6 +129,13 @@ $$
 # AdaBoost算法的解释
 
 
+
+# AdaBoost算法的优点
+
+- AdaBoost是一种有很高精度的分类器
+- AdaBoost可以支持各种方式构建的弱分类器，如上文中的x<v这样的分类器，AdaBoost提供的是框架
+- 构造弱分类器简单，不用进行特征筛选
+- 不用担心过拟合
 
 
 
