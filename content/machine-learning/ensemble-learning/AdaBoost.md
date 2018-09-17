@@ -6,6 +6,8 @@
 * [AdaBoost算法](#AdaBoost算法)
 * [AdaBoost算法的训练误差分析](#AdaBoost算法的训练误差分析)
 * [AdaBoost算法的解释](#AdaBoost算法的解释)
+  * [前向分布算法](#前向分布算法)
+  * [前向分步算法与AdaBoost](#前向分步算法与AdaBoost)
 * [AdaBoost算法的优点](#AdaBoost算法的优点)
 * [提升树](#提升树)
 
@@ -124,11 +126,217 @@ $$
 
 # AdaBoost算法的训练误差分析
 
+AdaBoost最基本的性质是它能在学习过程中不断减少训练误差，即在训练数据及上分类误差率。关于这个问题有下面的定理：
 
+**AdaBoost的训练误差界**
+
+AdaBoost算法最终分类器的训练误差界为
+$$
+\frac{1}{N}\sum_{i=1}^NI(G(x_i)\neq y_i)\leqslant\frac{1}{N}\sum_i\text{exp}(-y_if(x_i))=\prod_mZ_m
+$$
+这里，G(x)，f(x)和Zm分别由上面已经给出。
+
+**证明**：当G(x)≠yi时，yif(xi)<0，因而exp(-yif(xi))≥1。由此直接推导出前半部分。
+
+后半部分的推导要用到Zm的定义式及其上式的变形：
+$$
+w_{mi}\text{exp}(-\alpha_my_iG_m(x_i))=Z_mw_{m+1,i}
+$$
+现推导如下：
+$$
+\begin{aligned}
+&\frac{1}{N}\sum_i\text{exp}(-y_if(x_i))\\
+=&\frac{1}{N}\sum_i\text{exp}\left(-\sum_{m=1}^M\alpha_my_iG_m(x_i)\right)\\
+=&\sum_iw_{1i}\prod_{m=1}^M\text{exp}\left(-\alpha_my_iG_m(x_i)\right)\\
+=&Z_1\sum_iw_{2i}\prod_{m=2}^M\text{exp}\left(-\alpha_my_iG_m(x_i)\right)\\
+=&Z_1Z_2\sum_iw_{3i}\prod_{m=3}^M\text{exp}\left(-\alpha_my_iG_m(x_i)\right)\\
+=&...\\
+=&Z_1Z_2...Z_{M-1}\sum_iw_{Mi}\text{exp}\left(-\alpha_My_iG_M(x_i)\right)\\
+=&\prod_{m=1}^MZ_m\\
+\end{aligned}
+$$
+这一定理说明，可以在每一轮选取适当的Gm使得Zm最小，从而使训练误差下降最快。对二分类问题，有如下结果：
+
+**定理：二分类问题AdaBoost的训练误差界**
+$$
+\prod_{m=1}^MZ_m=\prod_{m=1}^M[2\sqrt{e_m(1-e_m)}]=\prod_{m=1}^M\sqrt{(1-4\gamma_m^2)}\leqslant\text{exp}\left( -2\sum_{m=1}^M\gamma_m^2 \right)
+$$
+这里，
+$$
+\gamma_m=\frac{1}{2}-e_m
+$$
+证明：由Zm的定义及em的定义得
+$$
+\begin{aligned}
+Z_m&=\sum_{i=1}^Nw_{mi}\text{exp}\left(-\alpha_my_iG_m(x_i)\right)\\
+&=\sum_{y_i=G_m(x_i)}w_{mi}e^{-\alpha_m}+\sum_{y_i\neq G_m(x_i)}w_{mi}e^{\alpha_m}\\
+&=(1-e_m)e^{-\alpha_m}+e_me^{\alpha_m}\\
+&=2\sqrt{e_m(1-e_m)}\\
+&=\sqrt{1-4\gamma^2_m}\\
+\end{aligned}
+$$
+至于不等式
+$$
+\prod_{m=1}^M\sqrt{(1-4\gamma_m^2)}\leqslant\text{exp}\left( -2\sum_{m=1}^M\gamma_m^2 \right)
+$$
+则可先由exp(x)和sqrt(1-x)在点x=0的泰勒展开式推出不等式
+$$
+\sqrt{(1-4\gamma_m^2)}\leqslant\text{exp}(-2\gamma_m^2)
+$$
+进而得到该不等式。
+
+**推论**：如果存在γ>0，对所有m有γm≥γ，则
+$$
+\frac{1}{N}\sum_{i=1}^NI(G(x_i)\neq y_i)\leqslant\text{exp}(-2M\gamma^2)
+$$
+这表明在此条件下AdaBoost的训练误差是以指数速率下降的。这一性质当然是很有吸引力的。
+
+注意，AdaBoost算法不需要知道下界γ。这正是Freund与Schapire设计AdaBoost时所考虑到的。与一些早期的提升方法不同，Adaboost具有适应性，即它能适应若分类器各自的训练误差率。这也是它名称（自适应提升）的由来，Ada是Adaptive的简写。
 
 # AdaBoost算法的解释
 
+AdaBoost算法还有另一个解释，即可以认为AdaBosst算法是模型为加法模型、损失函数为指数函数、学习算法为前向分布算法时的二分类学习方法。
 
+## 前向分布算法
+
+考虑加法模型
+$$
+f(x)=\sum_{m=1}^M\beta_mb(x;\gamma_m)
+$$
+其中，b(x;γm)为基函数，γm为基函数的参数，βm为基函数的系数。
+
+显然，上面构建的基本分类器的线性组合
+$$
+f(x)=\sum_{m=1}^M\alpha_mG_m(x)
+$$
+是一个加法模型。
+
+在给定训练数据及损失函数L(y,f(x))的条件下，学习加法模型f(x)成为经验风险极小化即损失函数极小化问题：
+$$
+\mathop{\text{min}}_{\beta_m,\gamma_m}\sum_{i=1}^NL\left( y_i, \sum_{m=1}^M\beta_mb(x_i;\gamma_m) \right)
+$$
+通常这是一个复杂的优化问题，前向分布算法求解这一优化问题的想法是：廻学习的是加法模型，如果能够从前到后，每一步只需吸一个基函数及其系数，逐步逼近优化目标函数式，那么就可以建华优化的复杂度。具体地，每步只需优化如下损失函数：
+$$
+\mathop{\text{min}}_{\beta,\gamma}\sum_{i=1}^NL(y_i,\beta b(x_i;\gamma))
+$$
+给定训练数据集T=\{ (x1,y1), (x2,y2), ... , (xN,yN) \}，xi∈X=R^n，yi∈Y=\{+1,-1\}。损失函数L(y,f(x))和基函数的结合\{ b(x;γ) \}，学习加法模型f(x)的前项分布算法如下：
+
+**前向分步算法**：
+
+输入：训练数据集集T=\{ (x1,y1), (x2,y2), ... , (xN,yN) \}；损失函数L(y,f(x))；基函数集\{ b(x;γ) \}；
+
+输出：加法模型f(x)。
+
+（1）初始化f0(x)=0
+
+（2）对m=1,2,...,M
+
+（a）极小化损失函数
+$$
+(\beta_m,\gamma_m)=\text{arg }\mathop{\text{min}}_{\beta,\gamma}\sum_{i=1}^NL(y_i,f_{m-1}(x_i)+\beta b(x_i; \gamma))
+$$
+得到参数βm，γm
+
+（b）更新
+$$
+f_m(x)=f_{m-1}(x)+\beta_mb(x; \gamma_m)
+$$
+（3）得到加法模型
+$$
+f(x)=f_M(x)=\sum_{m=1}^M\beta_mb(x;\gamma_m)
+$$
+这样，前向分步算法将同时求解m=1到M所有参数βm，γm的优化问题简化为主次求解各个βm，γm的优化问题。
+
+## 前向分步算法与AdaBoost
+
+由前项分布算法可以推导出AdaBoost，用定理叙述这一关系。
+
+**定理**：AdaBoost算法是前向分布加法算法的特例。这时，模型是由基本分类器组成的加法模型，损失函数是指数函数。
+
+证明：前向分布算法学习的是加法模型，当基函数为基本分类器时，该加法模型等价于AdaBoost的最终分类器。
+$$
+f(x)=\sum_{m=1}^M\alpha_mG_m(x)
+$$
+由基本分类器Gm(x)及其系数αm组成，m=1,2,...,M。前向分布算法逐一学习基函数，这一过程与AdaBoos算法逐一学习基本分类器的过程一致。下面证明**前向分步算法的损失函数是指数损失函数**。
+$$
+L(y,f(x))=exp[-y\ f(x)]
+$$
+时，其学习的具体操作等价于AdaBoost算法学习的具体操作。
+
+假设经过m-1轮迭代，前向分布算法已经得到
+$$
+\begin{aligned}
+f_{m-1}(x)&=f_{m-2}(x)+\alpha_{m-1}G_{m-1}(x)\\
+&=\alpha_1G_1(x)+...+\alpha_{m-1}G_{m-1}(x)
+\end{aligned}
+$$
+在第m轮迭代中，得到αm，Gm(x)和fm(x)。
+$$
+f_m(x)=f_{m-1}(x)+\alpha_mG_m(x)
+$$
+目标是使前向分布算法得到的αm和Gm(x)使fm(x)在训练数据集T上的指数损失最小，即
+$$
+(\alpha_m,G_m(x))=\text{arg }\mathop{\text{min}}_{\alpha,G}\sum_{i=1}^N\text{exp}[-y_i(f_{m-1}(x_i)+\alpha G(x_i))]
+$$
+上式可以表示为
+$$
+(\alpha_m,G_m(x))=\text{arg }\mathop{\text{min}}_{\alpha,G}\sum_{i=1}^N\overline{w}_{mi}\text{exp}[-y_i\alpha G(x_i)]
+$$
+其中，
+$$
+\overline{w}_{mi}=\text{exp}[-y_if_{m-1}(x_i)]
+$$
+。因为$\overline{w}_{mi}$既不依赖α也不依赖于G，所以与最小化无关。但其依赖于$f_{m-1}(x)$，随着每一轮迭代而发生改变。
+
+现证使上上式达到最小的α\*m和G\*m(x)就是AdaBoost算法所得到的αm和Gm(x)。求解上上式可分两步：
+
+首先，求G\*m(x)。对任意α>0，使上上式最小的G(x)由下式得到：
+$$
+G_m^*(x)=\text{arg }\mathop{\text{min}}_{G}\sum_{i=1}^N\overline{w}_{mi}I(y_i\neq G(x_i))
+$$
+注：这里为什么能和上上式是等效的？有待研究。
+
+此分类器G\*m(x)即为AdaBoost算法的基本分类器Gm(x)，因为它是使第m轮甲醛训练数据分类误差率最小的基本分类器。
+
+之后，求α\*m，上上上式中，
+$$
+\begin{aligned}
+&\sum_{i=1}^N\overline{w}_{mi}\text{exp}[-y_i\alpha G(x_i)]\\
+=&\sum_{y_i=G_m(x_i)}\overline{w}_{mi}\text{exp}(-\alpha)+\sum_{y_i\neq G_m(x_i)}\overline{w}_{mi}\text{exp}(\alpha)\\
+=&(e^{\alpha}-e^{-\alpha})\sum_{i=1}^N\overline{w}_{mi}I(y_i\neq G(x_i))+e^{-\alpha}\sum_{i=1}^N\overline{w}_{mi}
+\end{aligned}
+$$
+将已求得的G\*m(x)带入上式，对α求导并使倒数为0，即得到使上上式最小的α。
+$$
+\alpha_m^*=\frac{1}{2}\text{log}\frac{1-e_m}{e_m}
+$$
+其中，em是分类误差率：
+$$
+e_m=\frac
+{\sum_{i=1}^N\overline{N}_{mi}I(y_i\neq G_m(x_i))}
+{\sum_{i=1}^N\overline{N}_{mi}}
+=
+\sum_{i=1}^Nw_{mi}I(y_i\neq G_m(x_i))
+$$
+这里的α\*m与AdaBoost算法第2（c）步的αm完全一致。
+
+最后来看每一轮样本权值的更新。由
+$$
+f_m(x)=f_{m-1}(x)+\alpha_mG_m(x)
+$$
+以及
+$$
+\overline{w}_{mi}=\text{exp}[-y_if_{m-1}(x_i)]
+$$
+
+
+
+
+，可得
+$$
+\overline{w}_{m+1,i}=\overline{w}_{m,i}\text{exp}[-y_i\alpha_mG_m(x)]
+$$
+这与AdaBoost算法第2（d）步的样本权重的更新，只相差规范化因子，因而等价。
 
 # AdaBoost算法的优点
 
@@ -143,9 +351,10 @@ $$
 
 AdaBoost与决策树的结合则形成了提升树（boosting tree），AdaBoost使得决策树的准确率大大提高，可与SVM相媲美。
 
+这里先略过，以后再写。
 
+# 参考资料
 
+* 《统计学习方法》李航
 
-
-
-
+本文主要参考这本书的对应章节。
