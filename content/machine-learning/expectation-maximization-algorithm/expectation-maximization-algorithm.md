@@ -92,7 +92,7 @@ EM算法是一种迭代算法，1977年由Dempster等人总结提出，用于含
 
 推一篇Nature Biotech的EM tutorial文章，用了一个投硬币的例子来讲EM算法的思想。
 
-> [Do, C. B., & Batzoglou, S. (2008). 《What is the expectation maximization algorithm?》. *Nature biotechnology*, *26*(8), 897.](http://ai.stanford.edu/~chuongdo/papers/em_tutorial.pdf)
+> Do, C. B., & Batzoglou, S. (2008). [《What is the expectation maximization algorithm?》]((http://ai.stanford.edu/~chuongdo/papers/em_tutorial.pdf)). *Nature biotechnology*, *26*(8), 897.
 
 现在有两个硬币A和B，要估计的参数是它们各自翻正面（head）的概率。观察的过程是先随机选A或者B，然后扔10次。以上步骤重复5次。
 
@@ -225,11 +225,11 @@ matlab运行的收敛过程如下所示：
 
 一般地，用Y表示观测随机变量的数据，Z表示隐随机变量的数据。**Y和Z连在一起称为完全数据，观测数据Y又称为不完全数据**。
 
-假设给定观测数据Y，其概率分布是P(Y|θ)，其中θ是需要估计的模型参数，那么不完全数据Y的似然函数是P(Y|θ)，对数似然函数L(θ)=log P(Y|θ)；
+假设给定观测数据Y，其概率分布是P(Y | θ)，其中θ是需要估计的模型参数，那么不完全数据Y的似然函数是P(Y | θ)，对数似然函数L(θ)=log P(Y | θ)；
 
-假设Y和Z的联合概率分布是P(Y,Z|θ)，那么完全数据的对数似然函数是log P(Y,Z|θ)。
+假设Y和Z的联合概率分布是P(Y, Z | θ)，那么完全数据的对数似然函数是log P(Y, Z | θ)。
 
-EM算法通过迭代求不完全数据Y的对数似然函数L(θ)=log P(Y|θ)的极大似然估计。每次迭代包含两步：
+**EM算法通过迭代求不完全数据Y的对数似然函数L(θ)=log P(Y | θ)的极大似然估计**。每次迭代包含两步：
 
 * E步，求期望
 * M步，求极大化
@@ -238,25 +238,213 @@ EM算法通过迭代求不完全数据Y的对数似然函数L(θ)=log P(Y|θ)的
 
 ## EM算法公式
 
+输入：观测变量数据Y，隐变量数据Z，联合分布P(Y, Z | θ)，条件分布P(Z | Y, θ)；
 
+输出：模型参数θ。
+
+（1）选择参数的初值θ(0)，开始迭代；
+
+（2）E步：记θ(i)为第i次迭代参数θ的估计值，在第i+1次迭代的E步，计算
+$$
+\begin{aligned}
+Q(\theta,\theta^{(i)})&=E_Z[\text{log}P(Y,Z|\theta)|Y,\theta^{(i)}]\\
+&=\sum_Z\text{log}P(Y,Z|\theta)P(Z|Y,\theta^{(i)})\\
+\end{aligned}
+$$
+这里，P(Z|Y,θ(I))是在给定观测数据Y和当前的参数估计θ(i)下隐变量数据Z的条件概率分布；
+
+（3）M步：求使Q(θ,θ(i))极大化的θ，确定第i+1次迭代的参数的估计值θ(i+1)。
+$$
+\theta^{(i+1)}=\text{arg }\mathop{\text{max}}_{\theta}Q(\theta,\theta^{(i)})
+$$
+（4）重复第（2）步和第（3）步，直到收敛
+
+上上式的函数Q(θ , θ(i))是EM算法的核心，称为Q函数。
+
+**Q函数定义**：完全数据的对数似然函数log P(Y, Z | θ)关于在给定观测数据Y和当前参数θ(i)下对未观测数据Z的条件分布条件概率分布P(Z | Y, θ(i))的期望称为Q函数，即
+$$
+Q(\theta, \theta^{(i)})=E_Z[\text{log}P(Y, Z | \theta) | Y, \theta^{(i)}]
+$$
+下面关于EM算法做几点说明：
+
+步骤（1）参数的初值可以任意选择，但需注意EM算法对初值是敏感的。
+
+步骤（2）E步求Q(θ, θ(i))。Q函数式中Z是未观测数据，Y是观测数据，注意，Q(θ , θ(i))的第1个变元表示要极大化的参数，第2个变元表示参数的当前估计值。每次迭代实际在求Q函数及其极大。
+
+步骤（3）M步求Q(θ , θ(i))的极大化，得到θ(i+1)，完成一次迭代θ(i)→θ(i+1)。后面将证明每次迭代使似然函数增大或达到局部极值。
+
+步骤（4）给出停止迭代的条件，一般是对较小的正数ε1，ε2，若满足
+$$
+||\theta^{(i+1)}-\theta^{(i)}||<\epsilon_1\quad \text{or}\quad || Q(\theta^{(i+1)},\theta^{(i)})-Q(\theta^{(i)},\theta^{(i)}) ||<\epsilon_2
+$$
+则停止迭代。
 
 ## EM算法的推导
 
+上面叙述了EM算法，为什么EM算法能近似实现对观测数据的极大似然估计呢？
 
+下面通过**近似求解**观测数据的对数似然函数的极大化问题来导出EM算法，由此可以清楚地看出EM算法的作用。
+
+我们面对一个含有隐变量的概率模型，目标是极大化观测数据（不完全数据）Y关于参数θ的对数似然函数，即极大化
+$$
+\begin{aligned}
+L(\theta)&=\text{log}P(Y | \theta)\\
+&=\text{log}\sum_ZP(Y,Z|\theta)\\
+&=\text{log}\left( \sum_ZP(Y|Z,\theta)P(Z|\theta) \right)
+\end{aligned}
+$$
+注意到这一极大化的主要困难是上式中有**未观察数据**并有**包含累计和（或积分）的对数log∑**。log∑不好计算，要转成∑log才能计算出来，而这个∑log，就是下面要提到的Q函数。是因为观测数据的似然函数不好求，才转而求Q函数的。
+
+事实上，EM算法是通过迭代，逐步近似极大化L(θ)的。假设在第i次迭代后θ的估计值是θ(i)。我们希望新估计值θ能使L(θ)增加，即L(θ)>L(θ(i))，并逐步达到极大值。为此，考虑两者的差：
+$$
+L(\theta)-L(\theta^{(i)})=\text{log}\left( \sum_ZP(Y | Z, \theta)P(Z | \theta) \right)-\text{log}P(Y|\theta^{(i)})
+$$
+利用Jensen不等式得到其下界：
+$$
+\begin{aligned}
+L(\theta)-L(\theta^{(i)})&=\text{log}\left(\sum_ZP(Y|Z,\theta^{(i)})\frac{P(Y|Z,\theta)P(Z|\theta)}{P(Y|Z,\theta^{(\theta)})} \right)-\text{log}P(Y|\theta^{(i)})\\
+&\geqslant\sum_ZP(Z|Y,\theta^{(i)})\text{log}\frac{P(Y|Z,\theta)P(Z|\theta)}{P(Z|Y,\theta^{(i)})}-\sum_ZP(Z|Y,\theta^{(i)})\text{log}P(Y|\theta^{(i)})\\
+&=\sum_ZP(Z|Y,\theta^{(i)})\text{log}\frac{P(Y|Z,\theta)P(Z|\theta)}{P(Z|Y,\theta^{(i)})P(Y|\theta^{(i)})}\\
+\end{aligned}
+$$
+**注意：上面为啥要用Jensen不等式嘞？目的是将难以计算的log∑变为容易计算的∑log。而且，正好还是大于，即找到了下界，这样可以利用下界的最大值来提升函数的最大值。**
+
+令
+$$
+B(\theta,\theta^{(i)})=L(\theta^{(i)})+\sum_ZP(Z|Y, \theta^{(i)})\text{log}\frac{P(Y|Z,\theta)P(Z|\theta)}{P(Z|Y,\theta^{(i)})P(Y|\theta^{(i)})}
+$$
+则
+$$
+L(\theta)\geqslant B(\theta,\theta^{(i)})
+$$
+即函数B(θ , θ(i))是L(θ)的一个下界（注意，函数B是随着每次θ的更新都在变化的），而且由上上式可知，
+$$
+L(\theta^{(i)})=B(\theta^{(i)},\theta^{(i)})
+$$
+因此，**任何可以使B(θ , θ(i))增大的θ，也可以使L(θ)增大**。**为了使L(θ)有尽可能大的增长，选择θ(i+1)使B(θ , θ(i+1))达到极大**，即（注意，这里函数B达到极大。并不意味着L达到了极大，只是有尽可能大的增长而已，即只是**逼近**L的最大化而已，所以前面才说是EM算法能**近似**实现对观测数据的极大似然估计）
+$$
+\theta^{(i+1)}=\text{arg }\mathop{\text{max}}_{\theta}B(\theta, \theta^{(i)})
+$$
+现在求θ(i+1)表达式。省去对θ的极大化而言是常数的项，有
+$$
+\begin{aligned}
+\theta^{(i+1)}&=\text{arg }\mathop{\text{max}}_{\theta}B(\theta, \theta^{(i)})\\
+&=\text{arg }\mathop{\text{max}}_{\theta}\left( L(\theta^{(i)})+\sum_ZP(Z | Y, \theta^{(i)})\text{log}\frac{P(Y|Z,\theta)P(Z |\theta)}{P(Z|Y,\theta^{(i)})P(Y|\theta^{(i)})} \right)\\
+&=\text{arg }\mathop{\text{max}}_{\theta}\left( \sum_ZP(Z | Y, \theta^{(i)})\text{log}(P(Y|Z,\theta)P(Z |\theta)) \right)\\
+&=\text{arg }\mathop{\text{max}}_{\theta}\left( \sum_ZP(Z | Y, \theta^{(i)})\text{log}P(Y,Z|\theta) \right)\\
+&=\text{arg }\mathop{\text{max}}_{\theta}\left( E_Z[\text{log}P(Y,Z|\theta) | Y, \theta^{(i)}] \right)\\
+&=\text{arg }\mathop{\text{max}}_{\theta}Q(\theta, \theta^{(i)})\\
+\end{aligned}
+$$
+**怎么理解上式：**
+
+**不要忘了我们的根本目的：观测数据的似然函数L(θ)的极大似然估计。**
+
+**但是，观测数据的极大似然函数L(θ)中含有隐变量Z，且包含log∑，所以困难是：**
+
+**1，隐变量不知道；**
+
+**2，log∑很难求解。**
+
+**那么现在就换一个思路，把log∑通过Jensen不等式变换为∑log，这样就得到了L(θ)的下界函数B((θ , θ(i))，我们可以通过求使得B(θ , θ(i))最大化的参数θ来逐步近似极大化L(θ)。在求使得B((θ , θ(i))最大化的参数θ的过程中，我们发现其实等价于求使得Q((θ , θ(i))最大化的参数θ。**
+
+**这时候，我们虽然已经解决了前面的L(θ)包含log∑的难题，但是Q((θ , θ(i))仍然含有未观测数据Z，而且Q函数还是完全参数的似然函数关于未观测数据Z的分布的期望。**
+
+**所以，在E（求期望）步，我们是在求Q函数，由于Q函数是关于隐变量Z的期望，所以叫E（期望）步，而在Q函数里面，观测数据的参数与隐变量的期望无关，真正与隐变量的期望有关的，恰好就是隐变量。所以Q函数的期望，其实是对隐变量的期望，那么，在E步，其实就是求隐变量的期望。**
+
+**在M（极大化）步，我们是在求让Q函数最大化的模型参数θ。**
+
+上式等价于EM算法的一次迭代，即求Q函数及其极大化。EM算法是通过不断求解下界的极大化逼近求解对数似然函数极大化的算法。
+
+下图给出EM算法的直观解释。图中上方曲线为L(θ)，下方曲线为B(θ, θ(i))。由前面可知，B(θ, θ(i))为对数似然函数L(θ)的下界，且两个函数在点θ=θ(i)处相等。由上面两个式子可知，**EM算法找到下一个点θ(i+1)使函数B(θ, θ(i))极大化，也使函数Q(θ, θ(i))极大化。这时由于L(θ)≥B(θ , θ(i))，函数B(θ , θ(i))的增加，保证对数似然函数L(θ)在每次迭代过程也是增加的**。EM算法在点θ(i+1)重新计算Q函数值，进行下一次迭代。在这个过程中，对数似然函数L(θ)不断增大。从下图可以推断出**EM算法不能保证找到全局最优值**。
+
+![EM-exlaination](pic/EM-exlaination.png)
+
+## EM算法在非监督学习中的应用
+
+监督学习是由训练数据\{ (x1,y1), (x2,y2), ... , (xN,yN) \}学习条件概率分布P(Y|X)或决策函数Y=f(X)作为模型，用于分类、回归、标注等任务。这时训练数据中的每个样本点由输入和输出对组成。
+
+有时训练数据只有输入没有对应的输出据\{ (x1,·), (x2,·), ... , (xN,·) \}，从这样的数据学习模型称为非监督学习问题。EM算法可以用于生成模型的非监督学习。生成模型由联合概率分布P(X,Y)，可以认为非监督学习训练数据是联合概率分布产生的数据。X为观测数据，Y为未观测数据。
 
 ## EM算法的收敛性
 
+EM算法提供一种近似计算含有隐变量概率模型的极大似然估计的方法。EM算法的最大优点是简单性和普适性。我们很自然就要问：EM算法得到的估计序列是否收敛？如果收敛，是否收敛到全局最大值或局部最大值？下面给出关于EM算法啊收敛的两个定理。
 
+**定理一**
+
+设P(Y|θ)为观测数据的似然函数，θ(i)(i=1,2,...)为EM算法得到的参数估计序列，P(Y | θ(i))(i = 1,2,...)为对应的似然函数序列，则P(Y | θ(i))是单调递增的，即
+$$
+P(Y|\theta^{(i+1)})\geqslant P(Y|\theta^{(i)})
+$$
+证明：由于
+$$
+P(Y|\theta)=\frac{P(Y,Z|\theta)}{P(Z|Y,\theta)}
+$$
+取对数有
+$$
+\text{log}P(Y|\theta)=\text{log}P(Y,Z|\theta)-\text{log}P(Z | Y,\theta)
+$$
+我们已知
+$$
+Q(\theta,\theta^{(i)})=\sum_Z\text{log}P(Y,Z|\theta)P(Z|Y,\theta^{(i)})
+$$
+这里令
+$$
+H(\theta,\theta^{(i)})=\sum_Z\text{log}P(Z|Y,\theta)P(Z|Y,\theta^{(i)})
+$$
+于是对数似然函数可以写成
+$$
+\text{log}P(Y|\theta)=Q(\theta,\theta^{(i)})-H(\theta,\theta^{(i)})
+$$
+在上式中分别取θ为θ(i)和θ(i+1)并相减，有
+$$
+\begin{aligned}
+&\text{log}P(Y|\theta^{(i+1)})-\text{log}P(Y|\theta^{(i)})\\
+=&\left[Q(\theta^{(i+1)}, \theta^{(i)}) - Q(\theta^{(i)}, \theta^{(i)}) \right]-\left[H(\theta^{(i+1)}, \theta^{(i)}) - H(\theta^{(i)}, \theta^{(i)}) \right]\\
+\end{aligned}
+$$
+为了证明定理1的结论，即
+$$
+P(Y|\theta^{(i+1)})\geqslant P(Y|\theta^{(i)})
+$$
+只需要证上上式右端是非负的。上上式右端的第一项，由于θ(i+1)使Q(θ, θ(i))达到极大，所以有
+$$
+Q(\theta^{(i+1)},\theta^{(i)})-Q(\theta^{(i)},\theta^{(i)})\geqslant0
+$$
+其第二项为
+$$
+\begin{aligned}
+&H(\theta^{(i+1)},\theta^{(i)})-H(\theta^{(i)},\theta^{(i)})\\
+=&\sum_Z\left( \text{log}\frac{P(Z|Y,\theta^{(i+1)})}{P(Z|Y,\theta^{(i)})} \right)P(Z|Y,\theta^{(i)})\\
+\leqslant&\text{log}\left( \sum_Z\frac{P(Z|Y,\theta^{(i+1)})}{P(Z|Y,\theta^{(i)})} P(Z|Y,\theta^{(i)}) \right)\\
+=&\text{log}\left( \sum_ZP(Z|Y,\theta^{(i+1)}) \right)\\\\
+=&\text{log}(1)\\
+=&0\\
+\end{aligned}
+$$
+这里的不等号是由Jensen不等式得到的。
+
+由上两式可知，下式
+$$
+\text{log}P(Y|\theta^{(i+1)})-\text{log}P(Y|\theta^{(i)})
+$$
+的右端是非负的。证明完毕。
+
+**定理2**：设L(θ)=log P(Y|θ)为观测数据的对数似然函数，θ(i) (i=1,2,...)为EM算法得到的参数的估计序列，L(θ(i)) (i=1,2,...)为对应的对数似然函数序列。
+
+（1）如果P(Y|θ)有上界，则L(θ(i))=log P(Y | θ(i))收敛到某一值L\*；
+
+（2）在函数Q(θ, θ')与L(θ)满足已定条件下，由EM算法得到的参数估计序列θ(i)的收敛值θ\*是L(θ)的稳定点。
+
+证明：
+
+（1）由L(θ)=log P(Y | θ(i))的单调性及P(Y | θ)的有界性立即得到。
+
+（2）证明从略。
+
+定理2关于函数Q(θ, θ')与L(θ)的条件在大多数情况下都是满足的。EM算法的收敛性包含关于对数似然函数序列L(θ(i))的收敛性和关于参数估计序列θ(i)的收敛性两层意思，前置并不包含后者。此外，**定理只能保证参数估计序列收敛到对数似然函数序列的稳定点，不能保证收敛到极大值点**。所以在应用中，**初值的选择变得非常重要**，常用的方法是选取几个不同的初值进行迭代，然后对得到的各个估计值加以比较，从中选择最好的。
 
 # EM算法应用
-
-
-
-
-
-## EM算法在高斯混合模型中的应用
-
-
 
 
 
@@ -276,6 +464,16 @@ $$
 假设只能观测到掷硬币的最终结果0或1，不能观测掷硬币的过程（硬币A的投掷结果）。问该如何估计三硬币正面朝上的概率，即三硬币模型的参数π，p和q。
 
 解：三硬币模型可以写作
+
+
+
+## EM算法在高斯混合模型中的应用
+
+
+
+
+
+
 
 
 
