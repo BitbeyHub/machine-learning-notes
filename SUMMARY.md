@@ -103,6 +103,7 @@
 * [CRF条件随机场](content/machine-learning/conditional-random-field/conditional-random-field.md)
 * [聚类](content/machine-learning/clustering/clustering.md)
     * [k均值聚类](content/machine-learning/clustering/k-means-clustering.md)
+    * [高斯混合模型](content/machine-learning/clustering/gaussian-mixture-model.md)
 * [主题模型](content/machine-learning/topic-model/topic-model.md)
     * [LDA隐狄利克雷分布](content/machine-learning/topic-model/latent-dirichlet-allocation.md)
 * [机器学习算法总结](content/machine-learning/machine-learning-algorithm-summary/machine-learning-algorithm-summary.md)

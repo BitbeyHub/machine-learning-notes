@@ -1,83 +1,21 @@
 # EM算法
 
 * [返回顶层目录](../../content/SUMMARY.md#目录)
-
-
-
-
-[从最大似然到EM算法：一致的理解方式](https://mp.weixin.qq.com/s?__biz=MzIwMTc4ODE0Mw==&mid=2247487878&idx=1&sn=91eace84220bb48f876c50ef7f4b8c5f&chksm=96e9ce06a19e471049fcc02e019569ac648b5e8ed6153bf6a162a1da5b410466c94e5cf43c45&scene=0#rd)
-
-
-
-[EM算法再次总结](https://blog.csdn.net/xueyingxue001/article/details/52020673?from=timeline)
-
-
-
-[EM算法原理总结](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247486553&idx=1&sn=b8351c5d5f37c7603e7061201aee33fa&chksm=f9d152c1cea6dbd70fbdcad08968ce8051362af8eda8a9064ccfea6ef67a23d6b68214bee69e&mpshare=1&scene=1&srcid=0717m3N9pzw4F5sF8pnlMmln#rd)
-
-
-
-一文详解高斯混合模型原理
-http://www.ituring.com.cn/article/497545
-
-
-
-[EM算法的九层境界：Hinton和Jordan理解的EM算法](https://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&mid=2652560857&idx=3&sn=188be6fbfc614f505c3792285a7cb36c&chksm=8b7e2c82bc09a5945e66483aa889311f4968c200604a189d1a34dc752b90124a0c9d30193720&mpshare=1&scene=1&srcid=0731dbwZHlIqN8ushtUfiF0R#rd)
-
-
-
-# 为什么要有EM算法
-
-
-
-
-
-
-
-[EM算法存在的意义是什么？](https://www.zhihu.com/question/40797593/answer/453111693)
-
-
-
-# 1如何感性地理解EM算法？
-
-https://www.jianshu.com/p/1121509ac1dc
-
-
-
-# 2推一篇Nature Biotech的EM tutorial文章
-
-
-
-
-
-# 3The Introduction to Expectation Maximization Algorithm 
-
-https://www.zhihu.com/question/27976634/answer/263821332
-
-看了很多中文的，还是不懂，最后通过follow [NTU这个](http://www.cmlab.csie.ntu.edu.tw/~cyy/learning/tutorials/EM.pdf) 理解了一点。
-
-很多东西都是搞数学的人弄出来，那群人小智慧有余，其实很傻。
-
-http://www.cmlab.csie.ntu.edu.tw/~cyy/learning/tutorials/EM.pdf
-
-什么是缺失值(missiong value)或者隐变量？举例来说：
-
-* 给予四个人的身高和体重，但其中一人的体重未知(miss)，推测整体的distribution？
-* 任意给予十个人，但尚未做分类(classify)，此时他属于哪一个类是未知的。
-
-
-简单的说，EM算法就是先由当前的θn的分布，推测出缺失值z的最适合的分布，再由已知的数据+缺失数据z，去推测下一步θ(n+1)的分布。
-
-
-
-# 4
-
-https://www.zhihu.com/question/27976634/answer/163164402
-
-em算法应该推成 kl散度+下界函数 的形式，这样比较好理解
-
-
-
+* [EM算法的引入](#EM算法的引入)
+  * [用投硬币理解EM算法](#用投硬币理解EM算法)
+* [EM算法详述](#EM算法详述)
+  * [EM算法公式](#EM算法公式)
+  * [EM算法的推导](#EM算法的推导)
+  * [EM算法在非监督学习中的应用](#EM算法在非监督学习中的应用)
+  * [EM算法的收敛性](#EM算法的收敛性)
+* [EM算法应用](#EM算法应用)
+  * [EM算法在高斯混合模型中的应用](#EM算法在高斯混合模型中的应用)
+    * [高斯混合模型](#高斯混合模型)
+    * [高斯混合模型参数估计的EM算法](#高斯混合模型参数估计的EM算法)
+  * [EM算法在掷硬币模型中的应用](#EM算法在掷硬币模型中的应用)
+    * [伯努利混合模型](#伯努利混合模型)
+    * [伯努利混合模型参数估计的EM算法](#伯努利混合模型参数估计的EM算法)
+* [EM算法的推广](#EM算法的推广)
 
 
 EM算法是一种迭代算法，1977年由Dempster等人总结提出，用于含有隐变量（hidden variable）的概率模型参数的极大似然佔计，或极大后验概率估计。EM算法的每次迭代由两步组成：**E步，求期望（expectation）**；**M步，求极大（maximization）**。所以这一算法称为期望极大算法（expectation maximization algorithm），简称EM算法。本章首先叙述EM算法，然后讨论EM算法的收敛性；作为EM算法的应用，介绍髙斯混合模型的学习；最后叙述EM算法的推广——GEM算法。
@@ -88,7 +26,7 @@ EM算法是一种迭代算法，1977年由Dempster等人总结提出，用于含
 
 也就是说，EM算法当做最大似然估计的拓展，解决难以给出解析解（含有隐变量）的最大似然估计（MLE）（或极大后验概率）问题。
 
-## 用投硬币解释EM算法
+## 用投硬币理解EM算法
 
 推一篇Nature Biotech的EM tutorial文章，用了一个投硬币的例子来讲EM算法的思想。
 
@@ -448,6 +386,177 @@ $$
 
 
 
+## EM算法在高斯混合模型中的应用
+
+EM算法的一个重要应用就是高斯混合模型的参数估计。高斯混合模型应用广泛，在许多情况下，EM算法是学习高斯混合模型的有效方法。
+
+### 高斯混合模型
+
+**高斯混合模型的定义**：高斯混合模型是指具有如下形式的概率分布模型“
+$$
+P(y|\theta)=\sum_{k=1}^K\alpha_k\phi(y|\theta_k)
+$$
+其中，αk是系数，
+$$
+\alpha_k\geqslant0,\quad \sum_{k=1}^K\alpha_k=1
+$$
+；Φ(y | θk)是高斯密度分布，
+$$
+\theta_k=(\mu_k,\sigma_k^2),\quad \phi(y|\theta_k)=\frac{1}{\sqrt{2\pi}}\text{exp}\left( -\frac{(y-\mu_k)^2}{2\sigma_k^2} \right)
+$$
+称为第k个分模型。
+
+**一般混合模型可以由任意概率分布密度代替上式中的高斯分布密度**，我们这里只介绍最常用的高斯混合模型。
+
+### 高斯混合模型参数估计的EM算法
+
+假设观测数据y1,y2,...,yN由高斯混合模型生成，
+$$
+P(y|\theta)=\sum_{k=1}^K\alpha_k\phi(y|\theta_k)
+$$
+其中，
+$$
+\theta=(\alpha_1,\alpha_2, ... ,\alpha_K,\theta_1,\theta_2, ... , \theta_K)
+$$
+。我们用EM算法估计高斯混合模型的参数θ。
+
+---
+
+**1.明确隐变量，写出完全数据的对数似然函数**
+
+为什么要写出完全数据的对数似然函数？因为对其求关于隐变量概率分布的期望就是Q函数。
+
+可以设想观测数据yj，j=1,2,...,N，是这样产生的：
+
+首先依靠概率αk选择第k个高斯分布模型Φ(y | θk)；
+
+然后依靠第K个分模型的概率分布Φ(y | θk)生成观测数据yj。这时观测数据yj，j=1,2, ... ,N，是已知的；
+
+反应观测数据yj来自第k个分模型的数据是未知的，k=1,2, ... ,K，以隐变量γ(jk)表示，其定义如下：
+$$
+\begin{aligned}
+&\gamma_{jk}=
+\left\{\begin{matrix}
+&1,&\text{第j个观测来自第k个分模型}\\ 
+&0,&\text{否则}
+\end{matrix}\right.\\
+&j=1,2,...,N;\quad k=1,2,...,K\\
+\end{aligned}
+$$
+γ(jk)是0-1随机变量。
+
+有了观测数据yj及未观测数据γ(jk)，那么完全数据是
+$$
+(y_j,\gamma_{j1},\gamma_{j2},...,\gamma_{jK}),\quad j=1,2,...,N
+$$
+于是，可以写出完全数据的似然函数：
+$$
+\begin{aligned}
+P(y,\gamma|\theta)&=\prod_{j=1}^NP(y_j,\gamma_{j1},\gamma_{j2},...,\gamma_{jK}|\theta)\\
+&=\prod_{k=1}^K\prod_{j=1}^N\left[ \alpha_k\phi(y_j|\theta_k) \right]^{\gamma_{jk}}\\
+&=\prod_{k=1}^K\alpha_k^{n_k}\prod_{j=1}^N\left[\phi(y_j|\theta_k) \right]^{\gamma_{jk}}\\
+&=\prod_{k=1}^K\alpha_k^{n_k}\prod_{j=1}^N\left[\frac{1}{\sqrt{2\pi}\sigma_k}\text{exp}\left( -\frac{(y_j-\mu_k)^2}{2\sigma^2_k} \right) \right]^{\gamma_{jk}}\\
+\end{aligned}
+$$
+式中，
+$$
+n_k=\sum_{j=1}^N\gamma_{jk},\quad \sum_{k=1}^Kn_k=N
+$$
+那么，完全数据的对数似然函数为
+$$
+\text{log}P(y,\gamma|\theta)=\sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\gamma_{jk}\left[ \text{log}(\frac{1}{\sqrt{2\pi}})-\text{log}\sigma_k-\frac{1}{2\sigma_k^2}(y_j-\mu_k)^2 \right] \right\}
+$$
+
+---
+
+**2.EM算法的E步：确定Q函数**
+$$
+\begin{aligned}
+Q(\theta,\theta^{(i)})&=E_{\gamma}[\text{log}P(y,\gamma|\theta)|y,\theta^{(i)}]\\
+&=E_{\gamma}\left\{ \sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\gamma_{jk}\left[ \text{log}(\frac{1}{\sqrt{2\pi}})-\text{log}\sigma_k-\frac{1}{2\sigma_k^2}(y_j-\mu_k)^2 \right] \right\} \right\}\\
+&=\sum_{k=1}^K\left\{ \sum_{j=1}^N(E\gamma_{jk})\text{log}\alpha_k+\sum_{j=1}^N(E\gamma_{jk})\left[ \text{log}(\frac{1}{\sqrt{2\pi}})-\text{log}\sigma_k-\frac{1}{2\sigma_k^2}(y_j-\mu_k)^2 \right] \right\}
+\end{aligned}
+$$
+这里需要计算E(γ(jk) | y,θ(i))，记作hat(γ(jk))：
+$$
+\begin{aligned}
+\hat{\gamma}_{jk}&=E(\gamma_{jk}|y,\theta^{(i)})\\
+&=P(\gamma_{jk}=1|y,\theta^{(i)})\\
+&=\frac{P(\gamma_{jk}=1,y_j|\theta^{(i)})}{P(y_j|\theta^{(i)})}\\
+&=\frac{P(\gamma_{jk}=1,y_j|\theta^{(i)})}{\sum_{k=1}^KP(\gamma_{jk}=1,y_j|\theta)}\\
+&=\frac{P(y_j|\gamma_{jk}=1,\theta^{(i)})P(\gamma_{jk}=1|\theta^{(i)})}{\sum_{k=1}^KP(y_j|\gamma_{jk}=1,\theta^{(i)})P(\gamma_{jk}=1|\theta^{(i)})}\\
+&=\frac{\alpha_k\phi(y_i|\theta_k^{(i)})}{\sum_{k=1}^K\alpha_k\phi(y_j|\theta_k^{(i)})}\\
+,\ &j=1,2,...,N;\quad k=1,2,...,K
+\end{aligned}
+$$
+hat(γ(jk))是在当前模型参数下第j个观测数据来自第k个分模型的概率，称为分模型k对观测数据yj的相应度。
+
+将
+$$
+\hat{\gamma}_{jk}=E\gamma_{jk},\quad n_k=\sum_{j=1}^NE\gamma_{jk}
+$$
+代入上上上式，既得Q函数
+$$
+Q(\theta,\theta^{(i)})=\sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\hat{\gamma_{jk}}\left[ \text{log}(\frac{1}{\sqrt{2\pi}})-\text{log}\sigma_k-\frac{1}{2\sigma_k^2}(y_j-\mu_k)^2 \right] \right\}
+$$
+
+---
+
+**3.计算EM算法的M步**
+
+迭代的M步是求函数Q(θ, θ(i))对θ的极大值，即求新一轮迭代的模型参数：
+$$
+\theta^{(i+1)}=\text{arg }\mathop{\text{max}}_{\theta}Q(\theta,\theta^{(i)})
+$$
+用
+$$
+\hat{\mu}_k,\hat{\sigma}_k^2,\hat{\alpha}_k,\quad k=1,2,...,K
+$$
+表示θ(i+1)的各参数。求μk和σ^2k只需将上上式（Q函数）分别对μk和σ^2k求偏导数并令其为0，即可得到；求αk是在
+$$
+\sum_{k=1}^K\alpha_k=1
+$$
+的条件下求偏导数并令其为0得到的（拉格朗日乘子法）。结果如下：
+$$
+\begin{aligned}
+&\hat{\mu}_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}y_j}{\sum_{j=1}^N\hat{\gamma}_{jk}},\quad &k=1,2,...,K\\
+&\hat{\sigma}_k^2=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}(y_j-\mu_k)^2}{\sum_{j=1}^N\hat{\gamma}_{jk}},\quad &k=1,2,...,K\\
+&\hat{\sigma}_k^2=\frac{n_k}{N}=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{N},\quad &k=1,2,...,K\\
+\end{aligned}
+$$
+重复以上计算，知道对数似然函数值不再有明显的变化为止。
+
+现将估计高斯混合模型参数的EM算法总结如下：
+
+**高斯混合模型参数估计的EM算法**
+
+输入：观测数据y1,y2, ... , yN，高斯混合模型；
+
+输出：高斯混合模型参数。
+
+（1）取参数的初始值开始迭代
+
+（2）E步：依据当前模型参数，计算分模型k对观测数据yj的响应度
+$$
+\begin{aligned}
+&\hat{\gamma}_{jk}=\frac{\alpha_k\phi(y_i|\theta_k^{(i)})}{\sum_{k=1}^K\alpha_k\phi(y_j|\theta_k^{(i)})}\\
+,&\ \ j=1,2,...,N;\quad k=1,2,...,K
+\end{aligned}
+$$
+然后以此得到Q函数。
+
+（3）M步：计算新一轮迭代的模型参数
+
+通过Q函数求导得到使Q函数极大的参数值：
+$$
+\begin{aligned}
+&\hat{\mu}_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}y_j}{\sum_{j=1}^N\hat{\gamma}_{jk}},\quad &k=1,2,...,K\\
+&\hat{\sigma}_k^2=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}(y_j-\mu_k)^2}{\sum_{j=1}^N\hat{\gamma}_{jk}},\quad &k=1,2,...,K\\
+&\hat{\alpha}_k^2=\frac{n_k}{N}=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{N},\quad &k=1,2,...,K\\
+\end{aligned}
+$$
+（4）重复第（2）步和第（3）步，直到收敛。
+
 ## EM算法在掷硬币模型中的应用
 
 假设有3枚硬币，分别记作A、B、C。这些硬币正面出现的概率分别为π，p和q。进行如下掷硬币实验：
@@ -463,53 +572,198 @@ $$
 $$
 假设只能观测到掷硬币的最终结果0或1，不能观测掷硬币的过程（硬币A的投掷结果）。问该如何估计三硬币正面朝上的概率，即三硬币模型的参数π，p和q。
 
-解：三硬币模型可以写作
+解：这个模型其实是一个伯努利分布的混合模型，和上节的高斯混合模型的求解过程类似。即把上节的混合模型中的高斯分布替换成伯努利分布，就是这个例子的概率分布模型了。
 
+### 伯努利混合模型
 
+实际上并没有伯努利混合模型这一叫法，这里采用这种叫是为了方便表述。
 
-## EM算法在高斯混合模型中的应用
+**伯努利混合模型的定义**：伯努利混合模型是指具有如下形式的概率分布模型“
+$$
+P(y|\theta)=\sum_{k=1}^K\alpha_k\phi(y|\theta_k)
+$$
+其中，αk是系数，
+$$
+\alpha_k\geqslant0,\quad \sum_{k=1}^K\alpha_k=1
+$$
+；Φ(y | θk)是伯努利分布，
+$$
+\theta_k=p_k,\quad \phi(y|\theta_k)=p_k^{y}(1-p_k)^{1-y}
+$$
+称为第k个分模型；针对此问题，K=2，
 
+### 伯努利混合模型参数估计的EM算法
 
+假设观测数据y1,y2,...,yN由高斯混合模型生成，
+$$
+P(y|\theta)=\sum_{k=1}^K\alpha_k\phi(y|\theta_k)
+$$
+其中，
+$$
+\theta=(\alpha_1,\alpha_2, ... ,\alpha_K,\theta_1,\theta_2, ... , \theta_K)
+$$
+。我们用EM算法估计伯努利混合模型的参数θ。
 
+------
 
+**1.明确隐变量，写出完全数据的对数似然函数**
 
+为什么要写出完全数据的对数似然函数？因为对其求关于隐变量概率分布的期望就是Q函数。
 
+可以设想观测数据yj，j=1,2,...,N（本问题N=10），是这样产生的：
 
+首先依靠概率αk选择第k个伯努利分布模型Φ(y | θk)；
 
+然后依靠第K个分模型的概率分布Φ(y | θk)生成观测数据yj。这时观测数据yj，j=1,2, ... ,N，是已知的；
+
+反应观测数据yj来自第k个分模型的数据是未知的，k=1,2, ... ,K，以隐变量γ(jk)表示，其定义如下：
+$$
+\begin{aligned}
+&\gamma_{jk}=
+\left\{\begin{matrix}
+&1,&\text{第j个观测来自第k个分模型}\\ 
+&0,&\text{否则}
+\end{matrix}\right.\\
+&j=1,2,...,N;\quad k=1,2,...,K\\
+\end{aligned}
+$$
+γ(jk)是0-1随机变量。
+
+有了观测数据yj及未观测数据γ(jk)，那么完全数据是
+$$
+(y_j,\gamma_{j1},\gamma_{j2},...,\gamma_{jK}),\quad j=1,2,...,N
+$$
+于是，可以写出完全数据的似然函数：
+$$
+\begin{aligned}
+P(y,\gamma|\theta)&=\prod_{j=1}^NP(y_j,\gamma_{j1},\gamma_{j2},...,\gamma_{jK}|\theta)\\
+&=\prod_{k=1}^K\prod_{j=1}^N\left[ \alpha_k\phi(y_j|\theta_k) \right]^{\gamma_{jk}}\\
+&=\prod_{k=1}^K\alpha_k^{n_k}\prod_{j=1}^N\left[\phi(y_j|\theta_k) \right]^{\gamma_{jk}}\\
+&=\prod_{k=1}^K\alpha_k^{n_k}\prod_{j=1}^N\left[ p_k^{y_j}(1-p_k)^{1-y_j} \right]^{\gamma_{jk}}\\
+\end{aligned}
+$$
+式中，
+$$
+n_k=\sum_{j=1}^N\gamma_{jk},\quad \sum_{k=1}^Kn_k=N
+$$
+那么，完全数据的对数似然函数为
+$$
+\text{log}P(y,\gamma|\theta)=\sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\gamma_{jk}\left[ y_j\text{log}p_k + (1-y_j)\text{log}(1-p_k) \right] \right\}
+$$
+
+------
+
+**2.EM算法的E步：确定Q函数**
+$$
+\begin{aligned}
+Q(\theta,\theta^{(i)})&=E_{\gamma}[\text{log}P(y,\gamma|\theta)|y,\theta^{(i)}]\\
+&=E_{\gamma}\left\{ \sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\gamma_{jk}\left[ y_j\text{log}p_k + (1-y_j)\text{log}(1-p_k) \right] \right\} \right\}\\
+&=\sum_{k=1}^K\left\{ \sum_{j=1}^N(E\gamma_{jk})\text{log}\alpha_k+\sum_{j=1}^N(E\gamma_{jk})\left[ y_j\text{log}p_k + (1-y_j)\text{log}(1-p_k)\right] \right\}
+\end{aligned}
+$$
+这里需要计算E(γ(jk) | y,θ(i))，记作hat(γ(jk))：
+$$
+\begin{aligned}
+\hat{\gamma}_{jk}&=E(\gamma_{jk}|y,\theta^{(i)})\\
+&=P(\gamma_{jk}=1|y,\theta^{(i)})\\
+&=\frac{P(\gamma_{jk}=1,y_j|\theta^{(i)})}{P(y_j|\theta^{(i)})}\\
+&=\frac{P(\gamma_{jk}=1,y_j|\theta^{(i)})}{\sum_{k=1}^KP(\gamma_{jk}=1,y_j|\theta)}\\
+&=\frac{P(y_j|\gamma_{jk}=1,\theta^{(i)})P(\gamma_{jk}=1|\theta^{(i)})}{\sum_{k=1}^KP(y_j|\gamma_{jk}=1,\theta^{(i)})P(\gamma_{jk}=1|\theta^{(i)})}\\
+&=\frac{\alpha_k\phi(y_i|\theta_k^{(i)})}{\sum_{k=1}^K\alpha_k\phi(y_j|\theta_k^{(i)})}\\
+,\ &j=1,2,...,N;\quad k=1,2,...,K
+\end{aligned}
+$$
+hat(γ(jk))是在当前模型参数下第j个观测数据来自第k个分模型的概率，称为分模型k对观测数据yj的相应度。
+
+将
+$$
+\hat{\gamma}_{jk}=E\gamma_{jk},\quad n_k=\sum_{j=1}^NE\gamma_{jk}
+$$
+代入上上上式，既得Q函数
+$$
+Q(\theta,\theta^{(i)})=\sum_{k=1}^K\left\{ n_k\text{log}\alpha_k+\sum_{j=1}^N\hat{\gamma_{jk}}\left[ y_j\text{log}p_k + (1-y_j)\text{log}(1-p_k) \right] \right\}
+$$
+
+------
+
+**3.计算EM算法的M步**
+
+迭代的M步是求函数Q(θ, θ(i))对θ的极大值，即求新一轮迭代的模型参数：
+$$
+\theta^{(i+1)}=\text{arg }\mathop{\text{max}}_{\theta}Q(\theta,\theta^{(i)})
+$$
+用
+$$
+\hat{p}_k,\hat{\alpha}_k \quad k=1,2,...,K
+$$
+表示θ(i+1)的各参数。求pk只需将上上式（Q函数）对pk求偏导数并令其为0，即可得到；求αk是在
+$$
+\sum_{k=1}^K\alpha_k=1
+$$
+的条件下求偏导数并令其为0得到的（拉格朗日乘子法）。结果如下：
+$$
+\begin{aligned}
+&\hat{p}_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}y_j}{\sum_{j=1}^N\hat{\gamma}_{jk}},\quad &k=1,2,...,K\\
+&\hat{\alpha}_k^2=\frac{n_k}{N}=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{N},\quad &k=1,2,...,K\\
+\end{aligned}
+$$
+重复以上计算，知道对数似然函数值不再有明显的变化为止。
+
+下面具体说明上式如何得到，即如果计算pk和αk。
+
+对于pk：
+$$
+\begin{aligned}
+&\frac{\partial Q}{\partial p_k}=0\\
+\Rightarrow&\sum_{j=1}^N\hat{\gamma}_{jk}\left[ \frac{y_i}{p_k} - \frac{1-y_i}{1-p_k} \right] = 0\\
+\Rightarrow&\sum_{j=1}^N\hat{\gamma}_{jk}y_j-p_k\sum_{j=1}^N\hat{\gamma}_{jk}=0\\
+\Rightarrow&\hat{p}_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}y_j}{\sum_{j=1}^N\hat{\gamma}_{jk}}
+\end{aligned}
+$$
+对于αk：
+$$
+\begin{aligned}
+&Q+\lambda(1-\sum_{k=1}^K\alpha_k)\quad \text{拉格朗日乘子法}\\
+\Rightarrow&\frac{\partial Q+\lambda(1-\sum_{k=1}^K\alpha_k)}{\partial \alpha_k}=0\\
+\Rightarrow&\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{\alpha_k}-\lambda = 0\\
+\Rightarrow&\alpha_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{\lambda}\\
+\Rightarrow&\alpha_k=\frac{\sum_{j=1}^N\hat{\gamma}_{jk}}{N}\\
+\end{aligned}
+$$
+其中，λ由约束条件可计算，如下式所示：
+$$
+\begin{aligned}
+&\sum_{k=1}^K\alpha_k=1\\
+\Rightarrow&\sum_{k=1}^K\sum_{j=1}^N\hat{\gamma}_{jk}=\lambda\\
+\Rightarrow&\lambda=\sum_{k=1}^Kn_k=N
+\end{aligned}
+$$
 
 # EM算法的推广
 
+EM算法还可以解释为F含糊的极大-极大算法，基于这个解释有若干变形与推广，如广义期望极大（GEM）算法。
 
-
-
-
-
-
-
-
-
-
-
-
-
+由于时间所限，具体这里暂时不介绍。具体参考李航的《统计学习方法》。
 
 # 参考资料
+
+* 《统计学习方法》李航
+
+本文主要参考了这本书的对应章节。
 
 * [怎么通俗易懂地解释EM算法并且举个例子?](https://www.zhihu.com/question/27976634/answer/153567695)
 
 "通俗易懂地解释EM算法"一节参考此回答。
 
+---
 
+* [EM算法的九层境界：Hinton和Jordan理解的EM算法](https://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&mid=2652560857&idx=3&sn=188be6fbfc614f505c3792285a7cb36c&chksm=8b7e2c82bc09a5945e66483aa889311f4968c200604a189d1a34dc752b90124a0c9d30193720&mpshare=1&scene=1&srcid=0731dbwZHlIqN8ushtUfiF0R#rd)
 
+这个特别推荐，对EM算法的理解很深入。
 
-
-
-
-
-
-
-
-
-
-
+* [从最大似然到EM算法：一致的理解方式](https://mp.weixin.qq.com/s?__biz=MzIwMTc4ODE0Mw==&mid=2247487878&idx=1&sn=91eace84220bb48f876c50ef7f4b8c5f&chksm=96e9ce06a19e471049fcc02e019569ac648b5e8ed6153bf6a162a1da5b410466c94e5cf43c45&scene=0#rd)
+* [EM算法再次总结](https://blog.csdn.net/xueyingxue001/article/details/52020673?from=timeline)
+* [EM算法原理总结](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247486553&idx=1&sn=b8351c5d5f37c7603e7061201aee33fa&chksm=f9d152c1cea6dbd70fbdcad08968ce8051362af8eda8a9064ccfea6ef67a23d6b68214bee69e&mpshare=1&scene=1&srcid=0717m3N9pzw4F5sF8pnlMmln#rd)
+* [EM算法存在的意义是什么？](https://www.zhihu.com/question/40797593/answer/453111693)
+* [如何感性地理解EM算法？](https://www.jianshu.com/p/1121509ac1dc)
 
