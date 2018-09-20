@@ -384,7 +384,7 @@ $$
 
 # EM算法应用
 
-
+EM算法应用机器广泛，主要应用于含有隐变量的概率模型的学习。高斯混合模型的参数估计是EM算法的一个重要应用，隐马尔科夫模型的非监督学习也是EM算法的一个重要应用。
 
 ## EM算法在高斯混合模型中的应用
 
@@ -756,6 +756,8 @@ EM算法还可以解释为F含糊的极大-极大算法，基于这个解释有�
 "通俗易懂地解释EM算法"一节参考此回答。
 
 ---
+
+下面资料的待看：
 
 * [EM算法的九层境界：Hinton和Jordan理解的EM算法](https://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&mid=2652560857&idx=3&sn=188be6fbfc614f505c3792285a7cb36c&chksm=8b7e2c82bc09a5945e66483aa889311f4968c200604a189d1a34dc752b90124a0c9d30193720&mpshare=1&scene=1&srcid=0731dbwZHlIqN8ushtUfiF0R#rd)
 
