@@ -1,6 +1,6 @@
 # 函数近似和深度网络
 
-- [返回顶层目录](../SUMMARY.md#目录)
+- [返回顶层目录](../SUMMARY.md)
 - [本章在学习地图中的位置](#本章在学习地图中的位置)
 - [本章简介](#本章简介)
   - [值函数近似](#值函数近似)
@@ -275,6 +275,7 @@
 
 
 
+
 ### 表格检索特征
 
 还有一种特征，也是线性模型。
@@ -351,6 +352,7 @@
 
 
 
+
 ### 值函数近似下的蒙特卡洛
 
 * 回报值Gt是真实值函数vπ(St)的**无偏估计**
@@ -367,6 +369,7 @@
   &=\alpha(G_t-\hat{v}(S_tw))x(S_t)\quad \text{(in linear condition)}
   \end{aligned}
   $$
+
 
 
 
@@ -392,6 +395,7 @@
   &=\alpha\delta x(S)\quad \text{(in linear condition)}\\
   \end{aligned}
   $$
+
 
 
 
@@ -428,6 +432,7 @@
   \bigtriangleup w&=\alpha\delta_tE_t\\
   \end{aligned}
   $$
+
 
 
 
@@ -475,6 +480,7 @@
 
 
 
+
 ### 线性Q函数近似
 
 * 用一个特征向量表示某一个具体的S,A。
@@ -503,6 +509,7 @@
   \bigtriangleup w&=\alpha(q_{\pi}(S,A)-\hat{q}(S,A,w))x(S,A)\\
   \end{aligned}
   $$
+
 
 
 
@@ -543,6 +550,7 @@ $$
   \bigtriangleup w&=\alpha\delta_tE_t\\
   \end{aligned}
   $$
+
 
 
 
@@ -628,6 +636,7 @@ $$
 
 
 
+
 ![activation-function](pic/activation-function.png)
 
 * sigmoid和tanh形式不同，取值范围有所差别。([0,1],[-1,1])
@@ -698,6 +707,7 @@ $$
   \frac{\partial J}{\partial W^{(1)}}&=\frac{\partial J}{\partial a^{(2)}}\frac{\partial a^{(2)}}{\partial W^{(1)}}\\
   \end{aligned}
   $$
+
 
 
 

@@ -134,5 +134,6 @@
 * [策略梯度算法](content/reinforcement-learning/policy-gradient-algorithm/policy-gradient-algorithm.md)
 * [深度强化学习](content/reinforcement-learning/deep-reinforcement-learning/deep-reinforcement-learning.md)
 * [基于模型的强化学习](content/reinforcement-learning/model-based-reinforcement-learning/model-based-reinforcement-learning.md)
+* [强化学习前景](content/reinforcement-learning/reinforcement-learning-prospect/reinforcement-learning-prospect.md)
 
 
