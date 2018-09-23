@@ -332,7 +332,7 @@ How can the reward scale aﬀect results? Why is reward rescaling used?
 
 Can random seeds drastically alter performance? Can one distort results by averaging an improper number of trials? 
 
-![random-seeds-and-Trials](pic/random-seeds-and-Trials.png)
+![random-seeds-and-trials](pic/random-seeds-and-trials.png)
 
 即使其他任何参数都一样，只改下随机种子，结果都是不一样的。这就是说，有时候实验做得好不好，说句玩笑话，看命！到目前为止，也没人给出很好的解释。
 
@@ -531,7 +531,6 @@ Even Ignoring Generalization Issues, The Final Results Can be Unstable and Hard 
 * Harder environments could paradoxically be easier
 
   **有的时候越复杂的任务反而更容易学习**。Alex提到的例子是DeepMind经常喜欢让模型学习很多同一环境的变种来减小对环境的过拟合。我觉得这也涉及curriculum learning，即从简单的任务开始逐步加深难度。可以说是层层递进的迁移学习。另外一个可能的解释是很多时候人觉得困难的任务和机器觉得困难的任务是相反的。比如人觉得倒水很简单，你让机器人用学习的路子去学倒水就可以很难。但反过来人觉得下围棋很难而机器学习模型却在下围棋上把人击败了
-
 
 
 ---
