@@ -383,6 +383,7 @@ A，B，π称为隐马尔可夫模型的三要素。
   $$
 
 
+
 隐马尔可夫模型可以用于标注，这时状态对应着标记。标注问题是给定观测的序列预测其对应的标记序列。可以假设标注问题的数据是由隐马尔可夫模型生成的。这样我们可以利用隐马尔可夫模型的学习与预测算法进行标注。
 下面看一个隐马尔可夫模型的例子。
 
@@ -567,37 +568,209 @@ $$
 
 ![observation-sequence-structure](pic/observation-sequence-structure.png)
 
+**例子**：考虑盒子和球模型λ = (A, B, π)，状态集合Q = \{ 1,2,3 \}，观测集合V = \{ 红, 白 \}，
+$$
+\begin{aligned}
+A=\begin{bmatrix}
+0.5 & 0.2 & 0.3\\ 
+0.3 & 0.5 & 0.2\\ 
+0.2 & 0.3 & 0.5
+\end{bmatrix}
+,\ B=\begin{bmatrix}
+0.5 & 0.5\\ 
+0.4 & 0.6\\ 
+0.7 & 0.3
+\end{bmatrix}
+,\ \pi=(0.2, 0.4, 0.4)^T
+\end{aligned}
+$$
+设T=3，O=(红，白，红)，试用前向算法计算P(O | λ)。
 
+解：按照前向算法
 
-
+（1）计算初值
+$$
+\begin{aligned}
+\alpha_1(1)=\pi_1b_1(o_1)=0.2\times 0.5=0.10\ \text{(状态1，观测红)}\\
+\alpha_1(2)=\pi_2b_2(o_1)=0.4\times 0.4=0.16\ \text{(状态2，观测红)}\\
+\alpha_1(3)=\pi_3b_3(o_1)=0.4\times 0.7=0.28\ \text{(状态3，观测红)}\\
+\end{aligned}
+$$
+（2）递推计算
+$$
+\begin{aligned}
+&\alpha_2(1)=\left[ \sum_{i=1}^3\alpha_1(i)\alpha_{i1} \right]b_1(o_2)=0.154\times 0.5=0.077\\
+&\alpha_2(2)=\left[ \sum_{i=1}^3\alpha_1(i)\alpha_{i2} \right]b_2(o_2)=0.184\times 0.6=0.1104\\
+&\alpha_2(3)=\left[ \sum_{i=1}^3\alpha_1(i)\alpha_{i3} \right]b_3(o_2)=0.202\times 0.3=0.0606\\
+&\alpha_3(1)=\left[ \sum_{i=1}^3\alpha_2(i)\alpha_{i1} \right]b_1(o_3)=0.04187\\
+&\alpha_3(2)=\left[ \sum_{i=1}^3\alpha_2(i)\alpha_{i2} \right]b_2(o_3)=0.03551\\
+&\alpha_3(3)=\left[ \sum_{i=1}^3\alpha_2(i)\alpha_{i3} \right]b_3(o_3)=0.05284\\
+\end{aligned}
+$$
+（3）终止
+$$
+P(O|\lambda)=\sum_{i=1}^3\alpha_3(i)=0.13022
+$$
 
 ## 后向算法
 
+首先定义后向概率
 
+**后向概率**：给定隐马尔科夫模型λ，定义在时刻t状态为qi的条件下，从t+1到T的部分观测序列为
+$$
+o_{t+1},o_{t+2},...,o_T
+$$
+的概率为后向概率，记作
+$$
+\beta_t(i)=P(o_{t+1},o_{t+2},...,o_T|i_t=q_i,\lambda)
+$$
+可以用递推的方法求得后向概率βt(i)及观测序列概率P(O | λ)。
 
+**观测序列概率的后向算法**
 
+输入：隐马尔科夫模型λ，观测序列O；
 
+输出：观测序列概率P(O | λ)。
 
+（1）
+$$
+\beta_T(i)=1,\quad i=1,2,...,N
+$$
+（2）对t=T-1, T-2, ... , 1
+$$
+\beta_t(i)=\sum_{j=1}^N\alpha_{ij}b_j(o_{t+1})\beta_{t+1}(j),\quad =1,2,...,N
+$$
+（3）
+$$
+P(O|\lambda)=\sum_{i=1}^N\pi_ib_i(o_1)\beta_1(i)
+$$
+步骤（1）初始化后向概率，对最终时刻的所有状态qi规定βT(i)=1。步骤（2）是后向概率的递推公式。如下图所示，为了计算在时刻t状态为qi条件下时刻t+1之后的观测序列为o(t+1), o(t+2), ... , o(T)的后向概率βt(i)，只需要考虑在时刻t+1所有可能的N个状态qj的转移概率（即αij项），以及在此状态下的观测o(i+1)的观测概率（即bj(o(t+1))项），然后考虑状态qj之后的观测序列的后向概率（即β(t+1)(i)项）。步骤（3）求P(O | λ)的思路与步骤（2）一致，只是初始概率πi代替转移概率。
 
 ![forward_algorithm](pic/forward_algorithm.png)
 
-
-
-
+利用前向概率和后向概率的定义可以将观测序列概率P(O | λ)统一写成
+$$
+P(O|\lambda)=\sum_{i=1}^N\sum_{j=1}^N\alpha_t(i)\alpha_{ij}b_j(o_{t+1})\beta_{t+1}(j),\quad t=1,2,...,T-1
+$$
+此式当t=1和t=T-1时分别为后向算法的P(O | λ)和前向算法的P(O | λ)。
 
 ## 一些概率与期望值的计算
 
+利用前向概率和后向概率，可以得到关于单个状态和两个状态概率的计算公式。
 
+**1.给定模型λ和观测O，在时刻t处于状态qi的概率**。记
+$$
+\gamma_t(i)=P(i_t=q_i|O,\lambda)
+$$
+可以通过前向后向概率计算。事实上，
+$$
+\gamma_t(i)=P(i_t=q_i|O,\lambda)=\frac{P(i_t=q_i,O|\lambda)}{P(O|\lambda)}
+$$
+由前向概率αt(i)和后向概率βt(i)定义可知：
+$$
+\alpha_t(i)\beta_t(i)=P(i_t=q_i,O|\lambda)
+$$
+于是得到：
+$$
+\gamma_t(i)=\frac{\alpha_t(i)\beta_t(i)}{P(O|\lambda)}=\frac{\alpha_t(i)\beta_t(i)}{\sum_{j=1}^N\alpha_t(i)\beta_t(i)}
+$$
+**2.给定模型λ和观测O，在时刻t处于状态qi，且在时刻t+1处于状态qj的概率**。记
+$$
+\xi_t(i,j)=P(i_t=q_i,i_{t+1}=q_j|O,\lambda)
+$$
+可以通过前向后向概率计算:
+$$
+\begin{aligned}
+\xi_t(i,j)&=\frac{P(i_t=q_i,i_{t+1}=q_j,O|\lambda)}{P(O|\lambda)}\\
+&=\frac{P(i_t=q_i,i_{t+1}=q_j,O|\lambda)}{\sum_{i=1}^N\sum_{j=1}^NP(i_t=q_i,i_{t+1}=q_j,O|\lambda)}\\
+\end{aligned}
+$$
+而
+$$
+P(i_t=q_i,i_{t+1}=q_j,O|\lambda)=\alpha_t(i)\alpha_{ij}b_j(o_{t+1})\beta_{t+1}(j)
+$$
+所以
+$$
+\xi_t(i,j)=\frac{\alpha_t(i)\alpha_{ij}b_j(o_{t+1})\beta_{t+1}(j)}{\sum_{i=1}^N\sum_{j=1}^N\alpha_t(i)\alpha_{ij}b_j(o_{t+1})\beta_{t+1}(j)}
+$$
+3.将γt(i)和ξt(i,j)对各个时刻t求和，可以得到一些有用的期望值：
+
+（1）在观测O下状态i出现次数的期望值
+$$
+\sum_{t=1}^T\gamma_t(i)
+$$
+（2）在观测O下由状态i转移次数的期望值
+$$
+\sum_{t=1}^{T-1}\gamma_t(i)
+$$
+（3）在观测O下由状态i转移到状态j的次数的期望值
+$$
+\sum_{t=1}^{T-1}\xi_t(i,j)
+$$
 
 # 学习算法
 
-
+隐马尔科夫的学习，根据训练数据是包括观测序列和对应的状态序列，还是只有观测序列，可以分为由监督学习与非监督学习实现。本节首先介绍监督学习算法，而后介绍非监督学习算法——Baum-Welch算法（也就是EM算法）。
 
 ## 监督学习算法
 
+假设已给训练数据包含S个长度相同的观测序列和对应的状态序列
+$$
+\{ (O_1,I_1), (O_2,I_2), ... , (O_S,I_S) \}
+$$
+，那么可以利用极大似然估计法来估计隐马尔科夫模型的参数。具体方法如下。
 
+* 转移概率αij的估计
+
+  社样本中时刻t处于状态i，时刻t+1转移到状态j的频数为Aij，那么状态转移概率αij的估计是
+  $$
+  \hat{\alpha}_{ij}=\frac{A_{ij}}{\sum_{j=1}^NA_{ij}},\quad i=1,2,...,N;\ j=1,2,...,N
+  $$
+
+* 观测概率bj(k)的估计
+
+  设样本中状态为j并观测为k的频数是Bjk，那么状态为j观测为k的概率bj(k)的估计是
+  $$
+  \hat{b}_j(k)=\frac{B_{jk}}{\sum_{k=1}^MB_{jk}},\quad j=1,2,...,N;\ j=1,2,...,M
+  $$
+
+* 初始状态概率πi的估计hat(πi)为S个样本中初始状态为qi的频率
+
+由于监督学习需要使用训练数据，而人工标注训练数据往往代价很高，有时就会利用非监督学习的方法。
 
 ## Baum-Welch算法
+
+假设给定徐念数据只包含S个长度为T的观测序列\{ O1, O2, ... , OS \}而没有对应的状态序列，目标是学习隐马尔科夫模型λ = (A, B, π)的参数。我们将观测虚了数据看做观测数据O，状态序列数据看做不可观测的隐数据I，那么隐马尔科夫模型实际上是一个含有隐变量的概率模型。
+$$
+P(O|\lambda)=\sum_IP(O|I,\lambda)P(I|\lambda)
+$$
+它的参数学习可以由EM算法来实现。
+
+**1.确定完全数据的对数似然函数**
+
+所有观测数据写成O=(o1,o2,...,oT)，所有隐数据写成I=(i1,i2,...,iT)，完全数据是(O,I)=(o1,o2,...,oT,i1,i2,...,iT)。完全数据的对数似然函数是log P(O,I | λ)。
+
+**2.EM算法的E步：**求Q函数
+$$
+Q(\lambda,\bar{\lambda})=\sum_{I}\text{log}P(O,I|\lambda)P(O,I|\bar{\lambda})
+$$
+其中，bar(λ)是隐马尔科夫模型参数的当前估计值，λ是要极大化的隐马尔科夫模型参数。
+$$
+P(O,I|\lambda)=\pi_{i_1}b_{i_1(o_1)}\alpha_{i_1i_2}b_{i_2}(o_2)...\alpha_{i_{T-1}i_T}b_{i_T}(o_T)
+$$
+于是函数Q(λ, bar(λ))可以写成：
+$$
+\begin{aligned}
+Q(\lambda, \hat{\lambda})=&\sum_{I}\text{log}\pi_{i_1}P(O, I|\bar{\lambda})\\
++&\sum_I\left( \sum_{t=1}^{T-1}\text{log }\alpha_{i,i+1} \right)P(O,I|\bar{\lambda})\\
++&\sum_I\left( \sum_{t=1}^{T-1}\text{log }b_{i_t}(o_t) \right)P(O,I|\bar{\lambda})\\
+\end{aligned}
+$$
+式中求和都是对所有训练数据的序列总长度T进行的。
+
+**3.EM算法的M步**：极大化Q函数Q(λ, bar(λ))求模型参数A,B,π
+
+由于要极大化的参数在
 
 
 
