@@ -20,12 +20,13 @@
 * [预测算法](#预测算法)
   * [近似算法](#近似算法)
   * [维特比算法](#维特比算法)
-* [HMM的应用](#HMM的应用)
 
 
 
 
-隐马尔可夫模型（hidden Markov model，HMM）是可用于标注问题的统计学习模型，描述由隐藏的马尔可夫链随机生成观测序列的过程，属于生成模型。本章首先介绍隐马尔可夫模型的基本概念，然后分别叙述隐马尔可夫模型的概率计算算法、学习算法以及预测算法。隐马尔可夫模型在语音识别、自然语言处理、生物信息、模式识别等领域有着广泛的应用。
+隐马尔可夫模型（hidden Markov model，HMM）是可用于标注问题的统计学习模型，描述由隐藏的马尔可夫链随机生成观测序列的过程，属于**生成模型**。本章首先介绍隐马尔可夫模型的基本概念，然后分别叙述隐马尔可夫模型的概率计算算法、学习算法以及预测算法。隐马尔可夫模型在语音识别、自然语言处理、生物信息、模式识别等领域有着广泛的应用。
+
+隐马尔科夫模型是生成模型，表示状态序列和观测序列的联和分布，但状态序列是隐藏的，不可观测的。隐马尔科夫模型可以用于标注，这是状态对应着标记。标注问题是给定观测序列预测其对应的标记序列。
 
 # 隐马尔科夫模型的基本概念
 
@@ -381,6 +382,7 @@ A，B，π称为隐马尔可夫模型的三要素。
   $$
   P(o_t|i_T,o_T,i_{T-1},o_{T-1},...,i_{t+1},o_{t+1},i_t,i_{t-1},o_{t-1},...,i_1,o_1)=P(o_t|i_t)
   $$
+
 
 
 
@@ -758,6 +760,26 @@ $$
 $$
 P(O,I|\lambda)=\pi_{i_1}b_{i_1(o_1)}\alpha_{i_1i_2}b_{i_2}(o_2)...\alpha_{i_{T-1}i_T}b_{i_T}(o_T)
 $$
+---
+
+这里需要解释一下，你可能会疑惑，按照EM的参数的定义明明是下式啊：
+$$
+\begin{aligned}
+Q(\lambda,\bar{\lambda})&=E_I[\text{log}P(O,I|\lambda)|O,\bar{\lambda}]\\
+&=\sum_I\text{log}P(O,I|\lambda)P(I|O,\bar{\lambda})
+\end{aligned}
+$$
+而其中，
+$$
+P(I|O,\bar{\lambda})=\frac{P(I,O|\bar{\lambda})}{P(O|\bar{\lambda})}
+$$
+而上式中的分母，对于λ而言，就是常数因子，因为Q函数是下一步求λ的极值的，没有这个常数项不影响极值结果，所以就可以将上式中的分母略去。所以Q函数才写为了：
+$$
+Q(\lambda,\bar{\lambda})=\sum_{I}\text{log}P(O,I|\lambda)P(O,I|\bar{\lambda})
+$$
+
+---
+
 于是函数Q(λ, bar(λ))可以写成：
 $$
 \begin{aligned}
@@ -770,51 +792,284 @@ $$
 
 **3.EM算法的M步**：极大化Q函数Q(λ, bar(λ))求模型参数A,B,π
 
-由于要极大化的参数在
+由于要极大化的参数在上式中单独地出现在3个项中，所以只需对各项分别极大化。
 
-
-
-
+（1）上式Q(λ, bar(λ))的第一项可以写成：
+$$
+\sum_{I}\text{log}\pi_{i_1}P(O, I|\bar{\lambda})=\sum_{i=1}^N\text{log}\pi_iP(O,i_1-i|\bar{\lambda})
+$$
+注意到πi满足约束条件
+$$
+\sum_{i=1}^N\pi_i=1
+$$
+，利用拉格朗日乘子法，写出拉格朗日函数：
+$$
+\sum_{i=1}^N\text{log}\pi_iP(O,i_1=i|\bar{\lambda})+\gamma\left( \sum_{i=1}^N\pi_i-1 \right)
+$$
+对其求偏导，并令结果为0
+$$
+\frac{\partial}{\partial \pi_i}\left[ \sum_{i=1}^N\text{log}\pi_iP(O,i_1=i|\bar{\lambda})+\gamma\left( \sum_{i=1}^N\pi_i-1 \right) \right]=0
+$$
+得
+$$
+P(O,i_1=i|\bar{\lambda})+\gamma\pi_i=0
+$$
+对i求和得到γ
+$$
+\gamma=-P(O|\bar{\lambda})
+$$
+带入上上式中得到
+$$
+\pi_i=\frac{P(O,i_1=i|\bar{\lambda})}{P(O|\bar{\lambda})}
+$$
+（2）Q(λ, bar(λ))的第2项可以写成
+$$
+\sum_I\left( \sum_{t=1}^{T-1}\text{log}\alpha_{i_ti_{t+1}} \right)P(O,I|\bar{\lambda})=\sum_{i=1}^N\sum_{j=1}^N\sum_{t=1}^{T-1}\text{log}\alpha_{ij}P(O,i_t=i,i_{t+1}=j|\bar{\lambda})
+$$
+类似第1项，应用具有约束条件
+$$
+\sum_{i=1}^N\pi_i=1
+$$
+的拉格朗日乘子法可以求出
+$$
+\alpha_{ij}=\frac{\sum_{t=1}^{T-1}P(O,i_t=i,i_{t+1}=j|\bar{\lambda})}{\sum_{t=1}^{T-1}P(O,i_t=i|\bar{\lambda})}
+$$
+（3）Q(λ, bar(λ))的第3项为
+$$
+\sum_I\left( \sum_{t=1}^T\text{log}b_{i_t}(o_t) \right)P(O,I|\bar{\lambda})=\sum_{j=1}^N\sum_{t=1}^T\text{log}b_j(o_t)P(O,i_t=j|\bar{\lambda})
+$$
+同样用拉格朗日乘子法，约束条件是
+$$
+\sum_{k=1}^Mb_j(k)=1
+$$
+。注意，只有在ot=vk时bj(ot)对bj(k)的偏导数才不为0，以I(ot=vk)表示。求得
+$$
+b_j(k)=\frac{\sum_{t=1}^TP(O,i_t=j|\bar{\lambda})I(o_t=v_k)}{\sum_{t=1}^TP(O,i_t=j|\bar{\lambda})}
+$$
 
 ## Baum-Welch模型参数估计公式
 
+将上三式中的各概率分别用γt(i)，ξt(i,j)表示，则可将相应的公式写成：
+$$
+\begin{aligned}
+\alpha_{ij}&=\frac{\sum_{t=1}^{T-1}\xi_t(i,j)}{\sum_{t=1}^{T-1}\gamma_t(i)}\\
+b_j(k)&=\frac{\sum_{t=1,o_t=v_k}^{T}\gamma_t(i,j)}{\sum_{t=1}^{T}\gamma_t(i)}\\
+\pi_i&=\gamma_1(i)
+\end{aligned}
+$$
+其中，γt(i)，ξt(i,j)分别由上一小节已经给出。上面三式就是Baum-Welch算法，它是EM算法在隐马尔科夫模型学习中的具体实现，由Baum和Welch提出。
 
+**Baum-Welch算法：**
 
+输入：观测数据O=(o1,o2,...,oT)；
 
+输出：隐马尔科夫模型参数
+
+（1）初始化
+
+对n=0，选取
+$$
+\alpha_{ij}^{(0)},b_j(k)^{(0)},\pi_i^{(0)}
+$$
+，得到模型
+$$
+\lambda^{(0)}=(A^{(0)},B^{(0)},\pi^{(0)})
+$$
+（2）递推。对n=1,2,...,
+$$
+\begin{aligned}
+\alpha_{ij}&=\frac{\sum_{t=1}^{T-1}\xi_t(i,j)}{\sum_{t=1}^{T-1}\gamma_t(i)}\\
+b_j(k)&=\frac{\sum_{t=1,o_t=v_k}^{T}\gamma_t(i,j)}{\sum_{t=1}^{T}\gamma_t(i)}\\
+\pi_i&=\gamma_1(i)
+\end{aligned}
+$$
+右端各值按观测O=(o1,o2,...,oT)和模型λ(n) = (A(n), B(n), π(n))计算。式中γt(i)，ξt(i,j)由上一小节给出。
+
+（3）终止。得到模型参数
+$$
+\lambda^{(n+1)}=(A^{(n+1)},B^{(n+1)},\pi^{(n+1)})
+$$
 
 # 预测算法
 
-
+下面介绍隐马尔可夫模型预测的两种算法：近似算法与维特比算法（Viterbi algorithm）。
 
 ## 近似算法
 
+近似算法的想法是，在每个时刻t选择在该时刻最有可能出现的状态i\*\_t，从而得到一个状态序列
+$$
+I^*=(i_1^*,i_2^*,,...,i_T^*)
+$$
+，将它作为预测的结果。
 
+给定隐马尔可夫模型λ和观测序列O，在时刻t处于状态qi的概率γt(i)是
+$$
+\gamma_t(i)=\frac{\alpha_t(i)\beta_t(i)}{P(O|\lambda)}=\frac{\alpha_t(i)\beta_t(i)}{\sum_{j=1}^N\alpha_t(j)\beta_t(j)}
+$$
+在每一刻t最有可能的状态i\*_t是
+$$
+i^*_t=\text{arg }\mathop{\text{max}}_{1\leqslant i \leqslant N}\left[ \gamma_t(i) \right],\quad t=1,2,...,T
+$$
+从而得到状态序列
+$$
+I^*=(i_1^*,i_2^*,...,i_T^*)
+$$
+近似算法的优点是计算简单，其缺点是不能保证预测的状态序列整体是最有可能的状态序列，因为预测的状态序列可能有实际不发生的部分。事实上，上述方法得到的状态序列中有可能存在转移概率为0的相邻状态，即对某些i,j,αij=0时。尽管如此，近似算法仍然是有用的。
 
 ## 维特比算法
 
+维特比算法实际是用动态规划解隐马尔可夫模型预测问题，即用动态规划（dynamic programming）求概率最大路径（最优路径）。这时一条路径对应着一个状态序列。
 
+根据动态规划原理，最优路径具有这样的特性：如果最优路径在时刻t通过结点i\*\_t，那么这一路径从结点i\*\_t到终点i\*\_T的部分路径，对于从i\*\_t到i\*\_T的所有可能的部分路径来说，必须是最优的。因为假如不是这样，那么从i\*\_t到i\*\_T就有另一条更好的部分路径存在，如果把它和从i\*\_1到i\*\_t的部分路径连接起来，就会形成一条比原来的路径更优的路径，这是矛盾的。依据这一原理，我们只需从时刻t=1开始，递推地计算在时刻t状态为i的各条部分路径的最大概率，直至得到时刻t=T状态为i的各条路径的最大概率。时刻t=T的最大概率即为最优路径的概率P\*，最优路径的终结点i\*\_T也同时得到。之后，为了找出最优路径的各个结点，从终结点i\*\_T开始，由后向前逐步求得结点i\*\_(T-1),...,i\*\_1，得到最优路径
+$$
+I^*=(i_1^*,i_2^*,...,i_T^*)
+$$
+这就是维特比算法。
 
-# HMM的应用
+首先导入两个变量δ和ψ。定义在时刻t状态为i的所有单个路径(i1, i2, ... , it)中概率最大值为
+$$
+\delta_t(i)=\mathop{\text{max}}_{i_1,i_2,...,i_{t-1}}P(i_t=i,i_{t-1},...,i_1,o_t,...,o_1|\lambda),\quad i=1,2,...,N
+$$
+由定义可得变量δ的递推公式：
+$$
+\begin{aligned}
+\delta_{t+1}(i)&=\mathop{\text{max}}_{i_1,i_2,...,i_{t-1}}P(i_{t+1}=i,i_t,...,i_1,o_{t+1},...,o_1|\lambda)\\
+&=\mathop{\text{max}}_{1\leqslant j\leqslant N}\left[ \delta_t(j)\alpha_{ji} \right]b_i(o_{t+1})\quad i=1,2,...,N;t=1,2,...,T-1
+\end{aligned}
+$$
+定义在时刻t状态为i的所有单个路径(i1, i2, ... , i(t-1), i)中概率最大化的路径的第t-1个节点为
+$$
+\psi_t(i)=\text{arg }\mathop{\text{max}}_{1\leqslant j \leqslant N}\left[ \delta_{t-1}(j)\alpha_{ji} \right],\quad i=1,2,...,N
+$$
+下面介绍维特比算法。
 
+**维特比算法：**
 
+输入：模型λ = (A, B, π)和观测O=(o1,o2,...,oT)；
 
-知乎第三个例子后面的例子
+输出：最优路径
+$$
+I^*=(i_1^*,i_2^*,...,i_T^*)
+$$
+（1）初始化
+$$
+\begin{aligned}
+&\delta_1(i)=\pi_ib_i(o_1),\quad i=1,2,...,N\\
+&\psi_1(i)=0,\quad i=1,2,...,N
+\end{aligned}
+$$
+（2）递推。对t=2,3, ... ,T
+$$
+\begin{aligned}
+&\delta_t(i)=\mathop{\text{max}}_{1\leqslant j\leqslant N}\left[ \delta_{t-1}(j)\alpha_{ji} \right]b_i(o_t),\quad i=1,2,...,N\\
+&\psi_t(i)=\text{arg }\mathop{\text{max}}_{1\leqslant j\leqslant N}\left[ \delta_{t-1}(j)\alpha_{ji} \right],\quad i=1,2,...,N\\
+\end{aligned}
+$$
+（3）终止
+$$
+\begin{aligned}
+&P^*=\mathop{\text{max}}_{1\leqslant i \leqslant N}\delta_T(i)\\
+&i_T^*=\text{arg }\mathop{\text{max}}_{1\leqslant i \leqslant N}\left[ \delta_T(i) \right]\\
+\end{aligned}
+$$
+（4）最优路径回溯。对t=T-1, T-2, ... , 1
+$$
+i_t^*=\psi_{t+1}(i_{t+1}^*)
+$$
+求得最优路径
+$$
+I^*=(i_1^*,i_2^*,...,i_T^*)
+$$
+下面通过一个例子来说明维特比算法。
 
+上个例子的模型λ = (A, B, π)，
+$$
+\begin{aligned}
+A=\begin{bmatrix}
+0.5 & 0.2 & 0.3\\ 
+0.3 & 0.5 & 0.2\\ 
+0.2 & 0.3 & 0.5
+\end{bmatrix}
+,\ B=\begin{bmatrix}
+0.5 & 0.5\\ 
+0.4 & 0.6\\ 
+0.7 & 0.3
+\end{bmatrix}
+,\ \pi=(0.2, 0.4, 0.4)^T
+\end{aligned}
+$$
+已知观测序列O=\{ 红, 白, 红 \}，试求最优状态序列，即最优路径
+$$
+I^*=(i_1^*,i_2^*,...,i_T^*)
+$$
+解：如下图所示，要在所有可能的路径中选择一条最优路径，按照以下步骤处理：
 
+（1）初始化。在t=1时，对每个状态i, i=1,2,3，求状态为i观测o1为红的概率，记此概率为δ1(i)，则
+$$
+\delta_i(i)=\pi_ib_i(o_1)=\pi_ib_i(\text{红}),\quad i=1,2,3
+$$
+代入实际数据
+$$
+\delta_1(1)=0.10,\quad \delta_1(2)=0.16,\quad \delta_1(3)=0.28
+$$
+记ψ1(i)=0, i=1,2,3。
 
+![optimal-path](pic/optimal-path.png)
 
+（2）在t=2时，对每个状态i，i=1,2,3，求在t=1时状态为j观测o1为红并在t=2时状态为i观测o2为白的路径的最大概率，记此最大概率为δ2(i)，则
+$$
+\delta_2(i)=\mathop{\text{max}}_{1\leqslant j \leqslant 2}\left[ \delta_1(j)\alpha_{ji} \right]b_i(o_2)
+$$
+同时，对每个状态i, i=1,2,3，记录概率最大路径的前一个状态j：
+$$
+\begin{aligned}
+&\delta_2(1)=\mathop{\text{max}}_{1\leqslant j\leqslant 3}[\delta_1(j)\alpha_{j1}]b_1(o_2)\\
+&\quad\quad\ \ =\mathop{\text{max}}_{j}\{ 0.10\times 0.5,0.16\times 0.3,0.28\times 0.2 \}\times 0.5\\
+&\quad\quad\ \ =0.028\\
+&\psi_2(1)=3\\
+&\delta_2(2)=0.054,\quad \psi_2(2)=3\\
+&\delta_2(3)=0.042,\quad \psi_2(3)=3\\
+\end{aligned}
+$$
+同样，在t=3时，
+$$
+\begin{aligned}
+&\delta_3(i)=\mathop{\text{max}}_{1\leqslant j\leqslant 3}[\delta_1(j)\alpha_{ji}]b_i(o_3)\\
+&\psi_3(i)=\text{arg }\mathop{\text{max}}_{1\leqslant j\leqslant 3}[\delta_1(j)\alpha_{ji}]\\
+&\delta_3(1)=0.00756,\quad \psi_3(1)=2\\
+&\delta_3(2)=0.01008,\quad \psi_3(2)=2\\
+&\delta_3(3)=0.0147,\quad \psi_3(3)=3\\
+\end{aligned}
+$$
+（3）以P\*表示最优路径的概率，则
+$$
+P^*=\mathop{\text{max}}_{i\leqslant i \leqslant 3}\delta_3(i)=0.0147
+$$
+最优路径的终点是i\*\_3：
+$$
+i_3^*=\text{arg }\mathop{\text{max}}_{i}[\delta_3(i)]=3
+$$
+（4）由最优路径的终点i\*\_3，逆向找到i\*\_2, i\*\_1：
 
-
-
-
+在t=2时，
+$$
+i_2^*=\psi_3(i_3^*)=\psi_3(3)=3
+$$
+在t=1时，
+$$
+i_1^*=\psi_2(i_2^*)=\psi_2(3)=3
+$$
+于是求得最优路径，即最优状态序列
+$$
+I^*=(i_1^*,i_2^*,i_3^*)=(3,3,3)
+$$
 
 # 参考资料
+
+* 《统计学习方法》李航
+
+本文主要参考此书的对应章节。
 
 * [如何用简单易懂的例子解释隐马尔可夫模型](https://www.zhihu.com/question/20962240)
 
 “通过简单例子理解HMM”一节就是复制的这个回答里的例子。
-
-
-
-
-
