@@ -365,13 +365,97 @@ $$
 
 对观测序列x的每一个位置i=1, 2, ... , n+1，定义一个m阶矩阵（m是标记yi取值的个数）
 $$
-1
+\begin{aligned}
+M_i(x)&=[M_i(y_{i-1}, y_i|x)]\\
+M_i(y_{i-1},y_i|x)&=\text{exp}(W_i(y_{i-1},y_i|x))\\
+W_i(y_{i-1},y_i|x)&=\sum_{k=1}^Kw_kf_k(y_{i-1},y_i,x,i)\\
+\end{aligned}
 $$
 
+这样，给定观测序列x，相应标记序列y的非规范化概率可以通过该序列n+1个矩阵适当元素的乘积
+$$
+\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)
+$$
+表示。于是，条件概率Pw(y|x)是
+$$
+P_w(y|x)=\frac{1}{Z_w(x)}\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)
+$$
+其中，Zw(x)为规范化因子，是n+1个矩阵的乘积的**(start, stop)**元素：
+$$
+Z(x)=\left( M_1(x),M_2(x),...,M_{n+1}(x) \right)_{\text{start, stop}}
+$$
+注意：start和stop分别表示开始状态和终止状态为第几个状态，是数字，所以才能用(start, stop)来表示矩阵的不坐标。y0=start和y_(n+1)=stop表示开始状态与终止状态；规范化因子Zw(x)是以start为起点，stop为终点通过状态的所有路径y1y2...yn的非规范化概率
+$$
+\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)
+$$
+之和。下面的例子说明了这一事实。
 
-线性链条件随机场中的矩阵形式推导
+**这里补充下如何理解矩阵形式：**
+$$
+\begin{aligned}
+&\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)\\
+=&\prod_{i=1}^{n}M_i(y_{i-1},y_i|x)\cdot 1\\
+=&\prod_{i=1}^{n}\text{exp}(W_i(y_{i-1},y_i|x))\\
+=&\text{exp}\sum_{i=1}^n(W_i(y_{i-1},y_i|x))\\
+=&\text{exp}\sum_{i=1}^n\left( \sum_{k=1}^Kw_kf_k(y_{i-1},y_i,x,i) \right)\\
+=&\text{exp}\sum_{k=1}^Kw_k\left( \sum_{i=1}^nf_k(y_{i-1},y_i,x,i) \right)\\
+=&\text{exp}\sum_{k=1}^Kw_kf_k(y,x)\\
+\end{aligned}
+$$
+**所以，条件随机场的矩阵形式和其简化形式是完全一样的**。
 
-https://blog.csdn.net/qq_22408061/article/details/80524244
+**例子：**给定一个有下图所示的线性链条件随机场，观测序列x，状态序列y，i=1,2,3，n=3，标记yi∈\{ 1,2 \}，假设**y0=start=1**，**y4=stop=1**，各个位置的随机矩阵M1(x), M2(x), M3(x), M4(x)分别是
+$$
+\begin{aligned}
+&M_1(x)=\begin{bmatrix}
+a_{11} & a_{12}\\ 
+0 & 0
+\end{bmatrix},\quad
+M_2(x)=\begin{bmatrix}
+b_{11} & b_{12}\\ 
+b_{21} & b_{22}
+\end{bmatrix}\\
+&M_3(x)=\begin{bmatrix}
+c_{11} & c_{12}\\ 
+c_{21} & c_{22}
+\end{bmatrix},\quad\ 
+M_4(x)=\begin{bmatrix}
+1 & 0\\ 
+1 & 0
+\end{bmatrix}
+\end{aligned}
+$$
+试求状态序列y以start为起点stop为终点的所有路径的非规范化概率和规范化概率因子。
+
+![matrix-form-state-path](pic/matrix-form-state-path.png)
+
+解：首先计算上图中从start到stop对应于y=(1,1,1), y=(1,1,2), ... , y=(2,2,2)各路径的费规范化概率分别是
+$$
+\begin{aligned}
+a_{11}b_{11}c_{11},\quad a_{11}b_{11}c_{12},\quad a_{11}b_{12}c_{21},\quad a_{11}b_{12}c_{22},\quad \\
+a_{12}b_{21}c_{11},\quad a_{12}b_{21}c_{12},\quad a_{12}b_{22}c_{21},\quad a_{12}b_{22}c_{22},\quad 
+\end{aligned}
+$$
+然后按上面的求Zw(x)规范化因子的公式来求规范化因子。通过计算矩阵乘积M1(x)M2(x)M3(x)M4(x)可知，其第1(start=1)行第1(stop=1)列的元素为
+$$
+\begin{aligned}
+&a_{11}b_{11}c_{11}+a_{11}b_{11}c_{12}+a_{11}b_{12}c_{21}+a_{11}b_{12}c_{22}\\
++&a_{12}b_{21}c_{11}+a_{12}b_{21}c_{12}+a_{12}b_{22}c_{21}+a_{12}b_{22}c_{22}
+\end{aligned}
+$$
+恰好等于从start到stop的所有路径的非规范化概率之和，即规范化因子Z(x)。
+
+# 条件随机场的概率计算问题
+
+
+
+# 条件随机场的学习算法
+
+
+
+# 条件随机场的预测算法
+
+
 
 
 
@@ -402,6 +486,10 @@ https://blog.csdn.net/QFire/article/details/81065256
 * [条件随机场CRF-3】条件随机场的参数化形式详解 + 画出对应的状态路径图 + 给出对应的矩阵表示](https://blog.csdn.net/u012421852/article/details/80344965?utm_source=copy)
 
 "条件随机场的参数化形式"一节中的状态路径图就是参考此博客画的。
+
+* [线性链条件随机场中的矩阵形式推导](https://blog.csdn.net/qq_22408061/article/details/80524244)
+
+"条件随机场的矩阵形式"小节中对矩阵形式的理解受此博客的启发。
 
 
 
