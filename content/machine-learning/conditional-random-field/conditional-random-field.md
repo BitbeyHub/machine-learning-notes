@@ -133,7 +133,7 @@ p(w_i|l_i)表示发射概率（emission probability），比如l_i是名词，w_
 
 答案是：CRF比HMM要强大的多，它可以解决所有HMM能够解决的问题，并且还可以解决许多HMM解决不了的问题。事实上，我们可以对上面的HMM模型取对数，就变成下面这样：
 $$
-\text{log}p(l,s)=\text{log}p(l_0)+\sum_i\text{log}p(l_i|l_{i-1})+\sum_i\text{log}p(w_i|l_i)
+\text{log }p(l,s)=\text{log }p(l_0)+\sum_i\text{log }p(l_i|l_{i-1})+\sum_i\text{log }p(w_i|l_i)
 $$
 我们把这个式子与CRF的式子进行比较：
 $$
@@ -149,7 +149,7 @@ f_{x,y}(s,i,l_i,l_{i-1})=1
 $$
 该特征函数仅当l_i = y,l_(i-1)=x时才等于1。这个特征函数的权重如下：
 $$
-w_{x,y}=\text{log}p(l_i=y|l_{i-1}=x)
+w_{x,y}=\text{log }p(l_i=y|l_{i-1}=x)
 $$
 同样的，对于HMM中的每一个发射概率，我们也都可以定义相应的特征函数，并让该特征函数的权重等于HMM中的log形式的发射概率。
 
@@ -446,6 +446,61 @@ $$
 恰好等于从start到stop的所有路径的非规范化概率之和，即规范化因子Z(x)。
 
 # 条件随机场的概率计算问题
+
+条件随机场的概率计算问题是给定条件随机场P(Y|X)，输入序列x和输出序列y，计算条件概率
+$$
+P(Y_i=y_i|x), P(Y_{i-1}=y_{i-1},Y_i=y_i|x)
+$$
+以及相应的数学期望的问题。为了方便起见，像隐马尔科夫模型那样，引进前向-后向向量，递归地计算以上概率及期望值。这样的算法称为前向-后向算法。
+
+## 前向-后向算法
+
+对每个指标i=0, 1, ... , n+1，定义**前向向量**αi(x)：
+$$
+\begin{aligned}
+\alpha_0(y|x)=
+\left\{\begin{matrix}
+&1,&\quad y=\text{start}\\ 
+&0,&\quad \text{否则}
+\end{matrix}\right.
+\end{aligned}
+$$
+递推公式为
+$$
+\alpha_i^T(y_i|x)=\alpha_{i-1}^T(y_{i-1}|x)[M_i(y_{i-1},y_i|x)],\quad i=1,2,...,n+1
+$$
+又可以表示为
+$$
+\alpha_i^T(x)=\alpha_{i-1}^T(x)M_i(x)
+$$
+αi(yi|x)表示在位置i的标记是yi，并且到位置i的前部分标记序列的非规范化概率。yi的取值可以有m个，所以αi(x)是m维向量。
+
+同样，对每个指标i=0, 1, ... , n+1，定义**后向向量**βi(x)：
+$$
+\begin{aligned}
+\beta_{n+1}(y_{n+1}|x)=
+\left\{\begin{matrix}
+&1,&\quad y_{n+1}=\text{stop}\\ 
+&0,&\quad \text{否则}
+\end{matrix}\right.
+\end{aligned}
+$$
+
+$$
+\beta_i(y_i|x)=[M_i(y_i,y_{i+1}|x)]\beta_{i+1}(y_{i+1}|x)
+$$
+
+又可以表示为
+$$
+\beta_i(x)=M_{i+1}(x)\beta_{i+1}(x)
+$$
+βi(yi|x)表示在位置i的标记是yi，并且从i+1到n的后部分标记序列的非规范化概率。
+
+由前向-后向向量不难得到：
+$$
+Z(x)=\alpha_n^T(x)\cdot 1= 1^T\cdot \beta_i(x)
+$$
+这里，**1**是元素均为1的m维列向量。
 
 
 
