@@ -760,29 +760,37 @@ $$
 
 改进的迭代尺度法(improved iterative scaling, IIS)是一种最大熵模型学习的最优化算法。
 
+改进的迭代尺度法（Improved Iterative Scaling），在很多模型求解中用到，比如最大熵、CRFs等，对模型是对数线性模型的似然都适用。这个算法的思想也很简单，通俗的理解就是通过两个不等式变形优化下界，从而迭代到收敛的算法。
+
 已知最大熵模型为
 $$
-P_w(y|x)=\frac{1}{Z_w(X)}exp\left( \sum_{i=1}^n w_if_i(x,y) \right)
+P_w(y|x)=\frac{1}{Z_w(X)}\text{exp}\left( \sum_{i=1}^n w_if_i(x,y) \right)
 $$
 其中，
 $$
-Z_w(x)=\sum_yexp\left(\sum_{i=1}^nw_if_i(x,y)\right)
+Z_w(x)=\sum_y\text{exp}\left(\sum_{i=1}^nw_if_i(x,y)\right)
 $$
 对数似然函数为
 $$
 \begin{aligned}
-L(w)&=\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x}\tilde P(x)logZ_w(x)\\
-&=\sum_{x,y}\tilde P(x,y)\sum_{i=1}^nw_if_i(x,y)-\sum_{x}\tilde P(x)logZ_w(x)\\
+L(w)&=\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x}\tilde P(x)\text{log}Z_w(x)\\
+&=\sum_{x,y}\tilde P(x,y)\sum_{i=1}^nw_if_i(x,y)-\sum_{x}\tilde P(x)\text{log}Z_w(x)\\
 \end{aligned}
 $$
 目标是通过极大似然估计学习模型参数，即求对数似然函数的极大值$\hat{w}$。
 
-IIS的想法是：假设最大熵模型当前的参数向量是$w=(w_1,w_2,...,w_n)^T$，我们希望找到一个新的参数向量$w+\delta=(w_1+\delta,w_2+\delta,...,w_3+\delta)$，使得模型的对数似然函数值增大。如果能有这样一种参数向量更新的方法$\tau:w\rightarrow w+\delta$，那么就可以重复使用这一方法，直至找到对数似然函数的最大值。
+IIS的想法是：假设最大熵模型当前的参数向量是w=(w1, w2, ... , wn)^T，我们希望找到一个新的参数向量w+δ=(w1+δ1, w2+δ2, ... , wn+δn)^T，使得模型的对数似然函数值增大。如果能有这样一种参数向量更新的方法τ : w→w+δ，那么就可以重复使用这一方法，直至找到对数似然函数的最大值。
 
-对于给定的经验分布$\tilde P(x,y)$，模型参数从$w$到$w+\delta$，对数似然函数的改变量是
+对于给定的经验分布$\tilde P(x,y)$，模型参数从w到w+δ，对数似然函数的改变量是
 $$
 \begin{aligned}
-L(w+\delta)-L(w)&=\sum_{x,y}\tilde P(x,y)logP_{w+\delta}(y|x)-\sum_{x,y}\tilde P(x,y)logP_w(y|x)\\
+L(w+\delta)-L(w)&=\sum_{x,y}\tilde P(x,y)\text{log}P_{w+\delta}(y|x)-\sum_{x,y}\tilde P(x,y)\text{log}P_w(y|x)\\
+&=\sum_{x,y}\tilde P(x,y)\left(\text{log}P_{w+\delta}(y|x)-\text{log}P_w(y|x)\right)\\
+&=\sum_{x,y}\tilde P(x,y)\text{log}\left(\frac{P_{w+\delta}(y|x)}{P_w(y|x)}\right)\\
+&=\sum_{x,y}\tilde{P}(x,y)\text{log}\left(\frac{\frac{1}{Z_{w+\delta}(x)}\text{exp}\left( \sum_{i=1}^n (w_i+\delta_i)f_i(x,y) \right)}{\frac{1}{Z_w(x)}\text{exp}\left( \sum_{i=1}^n w_if_i(x,y) \right)}\right)\\
+&=\sum_{x,y}\tilde{P}(x,y)\text{log}\left(\text{exp}\left( \sum_{i=1}^n \delta_if_i(x,y)\right)\frac{Z_w(x)}{Z_{w+\delta}(x)} \right)\\
+&=\sum_{x,y}\tilde{P}(x,y)\left( \sum_{i=1}^n \delta_if_i(x,y) + \text{log}\left(\frac{Z_w(x)}{Z_{w+\delta}(x)} \right) \right)\\
+&=\sum_{x,y}\tilde P(x,y)\sum_{i=1}^n\delta_if_i(x,y)-\sum_{x,y}\tilde P(x,y)\text{log}\frac{Z_{w+\delta}(x)}{Z_w(x)}\\
 &=\sum_{x,y}\tilde P(x,y)\sum_{i=1}^n\delta_if_i(x,y)-\sum_x\tilde P(x)\text{log}\frac{Z_{w+\delta}(x)}{Z_w(x)}\\
 \end{aligned}
 $$
@@ -979,6 +987,8 @@ Statistical mechanics unifies different ecological patterns
 "最大熵模型的极大似然估计"一节参考了此博客。
 
 * [最大熵模型：读书笔记](http://blog.sina.com.cn/s/blog_afe2af380102v8qw.html)
+* [The Improved Iterative Scaling Algorithm: A Gentle Introduction](https://x-algo.cn/wp-content/uploads/2016/02/berger-iis.pdf)
+* 上文的翻译：[条件随机场（CRF）-IIS学习算法](https://www.cnblogs.com/xueyinzhe/p/7141838.html)
 
 "最大熵模型学习算法：IIS"一节参考了此博客。
 

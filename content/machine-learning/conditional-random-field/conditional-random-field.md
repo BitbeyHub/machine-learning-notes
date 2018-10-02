@@ -8,15 +8,21 @@
 
 
 
-条件随机场(CRF) - 1 - 简介
+条件随机场(CRF) - 1 - 简介（产生式模型和判别式模型）
 
 https://blog.csdn.net/xueyingxue001/article/details/51498902
 
 
 
+CRF模型族及其在语音识别中的应用（概率图模型讲得很好，可参考）
+
+http://mi.eng.cam.ac.uk/~cz277/doc/Slides-CRFASR-CSLT.pdf
 
 
 
+CRF的经典论文：     
+
+[from  Sutton, Charles, and Andrew McCallum. “An introduction to conditional random fields.” Machine Learning 4.4 (2011): 267-373.](http://homepages.inf.ed.ac.uk/csutton/publications/crftut-fnt.pdf)
 
 # 直观理解CRF条件随机场
 
@@ -502,9 +508,260 @@ Z(x)=\alpha_n^T(x)\cdot 1= 1^T\cdot \beta_i(x)
 $$
 这里，**1**是元素均为1的m维列向量。
 
+## 概率计算
 
+按照前向-后向向量的定义，很容易计算
+
+标记序列在位置i是标记yi的条件概率：
+$$
+P(Y_i=y_i|x)=\frac{\alpha_i^T(y_i|x)\beta_i(y_i|x)}{Z(x)}
+$$
+在位置i-1与i是标记y(i-1)和yi的条件概率：
+$$
+P(Y_{i-1}=y_{i-1},Y_i=y_i|x)=\frac{\alpha_{i-1}^T(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)}
+$$
+其中，
+$$
+Z(x)=\alpha_n^T(x)\cdot 1
+$$
+
+## 期望值的计算
+
+利用前向-后向向量，可以计算特征函数关于联合分布P(X,Y)和条件分布P(Y|X)的数学期望。
+
+特征函数fk关于**条件分布P(Y|X)**的数学期望是
+$$
+\begin{aligned}
+E_{P(Y|X)}[f_k]&=\sum_{y}P(y|x)f_k(y,x)\\
+&=\sum_y\left( P(y|x)\sum_{i=1}^{n+1}f_k(y_{i-1},y_i,x,i) \right)\\
+&=\sum_y\left( \sum_{i=1}^{n+1}f_k(y_{i-1},y_i,x,i)P(y|x) \right)\\
+&=\sum_{i=1}^{n+1}\left( \sum_yf_k(y_{i-1},y_i,x,i)P(y|x) \right)\\
+&=\sum_{i=1}^{n+1}\left( \sum_{y_{i-1}y_i}f_k(y_{i-1},y_i,x,i)P(Y_{i-1}=y_{i-1},Y_i=y_i|x) \right)\\
+&=\sum_{i=1}^{n+1}\left( \sum_{y_{i-1}y_i}f_k(y_{i-1},y_i,x,i)\frac{\alpha_{i-1}^T(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)} \right)\\
+&k=1,2,...,K
+\end{aligned}
+$$
+其中，
+$$
+Z(x)=\alpha_n^T(x)\cdot 1
+$$
+假设经验分布为
+$$
+\tilde{P}(x)
+$$
+，特征函数fk关于**联合分布P(X,Y)**的数学期望是
+$$
+\begin{aligned}
+E_{P(X,Y)}[f_k]&=\sum_{x,y}P(x,y)f_k(y,x)\\
+&=\sum_{x}\tilde{P}(x)\left(\sum_yP(y|x)f_k(y,x)\right)\\
+&=\sum_{x}\tilde{P}(x)E_{P(Y|X)}[f_k]\\
+&=\sum_{x}\tilde{P}(x)\sum_{i=1}^{n+1}\left( \sum_{y_{i-1}y_i}f_k(y_{i-1},y_i,x,i)\frac{\alpha_{i-1}^T(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)} \right)\\
+&k=1,2,...,K
+\end{aligned}
+$$
+其中，
+$$
+Z(x)=\alpha_n^T(x)\cdot 1
+$$
+上两式是特征函数数学期望的一般计算公式。
+
+* 对于转移特征
+  $$
+  t_k(y_{i-1},y_i,x,i), \quad k=1,2,...,K_1
+  $$
+  ，可以将上两式中的fk换成tk
+
+* 对于状态特征，可以将上两式中的fk换成sl，表示为
+
+* $$
+  s_l(y_i,x,i),\quad k=K_1+l,\quad l=1,2,...,K_2
+  $$
+
+
+有了上面概率和期望值的计算公式，对于给定的观测序列x与标记序列y，可以通过一次前向扫描计算αi及Z(x)，通过一次后向扫描计算βi，从而计算所有的概率和特征的期望。
 
 # 条件随机场的学习算法
+
+本节讨论给定训练数据集**估计**条件随机场**模型参数**的问题，即随机条件场的学习问题。**条件随机场模型实际是定义在时序数据上的对数线性模型，即序列化的逻辑回归**，其学习方法包括极大似然估计和正则化的极大似然估计。具体的优化实现算法有改进的迭代尺度算法IIS、梯度下降法以及拟牛顿法。
+
+## 改进的迭代尺度法
+
+改进的迭代尺度法（Improved Iterative Scaling），在很多模型求解中用到，比如最大熵、CRFs等，对模型是对数线性模型的似然都适用。这个算法的思想也很简单，通俗的理解就是通过两个不等式变形优化下界，从而迭代到收敛的算法。
+
+已知训练数据集，由此可知经验概率分布
+$$
+\tilde{P}(X,Y)
+$$
+。可以通过极大化训练数据的对数似然函数来求解模型参数。
+
+训练数据的对数似然函数为
+$$
+\begin{aligned}
+L(w)&=L_{\tilde{P}}(P_w)\\
+&=\text{log}\prod_{x,y}P_w(y|x)^{\tilde{P}(x,y)}\\
+&=\sum_{x,y}\tilde{P}(x,y)\text{log}P_w(y|x)\\
+\end{aligned}
+$$
+当Pw是一个由下式
+$$
+\begin{aligned}
+P(y|x)=\frac{1}{Z(x)}\text{exp}\sum_{k=1}^Kw_kf_k(y,x)\\
+Z(x)=\sum_y\text{exp}\sum_{k=1}^Kw_kf_k(y,x)
+\end{aligned}
+$$
+给出的条件随机场时，对数似然函数为
+$$
+\begin{aligned}
+L(w)&=\sum_{x,y}\tilde{P}(x,y)\text{log}P_w(y|x)\\
+&=\sum_{x,y}\left[ \tilde{P}(x,y)\sum_{k=1}^Kw_kf_k(y,x)-\tilde{P}(x,y)\text{log}Z_w(x) \right]\\
+&=\sum_{j=1}^N\sum_{k=1}^Kw_kf_k(y_j,x_i)-\sum_{j=1}^N\text{log}Z_w(x_j)
+\end{aligned}
+$$
+改进的迭代尺度法通过迭代的方法不断优化对数似然函数该变量的下界，达到极大化对数似然函数的目的。假设模型的当前参数向量为w=(w1, w2, ... , wK)^T，向量的增量为δ=(δ1, δ2, ... , δK)^T，更新参数向量为w+δ=(w1+δ, w2+δ, ... , wn+δ)^T。在每步迭代过程中，改进的迭代尺度法通过依次求解下两式，得到δ=(δ1, δ2, ... , δK)^T。推导可参考《线性模型》一章中的《最大熵模型》的“最大熵模型学习算法：IIS”一小节。
+
+关于**转移特征**tk的更新方程为
+$$
+\begin{aligned}
+E_{\tilde{P}}[t_k]&=\sum_{x,y}\tilde{P}(x,y)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\\
+&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i+1},y_i,x,i)\text{exp}(\delta_kT(x,y))\\
+k&=1,2,...,K_1
+\end{aligned}
+$$
+关于**状态特征**sl的更新方程为
+$$
+\begin{aligned}
+E_{\tilde{P}}[t_k]&=\sum_{x,y}\tilde{P}(x,y)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\\
+&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i+1},y_i,x,i)\text{exp}(\delta_kT(x,y))\\
+k&=1,2,...,K_1
+\end{aligned}
+$$
+这里，T(x,y)是在数据(x,y)中出现所有特征的和数（因为特征fk是二值函数，所以T(x,y)表示所有特征在(x,y)出现的次数）：
+$$
+T(x,y)=\sum_kf_k(y,x)=\sum_{k=1}^K\sum_{i=1}^{n+1}f_k(y_{i-1},y_i,x,i)
+$$
+**条件随机场模型学习的改进的迭代尺度法**
+
+输入：
+
+* 特征函数
+  $$
+  t_1, t_2, ... , t_{K1}, s_1, s_2 , ... , s_{K_2}
+  $$
+
+* 经验分布
+  $$
+  \tilde{P}(x,y)
+  $$
+
+
+输出：
+
+* 参数估计值
+  $$
+  \hat{w}
+  $$
+
+* 模型
+  $$
+  P_{\hat{w}}
+  $$
+
+
+（1）对所有k∈\{ 1,2,...,K \}，取初值wk=0
+
+（2）对每一k∈\{ 1,2,...,K \}：
+
+（a）当k=1,2,...,K1时，令δk是方程
+$$
+\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\text{exp}(\delta_kT(x,y))=E_{\tilde{P}}[t_k]
+$$
+的解；
+
+当k=K1+l. l=1,2,...,K2时，令δ(k1+l)是方程
+$$
+\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}s_l(y_{i-1},y_i,x,i)\text{exp}(\delta_{K_1+l}T(x,y))=E_{\tilde{P}}[s_l]
+$$
+的解，式中T(x,y)上面已经给出。
+
+（b）更新wk值：
+$$
+w_k\leftarrow w_k+\delta_k
+$$
+（3）如果不是所有wk都收敛，重复步骤（2）。
+
+在上面还有T(x,y)的转移特征和状态特征的更新方程中，T(x, y)表示数据(x, y)中的特征总数，对不同的数据(x, y)取值可能不同，。为了处理这个问题，定义松弛特征
+$$
+s(x,y)=S-\sum_{i=1}^{n+1}\sum_{k=1}^Kf_k(y_{i-1},y_i,x,i)
+$$
+式中，S是一个常数。选择足够大的常数S使得对训练数据集的所有数据(x, y)，s(x,y)≥0成立。这时特征总数可取S。
+
+由上面的转移特征tk的更新方程，对于转移特征tk，δk的更新方程是
+$$
+\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\text{exp}(\delta_kS)=E_{\tilde{P}}[t_k]
+$$
+则
+$$
+\delta_k=\frac{1}{S}\text{log}\frac{E_{\tilde{P}}[t_k]}{E_P[t_k]}
+$$
+其中，
+$$
+\begin{aligned}
+E_p(t_k)&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\\
+&=\sum_{x}\tilde{P}(x)\sum_{i=1}^{n+1}\sum_{y_{i-1},y_i}t_k(y_{i-1},y_i,x,i)\frac{\alpha_{i-1}^T(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)} \\
+\end{aligned}
+$$
+同样由上面的状态特征sl的更新方程，对于状态特征sl，δk的更新方程是
+$$
+\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}s_l(y_i,x,i)\text{exp}(\delta_{K_1+l}S)=E_{\tilde{P}}[s_l]
+$$
+则
+$$
+\delta_{K_1+l}=\frac{1}{S}\text{log}\frac{E_{\tilde{P}}[s_l]}{E_P[s_l]}
+$$
+其中，
+$$
+\begin{aligned}
+E_p(s_l)&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}s_l(y_i,x,i)\\
+&=\sum_{x}\tilde{P}(x)\sum_{i=1}^{n+1}\sum_{y_i}s_l(y_i,x,i)\frac{\alpha_{i}^T(y_i|x)\beta_i(y_i|x)}{Z(x)} \\
+\end{aligned}
+$$
+以上算法称为算法S。在算法S中需要使常数S取足够大，这样一来，每步迭代的增量向量就会变大（**？？？？？？？不理解，不应该是变小吗？？？**），算法收敛会变。算法T试图解决这个问题。算法T对每个观测序列x计算器特征总数最大值T(x)：
+$$
+T(x)=\mathop{\text{max}}_yT(x,y)
+$$
+利用前向-后向递推公式，可以很容易计算T(x)=t。
+
+这时，关于转移特征参数的更新方程可以写成：
+$$
+\begin{aligned}
+E_{\tilde{P}}[t_k]&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\text{exp}(\delta_kT(x))\\
+&=\sum_x\tilde{P}(x)\sum_yP(y|x)\sum_{i=1}^{n+1}t_k(y_{i-1},y_i,x,i)\text{exp}(\delta_kT(x))\\
+&=\sum_x\tilde{P}(x)a_{k,t}\text{exp}(\delta_kT(x))\\
+&=\sum_{t=0}^{T_{max}}a_{k,t}(\beta_k)^t\\
+\end{aligned}
+$$
+这里，a(k,t)是特征tk的期待值，δk=log βk。βk是多项式方程（上式）唯一的实根，可以用牛顿法求得。从而求得相关的δk。
+
+**注意：上式的倒数第二行到倒数第一行的推导我没看懂，而且βk是多项式的实根这一点也没看懂。。。**
+
+同样，关于状态特征参数的更新方程可以写成：
+$$
+\begin{aligned}
+E_{\tilde{P}}[s_l]&=\sum_{x,y}\tilde{P}(x)P(y|x)\sum_{i=1}^{n+1}s_l(y_i,x,i)\text{exp}(\delta_{K_1+l}T(x))\\
+&=\sum_x\tilde{P}(x)\sum_yP(y|x)\sum_{i=1}^{n+1}s_l(y_i,x,i)\text{exp}(\delta_{K_1+l}T(x))\\
+&=\sum_x\tilde{P}(x)b_{l,t}\text{exp}(\delta_k\cdot t)\\
+&=\sum_{t=0}^{T_{max}}b_{l,t}(\gamma_l)^t\\
+\end{aligned}
+$$
+这里，b(l,t)是特征sl的期待值，δl=log γl。γl是多项式方程（上式）唯一的实根，也可以用牛顿法求得。从而求得相关的δl。
+
+**注意：上式的倒数第二行到倒数第一行的推导我没看懂，而且γl是多项式的实根这一点也没看懂。。。**
+
+## 拟牛顿法
+
+[条件随机场入门（四） 条件随机场的训练](https://www.cnblogs.com/ooon/p/5826757.html)
+
+
 
 
 
@@ -523,6 +780,20 @@ $$
 如何用简单易懂的例子解释条件随机场（CRF）模型？它和HMM有什么区别？
 
 https://blog.csdn.net/QFire/article/details/81065256
+
+
+
+# CRF的代码实现CRF++
+
+现在关于CRF的工具有很多，这里简单介绍一下CRF++。[CRF++](http://pan.baidu.com/s/1hsOE0LI)包含Windows、Linux版本，
+
+关于具体的实现，这次发现CRF++与《统计学习方法》的契合度非常之高，所以请直接参考[《CRF++代码分析》](http://www.hankcs.com/ml/crf-code-analysis.html)。
+
+目前Python阵营里并没有简单好懂的实现，反而不如直接切入CRF++的生产代码有效果，还可以顺便学到不少C++的小知识。
+
+其拟牛顿法讲解可以直接与CRF++的代码对应，实为难得。这里有一篇[《CRF++代码分析》](http://www.hankcs.com/ml/crf-code-analysis.html)，与本文互为参考。
+
+
 
 
 
@@ -546,7 +817,11 @@ https://blog.csdn.net/QFire/article/details/81065256
 
 "条件随机场的矩阵形式"小节中对矩阵形式的理解受此博客的启发。
 
+* [条件随机场（CRF）](https://blog.csdn.net/a819825294/article/details/53893231)
+* [百度网盘：CRF++工具包使用介绍.ppt](https://pan.baidu.com/s/1bYJSMa)
+* [CRF++代码分析](http://www.hankcs.com/ml/crf-code-analysis.html)
 
+"CRF的代码实现CRF++"小节参考上述资料。
 
 
 
