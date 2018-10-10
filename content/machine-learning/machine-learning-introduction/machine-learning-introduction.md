@@ -519,7 +519,7 @@ l(w)&=\text{log}\ L(w)\\
 $$
 求对数似然的最大值，即求下式的最小值，同时最大似然估计的w参数为：
 $$
-w_{\text{MLE}}=\text{arg}\  \mathop{\text{min}}_w\frac{1}{2}\sum_{i=1}^m\left( y^{(i)}-w^Tx^{(i)} \right)^2
+w_{\text{MLE}}=\text{arg }\mathop{\text{min}}_w\frac{1}{2}\sum_{i=1}^m\left( y^{(i)}-w^Tx^{(i)} \right)^2
 $$
 这就导出了我们原始的least-squares损失函数，但是，但是，这是在我们对参数w没有加入任何**先验分布**的情况下。在数据维度很高的情况下，我们的模型参数很多，模型复杂度高，容易发生过拟合。
 
@@ -549,7 +549,7 @@ $$
 \begin{aligned}
 l(w)&=\text{log} L(w)\\
 &=m\ \text{log} \frac{1}{\sqrt{2\pi}\delta} + n\ \text{log}\frac{1}{\sqrt{2\pi\alpha}}-\frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2-\frac{1}{\alpha}\cdot \frac{1}{2}w^Tw\\
-\Rightarrow w_{\text{MAP}_{\text{Laplace}}}&=\text{arg}\  \mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{\alpha}\cdot \frac{1}{2}w^Tw \right)
+\Rightarrow w_{\text{MAP}_{\text{Laplace}}}&=\text{arg }\mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{\alpha}\cdot \frac{1}{2}w^Tw \right)
 \end{aligned}
 $$
 等价于：
@@ -593,7 +593,7 @@ $$
 关于拉普拉斯和正态分布的渊源，大家可以参见正态分布的前世今生。
 重复之前的推导过程我们很容易得到：
 $$
-w_{\text{MAP}_{\text{Laplace}}}=\text{arg}\  \mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{b}\left \| w \right \|_1 \right)
+w_{\text{MAP}_{\text{Laplace}}}=\text{arg }\mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{b}\left \| w \right \|_1 \right)
 $$
 
 > **我们对参数w引入尺度参数为b的零均值高斯先验。**
@@ -612,7 +612,7 @@ $$
 \begin{aligned}
 l(w)&=\text{log} L(w)\\
 &=m\ \text{log} \frac{1}{\sqrt{2\pi}\delta} + n\ \text{log}\frac{1}{2b}-\frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2-\frac{1}{b}\left \| w \right \|_1\\
-\Rightarrow w_{\text{MAP}_{\text{Laplace}}}&=\text{arg}\  \mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{b}\left \| w \right \|_1 \right)
+\Rightarrow w_{\text{MAP}_{\text{Laplace}}}&=\text{arg }\mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{b}\left \| w \right \|_1 \right)
 \end{aligned}
 $$
 等价于：
