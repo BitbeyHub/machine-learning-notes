@@ -33,7 +33,6 @@
 * [概率与信息论](mathematics/statistics-and-information-theory/statistics-and-information-theory.md)
   * [综述概率论基本定义](mathematics/statistics-and-information-theory/review-of-statistics.md)
   * [概率论与贝叶斯先验](mathematics/statistics-and-information-theory/probability-and-bayesian-prior.md)
-  * [偏差和方差](mathematics/statistics-and-information-theory/bias-and-variance.md)
   * [正态分布](mathematics/statistics-and-information-theory/normal-distribution.md)
   * [贝叶斯概率](mathematics/statistics-and-information-theory/bayes-probability.md)
   * [概率符号说明](mathematics/statistics-and-information-theory/probability-symbol-explaination.md)

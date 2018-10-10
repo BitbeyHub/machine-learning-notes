@@ -3,7 +3,6 @@
 * [返回顶层目录](../../content/SUMMARY.md#目录)
 * [综述概率论基本定义](review-of-statistics.md)
 * [概率论与贝叶斯先验](probability-and-bayesian-prior.md)
-* [偏差和方差](bias-and-variance.md)
 * [贝叶斯概率](bayes-probability.md)
 * [概率符号说明](probability-symbol-explaination.md)
 * [共轭先验](conjugate-prior.md)
