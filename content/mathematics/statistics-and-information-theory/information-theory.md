@@ -22,34 +22,6 @@
 
 
 
-有时间看下下面的网址
-
-[信息论的熵](http://blog.csdn.net/hguisu/article/details/27305435)
-
-
-
-[从香农熵到手推KL散度：纵览机器学习中的信息论](https://zhuanlan.zhihu.com/p/32985487)
-
-
-
-[如何通俗的解释交叉熵与相对熵?](https://www.zhihu.com/question/41252833/answer/195901726)
-
-
-
-[机器学习各种熵：从入门到全面掌握](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247485772&idx=1&sn=08e167ca071873b569ede4e5f9ae422f&chksm=f9d157d4cea6dec235cc2ae4500c0b72a81f92d1b540d377d6fe2a8ce9d12469b3073c6b7117&scene=0#rd)
-
-
-
-[为什么交叉熵（cross-entropy）可以用于计算代价？](https://www.zhihu.com/question/65288314/answer/244557337)
-
-
-
-[信息量，熵，交叉熵，相对熵与代价函数](https://mp.weixin.qq.com/s?__biz=MzU1NTUxNTM0Mg==&mid=2247488638&idx=1&sn=d00968aa06484c0d0550324f1c372baa&chksm=fbd278dfcca5f1c97d3fa571ffe53b184abad005753ff81eb9037e5ff29a42709c8ba1b4ff26&scene=0#rd)
-
-
-
-
-
 信息轮是应用数学的一个分支，主要研究的是**对一个信号包含信息的多少进行量化**。
 
 概率论使我们能够提出不确定的声明，以及在不确定性存在的情况下进行推理，而信息论使我们能够**量化概率分布中的不确定性总量**。（《深度学习》Goodfellow第34页）
@@ -426,6 +398,28 @@ $$
 * [北京2014年10月机器学习班之邹博的最大熵模型PPT](http://pan.baidu.com/s/1qWLSehI)
 
 “各种熵之间关系的文氏图”一节参考子ppt。
+
+---
+
+
+
+有时间看下下面的网址
+
+[信息论的熵](http://blog.csdn.net/hguisu/article/details/27305435)
+
+[从香农熵到手推KL散度：纵览机器学习中的信息论](https://zhuanlan.zhihu.com/p/32985487)
+
+[如何通俗的解释交叉熵与相对熵?](https://www.zhihu.com/question/41252833/answer/195901726)
+
+[机器学习各种熵：从入门到全面掌握](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247485772&idx=1&sn=08e167ca071873b569ede4e5f9ae422f&chksm=f9d157d4cea6dec235cc2ae4500c0b72a81f92d1b540d377d6fe2a8ce9d12469b3073c6b7117&scene=0#rd)
+
+[为什么交叉熵（cross-entropy）可以用于计算代价？](https://www.zhihu.com/question/65288314/answer/244557337)
+
+[信息量，熵，交叉熵，相对熵与代价函数](https://mp.weixin.qq.com/s?__biz=MzU1NTUxNTM0Mg==&mid=2247488638&idx=1&sn=d00968aa06484c0d0550324f1c372baa&chksm=fbd278dfcca5f1c97d3fa571ffe53b184abad005753ff81eb9037e5ff29a42709c8ba1b4ff26&scene=0#rd)
+
+
+
+---
 
 
 
