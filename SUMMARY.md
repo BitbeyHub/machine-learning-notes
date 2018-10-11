@@ -93,6 +93,7 @@
         * [随机森林](content/machine-learning/ensemble-learning/random-forest.md)
     * Boosting
         * [AdaBoost](content/machine-learning/ensemble-learning/AdaBoost.md)
+            * [BoostingTree](content/machine-learning/ensemble-learning/BoostingTree.md)
         * GradientBoosting
             * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
             * [XgBoost](content/machine-learning/ensemble-learning/XgBoost.md)

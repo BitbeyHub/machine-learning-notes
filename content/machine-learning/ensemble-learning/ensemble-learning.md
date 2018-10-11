@@ -7,6 +7,7 @@
 * [Boosting](#Boosting)
   * [Boosting概述](#Boosting概述)
   * [AdaBoost](#AdaBoost)
+    * [BoostingTree](#BoostingTree)
   * [GradientBoosting](#GradientBoosting)
     * [GBDT](#GBDT)
     * [XgBoost](#XgBoost)
@@ -95,6 +96,12 @@ AdaBoost的巧妙之处就在于它将这些想法自然且有效地实现在一
 AdaBoost是Boosting算法家族中代表算法。
 
 AdaBoost的详细描述，点击[AdaBoost](AdaBoost.md)跳转至相关章节。
+
+### BoostingTree
+
+AdaBoost与决策树的结合则形成了提升树（boosting tree），AdaBoost使得决策树的准确率大大提高，可与SVM相媲美。
+
+BoostingTree的详细描述，点击[BoostingTree](BoostingTree.md)跳转至相关章节。
 
 ## GradientBoosting
 
