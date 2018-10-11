@@ -43,6 +43,10 @@ https://zhuanlan.zhihu.com/p/32412043
 
 
 
+[理解主成分分析 (PCA)](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247484754&idx=1&sn=b2c0d6798f44e13956bb42373e51d18c&chksm=fdb698c5cac111d3e3dca24c50aafbfb61e5b05c5df5b603067bb7edec8db049370b73046b24&scene=21#wechat_redirect)
+
+
+
 # PCA的损失函数
 
 通过指定如下损失函数就可以得到PCA的第一个主向量
