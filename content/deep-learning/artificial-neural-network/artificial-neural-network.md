@@ -34,30 +34,156 @@ $$
 
 # 激活函数
 
-
-
-[理解神经网络的激活函数](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247483977&idx=1&sn=401b211bf72bc70f733d6ac90f7352cc&chksm=fdb69fdecac116c81aad9e5adae42142d67f50258106f501af07dc651d2c1473c52fad8678c3&mpshare=1&scene=1&srcid=0508JKgf4ThI1pfcRQSyK3Q4#rd)
+## 为什么需要激活函数
 
 
 
-卷积网络的激活函数sigmod和relu有什么区别？
+## 对激活函数的要求
+
+
+
+## 激活函数须满足的条件
+
+
+
+## 激活函数如何评价
+
+
+
+## 激活函数的作用
+
+激活函数有两个作用：
+
+* 加入非线性因素，解决线性模型所不能解决的问题
+* 用来组合训练数据的特征，特征的充分组合
+
+下面分别对激活函数的两个作用进行解释。
+
+### 加入非线性因素，解决非线性问题
+
+首先我们有这个需求，就是二分类问题，如我要将下面的三角形和圆形点进行正确的分类，如下图：
+
+![two-classify](pic/two-classify.png)
+
+利用我们单层的感知机, 用它可以划出一条线, 把三角形和圆形样本分割开：
+
+![single-layer-perceptron](pic/single-layer-perceptron.png)
+
+上图直线是由
+$$
+w_1x_1+w_2x_2+b=0
+$$
+得到，那么该感知器实现预测的功能步骤如下，就是我已经训练好了一个感知器模型，后面对于要预测的样本点，带入模型中。
+
+如果y>0,那么就说明是直线的右侧，也就是正类（我们这里是三角形）。
+
+如果y<0,那么就说明是直线的左侧，也就是负类（我们这里是圆形），虽然这和我们的题目关系不大，但是还是提一下~
+
+好吧，很容易能够看出，我给出的样本点根本不是线性可分的，一个感知器无论得到的直线怎么动，都不可能完全正确的将三角形与圆形区分出来，那么我们很容易想到用多个感知器来进行组合，以便获得更大的分类问题，好的，下面我们上图，看是否可行：
+
+![perceptron-with-one-hidden-layer](pic/perceptron-with-one-hidden-layer.png)
+
+好的，我们已经得到了多感知器分类器了，那么它的分类能力是否强大到能将非线性数据点正确分类开呢~我们来分析一下：
+
+我们能够得到
+$$
+\begin{aligned}
+y=\quad&w_{2-1}(w_{1-11}x_1+w_{1-21}x_2+b_{1-1})\\
++&w_{2-2}(w_{1-12}x_1+w_{1-22}x_2+b_{1-2})\\
++&w_{2-3}(w_{1-13}x_1+w_{1-23}x_2+b_{1-3})\\
+\end{aligned}
+$$
+哎呀呀，不得了，这个式子看起来非常复杂，估计应该可以处理我上面的情况了吧，哈哈哈哈~不一定额，我们来给它变个形。上面公式合并同类项后等价于下面公式：
+$$
+\begin{aligned}
+y=\quad&x_1(w_{2-1}w_{1-11}+w_{2-2}w_{1-12}+w_{2-3}w_{1-13})\\
++&x_2(w_{2-1}w_{1-21}+w_{2-2}w_{1-22}+w_{2-3}w_{1-23})\\
++&w_{2-1}b_{1-1}+w_{2-2}b_{1-2}+w_{2-3}b_{1-3}\\
+\end{aligned}
+$$
+**啧啧，估计大家都看出了，不管它怎么组合，最多就是线性方程的组合，最后得到的分类器本质还是一个线性方程，该处理不了的非线性问题，它还是处理不了。**
+
+就好像下图，直线无论在平面上如果旋转，都不可能完全正确的分开三角形和圆形点：
+
+![line-can-not-split](pic/line-can-not-split.png)
+
+既然是非线性问题，总有线性方程不能正确分类的地方~
+
+那么抛开神经网络中神经元需不需要激活函数这点不说，如果没有激活函数，仅仅是线性函数的组合解决的问题太有限了，碰到非线性问题就束手无策了.那么加入激活函数是否可能能够解决呢？
+
+在上面线性方程的组合过程中，我们其实类似在做三条直线的组合，如下图：
+
+![line-combination](pic/line-combination.png)
+
+下面我们来讲一下激活函数，我们都知道，每一层叠加完了之后，我们需要加入一个激活函数（激活函数的种类也很多，如sigmod等等~）这里就给出sigmod例子，如下图：
+
+![perceptron-with-non-linear-activation-function](pic/perceptron-with-non-linear-activation-function.png)
+
+通过这个激活函数映射之后，输出很明显就是一个非线性函数！能不能解决一开始的非线性分类问题不清楚，但是至少说明有可能啊，上面不加入激活函数神经网络压根就不可能解决这个问题~
+
+同理，扩展到多个神经元组合的情况时候，表达能力就会更强~对应的组合图如下：（现在已经升级为三个非线性感知器在组合了）
+
+![perceptron-with-non-linear-activation-function-2](pic/perceptron-with-non-linear-activation-function-2.png)
+
+跟上面线性组合相对应的非线性组合如下：
+
+![non-linear-combination](pic/non-linear-combination.png)
+
+这看起来厉害多了，是不是~最后再通过最优化损失函数的做法，我们能够学习到不断学习靠近能够正确分类三角形和圆形点的曲线，到底会学到什么曲线，不知道到底具体的样子，也许是下面这个~
+
+![two-classify-2](pic/two-classify-2.png)
+
+那么随着不断训练优化，我们也就能够解决非线性的问题了~
+
+所以到这里为止，我们就解释了这个观点，加入激活函数是用来加入非线性因素的，解决线性模型所不能解决的问题。
+
+### 组合训练数据的特征，特征的充分组合
+
+首先我们看一个简单的感知机如下：
+
+![perceptron-2](pic/perceptron-2.png)
+
+**其中，x1,x2输入均为特征的输入**
+
+则x3为
+$$
+x_3=w_1x_1+w_2x_2
+$$
+激活函数采取sigmoid函数，公式表达如下：
+$$
+S(x)=\frac{1}{1+e^{-x}}
+$$
+则
+$$
+S(x)=\frac{1}{1+e^{-x_3}}
+$$
+此时，我们可能看不出什么不同，**但是根据泰勒展开，**
+$$
+e^x=1+\frac{1}{1!}x+\frac{1}{2!}x^2+\frac{1}{3!}x^3+o(x^3)
+$$
+我们能够看到，将x3代入到激活函数的时候，其实激活函数的e^x泰勒展开后，有平方项，有立方项，有更高的项，**这些自动能够把输入特征进行两两组合，进行三三组合或者其它的组合。**
+
+**比如其中的平方项体现了将特征进行两两组合：**
+$$
+\begin{aligned}
+(w_1x_1+w_2x_2)^2=&\quad w_1w_1x_1x_1\\
+&+w_2w_2x_2x_2\\
+&+w_1x_1w_2x_2\\
+\end{aligned}
+$$
+**这就把原来需要领域知识的专家对特征进行组合的情况，在激活函数运算后，其实也能够起到类似特征组合的作用。**
+
+**（只要激活函数中有能够泰勒展开的函数，就可能起到特征组合的作用）**
+
+**这也许能给我们一些思考。**
+
+## 不同激活函数的区别
+
+卷积网络的激活函数sigmoid和relu有什么区别？
 
 使用sigmod函数会导致将近一半的神经元被激活。不太符合人类脑活动工程学。
+
 而relu函数在这方面神似，自动引入稀疏性，相当于无监督预练习。
-
-
-
-[理解神经网络的激活函数](http://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247483977&idx=1&sn=401b211bf72bc70f733d6ac90f7352cc&chksm=fdb69fdecac116c81aad9e5adae42142d67f50258106f501af07dc651d2c1473c52fad8678c3&mpshare=1&scene=1&srcid=07308RapV3KncGG6CBZwmF8w#rd)
-
-[神经网络的激活函数总结](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247485762&idx=1&sn=e1e9fc75b92999177d3c61c655b0e06e&chksm=fdb694d5cac11dc37dac1a7ce32150836d66f0012f35a7e04e3dceaf626b8453dc39ee80172b&scene=0#rd)
-
-[一种新的思路通俗理解激活函数](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247488052&idx=1&sn=327b04f1a7b2a7cd62a5c369e33b9f62&chksm=ebb42ae0dcc3a3f6809ba19dfd4432b4700f52a6ca5d448a98e0b6ea58f6a67e41d517295079&mpshare=1&scene=1&srcid=0723FSI6mqiC7zFLQNzK9HpT#rd)
-
-[理解激活函数作用，看这篇文章就够了！](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247488049&idx=1&sn=4cad0db659391faaa4dac0ace524a21f&chksm=ebb42ae5dcc3a3f3145c70529bb828ebdb66429cc0c1433ad5ad5072ef2c2bb86094f27320be&scene=0#rd)
-
-[通俗理解神经网络中激活函数作用](http://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247486431&idx=1&sn=f8f6f1ca8e4ab16616ee5ac853803d3b&chksm=ebb4330bdcc3ba1dc946df1078c49f8e42fe5701afefa8d886d2ca6654698fb9b2c8e0908341&scene=0#rd)
-
-
 
 # 感知机与多层网络
 
@@ -276,3 +402,11 @@ $$
 
 本文主要参考此资料。
 
+* [理解神经网络的激活函数](https://mp.weixin.qq.com/s?__biz=MzU4MjQ3MDkwNA==&mid=2247483977&idx=1&sn=401b211bf72bc70f733d6ac90f7352cc&chksm=fdb69fdecac116c81aad9e5adae42142d67f50258106f501af07dc651d2c1473c52fad8678c3&mpshare=1&scene=1&srcid=07308RapV3KncGG6CBZwmF8w#rd)
+
+"为什么需要激活函数"和“对激活函数的要求”参考此资料。
+
+* [理解激活函数作用，看这篇文章就够了！](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247488049&idx=1&sn=4cad0db659391faaa4dac0ace524a21f&chksm=ebb42ae5dcc3a3f3145c70529bb828ebdb66429cc0c1433ad5ad5072ef2c2bb86094f27320be&scene=0#rd)
+* [一种新的思路通俗理解激活函数](https://mp.weixin.qq.com/s?__biz=MzI4MDYzNzg4Mw==&mid=2247488052&idx=1&sn=327b04f1a7b2a7cd62a5c369e33b9f62&chksm=ebb42ae0dcc3a3f6809ba19dfd4432b4700f52a6ca5d448a98e0b6ea58f6a67e41d517295079&mpshare=1&scene=1&srcid=0723FSI6mqiC7zFLQNzK9HpT#rd)
+
+"激活函数的作用"一节参考了此微信文章。
