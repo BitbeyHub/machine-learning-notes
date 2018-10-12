@@ -310,6 +310,8 @@ $$
 
 而relu函数在这方面神似，自动引入稀疏性，相当于无监督预练习。
 
+AlexNet用ReLU代替了Sigmoid，发现使用ReLU得到的SGD的收敛速度会比sigmoid/tanh 快很多。主要是因为它是linear，而且non-saturating（因为ReLU的导数始终是1），相比于sigmoid/tanh，ReLU只需要一个阈值就可以得到激活值，而不用去算一大堆复杂的运算。
+
 # 感知机与多层网络
 
 **感知机（Perceptron）由两层神经元组成**，如下图所示，输入层接收外界输入信号后传递给输出层，输出层是M-P神经元，亦称"阈值逻辑单元"（threshold logic unit）。
