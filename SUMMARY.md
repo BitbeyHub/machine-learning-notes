@@ -96,7 +96,7 @@
             * [BoostingTree](content/machine-learning/ensemble-learning/BoostingTree.md)
         * GradientBoosting
             * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
-            * [XgBoost](content/machine-learning/ensemble-learning/XgBoost.md)
+            * [XGBoost](content/machine-learning/ensemble-learning/XGBoost.md)
     * Stacking
 * [EM算法](content/machine-learning/expectation-maximization-algorithm/expectation-maximization-algorithm.md)
 * [HMM隐马尔科夫模型](content/machine-learning/hidden-markov-model/hidden-markov-model.md)
