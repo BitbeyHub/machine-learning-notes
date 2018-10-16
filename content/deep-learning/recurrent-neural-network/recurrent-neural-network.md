@@ -11,3 +11,8 @@
 深度学习循环神经网络详解
 
 https://zhuanlan.zhihu.com/p/37428697
+
+
+
+[【深度学习之美】循环递归RNN，序列建模套路深（入门系列之十三）](https://yq.aliyun.com/articles/169880?spm=a2c4e.11153940.blogcont86580.22.152919797EqPuO)
+
