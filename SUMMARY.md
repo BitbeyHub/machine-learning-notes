@@ -7,7 +7,6 @@
 * [封面](README.md)
 * [目录](content/SUMMARY.md)
 
-
 ---
 
 # 前言
@@ -23,7 +22,6 @@
     * [机器学习的学习路径](content/perface/machine-learning-perface/machine-learning-perface.md#机器学习的学习路径)
     * [深度学习的学习路径](content/perface/machine-learning-perface/machine-learning-perface.md#深度学习的学习路径)
     * [互联网机器学习特定岗位所需技能](content/perface/machine-learning-perface/machine-learning-perface.md#互联网机器学习特定岗位所需技能)
-
 
 ---
 
@@ -46,14 +44,13 @@
     * [贝叶斯概率](content/mathematics/statistics-and-information-theory/bayes-probability.md)
     * [概率符号说明](content/mathematics/statistics-and-information-theory/probability-symbol-explaination.md)
     * [共轭先验](content/mathematics/statistics-and-information-theory/conjugate-prior.md)
-    * [概率图模型-结构化概率模型](content/mathematics/statistics-and-information-theory/probability-graphical-model.md)
+    * [概率图模型](content/mathematics/statistics-and-information-theory/probability-graphical-model.md)
     * [信息论](content/mathematics/statistics-and-information-theory/information-theory.md)
 * [数值计算与优化](content/mathematics/numerical-calculation-and-optimization/numerical-calculation-and-optimization.md)
     * [梯度下降算法](content/mathematics/numerical-calculation-and-optimization/gradient-descent.md)
     * [随机梯度下降SGD](content/mathematics/numerical-calculation-and-optimization/stochastic-gradient-desent.md)
     * [等式约束的拉格朗日乘子法](content/mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
     * [凸优化](content/mathematics/numerical-calculation-and-optimization/convex-optimization.md)
-
 
 ---
 
@@ -67,7 +64,6 @@
     * [matplotlib](content/coding/python/matplotlib.md)
     * [python基础综合实践](content/coding/python/python-basic-comprehensive-practice.md)
     * [scikit-learn](content/coding/python/scikit-learn.md)
-
 
 ---
 
@@ -108,7 +104,6 @@
     * [LDA隐狄利克雷分布](content/machine-learning/topic-model/latent-dirichlet-allocation.md)
 * [机器学习算法总结](content/machine-learning/machine-learning-algorithm-summary/machine-learning-algorithm-summary.md)
 
-
 ---
 
 # 深度学习
@@ -118,7 +113,6 @@
 * [CNN卷积神经网络](content/deep-learning/convolutional-neural-network/convolutional-neural-network.md)
 * [RNN循环神经网络](content/deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](content/deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
-
 
 ---
 

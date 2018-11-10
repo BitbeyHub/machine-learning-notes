@@ -1,6 +1,6 @@
-# 奇异值分解
+# SVD奇异值分解
 
-* [返回顶层目录](../../SUMMARY.md#目录)
+* [返回顶层目录](../../SUMMARY.md)
 * [返回上层目录](linear-algebra.md)
 * [SVD的思想](#SVD的思想)
 * [SVD的直观理解](#SVD的直观理解)

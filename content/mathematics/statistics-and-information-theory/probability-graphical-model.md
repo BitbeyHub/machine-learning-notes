@@ -1,4 +1,4 @@
-# 概率图模型(结构化概率模型)
+# 概率图模型
 
 - [返回顶层目录](../../SUMMARY.md)
 - [返回上层目录](statistics-and-information-theory.md)

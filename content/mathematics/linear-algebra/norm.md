@@ -1,6 +1,6 @@
 # 范数
 
-- [返回顶层目录](../../SUMMARY.md#目录)
+- [返回顶层目录](../../SUMMARY.md)
 - [返回上层目录](linear-algebra.md)
 
 

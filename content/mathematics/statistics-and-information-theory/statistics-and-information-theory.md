@@ -6,7 +6,7 @@
 * [贝叶斯概率](bayes-probability.md)
 * [概率符号说明](probability-symbol-explaination.md)
 * [共轭先验](conjugate-prior.md)
-* [概率图模型(结构化概率模型)](probability-graphical-model.md)
+* [概率图模型](probability-graphical-model.md)
 * [信息论](information-theory.md)
 
 
