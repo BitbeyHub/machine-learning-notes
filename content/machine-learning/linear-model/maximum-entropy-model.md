@@ -1,6 +1,6 @@
 # 最大熵模型
 
-- [返回顶层目录](../../SUMMARY.md#目录)
+- [返回顶层目录](../../SUMMARY.md)
 - [返回上层目录](linear-model.md)
 - [直观理解最大熵](#直观理解最大熵)
 - [最大熵模型的数学推导](#最大熵模型的数学推导)
@@ -67,13 +67,13 @@
 
 假设离散随机变量X的概率分布是P(X)，则其熵是
 $$
-H(P)=-\sum_xP(x)logP(x)
+H(P)=-\sum_xP(x)\text{log}P(x)
 $$
 熵满足下列不等式：
 $$
-0\leqslant H(P)\leqslant log|X|
+0\leqslant H(P)\leqslant \text{log}|X|
 $$
-式中，|X|是X的取值个数，当且仅当X的分布是均匀分布时右边的等号成立。这就是说，当X服从均勻分布时，熵最大。
+式中，|X|是X的取值个数，当且仅当X的分布是均匀分布时右边的等号成立。这就是说，当X服从均匀分布时，熵最大。
 
 直观地，最大熵原理认为要选择的概率模型首先必须满足已有的事实，即约束条件。在没有更多信息的情况下，那些不确定的部分都是“等可能的”。最大熵原理通过熵的最大化来表示等可能性。“等可能”不容易操作，而熵则是一个可优化的数值指标。
 
@@ -87,7 +87,7 @@ T={(x_1,y_1),(x_2,y_2),...(x_N,y_N)}
 $$
 学习的目的是用最大熵原理选择最好的分类模型。
 
-首先考虑模型应该满足的条件，给定训练数据集，可以确定联合分布P(X,Y)的经验分布和边缘分布的经验分布，分别以$\tilde P(x,y)$和$\tilde P(X)$表示。这里，
+首先考虑模型应该满足的条件，给定训练数据集，可以确定联合分布P(X,Y)的经验分布和边缘分布的经验分布，分别以$\tilde P(X,Y)$和$\tilde P(X)$表示。这里，
 $$
 \begin{aligned}
 &\tilde P(X=x,Y=y)=\frac{v(X=x,Y=y)}{N}\\
@@ -114,7 +114,7 @@ $$
 $$
 E_P(f)=\sum_{x,y}\tilde P(x)P(y|x)f(x,y)
 $$
-如果模型能够获取训练数据中的信息，那么就可以假设这两个期望值相等，即
+如果**模型能够获取训练数据中的信息**，那么就可以假设这两个期望值相等，即
 $$
 E_p(f)=E_{\tilde P}(f)
 $$
@@ -122,7 +122,7 @@ $$
 $$
 \sum_{x,y}\tilde P(x)P(y|x)f(x,y)=\sum_{x,y}\tilde P(x,y)f(x,y)
 $$
-我们将上式作为模型学习的约束条件。加入有n个特征函数fi(x,y), i=1,2,...,n，那么就有n个约束条件。
+我们将上式作为模型学习的约束条件。假如有n个特征函数fi(x,y), i=1,2,...,n，那么就有n个约束条件。
 
 **最大熵模型**
 
@@ -136,11 +136,15 @@ H(P)=-\sum_{x,y}\tilde P(x)P(y|x)logP(y|x)
 $$
 则模型集合C中条件熵H(P)最大的模型成为最大熵模型，式中的对数为自然对数。
 
-[最大熵模型，为什么最大的是条件熵？](https://www.zhihu.com/question/35295907)
+[**最大熵模型，为什么最大的是条件熵？**](https://www.zhihu.com/question/35295907)
 
 1. 最大熵属于discriminant model，所有的discriminant model需要求解的问题都是P(Y|X)，此为一；
-2. 最大熵基于经验风险最小化，假设样本的联合分布反映了实际分布，这样经验分布P(^X)与P(Y|X)的乘积即等于P(X,Y)，此为二；
-3. 最大熵的哲学思想为：在已知样本情况下，从所有可能的模型中，选择没有额外假设的那一个（没有额外假设即没有额外信息，所以也可以理解为熵最高），此为三；
+
+2. 最大熵基于经验风险最小化，假设样本的联合分布反映了实际分布，这样经验分布P(X)与P(Y|X)的乘积即等于P(X,Y)，此为二；
+
+3. 最大熵模型的定义中，对于条件概率分布P(Y|X)，条件熵H(Y|X)最大，意思是在已知样本X的情况下，对不确定事件Y|X，让所有的事件都是“等可能”，也是熵最大。既然H(Y|X)最大，那么互信息I(X;Y)最小，表示X,Y之间相互透露的信息量最少，也就是让X,Y之间额外的假设最少。此为三；
+
+   ![venn-diagram-of-entropy](pic/venn-diagram-of-entropy.png)
 
 综合上述三点，最大熵采用最大化条件熵为优化目标，满足从样本中抽取出来的特征的经验期望与期望一致的约束，也就很自然了。
 
@@ -151,16 +155,16 @@ $$
 对于给定的训练数据集T=\{ (x1, y1), (x2, y2), ... , (xN, yN) \}以及特征函数fi(x,y), i=1,2,...,n，最大熵模型的学习等价于约束最优化问题：
 $$
 \begin{aligned}
-\mathop{max}_{P\in C}\quad &H(P)=-\sum_{x,y}\tilde P(x)P(y|x)\text{log}\ P(y|x)\\
-s.t.\quad &E_P(f_i)=E_{\tilde P}(f_i),\ i=1,2,3...,n\\
+\mathop{\text{max}}_{P\in C}\quad &H(P)=-\sum_{x,y}\tilde P(x)P(y|x)\text{log}\ P(y|x)\\
+\text{s.t.}\quad &E_P(f_i)=E_{\tilde P}(f_i),\ i=1,2,3...,n\\
 &\sum_yP(y|x)=1\\
 \end{aligned}
 $$
 按照最优化问题的习惯，将求最大值问题改写为等价的求最小值问题：
 $$
 \begin{aligned}
-\mathop{min}_{P\in C}\quad &-H(P)=\sum_{x,y}\tilde P(x)P(y|x)\text{log}\ P(y|x)\\
-s.t.\quad &E_P(f_i)-E_{\tilde P}(f_i)=0,\ i=1,2,3...,n\\
+\mathop{\text{min}}_{P\in C}\quad &-H(P)=\sum_{x,y}\tilde P(x)P(y|x)\text{log}\ P(y|x)\\
+\text{s.t.}\quad &E_P(f_i)-E_{\tilde P}(f_i)=0,\ i=1,2,3...,n\\
 &\sum_yP(y|x)=1\\
 \end{aligned}
 $$
@@ -188,7 +192,7 @@ $$
 
 首先，求解对偶问题内部的极小化问题min L(P,w)，min L(P,w)是w的函数，将其记作
 $$
-\Psi(w)=\mathop{min}_{P\in C}L(P,w)=L(P_w,w)
+\Psi(w)=\mathop{\text{min}}_{P\in C}L(P,w)=L(P_w,w)
 $$
 Ψ(w)称为对偶函数。同时，将其解记作 
 $$
@@ -204,7 +208,7 @@ $$
 $$
 令偏导数等于0，在$\tilde P(x)>0$的情况下，解得
 $$
-P(y|x)=\text{exp}\left[\sum_{i=1}^nw_if_i(x,y)+w_0-1\right]=\frac{\text{exp}\left[\sum_{i=1}^nw_if_i(x,y)\right]}{\text{exp}(1-w_0)}
+P(y|x)=\text{exp}\left(\sum_{i=1}^nw_if_i(x,y)+w_0-1\right)=\frac{\text{exp}\left(\sum_{i=1}^nw_if_i(x,y)\right)}{\text{exp}(1-w_0)}
 $$
 由于
 $$
@@ -212,11 +216,11 @@ $$
 $$
 ，得
 $$
-P_w(y|x)=\frac{1}{Z_w(x)}\text{exp}\left[\sum_{i=1}^nw_if_i(x,y)\right]
+P_w(y|x)=\frac{1}{Z_w(x)}\text{exp}\left(\sum_{i=1}^nw_if_i(x,y)\right)
 $$
 其中，
 $$
-Z_w(x)=\sum_y\text{exp}\left[\sum_{i=1}^nw_if_i(x,y)\right]
+Z_w(x)=\sum_y\text{exp}\left(\sum_{i=1}^nw_if_i(x,y)\right)
 $$
 Zw(x)称为规范化因子；fi(x,y)是特征函数；wi是特征的权值。由上两式表示的模型Pw=Pw(y|x)就是最大熵模型。这里，w是最大熵模型中的参数向量。
 
@@ -230,7 +234,7 @@ w^*=\text{arg}\ \mathop{\text{max}}_w\ \Psi
 $$
 这就是说，可以应用最优化算法求对偶函数Ψ(w)的极大化，得到w\*，用来表示P\*∈C，这里，
 $$
-P^*=P_{w^*}=P_{w^*}(y|x)
+P^*=P_{w^*}=P_{w^*}(y|x)=\frac{1}{Z_{w^*}(x)}\text{exp}\left(\sum_{i=1}^nw_i^*f_i(x,y)\right)
 $$
 是学习到的最有模型（最大熵模型）。也就是说，最大熵模型的学习归结为对偶函数Ψ(w)的极大化。
 
@@ -432,45 +436,45 @@ $$
 
 ## 已知均值和标准差推导出正态分布
 
-已知概率分布的均值为μ，方差为$\sigma^2$，则最大熵模型学习的最优化问题是
+已知概率分布的均值为μ，方差为σ^2，则最大熵模型学习的最优化问题是
 $$
 \begin{aligned}
-&min\ &-H(P)=\sum_{i=1}^nP(x_i)\text{log}\ P(x_i)\\
-&s.t.\ &\sum_{i=1}^nP(x_i)=\sum_{i=1}^n\tilde{P}(x_i)=1\\
-&&\sum_{i=1}^nP(x_i)x_i=\mu \\
-&&\sum_{i=1}^nP(x_i)(x_i-\mu)^2=\sigma^2\\
+&\text{min}\ -H(P)=\sum_{i=1}^nP(x_i)\text{log}\ P(x_i)\\
+&\text{s.t.}\quad \sum_{i=1}^nP(x_i)=1\\
+&\quad\quad\ \ \sum_{i=1}^nP(x_i)x_i=\mu \\
+&\quad\quad\ \ \sum_{i=1}^nP(x_i)(x_i-\mu)^2=\sigma^2\\
 \end{aligned}
 $$
-引进拉格朗日乘子$w_0$，$w_1$，$w_2$定义拉格朗日函数
+引进拉格朗日乘子w0，w1，w2定义拉格朗日函数
 $$
 L(P,w)=\sum_{i=1}^nP(x_i)\text{log}\ P(x_i)+w_0(1-\sum_{i=1}^nP(x_i))+w_1(\mu-\sum_{i=1}^nP(x_i)x_i)+w_2(\sigma^2-\sum_{i=1}^nP(x_i)(x_i-\mu)^2)
 $$
-根据拉格朗日对偶性，可以通过求解对偶最优化问题得到原始最优化问题的解，所以求解
+根据拉格朗日对偶性，可以通过求解对偶最优化问题得到原始最优化问题的解，所以求解对偶问题
 $$
-\mathop{max}_{w}\mathop{min}_{P}L(P,w)
+\mathop{\text{max}}_{w}\mathop{\text{min}}_{P}L(P,w)
 $$
-首先求解$L(P,w)$关于P的极小化问题。为此，固定$w_0$，$w_1$，求偏导数：
+首先求解L(P,w)关于P的极小化问题。为此，固定w0，w1，求偏导数：
 $$
 \frac{\partial L(P,w)}{\partial P(x_i)}=1+\text{log}\ P(x_i)-w_0-w_1x_i-w_2(x_i-\mu)^2
 $$
 令每个偏导数为0，解得
 $$
-P_w(x_i)=e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}=\frac{exp(w_1x_i+w_2(x_i-\mu)^2)}{exp(1-w_0)}
+P_w(x_i)=\text{exp}\left(-1+w_0+w_1x_i+w_2(x_i-\mu)^2\right)=\frac{\text{exp}(w_1x_i+w_2(x_i-\mu)^2)}{\text{exp}(1-w_0)}
 $$
 由于
 $$
 \begin{aligned}
 &\sum_{y}P_w(x_i)=1\\
-\Rightarrow&\frac{1}{exp(1-w_0)}\sum_{y}exp(w_1x_i+w_2(x_i-u)^2)=1\\
-\Rightarrow&exp(1-w_0)=Z_w(x)=\sum_{y}exp(w_1x_i+w_2(x_i-u)^2)\\
+\Rightarrow&\frac{1}{\text{exp}(1-w_0)}\sum_{y}\text{exp}(w_1x_i+w_2(x_i-u)^2)=1\\
+\Rightarrow&\text{exp}(1-w_0)=Z_w(x)=\sum_{y}\text{exp}(w_1x_i+w_2(x_i-u)^2)\\
 \end{aligned}
 $$
 可得
 $$
 \begin{aligned}
-P_w(x_i)=&e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}\\
-=&\frac{exp(w_1x_i+w_2(x_i-\mu)^2)}{exp(1-w_0)}\\
-=&\frac{1}{Z_w(x)}exp(w_1x_i+w_2(x_i-\mu)^2)\\
+P_w(x_i)=&\text{exp}(-1+w_0+w_1x_i+w_2(x_i-\mu)^2)\\
+=&\frac{\text{exp}(w_1x_i+w_2(x_i-\mu)^2)}{\text{exp}(1-w_0)}\\
+=&\frac{1}{Z_w(x)}\text{exp}(w_1x_i+w_2(x_i-\mu)^2)\\
 \end{aligned}
 $$
 如果我们令
@@ -482,37 +486,37 @@ $$
 $$
 则上上式可改写为更清楚的结构：
 $$
-P_w(x_i)=\frac{1}{Z_w(x)}exp(w_1x_i+w_2(x_i-\mu)^2)=\frac{1}{Z_w(x)}exp(w^T\cdot f(x,y))
+P_w(x_i)=\frac{1}{Z_w(x)}\text{exp}(w_1x_i+w_2(x_i-\mu)^2)=\frac{1}{Z_w(x)}\text{exp}(w^T\cdot f(x,y))
 $$
 其中，
 $$
-Z_w(x)=\sum_{y}exp(w_1x_i+w_2(x_i-u)^2)=\sum_{y}exp(w^T\cdot f(x,y))
+Z_w(x)=\sum_{y}\text{exp}(w_1x_i+w_2(x_i-u)^2)=\sum_{y}\text{exp}(w^T\cdot f(x,y))
 $$
-$Z_w(x)$被称为规范化因子，$f(x,y)$是特征函数，$w$是特征的权值。上面的$P_w(x_i)$就是最大熵模型。
+Zw(x)被称为规范化因子，f(x,y)是特征函数，w是特征的权值。上面的Pw(x_i)就是最大熵模型。
 
 于是，
 $$
 \begin{aligned}
-&\mathop{min}_{P}L(P,w)=L(P_w,w)\\
+&\mathop{\text{min}}_{P}L(P,w)=L(P_w,w)\\
 =&\sum_{i=1}^n(-1+w_0+w_1x_i+w_2(x_i-\mu)^2)e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}\\
-&+w_0(\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-1)\\
-&+w_1(\sum_{i=1}^nx_ie^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-\mu)\\
-&+w_1(\sum_{i=1}^n(x_i-\mu)^2e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-\sigma^2)\\
-=&-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-w_0-w_1\mu-w_2\sigma^2\\
+&+w_0(1-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2})\\
+&+w_1(\mu-\sum_{i=1}^nx_ie^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2})\\
+&+w_2(\sigma^2-\sum_{i=1}^n(x_i-\mu)^2e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2})\\
+=&-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}+w_0+w_1\mu+w_2\sigma^2\\
 \end{aligned}
 $$
-然后再求解$L(p_w,w)$关于w的极大化问题：
+然后再求解L(p_w , w)关于w的极大化问题：
 $$
-\mathop{max}_wL(p_w,w)=\mathop{max}_w\{-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-w_0-w_1\mu-w_2\sigma^2\}
+\mathop{\text{max}}_wL(p_w,w)=\mathop{\text{max}}_w\{-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}+w_0+w_1\mu+w_2\sigma^2\}
 $$
-分别求$L(P_w,w)$对$w_0$，$w_1$，$w_2$的偏导数并令其为0，得到
+分别求L(Pw , w)对w0，w1，w2的偏导数并令其为0，得到
 $$
 \begin{aligned}
-&\frac{\partial L(P_w,w)}{\partial w_0}=\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-1=0 \\
+&\frac{\partial L(P_w,w)}{\partial w_0}=-\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}+1=0 \\
 \Rightarrow &\sum_{i=1}^ne^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}=1&(1)\\
-&\frac{\partial L(P_w,w)}{\partial w_1}=\sum_{i=1}^nx_ie^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-\mu=0\\
+&\frac{\partial L(P_w,w)}{\partial w_1}=-\sum_{i=1}^nx_ie^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}+\mu=0\\
 \Rightarrow &\sum_{i=1}^nx_ie^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}=\mu&(2)\\
-&\frac{\partial L(P_w,w)}{\partial w_2}=\sum_{i=1}^n(x_i-\mu)^2e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}-\sigma^2=0\\
+&\frac{\partial L(P_w,w)}{\partial w_2}=-\sum_{i=1}^n(x_i-\mu)^2e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}+\sigma^2=0\\
 \Rightarrow &\sum_{i=1}^n(x_i-\mu)^2e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}=\sigma^2&(3)\\
 \end{aligned}
 $$
@@ -520,53 +524,51 @@ $$
 
 因为前面已知
 $$
-P_w(x_i)=e^{-1+w_0+w_1x_i+w_2(x_i-\mu)^2}
+P_w(x_i)=\text{exp}\left(-1+w_0+w_1x_i+w_2(x_i-\mu)^2\right)
 $$
-我们对上式做一些变换，方便下面的积分计算，即上式可改写为
+我们对上式做一些变换，方便下面的积分计算。上式可改写为
 $$
 \begin{aligned}
-P_w(x_i)&=exp(-1+w_0+w_1x_i+w_2(x_i-\mu)^2)\\
-&=exp(w_0-1)\ exp(w_1x_i+w_2(x_i-\mu)^2)\\
-&=C\ exp(w_2[x_i-(\mu-\frac{w_1}{2w_2})^2])
+P_w(x_i)&=\text{exp}\left(-1+w_0+w_1x_i+w_2(x_i-\mu)^2\right)\\
+&=\text{exp}(w_0-1)\ \text{exp}\left(w_1x_i+w_2(x_i-\mu)^2\right)\\
+&=C\ \text{exp}\left\{w_2\left[x_i-\left(\mu-\frac{w_1}{2w_2}\right)\right]^2\right\}
 \end{aligned}
 $$
-其中，C是修正以后代替了$w_0$的待定系数。
+其中，C是修正以后代替了w0的待定系数。
 
 下面开始应用上面的三个约束条件，为了计算方便，我们将累加求和变为积分，利用约束(1)，令
 $$
-y=x-(\mu-\frac{w_1}{2w_2})
+y=x-\left(\mu-\frac{w_1}{2w_2}\right)
 $$
-，又由函数在整个实数域上可积，有
+，又由概率密度函数Pw(x)在整个实数域上可积，有
 $$
-\int_{-\infty}^{\infty}f(x)dx=\int_{-\infty}^{\infty}f(y)dy=C\sqrt{\frac{\pi}{-w_2}}=1\Rightarrow C=\sqrt{-\frac{w_2}{\pi}}
+\int_{-\infty}^{\infty}P_w(x)dx=\int_{-\infty}^{\infty}P'_w(y)dy=C\sqrt{\frac{\pi}{-w_2}}=1\Rightarrow C=\sqrt{-\frac{w_2}{\pi}}
 $$
-其中，f(x)是概率密度函数。
-
 利用约束(2)，又有
 $$
 \begin{aligned}
-&\int_{-\infty}^{\infty}xf(x)dx=\int_{-\infty}^{\infty}(y+\mu-\frac{w_1}{2w_2})f(y)dy=\mu\\
-\Rightarrow &\int_{-\infty}^{\infty}yf(y)dy=\frac{w_1}{2w_2}
+&\int_{-\infty}^{\infty}xP_w(x)dx=\int_{-\infty}^{\infty}\left(y+\left(\mu-\frac{w_1}{2w_2}\right)\right)p'_w(y)dy=\mu\\
+\Rightarrow &\int_{-\infty}^{\infty}yP'_w(y)dy=\frac{w_1}{2w_2}
 \end{aligned}
 $$
-由于$yf(y)$是个奇函数，故
+由于yP'w(y)是个奇函数，故
 $$
 \begin{aligned}
 &w_1=0\\
 &y=x-\mu\\
-&f(x)=C\ e^{w_2[x_i-(\mu-\frac{w_1}{2w_2})^2]}=\sqrt{-\frac{w_2}{\pi}}e^{w_2(x-\mu)^2}
+&P_w(x)=C\ e^{w_2[x_i-(\mu-\frac{w_1}{2w_2})^2]}=\sqrt{-\frac{w_2}{\pi}}e^{w_2(x-\mu)^2}
 \end{aligned}
 $$
 再利用约束(3)，有
 $$
 \begin{aligned}
-&\int_{-\infty}^{\infty}y^2f(y)dy=\sqrt{-\frac{w_2}{\pi}}\frac{\sqrt{\pi}}{2(-w_2)^{\frac{3}{2}}}=-\frac{1}{2w_2}=\sigma^2\\
+&\int_{-\infty}^{\infty}y^2P'_w(y)dy=\sqrt{-\frac{w_2}{\pi}}\frac{\sqrt{\pi}}{2(-w_2)^{\frac{3}{2}}}=-\frac{1}{2w_2}=\sigma^2\\
 \Rightarrow&w_2=-\frac{1}{2\sigma^2}
 \end{aligned}
 $$
 至此，可得
 $$
-P(x)=f(x)=\sqrt{-\frac{w_2}{\pi}}e^{w_2(x-\mu)^2}=-\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+P(x)=P_w(x)=\sqrt{-\frac{w_2}{\pi}}e^{w_2(x-\mu)^2}=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 $$
 这是什么分布？这就是正态分布啊，所以，正态分布其实就是满足均值和方差约束的熵最大的分布。就是说，当你只知道一堆数据的均值和方差时，你最好的假设模型就是正态分布了。
 
@@ -586,13 +588,13 @@ $$
 
 确定均值和方差下，正态分布就是熵最大，最混乱，最无序的分布。当我们不知道其他信息时，就认为正态分布是最佳的选择。
 
-具体来说：我们在实践中为何总是选择使用正态分布呢，正态分布在自然界中的频繁出现只是原因之一。Jaynes认为还有一个重要的原因是正态分布的最大熵性质。在很多时候我们并不知道数据的真实分布是什么，但是一个分布的均值和方差往往是相对稳定的。因此我们能从数据中获取到的比较好的知识就是均值和方差，除此之外没有其它更加有用的信息量。因此按照最大熵原理，我们应该选择在给定的知识的限制下，选择熵最大的概率分布，而这就恰好是正态分布。因此按照最大熵的原理，即便数据的真实分布不是正态分布，由于我们对真实分布一无所知，如果数据不能有效提供除了均值和方差之外的更多的知识，那这时候正态分布就是最佳的选择。
+具体来说：我们在实践中为何总是选择使用正态分布呢，正态分布在自然界中的频繁出现只是原因之一。Jaynes认为还有一个重要的原因是正态分布的最大熵性质。**在很多时候我们并不知道数据的真实分布是什么，但是一个分布的均值和方差往往是相对稳定的。因此我们能从数据中获取到的比较好的知识就是均值和方差，除此之外没有其它更加有用的信息量**。因此按照最大熵原理，我们应该选择在给定的知识的限制下，选择熵最大的概率分布，而这就恰好是正态分布。因此按照最大熵的原理，即便数据的真实分布不是正态分布，由于我们对真实分布一无所知，如果数据不能有效提供除了均值和方差之外的更多的知识，那这时候正态分布就是最佳的选择。
 
 平时因为我们测量时候最容易得到的数据也就是关于均值和协方差（关联）的有关信息，与这些有关的约束加上最大熵要求，不考虑更高阶的关联，一般都是得到正态分布。但是如果涉及到高阶矩，或者约束条件有些奇怪，则不能得到正态分布。
 
 ## 矩约束下的满足最大熵原理的分布是指数族分布
 
-其实，上面三个都可以归结为，在0阶矩、1阶矩、2阶矩等矩的约束下，满足最大熵原理的分布。而这些分布其实都是指数族分布。匈牙利数学家Csiszar曾经证明，对任何一组不自相矛盾的信息，最大熵模型不仅存在，而且是唯一的。而且它们都有同一个非常简单的形式 -- 指数函数。
+其实，上面三个都可以归结为，在0阶矩、1阶矩、2阶矩等矩的约束下，满足最大熵原理的分布。而这些分布其实都是指数族分布。匈牙利数学家Csiszar曾经证明，**对任何一组不自相矛盾的信息，最大熵模型不仅存在，而且是唯一的。而且它们都有同一个非常简单的形式 -- 指数函数**。
 
 均匀分布、指数分布、正态分布等分布都属于指数族分布。还有下面的分布都是满足约束的最大熵推导出来的指数族分布。
 
@@ -603,20 +605,20 @@ $$
 # 如何理解最大熵模型里面的特征
 
 1. 一般的最大熵模型中，特征不一定是0/1的，所以求和不一定是计数。当然，如果在一本教材中，最大熵模型的主要应用场合里特征是0/1的，那么还是点明求和就是计数比较好。
-2. 一组数据(x,y)一般情况下并不只触发一个特征。特征除了「x取特定值，y取特定值」的形式以外，还可以是「x取某类值，y取某类值」的形式，更一般的是「x和y的取值满足某种关系」的形式。正是这些一般形式的特征才让最大熵模型有足够的泛化能力。当一组数据不只触发一个特征的时候，exp内就不止一个权重求和，就求不出解析解了。
+2. 一组数据(x,y)一般情况下并不只触发一个特征。特征除了“x取特定值，y取特定值”的形式以外，还可以是“x取某类值，y取某类值”的形式，更一般的是“x和y的取值满足某种关系”的形式。正是这些一般形式的特征才让最大熵模型有足够的泛化能力。当一组数据不只触发一个特征的时候，exp内就不止一个权重求和，就求不出解析解了。
 
-对数线性模型对特征的表达描述的是与的相关性，而“等于”只是相关性的一种。同一个可以满足不同的相关性，从而贡献到不同的上去；同一个也可能被不同的激活。
+对数线性模型对特征的表达fi(x,y)描述的是x与y的相关性，而“等于”只是相关性的一种。同一个(x,y)可以满足不同的相关性，从而贡献到不同的fi(x,y)上去；同一个fi(x,y)也可能被不同的(x,y)激活。
 
 拿情感分类举个栗子：
 $$
-x=\{'I','am','not','happy'\},y=-1
+x=\{'\text{I}','\text{am}','\text{not}','\text{happy}'\},y=-1
 $$
 如果“关系”仅仅是“相等”，只能建立这样的特征：
 $$
 f_1(x,y)=
 \left\{\begin{matrix}
-1&,\ if\ x=\{'I','am','not','happy'\}\ and\ y=-1\\ 
-0&,\ others\\
+1&,\ \text{if}\ x=\{'\text{I}','\text{am}','\text{not}','\text{happy}'\}\ \text{and}\ y=-1\\ 
+0&,\ \text{others}\\
 \end{matrix}\right.
 $$
 很显然，把一个句子固定死了，特征的泛化能力不行啊
@@ -625,54 +627,54 @@ $$
 $$
 f_2(x,y)=
 \left\{\begin{matrix}
-1&,\ if\ x[2]='not'\ and\ x[3]='happy'\ and\ y=-1\\ 
-0&,\ others\\
+1&,\ \text{if}\ x[2]='\text{not}'\ \text{and}\ x[3]='\text{happy}'\ \text{and}\ y=-1\\ 
+0&,\ \text{others}\\
 \end{matrix}\right.
 $$
 也可以：
 $$
 f_3(x,y)=
 \left\{\begin{matrix}
-1&,\ if\ x[2]='not'\ and\ x[3]\in \text{PositiveWords}\ and\ y=-1\\ 
-0&,\ others\\
+1&,\ \text{if}\ x[2]='\text{not}'\ \text{and}\ x[3]\in \text{PositiveWords}\ \ \text{and}\ y=-1\\ 
+0&,\ \text{others}\\
 \end{matrix}\right.
 $$
-相比$f_1(x,y)$，更好的特征应该是$f_3(x,y)$。
+相比f1(x,y)，更好的特征应该是f3(x,y)。
 
 你也可以把上面的特征都用上。让大量特征参与进来，也正是对数线性模型的妙处。这时就需要数值计算了。
 
 事实上，解法的选取影响到特征的定义。早先的[Darroch-Ratcliff过程](Darroch J N, Ratcliff D. Generalized Iterative Scaling for Log-Linear Models[J]. Annals of Mathematical Statistics, 1972, 43(5):1470-1480.)，要求
 $$
-\sum_if_i(x,y)=1\ \ for\ all\ x,y
+\sum_if_i(x,y)=1\ \ \text{for all x,y}
 $$
 ，后来改进的[Improved Iterative Scaling](Berger A L, Pietra V J D, Pietra S A D. A maximum entropy approach to natural language processing[J]. Computational Linguistics, 2002, 22(1):39-71.)在此基础上融入了牛顿方法处理
 $$
 f^{\text{+}}(x,y)=\sum_if_i(x,y)
 $$
-非常数的情况，只需$f_i(x,y)\geqslant0$即可。
+非常数的情况，只需fi(x,y)≥0即可。
 
 # 最大熵模型的极大似然估计
 
 最大熵就是下式表示的条件概率分布。
 $$
-P_w(y|x)=\frac{1}{Z_w(x)}exp(w^T\cdot f(x,y))
+P_w(y|x)=\frac{1}{Z_w(x)}\text{exp}(w^T\cdot f(x,y))
 $$
 其中，
 $$
 \begin{aligned}
-&Z_w(x)=\sum_{y}exp(w^T\cdot f(x,y))\\
+&Z_w(x)=\sum_{y}\text{exp}(w^T\cdot f(x,y))\\
 &w=[w_1, w_2,...,w_n]^T\\
 &f(x,y)=[f_1(x,y),f_2(x,y),...,f_n(x,y)]^T\\
 \end{aligned}
 $$
 下面证明对偶函数的极大化等价于最大熵模型的极大斯然估计。
 
-已知训练数据的经验概率分布$\tilde P(X,Y)$，条件概率分布$P(Y|X)$的对数似然函数表示为(如果你看不懂这里的对数似然函数为什么是指数形式，请看本小小节的最后的解释)
+已知训练数据的经验概率分布$\tilde P(X,Y)$，条件概率分布P(Y|X)的对数似然函数表示为(如果你看不懂这里的对数似然函数为什么是指数形式，请看本小节的最后的解释)
 $$
-L_{\tilde P}(P_w)=\text{log}\prod P(y|x)^{\tilde P(x,y)}=\sum_{x,y}\tilde P(x,y)log P(y|x)
+L_{\tilde P}(P_w)=\text{log}\prod P(y|x)^{\tilde P(x,y)}=\sum_{x,y}\tilde P(x,y)\text{log} P(y|x)
 $$
 
-当条件概率分布$P(y|x)$是最大熵模型时，对数似然函数
+当条件概率分布P(y|x)是最大熵模型时，对数似然函数
 $$
 \begin{aligned}
 L_{\tilde P}(P_w)&=\sum_{x,y}\tilde P(x,y)log P(y|x)\\
@@ -680,22 +682,20 @@ L_{\tilde P}(P_w)&=\sum_{x,y}\tilde P(x,y)log P(y|x)\\
 &=\sum_{x,y}\tilde P(x,y)[w^T\cdot f(x,y)]-\sum_{x}\tilde P(x)logZ_w(x)\\
 \end{aligned}
 $$
-再看对偶函数$\Psi(w)$，
+再看对偶函数Ψ(w)，
 $$
 \begin{aligned}
 \Psi(w)=&L(P_w,w)\\
-=&\sum_{x,y}\tilde P(x)P_w(y|x)logP_w(y|x)\\
+=&\sum_{x,y}\tilde P(x)P_w(y|x)\text{log}P_w(y|x)\\
 &+\sum_{i=1}^nw_i\left[\sum_{x,y}\tilde P(x,y)f_i(x,y)-\sum_{x,y}\tilde P(x)P(y|x)f_i(x,y)\right]\\
-=&\sum_{x,y}\tilde P(x,y)\sum_{i=1}^nw_if_i(x,y)+\sum_{x,y}\tilde P(x)P_w(y|x)\left[logP_w(y|x)-\sum_{i=1}^nw_if_i(x,y)\right]\\
-=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]+\sum_{x,y}\tilde P(x)P_w(y|x)\left[logP_w(y|x)-w^T\cdot f(x,y)\right]\\
-=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]+\sum_{x,y}\tilde P(x)P_w(y|x)\left[logP_w(y|x)-loge^{w^T\cdot f(x,y)}\right]\\
-=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x,y}\tilde P(x)P_w(y|x)logZ_w(x)\\
-=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x}\tilde P(x)logZ_w(x)\\
+=&\sum_{x,y}\tilde P(x,y)\sum_{i=1}^nw_if_i(x,y)+\sum_{x,y}\tilde P(x)P_w(y|x)\left[\text{log}P_w(y|x)-\sum_{i=1}^nw_if_i(x,y)\right]\\
+=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]+\sum_{x,y}\tilde P(x)P_w(y|x)\left[\text{log}P_w(y|x)-w^T\cdot f(x,y)\right]\\
+=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]+\sum_{x,y}\tilde P(x)P_w(y|x)\left[\text{log}P_w(y|x)-\text{log}e^{w^T\cdot f(x,y)}\right]\\
+=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x,y}\tilde P(x)P_w(y|x)\text{log}Z_w(x)\\
+=&\sum_{x,y}\tilde P(x,y)\left[w^T\cdot f(x,y)\right]-\sum_{x}\tilde P(x)\text{log}Z_w(x)\quad \text{since} \sum P(y|x)=1\\
 \end{aligned}
 $$
-其中，最后一步用到了$\sum P(y|x)=1$。
-
-比较上两式，我们发现，对偶函数$Psi(w)$等价于对数似然函数$L_{\tilde P}(P_w)$，即
+比较上两式，我们发现，对偶函数Ψ(w)等价于对数似然函数$L_{\tilde P}(P_w)$，即
 $$
 \Psi(w)=L_{\tilde P}(P_w)
 $$
@@ -703,7 +703,7 @@ $$
 
 这样，最大熵模型的学习问题就转换为具体求解对数似然函数极大化或对偶函数极大化的问题。
 
-且根据MLE的正确性，可以断定：最大熵的解（无偏的对待不确定性）同时是最符合样本数据分布的解，进一步证明了最大熵模型的合理性。两相对比，熵是表示不确定性的度量，似然表示的是与知识的吻合程度，进一步，最大熵模型是对不确定度的无偏分配，最大似然估计则是对知识的无偏理解。
+且根据MLE的正确性，可以断定：**最大熵的解（无偏的对待不确定性）同时是最符合样本数据分布的解，进一步证明了最大熵模型的合理性**。两相对比，**熵是表示不确定性的度量，而似然表示的是与知识的吻合程度**，进一步，**最大熵模型是对不确定度的无偏分配，最大似然估计则是对知识的无偏理解**。
 
 
 
@@ -713,7 +713,7 @@ $$
 
 **这里的对数似然函数为什么是指数形式？**
 
-最近在学习最大熵模型，看到极大似然估计这部分，没有看明白条件概率分布p(y|x)p(y|x)的对数似然函数。上网查了很多资料都没有一个合理的解释。基本直接给出对数似然函数的一般形式: 
+最近在学习最大熵模型，看到极大似然估计这部分，没有看明白条件概率分布p(y|x)的对数似然函数。上网查了很多资料都没有一个合理的解释。基本直接给出对数似然函数的一般形式: 
 $$
 L_{\tilde P}(P_w)=\text{log}\prod P(y|x)^{\tilde P(x,y)}=\sum_{x,y}\tilde P(x,y)log P(y|x)
 $$
@@ -723,7 +723,7 @@ $$
 $$
 L(x_1,x_2,...,x_n;\theta)=\prod_{i=1}^np(x_i;\theta)
 $$
-其实这个公式和上式是等价的。$x_1,x_2,...,x_n$是样本具体观测值。随机变量X是离散的，所以它的取值范围是一个集合，假设样本集的大小为n，X的取值有k个，分别是$v_1,v2,...,v_k$。用$C(X=v_i)$表示在观测值中样本$v_i$出现的频数。所以L(x1,x2,...,xn;θ)可以表示为： 
+其实这个公式和上式是等价的。x1,x2,...,xn是样本具体观测值。随机变量X是离散的，所以它的取值范围是一个集合，假设样本集的大小为n，X的取值有k个，分别是v1,v2,...,vk。用C(X=v_i)表示在观测值中样本vi出现的频数。所以L(x1,x2,...,xn;θ)可以表示为： 
 $$
 L(x1,x2,...,x_n;\theta)=\prod_{i=1}^kp(v_i;\theta)^{C(X=v_i)}
 $$
@@ -739,11 +739,11 @@ $$
 $$
 L(x_1,x_2,...,x_n;\theta)^{\frac{1}{n}}=\prod_xp(x;\theta)^{\hat p(x)}
 $$
-很明显对L(x1,x2,...,xn;θ)求最大值和对$L(x_1,x_2,...,x_n;\theta)^{\frac{1}{n}}$求最大值的优化的结果是一样的。整理上式所以最终的最大似然函数可以表示为： 
+很明显对L(x1,x2,...,xn;θ)求最大值和对L开n次方后求最大值的优化的结果是一样的。整理上式所以最终的最大似然函数可以表示为： 
 $$
 L(x;\theta)=\prod_xp(x;\theta)^{\hat p(x)}
 $$
-忽略$\theta$，更一般的公式就是本文的第一个公式。而最大熵的对数似然函数为：
+忽略θ，更一般的公式就是本文的第一个公式。而最大熵的对数似然函数为：
 $$
 \begin{aligned}
 L_{\hat p}&=\text{log}\prod_{x,y}p(x,y)^{\hat p(x,y)}\\
@@ -757,8 +757,6 @@ $$
 L_{\hat p}=\sum_{x,y}\hat p(x,y)\text{log}\ p(y|x)
 $$
 上式就是最大熵模型中用到的对数似然函数。
-
-
 
 # 最大熵模型学习算法：IIS
 

@@ -497,7 +497,7 @@ $$
 
 # 各种熵之间关系的文氏图
 
-![Venn-diagram-of-entropy](pic/Venn-diagram-of-entropy.png)
+![Venn-diagram-of-entropy](pic/venn-diagram-of-entropy.png)
 
 整理得到的等式
 
