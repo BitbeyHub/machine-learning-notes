@@ -133,7 +133,7 @@ $$
 $$
 \begin{aligned}
 &p^*(x) = \text{arg}\ \mathop{\text{max}}_{p(x)}\ -\sum_x p(x)\log p(x)\\
-&\text{s.t.}\ \ \sum\limits_x p(x)\phi(x) = \hat{\mu}\ \ \  \text{注：}\phi(x)\text{和}\hat{\mu}\text{是向量}\\
+&\text{s.t.}\ \ \sum\limits_x p(x)\phi(x) = \hat{\mu}\ \ \  \text{注:}\phi(x)\text{和}\hat{\mu}\text{是向量}\\
 &\quad \quad \sum\limits_x p(x) = 1\\
 \end{aligned}
 $$
@@ -141,7 +141,7 @@ $$
 $$
 \begin{aligned}
 &\text{min}\ -H(p)=\sum_x p(x)\log p(x)\\
-&\text{s.t.}\ \ \sum\limits_x p(x)\phi(x) = \hat{\mu}\ \ \  \text{注：}\phi(x)\text{和}\hat{\mu}\text{是向量}\\
+&\text{s.t.}\ \ \sum\limits_x p(x)\phi(x) = \hat{\mu}\ \ \  \text{注:}\phi(x)\text{和}\hat{\mu}\text{是向量}\\
 &\quad \quad \sum\limits_x p(x) = 1\\
 \end{aligned}
 $$
@@ -664,7 +664,7 @@ $$
 
 ### 最大熵模型
 
-用最大熵推导时不需要费力猜测sigmod函数的形式是什么，只需要满足平衡方程的约束，就能推导出$\pi()​$的公式。
+用最大熵推导时不需要费力猜测sigmod函数的形式是什么，只需要满足平衡方程的约束，就能推导出$\pi()$的公式。
 
 我们这里假设$\pi()$需要满足下面的约束：
 $$
