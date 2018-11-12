@@ -63,7 +63,6 @@
 
 * [机器学习概论](machine-learning/machine-learning-introduction/machine-learning-introduction.md)
 * [特征工程](machine-learning/feature-engineering/feature-engineering.md)
-  * [主成分分析PCA](machine-learning/feature-engineering/principal-component-analysis.md)
 * [感知机](machine-learning/perceptron/perceptron.md)
 * [k近邻](machine-learning/k-nearest-neighbor/k-nearest-neighbor.md)
 * [朴素贝叶斯](machine-learning/naive-bayes/naive-bayes.md)
