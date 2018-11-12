@@ -259,7 +259,7 @@ $$
 $$
 ，将log p(θ)与log p(D|θ)代入式子后，我们有
 $$
-\log p(\theta|D) = \eta'^T \begin{bmatrix} \theta \\ A(\theta) \end{bmatrix} + \text{const}
+\log p(\theta|D) = {\eta'}^T \begin{bmatrix} \theta \\ A(\theta) \end{bmatrix} + \text{const}
 $$
 ，其中
 $$
