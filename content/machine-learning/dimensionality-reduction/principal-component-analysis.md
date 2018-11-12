@@ -1,7 +1,7 @@
-# 主成分分析PCA
+# PCA主成分分析
 
-* [返回顶层目录](../../SUMMARY.md#目录)
-* [返回上层目录](feature-engineering.md)
+* [返回顶层目录](../../SUMMARY.md)
+* [返回上层目录](dimensionality-reduction.md)
 
 
 

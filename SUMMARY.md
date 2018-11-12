@@ -71,7 +71,6 @@
 
 * [机器学习概论](content/machine-learning/machine-learning-introduction/machine-learning-introduction.md)
 * [特征工程](content/machine-learning/feature-engineering/feature-engineering.md)
-    * [主成分分析PCA](content/machine-learning/feature-engineering/principal-component-analysis.md)
 * [感知机](content/machine-learning/perceptron/perceptron.md)
 * [k近邻](content/machine-learning/k-nearest-neighbor/k-nearest-neighbor.md)
 * [朴素贝叶斯](content/machine-learning/naive-bayes/naive-bayes.md)
@@ -94,6 +93,9 @@
             * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
             * [XGBoost](content/machine-learning/ensemble-learning/XGBoost.md)
     * Stacking
+* [降维](content/machine-learning/dimensionality-reduction/dimensionality-reduction.md)
+    * [PCA主成分分析](content/machine-learning/dimensionality-reduction/principal-component-analysis.md)
+    * [流形学习](content/machine-learning/dimensionality-reduction/manifold-learning.md)
 * [EM算法](content/machine-learning/expectation-maximization-algorithm/expectation-maximization-algorithm.md)
 * [HMM隐马尔科夫模型](content/machine-learning/hidden-markov-model/hidden-markov-model.md)
 * [CRF条件随机场](content/machine-learning/conditional-random-field/conditional-random-field.md)

@@ -88,6 +88,10 @@
       - [GBDT](machine-learning/ensemble-learning/GBDT.md)
       - [XGBoost](machine-learning/ensemble-learning/XGBoost.md)
   * Stacking
+* [降维](machine-learning/dimensionality-reduction/dimensionality-reduction.md)
+
+  * [PCA主成分分析](machine-learning/dimensionality-reduction/principal-component-analysis.md)
+  * [流形学习](machine-learning/dimensionality-reduction/manifold-learning.md)
 * [EM算法](machine-learning/expectation-maximization-algorithm/expectation-maximization-algorithm.md)
 * [HMM隐马尔科夫模型](machine-learning/hidden-markov-model/hidden-markov-model.md)
 * [CRF条件随机场](machine-learning/conditional-random-field/conditional-random-field.md)

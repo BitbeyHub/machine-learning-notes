@@ -1,7 +1,6 @@
 # 特征工程
 
 * [返回顶层目录](../../SUMMARY.md#目录)
-* [主成分分析](principal-component-analysis.md)
 
 
 
