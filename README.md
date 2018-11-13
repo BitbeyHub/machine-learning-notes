@@ -2,13 +2,21 @@
 
 欢迎来到芦苇的机器学习笔记！
 
-
+---
 
 请点击GitBook目录阅读：
 
 ## [《GitBook》目录](https://luweikxy.gitbooks.io/machine-learning-notes/content/content/SUMMARY.html)
 
 ps：如果打不开GitBook，则可能需要翻墙，或者阅读GitHub（但GitHub不会显示公式）。
+
+---
+
+想从微信公众号阅读请关注我的公众号：
+
+![weixin_gongzhonghao](content/perface/machine-learning-perface/pic/weixin_gongzhonghao.jpg)
+
+---
 
 查看源文件目录请点击：
 
