@@ -36,6 +36,7 @@
     - [Lasso Regression](#Lasso Regression)
     - [Elastic Net Regression](#Elastic Net Regression)
     - [贝叶斯观点正则化总结](#贝叶斯观点正则化总结)
+  - [L1和L2正则化的异同](#L1和L2正则化的异同)
   - [正则化技术总结](#正则化技术总结)
 - [模型评估方法](#模型评估方法)
   - [留出法](#留出法)
@@ -584,6 +585,7 @@ $$
 
 
 
+
 下面将从直观分析和理论推导两个角度来说明L1、L2正则化的效果。
 
 ### L2正则化直观理解
@@ -800,9 +802,6 @@ $$
 
 
 
-
-
-
 这就是L1正则化的效果。
 
 **L1正则化会使得一些w分量变为0，此时该分量对应的特征便不再有效了，造成的结果是特征空间的稀疏性。所以L1有的时候会被用来做特征选择。**
@@ -881,13 +880,13 @@ $$
 
 **”数据样本点数目p>数据维度n“问题以及维度选择 **
 
-- p$\approx$10000并且n<100。一个典型的“少数据样本点n，高数据维度p”问题(West et al. 2001)。
+- p≈10000并且n<100。一个典型的“少数据样本点n，高数据维度p”问题(West et al. 2001)。
 
 在这个时候，我们可以对参数w引入**先验分布**，降低模型复杂度。
 
 ### Ridge Regression
 
-> **我们对参数w引入协方差为$\alpha$的零均值高斯先验。**
+> **我们对参数w引入协方差为α的零均值高斯先验。**
 
 $$
 \begin{aligned}
@@ -914,7 +913,7 @@ $$
 
 ![weight_log_density](pic/weight_log_density.jpg)
 
-看我们得到的参数，在零附近是不是很密集，老实说，ridge regression并不具有产生**稀疏解**的能力，也就是说参数并不会真出现很多零。假设我们的预测结果与两个特征相关，L2正则倾向于综合两者的影响，给影响大的特征赋予**高的权重**；而L2正则倾向于选择影响较大的参数，而舍弃掉影响较小的那个。实际应用中L2正则表现往往会优于L1正则，但L2正则会大大降低我们的**计算量**。
+看我们得到的参数，在零附近是不是很密集，老实说，ridge regression并不具有产生**稀疏解**的能力，也就是说参数并不会真出现很多零。假设我们的预测结果与两个特征相关，L2正则倾向于综合两者的影响，给影响大的特征赋予**高的权重**；而L1正则倾向于选择影响较大的参数，而舍弃掉影响较小的那个。实际应用中L2正则表现往往会优于L1正则，但L1正则会大大降低我们的**计算量**。
 
 > Typically ridge or ℓ2 penalties are **much better** for minimizing prediction error rather than ℓ1 penalties. The reason for this is that when two predictors are highly correlated, ℓ1 regularizer will simply pick one of the two predictors. In contrast, the ℓ2 regularizer will keep both of them and jointly shrink the corresponding coefficients a little bit. Thus, while the ℓ1 penalty can certainly reduce overfitting, you may also experience a loss in predictive power.
 
@@ -950,7 +949,7 @@ $$
 w_{\text{MAP}_{\text{Laplace}}}=\text{arg }\mathop{\text{min}}_w\left( \frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^m(y^{(i)}-w^Tx^{(i)})^2+\frac{1}{b}\left \| w \right \|_1 \right)
 $$
 
-> **我们对参数w引入尺度参数为b的零均值高斯先验。**
+> **我们对参数w引入尺度参数为b的零均值拉普拉斯先验。**
 
 $$
 \begin{aligned}
@@ -1025,6 +1024,21 @@ $$
 正则化参数等价于对参数引入**先验分布**，使得**模型复杂度**变小（缩小解空间），对于噪声以及异常值的鲁棒性（泛化能力）增强。整个最优化问题从贝叶斯观点来看是一种贝叶斯最大后验估计，其中正则化项对应后验估计中的**先验信息**，损失函数对应后验估计中的似然函数，两者的乘积即对应贝叶斯最大后验估计的形式。
 
 这篇文章[《Lazy Sparse Stochastic Gradient Descent for Regularized Mutlinomial Logistic Regression》](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=BFEF7AF6F95524A8DD0B8BBA565D4EDD?doi=10.1.1.177.3514&rep=rep1&type=pdf)还讲了线性回归正则化和数据先验分布的关系的理论推导到算法实现，除了高斯先验、拉普拉斯先验，还讲了其他先验。
+
+## L1和L2正则化的异同
+
+**1. L2 regularizer** ：使得模型的解偏向于norm较小的W，通过限制W的norm的大小实现了对模型空间的限制，从而在一定程度上避免了overfitting 。不过ridge regression并不具有产生稀疏解的能力，得到的系数仍然需要数据中的所有特征才能计算预测结果，从计算量上来说并没有得到改观。
+**2. L1 regularizer** ： 它的优良性质是能产生稀疏性，导致W中许多项变成零。 稀疏的解除了计算量上的好处之外，更重要的是更具有“可解释性”。
+
+这两种方法的**共同点**在于，将**解释变量的系数**加入到Cost Function中，并对其进行最小化，本质上是**对过多的参数实施了惩罚**。
+
+而两种方法的**区别**在于**惩罚函数不同**。但这种微小的区别却使LASSO有很多优良的特质（可以同时选择和缩减参数）。
+
+**岭回归的一个缺点**：在建模时，同时引入p个预测变量，罚约束项可以收缩这些预测变量的待估系数**接近0**,但并非恰好是0（除非lambda为无穷大）。这个缺点对于模型精度影响不大，但给模型的解释造成了困难。这个缺点可以由lasso来克服。(所以岭回归虽然减少了模型的复杂度，并没有真正解决变量选择的问题) 。
+
+可以看到，L1-ball与L2-ball的不同就在于L1在和每个坐标轴相交的地方都有“角”出现，而目标函数的等高线除非位置摆得非常好，大部分时候都会在角的地方相交。注意到在角的位置就会产生稀疏性，例如图中的相交点就有w1=0，而更高维的时候（想象一下三维的L1-ball 是什么样的？）除了角点以外，还有很多边的轮廓也是既有很大的概率成为第一次相交的地方，又会产生稀疏性。
+
+ L2正则项作用是限制权重W过大，且使得权重W分布均匀。而L1正则项倾向于得到离散的W，各W之间差距较大。
 
 ## 正则化技术总结
 
