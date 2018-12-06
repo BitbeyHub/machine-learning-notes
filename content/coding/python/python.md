@@ -1,6 +1,6 @@
 # python
 
-* [返回顶层目录](../../SUMMARY.md#目录)
+* [返回顶层目录](../../SUMMARY.md)
 * [关于python](#关于python)
 * [python语法](python-grammar.md)
 * [numpy](numpy.md)

@@ -66,6 +66,8 @@
     * [matplotlib](content/coding/python/matplotlib.md)
     * [python基础综合实践](content/coding/python/python-basic-comprehensive-practice.md)
     * [scikit-learn](content/coding/python/scikit-learn.md)
+* [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
+    * [数据结构与算法概论](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction.md)
 
 ---
 
@@ -133,5 +135,11 @@
 * [深度强化学习](content/reinforcement-learning/deep-reinforcement-learning/deep-reinforcement-learning.md)
 * [基于模型的强化学习](content/reinforcement-learning/model-based-reinforcement-learning/model-based-reinforcement-learning.md)
 * [强化学习前景](content/reinforcement-learning/reinforcement-learning-prospect/reinforcement-learning-prospect.md)
+
+# 机器学习应用
+
+* [自然语言处理](content/machine-learning-application/natural-language-processing/natural-language-processing.md)
+* [推荐系统](content/machine-learning-application/recommender-systems/recommender-systems.md)
+
 
 
