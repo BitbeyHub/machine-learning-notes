@@ -45,6 +45,9 @@
   * [随机梯度下降SGD](mathematics/numerical-calculation-and-optimization/stochastic-gradient-desent.md)
   * [等式约束的拉格朗日乘子法](mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
   * [凸优化](mathematics/numerical-calculation-and-optimization/convex-optimization.md)
+* [概率图模型](mathematics/probability-graphical-model/probability-graphical-model.md)
+  - [概率图模型概论](mathematics/probability-graphical-model/probability-graphical-model-introduction.md)
+  - [概率图简介](mathematics/probability-graphical-model/probability-graph-introduction.md)
 ---
 
 #编程基础

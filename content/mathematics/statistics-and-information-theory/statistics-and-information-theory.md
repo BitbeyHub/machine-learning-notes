@@ -1,4 +1,4 @@
-# 概率与信息论
+# 概率论
 
 * [返回顶层目录](../../content/SUMMARY.md#目录)
 * [综述概率论基本定义](review-of-statistics.md)
@@ -6,8 +6,6 @@
 * [贝叶斯概率](bayes-probability.md)
 * [概率符号说明](probability-symbol-explaination.md)
 * [共轭先验](conjugate-prior.md)
-* [概率图模型](probability-graphical-model.md)
-* [信息论](information-theory.md)
 
 
 

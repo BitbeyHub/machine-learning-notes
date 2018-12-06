@@ -1,7 +1,7 @@
 # 概率图模型
 
 - [返回顶层目录](../../SUMMARY.md)
-- [返回上层目录](statistics-and-information-theory.md)
+- [概率图模型简介](probability-graphical-model-introduction.md)
 
 =================================
 
