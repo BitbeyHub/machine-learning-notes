@@ -138,8 +138,15 @@
 
 # 机器学习应用
 
-* [自然语言处理](content/machine-learning-application/natural-language-processing/natural-language-processing.md)
-* [推荐系统](content/machine-learning-application/recommender-systems/recommender-systems.md)
+## 自然语言处理
+
+* [自然语言处理概论](content/machine-learning-application/natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
+
+* [word2vec](content/machine-learning-application/natural-language-processing/word2vec/word2vec.md)
+
+## 推荐系统
+
+* [推荐系统概论](content/machine-learning-application/recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
 
 
 
