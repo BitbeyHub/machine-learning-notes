@@ -2,7 +2,27 @@
 
 * [返回顶层目录](../../../SUMMARY.md)
 
+http://suhui.github.io/word2vec
 
+http://pskun.github.io/machine%20learning/word2vec-source-code-analysis.html
+
+https://zhuanlan.zhihu.com/p/40557458
+
+https://zhuanlan.zhihu.com/p/40558913
+
+http://jacoxu.com/word2vector/
+
+https://blog.csdn.net/lingerlanlan/article/details/38232755
+
+https://blog.csdn.net/mpk_no1/article/details/72458003
+
+https://blog.csdn.net/leiting_imecas/article/details/72303044
+
+https://blog.csdn.net/google19890102/article/details/51887344
+
+https://blog.csdn.net/jingquanliang/article/details/82886645
+
+https://www.processon.com/diagraming/5c3f5691e4b08a7683aa7ac5
 
 # 前言
 
@@ -105,6 +125,28 @@
 
 
 
+### 统计语言模型
+
+
+
+
+
+### n-gram模型
+
+
+
+
+
+### 神经概率语言模型
+
+
+
+### 词向量的理解
+
+
+
+
+
 
 
 
@@ -113,9 +155,17 @@
 
 
 
+
+
+**使用哈夫曼树的作用**：如果不适用哈夫曼树，而是直接从隐层计算每一个输出的概率——即传统的Softmax，则需要对词汇表V中的每一个词都计算一遍概率，这个过程的时间复杂度是O|V|，而如果使用了哈夫曼树，则时间复杂度就降到了O(log2(|V|))。另外，由于哈夫曼树的特点，词频高的编码短，这样就更加快了模型的训练过程。
+
+
+
 ## 基于Negative Sampling的模型
 
 
+
+其实，上面介绍的CBOW和Skip-gram模型就是在Hierarchical Softmax方法下实现的，还记得我们一开始提到的还有一种Negative Sampling方法么，这种方法也叫作负采样方法。从上面我们可以看出，无论是CBOW还是Skip-gram模型，其实都是分类模型。对于机器学习中的分类任务，在训练的时候不但要给正例，还要给负例。对于Hierarchical Softmax来说，负例其实就是哈夫曼树的根节点。对于Negative Sampling，负例是随机挑选出来的。据说Negative Sampling能提高速度、改进模型质量。
 
 ## 若干源码细节
 
@@ -212,13 +262,81 @@
 
 ## 初始化网络结构
 
+有了以上的对词的处理，就已经处理好了所有的训练样本，此时，便可以开始网络结构的初始化和接下来的网络训练。网络的初始化的过程在InitNet()函数中完成。
 
+### 初始化网络参数
 
+在初始化的过程中，主要的参数包括词向量的初始化和映射层到输出层的权重的初始化，如下图所示：
 
+![init_net](pic/init_net.bmp)
+
+在初始化的过程中，映射层到输出层的权重都初始化为0，而对于每一个词向量的初始化，作者的初始化方法如下代码所示：
+
+```c
+for (a = 0; a < vocab_size; a++) for (b = 0; b < layer1_size; b++) {
+    next_random = next_random * (unsigned long long)25214903917 + 11;
+    // 1、与：相当于将数控制在一定范围内
+    // 2、0xFFFF：65536
+    // 3、/65536：[0,1]之间
+    syn0[a * layer1_size + b] = (((next_random & 0xFFFF) / (real)65536) - 0.5) / layer1_size;// 初始化词向量
+}
+```
+
+首先，生成一个很大的next_random的数，通过与“0xFFFF”进行与运算截断，再除以65536得到\[0,1\]之间的数，最终，得到的初始化的向量的范围为：\[−0.5/m,0.5/m\]，其中，m为词向量的长度。
+
+### Huffman树的构建
+
+在层次Softmax中需要使用到Huffman树以及Huffman编码，因此，在网络结构的初始化过程中，也需要初始化Huffman树。在生成Huffman树的过程中，首先定义了3个长度为vocab_size\*2+1的数组：
+
+```c
+long long *count = (long long *)calloc(vocab_size * 2 + 1, sizeof(long long));
+long long *binary = (long long *)calloc(vocab_size * 2 + 1, sizeof(long long));
+long long *parent_node = (long long *)calloc(vocab_size * 2 + 1, sizeof(long long));
+```
+
+其中，count数组中前vocab_size存储的是每一个词的对应的词频，后面初始化的是很大的数，已知词库中的词是按照降序排列的，因此，构建Huffman树的过程如下所示（对于Huffman树的原理，可以参见博文“[数据结构和算法——Huffman树和Huffman编码](http://blog.csdn.net/google19890102/article/details/54848262)”）：
+
+![CreateBinaryTree-huffman-tree-construction](pic/CreateBinaryTree-huffman-tree-construction.bmp)
+
+首先，设置两个指针pos1和pos2，分别指向最后一个词和最后一个词的后一位，从两个指针所指的数中选出最小的值，记为min1i，如果pos1所指的值最小，则此时将pos1左移，再比较pos1和pos2所指的数，选择出最小的值，记为min2i，将它们的和存储到pos2所指的位置。并将此时pos2所指的位置设置为min1i和min2i的父节点，同时，记min2i所指的位置的编码为1，如下代码所示：
+
+```c
+// 设置父节点
+parent_node[min1i] = vocab_size + a;
+parent_node[min2i] = vocab_size + a;
+binary[min2i] = 1;// 设置一个子树的编码为1
+```
+
+构建好Huffman树后，此时，需要根据构建好的Huffman树生成对应节点的Huffman编码。假设，上述的数据生成的最终的Huffman树为：
+
+![CreateBinaryTree-Huffman-tree-example](pic/CreateBinaryTree-Huffman-tree-example.bmp)
+
+此时，count数组，binary数组和parent_node数组分别为：
+
+![CreateBinaryTree-huffman-tree-count-binary-parent-node](pic/CreateBinaryTree-huffman-tree-count-binary-parent-node.bmp)
+
+在生成Huffman编码的过程中，针对每一个词（词都在叶子节点上），从叶子节点开始，将编码存入到code数组中，如对于上图中的“R”节点来说，其code数组为{1,0}，再对其反转便是Huffman编码：
+
+```c
+vocab[a].codelen = i;// 词的编码长度
+vocab[a].point[0] = vocab_size - 2;
+for (b = 0; b < i; b++) {
+    vocab[a].code[i - b - 1] = code[b];// 编码的反转
+    vocab[a].point[i - b] = point[b] - vocab_size;// 记录的是从根结点到叶子节点的路径
+}
+```
+
+注意：这里的Huffman树的构建和Huffman编码的生成过程写得比较精简。
 
 ## 多线程模型训练
 
 
+
+# TensorFlow上构建Word2Vec词嵌入模型
+
+- [在TensorFlow上构建Word2Vec词嵌入模型](https://zhuanlan.zhihu.com/p/42067012)
+
+本文详细介绍了 word2vector 模型的模型架构，以及 TensorFlow 的实现过程，包括数据准备、建立模型、构建验证集，并给出了运行结果示例。
 
 
 
@@ -232,6 +350,10 @@
 
 "word2vec源码解析"一节主要参考此文章。
 
+* [深度学习笔记——Word2vec和Doc2vec原理理解并结合代码分析](https://blog.csdn.net/mpk_no1/article/details/72458003)
+
+从此文知道了Huffman树的作用和HS的负反馈就是其哈夫曼树的根结点。
+
 * [word2vec之源码注释](http://suhui.github.io/word2vec)
 * [基于深度学习的自然语言处理（Word2vec源码分析-2上）](https://zhuanlan.zhihu.com/p/40557458)
 * [基于深度学习的自然语言处理（Word2vec源码分析-2下）](https://zhuanlan.zhihu.com/p/40558913)
@@ -244,6 +366,26 @@
 * [word2vec使用说明](http://jacoxu.com/word2vector/)
 
 这是word2vec的使用说明。
+
+
+
+---
+
+http://suhui.github.io/word2vec
+http://pskun.github.io/machine%20learning/word2vec-source-code-analysis.html
+https://zhuanlan.zhihu.com/p/40557458
+https://zhuanlan.zhihu.com/p/40558913
+http://jacoxu.com/word2vector/
+https://blog.csdn.net/lingerlanlan/article/details/38232755
+https://blog.csdn.net/google19890102/article/details/51887344
+https://blog.csdn.net/jingquanliang/article/details/82886645
+https://www.processon.com/diagraming/5c3f5691e4b08a7683aa7ac5
+
+https://blog.csdn.net/lingerlanlan/article/details/38232755
+https://blog.csdn.net/mpk_no1/article/details/72458003
+https://blog.csdn.net/leiting_imecas/article/details/72303044
+https://www.zhihu.com/question/21661274
+https://blog.csdn.net/zwwhsxq/article/details/77200129
 
 
 

@@ -6,6 +6,11 @@
 
 
 
+1
+
+[真正的完全图解Seq2Seq Attention模型](https://zhuanlan.zhihu.com/p/40920384)
+
+
 
 
 
