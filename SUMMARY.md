@@ -141,8 +141,10 @@
 ## 自然语言处理
 
 * [自然语言处理概论](content/machine-learning-application/natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
-
 * [word2vec](content/machine-learning-application/natural-language-processing/word2vec/word2vec.md)
+  * [word2vec概述](content/machine-learning-application/natural-language-processing/word2vec/word2vec-introduction.md)
+  * [word2vec算法原理](content/machine-learning-application/natural-language-processing/word2vec/word2vec-algorithm-principle.md)
+  * [word2vec源码分析理](content/machine-learning-application/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
 
 ## 推荐系统
 
