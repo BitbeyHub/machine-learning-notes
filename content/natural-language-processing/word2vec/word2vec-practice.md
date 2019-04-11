@@ -39,9 +39,11 @@ github:[dav/word2vec](https://github.com/dav/word2vec)
 
 等训练结束后，会在`\data`文件夹中生成两个文件：classes.txt和classes.sorted.txt，其中classes.txt就是我们需要的文件。打开就能看到每个单词训练的embedding向量了。
 
-## 其他
+## 查看TopN相似度
 
 进入根目录下的`\scripts`文件夹，然后运行sh文件demo-word.sh：`sh demo-word.sh`，然后按照提示输入单词，查看与其相近的前40个词及相似程度。
+
+相似程度的代码是distance.c，很简单，有个博客有对这个代码的注释：[Word2Vec代码注解-distance](https://blog.csdn.net/a785143175/article/details/23771625)
 
 # 参考资料
 

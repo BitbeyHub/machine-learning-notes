@@ -143,6 +143,7 @@
   * [word2vec概述](content/natural-language-processing/word2vec/word2vec-introduction.md)
   * [word2vec算法原理](content/natural-language-processing/word2vec/word2vec-algorithm-principle.md)
   * [word2vec源码分析](content/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
+  * [word2vec实践](content/natural-language-processing/word2vec/word2vec-practice.md)
 
 # 推荐系统
 
