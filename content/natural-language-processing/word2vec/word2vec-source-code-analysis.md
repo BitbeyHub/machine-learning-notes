@@ -3,31 +3,9 @@
 * [返回顶层目录](../../../SUMMARY.md)
 * [返回上层目录](word2vec.md)
 
-http://suhui.github.io/word2vec
-
-http://pskun.github.io/machine%20learning/word2vec-source-code-analysis.html
-
-https://zhuanlan.zhihu.com/p/40557458
-
-https://zhuanlan.zhihu.com/p/40558913
-
-http://jacoxu.com/word2vector/
-
-https://blog.csdn.net/lingerlanlan/article/details/38232755
-
-https://blog.csdn.net/mpk_no1/article/details/72458003
-
-https://blog.csdn.net/leiting_imecas/article/details/72303044
-
-https://blog.csdn.net/google19890102/article/details/51887344
-
-https://blog.csdn.net/jingquanliang/article/details/82886645
-
-https://www.processon.com/diagraming/5c3f5691e4b08a7683aa7ac5
 
 
-
-在阅读本文之前，建议首先阅读上面的“word2vec的算法原理”，掌握如下的几个概念：
+在阅读本文之前，建议首先阅读上一小节的“word2vec的算法原理”，掌握如下的几个概念：
 
 * 什么是统计语言模型
 * 神经概率语言模型的网络结构
@@ -49,7 +27,12 @@ https://www.processon.com/diagraming/5c3f5691e4b08a7683aa7ac5
 
 其中CBOW和Skip-Gram是word2vec工具中使用到的两种不同的语言模型，而Hierarchical Softmax和Negative Sampling是对以上的两种模型的具体的优化方法。
 
-## word2vec流程图
+# word2vec源码
+
+* GitHub:[dav/word2vec](https://github.com/dav/word2vec)
+* Google-Code:[google-code:word2vec](https://code.google.com/archive/p/word2vec/)
+
+# word2vec流程图
 
 在word2vec工具中，主要的工作包括：
 
@@ -65,52 +48,39 @@ https://www.processon.com/diagraming/5c3f5691e4b08a7683aa7ac5
 
 在接下来的内容中，将针对以上的五个部分，详细分析下在源代码中的实现技巧，以及简单介绍我在读代码的过程中对部分代码的一些思考。
 
-## 预处理
+# 预处理
 
 
 
-## 构建词库
+# 构建词库
 
 在word2vec源码中，提供了两种构建词库的方法，分别为：
 
 - 指定词库：ReadVocab()方法
 - 从词的文本构建词库：LearnVocabFromTrainFile()方法
 
-### 构建词库的过程
+## 构建词库的过程
 
-#### 从指定词库生成词库
+### 从指定词库生成词库
 
-
-
-#### 从词的文本构建词库
+### 从词的文本构建词库
 
 在这里，我们以从词的文本构建词库为例（函数LearnVocabFromTrainFile()）。构建词库的过程如下所示：
 
 ![LearnVocabFromTrainFile-flow-chartbmp](pic/LearnVocabFromTrainFile-flow-chartbmp.bmp)
 
+## 对词的哈希处理
+
+## 对低频词的处理
 
 
-### 对词的哈希处理
+## 根据词频对词库中的词排序
 
-
-
-
-
-### 对低频词的处理
-
-
-
-
-
-### 根据词频对词库中的词排序
-
-
-
-## 初始化网络结构
+# 初始化网络结构
 
 有了以上的对词的处理，就已经处理好了所有的训练样本，此时，便可以开始网络结构的初始化和接下来的网络训练。网络的初始化的过程在InitNet()函数中完成。
 
-### 初始化网络参数
+## 初始化网络参数
 
 在初始化的过程中，主要的参数包括词向量的初始化和映射层到输出层的权重的初始化，如下图所示：
 
@@ -130,7 +100,7 @@ for (a = 0; a < vocab_size; a++) for (b = 0; b < layer1_size; b++) {
 
 首先，生成一个很大的next_random的数，通过与“0xFFFF”进行与运算截断，再除以65536得到\[0,1\]之间的数，最终，得到的初始化的向量的范围为：\[−0.5/m,0.5/m\]，其中，m为词向量的长度。
 
-### Huffman树的构建
+## Huffman树的构建
 
 word2vec里是拿数组实现word2vec，效率很高，在学校里经常见到的是递归迭代实现Huffman树，这对于处理大量叶子节点的问题不是一个最佳方法。 
 
@@ -188,7 +158,33 @@ for (b = 0; b < i; b++) {
 
 注意：这里的Huffman树的构建和Huffman编码的生成过程写得比较精简。
 
-## 多线程模型训练
+## 负样本选中表的初始化
+
+如果是采用负采样的方法，此时还需要初始化每个词被选中的概率。在所有的词构成的词典中，每一个词出现的频率有高有低，我们希望，对于那些高频的词，被选中成为负样本的概率要大点，同时，对于那些出现频率比较低的词，我们希望其被选中成为负样本的频率低点。这个原理于“轮盘赌”的策略一致。在程序中，实现这部分功能的代码为：
+
+```c
+// 生成负采样的概率表
+void InitUnigramTable() {
+        int a, i;
+        double train_words_pow = 0;
+        double d1, power = 0.75;
+        table = (int *)malloc(table_size * sizeof(int));// int --> int
+        for (a = 0; a < vocab_size; a++) train_words_pow += pow(vocab[a].cn, power);
+        // 类似轮盘赌生成每个词的概率
+        i = 0;
+        d1 = pow(vocab[i].cn, power) / train_words_pow;
+        for (a = 0; a < table_size; a++) {
+                table[a] = i;
+                if (a / (double)table_size > d1) {
+                        i++;
+                        d1 += pow(vocab[i].cn, power) / train_words_pow;
+                }
+                if (i >= vocab_size) i = vocab_size - 1;
+        }
+}
+```
+
+# 多线程模型训练
 
 
 

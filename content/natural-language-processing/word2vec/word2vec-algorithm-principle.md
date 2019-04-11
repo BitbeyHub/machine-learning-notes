@@ -233,7 +233,7 @@ He’s since taken the tutorials down, but I have PDF copies here:
 
 [全面理解word2vec](https://zhuanlan.zhihu.com/p/33799633)
 
-
+[Deep Learning 实战之 word2vec](https://kexue.fm/usr/uploads/2017/04/146269300.pdf)
 
 ## 近似softmax的几种方法
 

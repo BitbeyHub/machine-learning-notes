@@ -130,18 +130,22 @@
 * [基于模型的强化学习](reinforcement-learning/model-based-reinforcement-learning/model-based-reinforcement-learning.md)
 * [强化学习前景](reinforcement-learning/reinforcement-learning-prospect/reinforcement-learning-prospect.md)
 
-# 机器学习应用
+# 自然语言处理
 
-## 自然语言处理
+- [自然语言处理概论](natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
+- [word2vec](natural-language-processing/word2vec/word2vec.md)
 
-- [自然语言处理概论](machine-learning-application/natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
-- [word2vec](machine-learning-application/natural-language-processing/word2vec/word2vec.md)
+# 推荐系统
 
-## 推荐系统
+- [推荐系统概述](recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
 
-- [推荐系统概述](machine-learning-application/recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
+* 基础知识
 
+* [进阶知识](recommender-systems/advanced-knowledge/advanced-knowledge.md)
+  * [embedding](recommender-systems/advanced-knowledge/embedding/embedding.md)
+  * [强化学习](recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
 
+* [业界应用](recommender-systems/industry-application/industry-application.md)
 
-
+* 前景与未来
 

@@ -136,19 +136,28 @@
 * [基于模型的强化学习](content/reinforcement-learning/model-based-reinforcement-learning/model-based-reinforcement-learning.md)
 * [强化学习前景](content/reinforcement-learning/reinforcement-learning-prospect/reinforcement-learning-prospect.md)
 
-# 机器学习应用
+# 自然语言处理
 
-## 自然语言处理
+* [自然语言处理概论](content/natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
+* [word2vec](content/natural-language-processing/word2vec/word2vec.md)
+  * [word2vec概述](content/natural-language-processing/word2vec/word2vec-introduction.md)
+  * [word2vec算法原理](content/natural-language-processing/word2vec/word2vec-algorithm-principle.md)
+  * [word2vec源码分析](content/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
 
-* [自然语言处理概论](content/machine-learning-application/natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
-* [word2vec](content/machine-learning-application/natural-language-processing/word2vec/word2vec.md)
-  * [word2vec概述](content/machine-learning-application/natural-language-processing/word2vec/word2vec-introduction.md)
-  * [word2vec算法原理](content/machine-learning-application/natural-language-processing/word2vec/word2vec-algorithm-principle.md)
-  * [word2vec源码分析理](content/machine-learning-application/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
+# 推荐系统
 
-## 推荐系统
+* [推荐系统概论](content/recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
+* 基础知识
 
-* [推荐系统概论](content/machine-learning-application/recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
+* [进阶知识](content/recommender-systems/advanced-knowledge/advanced-knowledge.md)
+  * [embedding](content/recommender-systems/advanced-knowledge/embedding/embedding.md)
+  * [强化学习](content/recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
+
+- 业界应用
+
+- 前景与未来
+
+
 
 
 

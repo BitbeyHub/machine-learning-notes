@@ -12,5 +12,9 @@
 
 
 
+[经典算法·从seq2seq、attention到transformer](https://zhuanlan.zhihu.com/p/54368798)
+
+
+
 
 
