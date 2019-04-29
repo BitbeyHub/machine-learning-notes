@@ -112,8 +112,10 @@
 * [深度学习概论](deep-learning/deep-learning-introduction/deep-learning-introduction.md)
 * [ANN人工神经网络](deep-learning/artificial-neural-network/artificial-neural-network.md)
 * [CNN卷积神经网络](deep-learning/convolutional-neural-network/convolutional-neural-network.md)
+* [深度学习优化算法](deep-learning/deep-learning-optimization-algorithm/deep-learning-optimization-algorithm.md)
 * [RNN循环神经网络](deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
+* [注意力机制](deep-learning/attention-mechanism/attention-mechanism.md)
 ---
 
 # 强化学习
@@ -143,6 +145,7 @@
 
 * [进阶知识](recommender-systems/advanced-knowledge/advanced-knowledge.md)
   * [embedding](recommender-systems/advanced-knowledge/embedding/embedding.md)
+  * [深度学习](recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
   * [强化学习](recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
 
 * [业界应用](recommender-systems/industry-application/industry-application.md)
