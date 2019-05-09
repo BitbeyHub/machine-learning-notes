@@ -151,13 +151,15 @@
 
 * [推荐系统概论](content/recommender-systems/recommender-systems-introduction/recommender-systems-introduction.md)
 * 基础知识
-
 * [进阶知识](content/recommender-systems/advanced-knowledge/advanced-knowledge.md)
+  * 机器学习
+    * [FM](content/recommender-systems/advanced-knowledge/machine-learning/FM.md)
   * [embedding](content/recommender-systems/advanced-knowledge/embedding/embedding.md)
   * [深度学习](content/recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
     * [DeepMatch](content/recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
     * [DeepFM](content/recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
   * [强化学习](content/recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
+    * [DRN基于深度强化学习的新闻推荐模型](content/recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 
 - 业界应用
 
