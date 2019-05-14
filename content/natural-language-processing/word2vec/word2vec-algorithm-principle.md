@@ -229,6 +229,14 @@ He’s since taken the tutorials down, but I have PDF copies here:
 
 
 
+[图解Word2vec，读这一篇就够了](https://blog.csdn.net/leadai/article/details/89391366)
+
+
+
+[word2vec前世今生](https://www.cnblogs.com/iloveai/p/word2vec.html)
+
+
+
 整体框架：
 
 [全面理解word2vec](https://zhuanlan.zhihu.com/p/33799633)

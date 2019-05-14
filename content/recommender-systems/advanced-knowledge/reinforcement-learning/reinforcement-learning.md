@@ -5,7 +5,7 @@
 
 
 
-[增强学习在推荐系统有什么最新进展？](https://www.zhihu.com/question/57388498)
+[增强学习在推荐系统有什么最新进展？](https://www.zhihu.com/question/57388498/answer/570874226)
 
 # 为什么要将强化学习用在推荐系统上
 

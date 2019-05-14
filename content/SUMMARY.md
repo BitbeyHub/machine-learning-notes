@@ -152,5 +152,7 @@
   * [强化学习](recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 * [业界应用](recommender-systems/industry-application/industry-application.md)
+  * YouTube
+    * [YouTube深度学习推荐系统](recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
 * 前景与未来
 

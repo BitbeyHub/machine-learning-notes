@@ -41,6 +41,8 @@ Airbnb的这篇论文是KDD 2018的best paper，在工程领域的影响力很�
 
 以随机游走的方式从网络中生成序列，进而转换成传统word2vec的方法生成Embedding。这篇论文可以视为Graph Embedding的baseline方法，用极小的代价完成从word2vec到graph embedding的转换和工程尝试。
 
+[Graph embedding: 从Word2vec到DeepWalk](https://zhuanlan.zhihu.com/p/59887204)
+
 **7**. [[LINE\] LINE - Large-scale Information Network Embedding (MSRA 2015)](https://link.zhihu.com/?target=https%3A//github.com/wzhe06/Reco-papers/blob/master/Embedding/%255BLINE%255D%2520LINE%2520-%2520Large-scale%2520Information%2520Network%2520Embedding%2520%2528MSRA%25202015%2529.pdf)
 
 相比DeepWalk纯粹随机游走的序列生成方式，LINE可以应用于有向图、无向图以及边有权重的网络，并通过将一阶、二阶的邻近关系引入目标函数，能够使最终学出的node embedding的分布更为均衡平滑，避免DeepWalk容易使node embedding聚集的情况发生。

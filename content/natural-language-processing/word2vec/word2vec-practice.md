@@ -75,6 +75,14 @@ Embedding的基本内容如前面介绍所示，然而我想说的是它的价�
 
 词的分布，推荐用google的[tensorboard](https://www.tensorflow.org/tensorboard/r1/summaries)，可以多视角查看，如果不想搭建服务，直接访问[TensorFlow-projector](http://projector.tensorflow.org/)。另外可以用python的matplotlib。
 
+
+
+# word2vec的参数选择
+
+[word2vec你可能不知道的秘密](https://blog.csdn.net/xiaojiayudst/article/details/84668729)
+
+
+
 # 参考资料
 
 * [使用word2vec（C语言版本）训练中文语料 并且将得到的vector.bin文件转换成txt文件](https://blog.csdn.net/zwwhsxq/article/details/77200129)
