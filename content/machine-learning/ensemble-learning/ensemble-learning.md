@@ -115,7 +115,7 @@ XgBoost的详细描述，点击[XgBoost](XgBoost.md)跳转至相关章节。
 
 # Stacking
 
-
+训练一个模型来组合其他各个模型。首先先训练多个不同的模型，然后再以之前训练的各个模型的输出为输入来训练一个模型，以得到一个最终的输出。使用过stacking之后，发现其实stacking很像神经网络，通过很多模型的输出，构建中间层，最后用逻辑回归讲中间层训练得到最后的结果。
 
 
 
@@ -126,3 +126,7 @@ XgBoost的详细描述，点击[XgBoost](XgBoost.md)跳转至相关章节。
 - [百度百科：Boosting](https://baike.baidu.com/item/Boosting/1403912?fr=aladdin)
 
 “Boosting概述”一节参考此文章。
+
+* [用python参加Kaggle的些许经验总结](https://www.jianshu.com/p/32def2294ae6)
+
+"Stacking"部分参考此博客。
