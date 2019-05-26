@@ -68,6 +68,7 @@
     * [scikit-learn](content/coding/python/scikit-learn.md)
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
     * [数据结构与算法概论](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction.md)
+    * [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming.md)
 
 ---
 
