@@ -26,3 +26,13 @@
 
 [GCN作者Thomas Kipf 最新Talk：利用图神经网络进行无监督学习](https://mp.weixin.qq.com/s/PxNGJ0hcmCo-2zvWD-rfug)
 
+[GATs:图神经网络中的注意力机制](https://zhuanlan.zhihu.com/p/66812926?utm_source=wechat_session&utm_medium=social&utm_oi=903049909593317376)
+
+
+
+## 论文
+
+[Github上的图神经网络必读论文和最新进展列表20190521](https://mp.weixin.qq.com/s/M_mHgbzWsooUcWtdpP_OCQ)
+
+
+

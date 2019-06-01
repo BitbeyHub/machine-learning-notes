@@ -102,6 +102,7 @@
 
 
 
+
 # 马尔科夫过程
 
 ## 马尔科夫性
@@ -169,13 +170,6 @@ $$
   $$
 
 
-
-
-
-
-
-
-
 ## 马尔科夫过程
 
 一个马尔科夫过程（Markov process， MP）是一个无记忆的随机过程，即一些马尔科夫状态的序列
@@ -190,13 +184,6 @@ $$
   $$
   {P}_{ss'}=\mathbb{P}[S_{t+1}=s'|S_t=s]
   $$
-
-
-
-
-
-
-
 
 
 注：虽然我们有时候并不知道P的具体值，但是通常我们假设P是存在且稳定的
@@ -289,6 +276,7 @@ $$
 
 
 
+
 ## 马尔科夫奖励过程例子
 
 ![markov-reward-process-example1](pic/markov-reward-process-example1.png)
@@ -317,13 +305,6 @@ $$
   &=\sum_{k=0}^{\infty}\gamma^kR_{t+k+1}
   \end{aligned}
   $$
-
-
-
-
-
-
-
 
 
 
@@ -413,14 +394,6 @@ $$
   &=-4.4214...
   \end{aligned}
   $$
-
-
-
-
-
-
-
-
 
 
 **虽然都是从相同的初始状态开始，但是不同的片段有不同的回报值，而值函数是它们的期望值。**
@@ -616,6 +589,7 @@ $$
 
 
 
+
 注：注意由于策略π代表：1，一个动作；2，一个动作分布，所以有时候，π和a会存在一定的混淆。
 
 ## MDPs中的值函数
@@ -799,6 +773,7 @@ $$
 
 
 
+
 注：具体证明参考[《Total Expected Discounted Reward MDPs: Existence of Optimal Policies 》](http://www.ams.sunysb.edu/~feinberg/public/enc_dis.pdf)
 
 ### 怎么得到最优策略
@@ -860,7 +835,7 @@ $$
 
 ![bellman-optical-equition-Q-function](pic/bellman-optical-equition-Q-function.png)
 $$
-q_*(s,a)=R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^a\ \mathop{\text{max}}_{a‘}\ q_*(s',a')
+q_*(s,a)=R(s,a)+\gamma\sum_{s'\in S}P_{ss'}^a\ \mathop{\text{max}}_{a'}\ q_*(s',a')
 $$
 
 ### 和贝尔曼期望方程的关系

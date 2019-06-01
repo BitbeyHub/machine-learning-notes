@@ -173,6 +173,7 @@
   * [深度学习](content/recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
     * [DeepMatch](content/recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
     * [DeepFM](content/recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
+    * [Attention](content/recommender-systems/advanced-knowledge/attention/attention.md)
   * [强化学习](content/recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](content/recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 
