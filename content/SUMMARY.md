@@ -1,7 +1,12 @@
 # 目录
 * [封面](../README.md)
 * [目录](SUMMARY.md)
+
+[机器学习算法地图](http://www.tensorinfinity.com/paper_18.html)
+
 ---
+
+![machine-learning-map](machine-learning/machine-learning-introduction/pic/machine-learning-map.png)
 
 # 前言
 
@@ -58,11 +63,19 @@
   * [pandas](coding/python/pandas.md)
   * [scipy](coding/python/scipy.md)
   * [matplotlib](coding/python/matplotlib.md)
-  * [python基础综合实践](coding/python/python-basic-comprehensive-practice.md)
   * [scikit-learn](coding/python/scikit-learn.md)
 * [数据结构与算法](coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
-  - [数据结构与算法概论](coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction.md)
+  - [数据结构与算法简介](coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction.md)
   - [动态规划](coding/data-structures-and-algorithms/dynamic-programming.md)
+- [Hadoop](coding/hadoop/hadoop.md)
+  - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
+  - [MapReduce](coding/hadoop/map-reduce.md)
+- Spark
+- TensorFlow
+- [PyTorch](coding/pytorch/pytorch.md)
+
+
+
 ---
 
 # 机器学习
@@ -116,7 +129,7 @@
 * [深度学习优化算法](deep-learning/deep-learning-optimization-algorithm/deep-learning-optimization-algorithm.md)
 * [RNN循环神经网络](deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
-* [注意力机制](deep-learning/attention-mechanism/attention-mechanism.md)
+* [GCN图神经网络](deep-learning/graph-neural-networks/graph-neural-networks.md)
 ---
 
 # 强化学习
@@ -137,6 +150,10 @@
 
 - [自然语言处理概论](natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
 - [word2vec](natural-language-processing/word2vec/word2vec.md)
+- [Attention注意力机制](natural-language-processing/attention-mechanism/attention-mechanism.md)
+- [Transformer](natural-language-processing/transformer/transformer.md)
+
+# 知识图谱
 
 # 推荐系统
 

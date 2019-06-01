@@ -31,7 +31,9 @@
 
 [3] Zheng G, Zhang F, Zheng Z, et al. DRN: A Deep Reinforcement Learning Framework for News Recommendation[C]//Proceedings of the 2018 World Wide Web Conference on World Wide Web. International World Wide Web Conferences Steering Committee, 2018: 167-176.
 
+[4] Lixin Zou, Long Xia, Zhuoye Ding, Jiaxing Song, Weidong Liu, Dawei Yin: [Reinforcement Learning to Optimize Long-term User Engagement in Recommender Systems](http://export.arxiv.org/abs/1902.05570)[C]KDD 2019
 
+清华大学和京东发表于 KDD 2019 的全新强化学习框架 FeedRec
 
 # 参考文献
 

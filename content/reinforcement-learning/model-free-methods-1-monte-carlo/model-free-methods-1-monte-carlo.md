@@ -295,11 +295,37 @@ $$
 
 ## 对Q函数的MC方法
 
-* 在没有模型的时候，一般我们选择估计Q函数
-* 因为我们可以通过Q函数直接得到贪婪的策略，最优的Q函数可以得到最优的策略
+* 在没有模型的时候，一般我们选择估计Q函数（为什么不选V函数？）
+
+  在模型相关强化学习中，我们的工作是找到最优策略的状态价值v函数。但是在模型无关的环境下，这个做法却行不通。如果我们在模型无关环境下找最优策略的状态价值v，在预测时，对状态 (s) 最优策略如下所示
+  $$
+  \begin{aligned}
+  \pi(s,a)=
+  \left\{\begin{matrix}
+  &1,\ a=\text{arg}\ \mathop{\text{max}}_{a}[R_{s,a}+\gamma\sum_{s'\in S}P_{s,a}^{s'}v(s')]\\ 
+  &1,\ a\neq\text{arg}\ \mathop{\text{max}}_{a}[R_{s,a}+\gamma\sum_{s'\in S}P_{s,a}^{s'}v(s')]
+  \end{matrix}\right.
+  \end{aligned}
+  $$
+  看到那个R和P了吗？在模型无关的设定下，我们不知道这两个值。也许有同学说可以在预测时探索环境得到R和T。但是实际问题中，探索会破坏当前状态，比如在机器人行走任务中，为了探索，机器人需要做出一个动作，这个动作使得机器人状态发生变化。这时候为原来状态选择最优动作已经没有意义了。解决办法是把工作对象换成状态-动作价值q。获得最优策略的状态-动作价值q之后，对于状态s，最优策略策略如下所示：
+  $$
+  \begin{aligned}
+  \pi(s,a)=
+  \left\{\begin{matrix}
+  &1,\ a=\text{arg}\ \mathop{\text{max}}_{a}q(s,a)\\ 
+  &1,\ a\neq\text{arg}\ \mathop{\text{max}}_{a}q(s,a)
+  \end{matrix}\right.
+  \end{aligned}
+  $$
+
+* 因为我们可以通过Q函数直接得到贪婪的策略，最优的Q函数可以得到最优的策略（如上式所示）
+
 * MC方法和V函数类似，但是Q函数的拜访从状态s变成了在状态s下做动作a
+
 * 一个重要的区别是，在给定策略π的情况下，大量的\<s,a\>都没有被遍历到
+
   * 尤其是当策略π是确定性策略时，每个s只对应一个a
+
 * 一种避免该困境的方法是假设**探索开始**，即随机选择初始状态和初始动作
 
 ## 离策略MC策略评价
@@ -382,7 +408,7 @@ $$
 $$
 V(S_t)\leftarrow V(S_t)+\alpha(G_t-V(S_t))
 $$
-常量步长的意思表示会逐渐遗忘过去的轨迹。（ps.这不就是一节低通滤波嘛。。。）
+常量步长的意思表示会逐渐遗忘过去的轨迹。（ps.这不就是一阶低通滤波嘛。。。）
 $$
 \begin{aligned}
 V_{k+1}=&V_k+\alpha(g_k-V_k)\\
@@ -422,7 +448,7 @@ $$
 
 ## 问题一：使用哪个值函数？
 
-* 在V函数上做贪婪恶略提升要求环境模型
+* 在V函数上做贪婪策略提升要求环境模型
   $$
   \pi'(s)=\text{arg }\mathop{\text{max}}_{a\in A}R(s,a)
   $$
@@ -433,9 +459,28 @@ $$
   $$
 
 
+如何理解以上两点：
 
-
-
+在模型相关强化学习中，我们的工作是找到最优策略的状态价值v函数。但是在模型无关的环境下，这个做法却行不通。如果我们在模型无关环境下找最优策略的状态价值v，在预测时，对状态 (s) 最优策略如下所示
+$$
+\begin{aligned}
+\pi(s,a)=
+\left\{\begin{matrix}
+&1,\ a=\text{arg}\ \mathop{\text{max}}_{a}[R_{s,a}+\gamma\sum_{s'\in S}P_{s,a}^{s'}v(s')]\\ 
+&1,\ a\neq\text{arg}\ \mathop{\text{max}}_{a}[R_{s,a}+\gamma\sum_{s'\in S}P_{s,a}^{s'}v(s')]
+\end{matrix}\right.
+\end{aligned}
+$$
+看到那个R和P了吗？在模型无关的设定下，我们不知道这两个值。也许有同学说可以在预测时探索环境得到R和T。但是实际问题中，探索会破坏当前状态，比如在机器人行走任务中，为了探索，机器人需要做出一个动作，这个动作使得机器人状态发生变化。这时候为原来状态选择最优动作已经没有意义了。解决办法是把工作对象换成状态-动作价值q。获得最优策略的状态-动作价值q之后，对于状态s，最优策略策略如下所示：
+$$
+\begin{aligned}
+\pi(s,a)=
+\left\{\begin{matrix}
+&1,\ a=\text{arg}\ \mathop{\text{max}}_{a}q(s,a)\\ 
+&1,\ a\neq\text{arg}\ \mathop{\text{max}}_{a}q(s,a)
+\end{matrix}\right.
+\end{aligned}
+$$
 
 
 ## 问题二：贪婪策略提升？
@@ -501,7 +546,7 @@ $$
 
 ![MC-policy-iterition](pic/MC-policy-iterition.png)
 
-* 策略评价：蒙特卡洛策略评价，**Q=qπ**
+* 策略评价：蒙特卡洛策略评价，**Q=q_π**
 * 策略提升：**ε**-贪婪探索提升
 
 ## 增量式策略评价
@@ -569,11 +614,15 @@ GLIE蒙特卡洛优化能收敛到最优的Q函数
 
 * [《强化学习理论与实践》第四章：无模型方法一：蒙特卡洛](http://www.shenlanxueyuan.com/my/course/96)
 
-本章内容是该课程这节课的笔记。
+本章内容是该课程这节课的笔记
 
+* [强化学习系列之三:模型无关的策略评价](http://www.algorithmdog.com/reinforcement-learning-model-free-evalution)
 
+可以看下这个，讲蒙特卡洛和时间差分的模型无关的策略评价
 
+* [强化学习系列之四:模型无关的策略学习](http://www.algorithmdog.com/reinforcement-learning-model-free-learning)
 
+讲模型无关的策略学习，主要有三种算法: MC Control, SARSA和Q learning
 
 
 
