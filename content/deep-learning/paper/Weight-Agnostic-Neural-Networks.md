@@ -12,9 +12,11 @@
   * [分类](#分类)
 * [总结和未来工作](#总结和未来工作)
 
-
-
-![two-leg-robot](pic/two-leg-robot.mp4)
+<div align="center">
+    <iframe width="620" height="315"
+        src="pic/two-leg-robot.mp4">
+    </iframe>
+</div>
 
 论文：[Weight Agnostic Neural Networks](https://arxiv.org/pdf/1906.04358.pdf)
 
