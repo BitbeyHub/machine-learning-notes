@@ -20,8 +20,9 @@
   - [求解▽θU(θ)](#求解▽θU(θ))
   - [从似然率的角度](#从似然率的角度)
   - [从重要性采样的角度](#从重要性采样的角度)
-  - [似然率梯度的理解](#似然率梯度的理解)
+  - [似然率梯度的直观理解](#似然率梯度的直观理解)
   - [将轨迹分解成状态和动作](#将轨迹分解成状态和动作)
+  - [求解动作策略的梯度](#求解动作策略的梯度)
   - [似然率梯度估计](#似然率梯度估计)
 - [减少方差](#减少方差)
   - [引入基线](#引入基线)
@@ -87,7 +88,7 @@
   &Q_w(s,a)\approx Q^{\pi}(s,a)\\
   \end{aligned}
   $$
-  这节课我们讲基于策略的方法，上节课我们用参数近似值函数，这节课我们用参数直接来近似策略。比如上节课用神经网络，输入是状态，输出是V函数，而这节课，输入是状态，输出直接就是一个动作（即策略）或者动作的概率分布，这就是基于策略的强化学习。
+  这节课我们讲基于策略的方法，上节课我们用参数近似值函数，这节课我们用参数直接来近似策略。比如上节课用神经网络，输入是状态，输出是V函数，而这节课，**输入是状态，输出直接就是一个动作（即策略）或者动作的概率分布**，这就是基于策略的强化学习。
 
 * 之前的策略是从值函数中推导出来的
 
@@ -337,6 +338,7 @@
 
 
 
+
 当不知道策略模型和目标函数有什么关系的时候，可用数值法求解。
 
 数值梯度法：
@@ -517,7 +519,7 @@ $$
 $$
 这个关系就又和前面的“从似然率的角度”的式子一样了。只是这边严格区分了在更新的时候，参数是θold还是θ。
 
-## 似然率梯度的理解
+## 似然率梯度的直观理解
 
 $$
 \bigtriangledown_{\theta}U(\theta)\approx \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)R(\tau)
@@ -525,12 +527,16 @@ $$
 
 ![likelihood-gradient](pic/likelihood-gradient.png)
 
-* 轨迹τ的概随参数θ变化最陡的方向是
+上图中三条路径来自探索策略。
+
+
+
+* 轨迹τ的出现概率随参数θ变化最陡的方向是
   $$
   \bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)
   $$
 
-  * 沿正方向，估计出现的概率会变大
+  * 沿正方向，轨迹出现的概率会变大
   * 沿负方向，轨迹出现的概率会变小
 
 * R(τ)控制了参数更新的方向和步长，正负决定了方向，大小决定了概率（减小）的幅度
@@ -539,16 +545,21 @@ $$
 
   回报值是负的轨迹，就去减小它的概率
 
-  策略梯度算法本质上是在增大高回报轨迹出现的概率，减小低回报轨迹出现的概率。就是说智能体和环境交互，得到了很多轨迹，而不同轨迹得到的回报值是不一样的。那怎么更新参数呢？就是尽可能使回报值更高的轨迹，下次出现的概率更高一点，使回报值更低的轨迹，下次出现的概率更低一点。这就是策略梯度算法本质上在做的事。
+  **策略梯度算法本质上是在增大高回报轨迹出现的概率，减小低回报轨迹出现的概率**。就是说智能体和环境交互，得到了很多轨迹，而不同轨迹得到的回报值是不一样的。那怎么更新参数呢？就是**尽可能使回报值更高的轨迹，下次出现的概率更高一点，使回报值更低的轨迹，下次出现的概率更低一点**。这就是策略梯度算法本质上在做的事。
 
 策略梯度
 
 * 增大了高回报轨迹出现的概率，回报值越大增加越多
 * 减少了低回报值轨迹出现的概率，回报值越小减少越多
 
-这里有个问题就是：要是所有采样到的轨迹的回报值都是正的话，那就是谁先被采样到，谁出现的概率就更大一些。这就是一个bug。怎么修复这个bug呢？后面会讲到一个削减一个基线（base-line）来解决这个bug。
+这里有个问题就是：要是所有采样到的轨迹的回报值都是正的话，那就是谁先被采样到，谁出现的概率就更大一些。这就是一个bug。怎么修复这个bug呢？后面会讲到削减一个基线（base-line）来解决这个bug。
 
 注意到似然率梯度只是改变轨迹出现的概率，而没有尝试去改变轨迹。
+
+接下来我们解决如何求似然率的梯度：
+$$
+\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)
+$$
 
 ## 将轨迹分解成状态和动作
 
@@ -574,6 +585,16 @@ $$
 \end{aligned}
 $$
 
+从上式的结果来看，似然率梯度转化为动作策略的梯度，与状态转移概率无关。那么，如何求解动作策略的梯度呢？
+
+## 求解动作策略的梯度
+
+下面，我们看一下常见的**策略表示方法**：
+
+一般，随机策略可以写为确定性策略加随机部分，即：
+
+具体见[强化学习进阶 第六讲 策略梯度方法](https://zhuanlan.zhihu.com/p/26174099)
+
 ## 似然率梯度估计
 
 根据之前的推导，我们可以在仅有可微分的策略模型πθ的情况下，求得
@@ -589,6 +610,8 @@ $$
 $$
 \bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau^{(i)};\theta)=\sum_{i=1}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t^{(i)}|s_t^{(i)})
 $$
+上式给出的策略梯度是无偏的，但是**方差很大**。
+
 如下式所示，$\hat{\eta}$是▽θU(θ)的无偏估计（根据经验平均估计真实的值），即
 $$
 \mathbb{E}[\hat{\eta}]=\bigtriangledown_{\theta}U(\theta)
@@ -607,7 +630,7 @@ $$
 
 我们可以通过以下的方法去减小方差
 
-* 引入基线（baseline）
+* 在回报中引入常数基线（baseline）
 
 * 修改回报函数R(τ)
 
@@ -622,6 +645,8 @@ $$
 * ...
 
 ## 引入基线
+
+如前面的“似然率梯度的直观理解”中所说到的，要是所有采样到的轨迹的回报值都是正的话，那就是谁先被采样到，谁出现的概率就更大一些。这就是一个bug。怎么修复这个bug呢？后面会讲到削减一个基线（base-line）来解决这个bug。现在就来讲这个基线。
 
 首先要证明引入基线baseline，不影响策略梯度
 $$
@@ -642,7 +667,7 @@ $$
 \begin{aligned}
 \mathbb{E}\left[\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)b\right]
 &=\sum_{\tau}\mathbb{P}(\tau;\theta)\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)b\\
-&=\sum_{\tau}\mathbb{P}(\tau;\theta)\frac{\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)b}{\mathbb{p}(\tau;\theta)}\\
+&=\sum_{\tau}\mathbb{P}(\tau;\theta)\frac{\bigtriangledown_{\theta}\mathbb{P}(\tau;\theta)b}{\mathbb{P}(\tau;\theta)}\\
 &=\sum_{\tau}\bigtriangledown_{\theta}\mathbb{P}(\tau;\theta)b\\
 &=\bigtriangledown_{\theta}\left( \sum_{\tau}\mathbb{P}(\tau;\theta)b \right)\\
 &=\bigtriangledown_{\theta}b\\
@@ -667,18 +692,15 @@ $$
   $$
 
 
-
-
-
 上面的公式为什么就是最小方差了呢？
 
 下面是一个求最小方差的简单推导：
 
 令
 $$
-X=\frac{1}{m}\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau^{(i)}-b)
+X=\frac{1}{m}\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau^{(i)};\theta)(R(\tau^{(i)})-b)
 $$
-，则方差为
+s，则方差为
 $$
 \text{Var}(X)=\mathbb{E}(X-\bar{X})^2=\mathbb{E}\left[ X^2 \right]-\bar{X}^2
 $$
@@ -694,27 +716,34 @@ $$
 
 ## 修改回报函数R(τ)
 
-除了引入baseline减小方差，还可以通过修改回报函数R(τ)来减小方差。
+除了引入baseline减小方差，还可以通过修改回报函数R(τ)来进一步减小方差。
 
 为什么呢？
 
-因为R(τ)是对于一条轨迹的回报值，可以减少一些点的采样，来减小方差，以为采样越多，带来的方差就越大。比如前面一条轨迹，前面五步是已知的，那就只利用后面的五步去求解，这样的方差是比计算整条轨迹的十步是要小的。尤其是TD(0)，只利用了一次采样，那方差肯定会更小。
+因为R(τ)是对于一条轨迹的回报值，可以减少一些点的采样，来减小方差，因为采样越多，带来的方差就越大。比如前面一条轨迹，前面五步是已知的，那就只利用后面的五步去求解，这样的方差是比计算整条轨迹的十步是要小的。尤其是TD(0)，只利用了一次采样，那方差肯定会更小。
 
 策略梯度可用下面的估计去表达：
 
 当前的估计值
 $$
 \begin{aligned}
-\hat{\eta}&= \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau;\theta)(R(\tau)-b)\\
+\hat{\eta}&= \frac{1}{m}\sum_{i=1}^m\bigtriangledown_{\theta}\text{log}\mathbb{P}(\tau^{(i)};\theta)(R(\tau^{(i)})-b)\\
 &= \frac{1}{m}\sum_{i=1}^m\left(\sum_{t=0}^T\bigtriangledown_{\theta}\text{log}\pi_{\theta}\left( a_t^{(i)}|s_t^{(i)} \right)\right)
 \left(\sum_{t=0}^TR\left( s_t^{(i)},a_t^{(i)} \right)-b\right)\\
 \end{aligned}
 $$
 
-* 将来的动作不依赖过去的奖励，因此我们可以修改回报值来降低方差
+* 将来的动作不依赖过去的奖励，即
+  $$
+  \begin{aligned}
+  E_p\left[\bigtriangledown_{\theta}\text{log}\pi_{\theta}\left( a_t^{(i)}|s_t^{(i)} \right)r_j\right]=0\ \ \text{for }j<t
+  \end{aligned}
+  $$
+  因此我们可以修改回报值来降低方差
   $$
   \frac{1}{m}\sum_{i=1}^m\sum_{t=0}^T\left[\bigtriangledown_{\theta}\text{log}\pi_{\theta}\left( a_t^{(i)}|s_t^{(i)} \right)\left(\sum_{k=t}^TR\left( s_k^{(i)},a_k^{(i)} \right)-b\left(s_k^{(i)}\right)\right)\right]
   $$
+
 
 
 
@@ -758,9 +787,6 @@ $$
   $$
 
 
-
-
-
 ## 蒙特卡洛策略梯度（REINFORCE）
 
 对于上式中等号右边的括号内的值，该怎么估计呢？其实就相当于V函数，第一种方法就是用蒙特卡洛的方法去估计。
@@ -771,7 +797,6 @@ $$
   $$
   \Delta\theta_t=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a_t|s_t)g_t
   $$
-
 
 
 
@@ -803,13 +828,12 @@ $$
   * Critic更新Q函数的参数w
   * Actor使用Critic的方向更新策略参数θ
 
-* Actor-Critic算法本质上还是利用Actor方法（策略网络）去做，用Critic方法去指导Actor的更新，Actor的更新用的是策略梯度，策略梯度中有一项需要算回报值，回报值怎么算，就用Critic算，虽然回报值可以用采样才出来，但是方差 太大，所以就用Critic去估计回报值。
+* Actor-Critic算法**本质**上还是利用Actor方法（策略网络）去做，用Critic方法去指导Actor的更新，Actor的更新用的是策略梯度，策略梯度中有一项需要算回报值，回报值怎么算，就用Critic算，虽然回报值可以用采样才出来，但是方差 太大，所以就用Critic去估计回报值。
 
 * 近似策略梯度
   $$
   \Delta\theta=\alpha\bigtriangledown_{\theta}\text{log}\pi_{\theta}(a|s)Q_w(s,a)
   $$
-
 
 
 
@@ -904,6 +928,7 @@ $$
 
 
 
+
 ## 小结
 
 * **策略梯度**有多种形式
@@ -923,6 +948,7 @@ $$
   $$
   Q^{\pi}(s,a), A^{\pi}(s,a), V^{\pi}(s)
   $$
+
 
 
 
@@ -952,3 +978,7 @@ OenAI提出的A2C（即Advantage-Actor-Critic的简称），该算法使用多�
 - [《强化学习理论与实践》第八章-策略梯度算法](http://www.shenlanxueyuan.com/my/course/96)
 
 本章内容是该课程这节课的笔记。
+
+* [强化学习进阶 第六讲 策略梯度方法](https://zhuanlan.zhihu.com/p/26174099)
+
+"求解动作策略的梯度"参考这篇知乎专栏。

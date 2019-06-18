@@ -2,6 +2,11 @@
 
 * [返回顶层目录](../../../../SUMMARY.md)
 * [返回上层目录](../advanced-knowledge.md)
+* [Embedding方法的学习路径](#Embedding方法的学习路径)
+* Word2vec基础
+* Word2vec的衍生及应用
+* [NetworkEmbedding](#GraphEmbedding)
+  * [LINE: Large-scale Information Network Embedding](network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
 
 # Embedding方法的学习路径
 
@@ -66,6 +71,14 @@ node2vec这篇文章还是对DeepWalk随机游走方式的改进。为了使最�
 这里是**「王喆的机器学习笔记」 ，**关于Embedding的这十篇论文包括了从基础理论、模型改造与进阶、模型应用等几个方面的内容，还是比较全面的，希望能帮助你成为相关方向的专家。但一个人的视野毕竟有局限性，希望大家能够反馈给我其他embedding相关的著名文章，我可以进行补充和替换。
 
 
+
+# NetworkhEmbedding
+
+[深度学习中不得不学的Graph Embedding方法](https://zhuanlan.zhihu.com/p/64200072)
+
+[网络表示学习综述：一文理解Network Embedding](https://www.jiqizhixin.com/articles/2018-08-14-10)
+
+[关于Network embedding的一些笔记(内含数据集）](https://blog.csdn.net/ZhichaoDuan/article/details/79570051)
 
 # 论文
 

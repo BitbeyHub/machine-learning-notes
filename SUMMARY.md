@@ -130,6 +130,8 @@
 * [LSTM长短期记忆网络](content/deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
 * [Attention注意力机制](content/deep-learning/attention-mechanism/attention-mechanism.md)
 * [GCN图神经网络](content/deep-learning/graph-neural-networks/graph-neural-networks.md)
+* 论文
+  * [权重无关的神经网络-谷歌2019](content/deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
 
 ---
 
@@ -170,10 +172,12 @@
   * 机器学习
     * [FM](content/recommender-systems/advanced-knowledge/machine-learning/FM.md)
   * [embedding](content/recommender-systems/advanced-knowledge/embedding/embedding.md)
+    * NetworkEmbedding
+      * [LINE: Large-scale Information Network Embedding](content/recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
   * [深度学习](content/recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
     * [DeepMatch](content/recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
     * [DeepFM](content/recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
-    * [Attention](content/recommender-systems/advanced-knowledge/attention/attention.md)
+    * [Attention](content/recommender-systems/advanced-knowledge/deep-learning/attention.md)
   * [强化学习](content/recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](content/recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 

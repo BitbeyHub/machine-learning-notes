@@ -130,6 +130,8 @@
 * [RNN循环神经网络](deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
 * [GCN图神经网络](deep-learning/graph-neural-networks/graph-neural-networks.md)
+* 论文
+  * [权重无关的神经网络-谷歌2019](deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
 ---
 
 # 强化学习
@@ -164,6 +166,8 @@
   * 机器学习
     * [FM](recommender-systems/advanced-knowledge/machine-learning/FM.md)
   * [embedding](recommender-systems/advanced-knowledge/embedding/embedding.md)
+    * NetworkEmbedding
+      * [LINE: Large-scale Information Network Embedding](recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
   * [深度学习](recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
     * [DeepMatch](recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
     * [DeepFM](recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
