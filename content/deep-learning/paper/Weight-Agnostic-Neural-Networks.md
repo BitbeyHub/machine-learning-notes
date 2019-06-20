@@ -143,7 +143,7 @@
 
 奖励：行驶距离，以及电机扭矩的成本，以鼓励有效运动
 
-![two-leg-robot](/Users/momo/Desktop/pic/two-leg-robot.gif)
+![two-leg-robot](pic/two-leg-robot.gif)
 
 （3）赛车
 
