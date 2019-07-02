@@ -47,7 +47,6 @@
     * [信息论](content/mathematics/statistics-and-information-theory/information-theory.md)
 * [数值计算与优化](content/mathematics/numerical-calculation-and-optimization/numerical-calculation-and-optimization.md)
     * [梯度下降算法](content/mathematics/numerical-calculation-and-optimization/gradient-descent.md)
-    * [随机梯度下降SGD](content/mathematics/numerical-calculation-and-optimization/stochastic-gradient-desent.md)
     * [等式约束的拉格朗日乘子法](content/mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
     * [凸优化](content/mathematics/numerical-calculation-and-optimization/convex-optimization.md)
 * [概率图模型](content/mathematics/probability-graphical-model/probability-graphical-model.md)

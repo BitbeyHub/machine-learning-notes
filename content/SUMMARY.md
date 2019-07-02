@@ -47,7 +47,6 @@
 * [数值计算与优化](mathematics/numerical-calculation-and-optimization/numerical-calculation-and-optimization.md)
   * [最小二乘法](mathematics/numerical-calculation-and-optimization/least-square-method.md)
   * [梯度下降算法](mathematics/numerical-calculation-and-optimization/gradient-descent.md)
-  * [随机梯度下降SGD](mathematics/numerical-calculation-and-optimization/stochastic-gradient-desent.md)
   * [等式约束的拉格朗日乘子法](mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
   * [凸优化](mathematics/numerical-calculation-and-optimization/convex-optimization.md)
 * [概率图模型](mathematics/probability-graphical-model/probability-graphical-model.md)

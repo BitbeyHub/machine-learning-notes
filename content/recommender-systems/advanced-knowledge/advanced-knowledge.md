@@ -13,6 +13,7 @@
     * [DeepMatch](deep-learning/DeepMatch.md)
   * 排序
     * [DeepFM](deep-learning/DeepFM.md)
+    * [Wide&Deep](deep-learning/wide-and-deep.md)
 * [强化学习](reinforcement-learning/reinforcement-learning.md)
   * 排序
     * [DRN基于深度强化学习的新闻推荐模型](reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
