@@ -13,6 +13,18 @@
 
 
 
+# 论文解读
+
+
+
+## 使用Alias-Sampling-Method采样边
+
+
+
+
+
+
+
 # 源码说明与运行
 
 ## 代码说明
@@ -240,15 +252,153 @@ python3 score.py result.txt
 
 ## reconstruct.cpp
 
-
+这个代码的作用是，对于少于指定的边数的节点，扩展
 
 
 
 ##line.cpp
 
- 
+ 这个程序和word2vec的风格很像，估计就是从word2vec改的。
 
+首先在main函数这，特别说明一个参数：`total_samples`，这个参数是总的训练次数，LINE没有训练轮数的概念，因为LINE是随机按照权重选择边进行训练的。
 
+我们直接看TrainLINE()函数中的TrainLINEThread()这个函数，多线程跑的就是这个函数。
+
+训练结束条件是，当训练的次数超过`total_samples`的次数以后就停止训练。如下：
+
+```c++
+if (count > total_samples / num_threads + 2) break;
+```
+
+首先要按边的权重采集一条边edge(u, v)，得到其这条边的起始点u和目标点v：
+
+```c++
+curedge = SampleAnEdge(gsl_rng_uniform(gsl_r), gsl_rng_uniform(gsl_r));
+u = edge_source_id[curedge];
+v = edge_target_id[curedge];
+```
+
+然后最核心的部分就是负采样并根据损失函数更新参数：
+
+```c++
+lu = u * dim;
+for (int c = 0; c != dim; c++) vec_error[c] = 0;
+
+// NEGATIVE SAMPLING
+for (int d = 0; d != num_negative + 1; d++)
+{
+    if (d == 0)
+    {
+        target = v;
+        label = 1;
+    }
+    else
+    {
+        target = neg_table[Rand(seed)];
+        label = 0;
+    }
+    lv = target * dim;
+    if (order == 1) Update(&emb_vertex[lu], &emb_vertex[lv], vec_error, label);
+    if (order == 2) Update(&emb_vertex[lu], &emb_context[lv], vec_error, label);
+}
+for (int c = 0; c != dim; c++) emb_vertex[c + lu] += vec_error[c];
+```
+
+很显然，1阶关系训练的是两个节点的`emb_vertex`，而2阶关系训练的是开始节点的`emb_vertex`（节点本身的embedding）和目标节点的`emb_context`（节点上下文的embedding）。
+
+接下来进入最关键的权值更新函数`Update()`：
+
+```c++
+/* Update embeddings */
+void Update(real *vec_u, real *vec_v, real *vec_error, int label)
+{
+	real x = 0, g;
+	for (int c = 0; c != dim; c++) x += vec_u[c] * vec_v[c];
+	g = (label - FastSigmoid(x)) * rho;
+	for (int c = 0; c != dim; c++) vec_error[c] += g * vec_v[c];
+	for (int c = 0; c != dim; c++) vec_v[c] += g * vec_u[c];
+}
+```
+
+这时我们需要回到论文中，看公式（8）和公式（7）：
+$$
+\begin{aligned}
+\frac{\partial O_2}{\partial \overrightarrow{u}_i}&=w_{ij}\cdot \frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \overrightarrow{u}_i}\\
+&=\frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \overrightarrow{u}_i}\ (w_{ij}\text{通过Alias采样来近似})\\
+&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right]}{\partial \overrightarrow{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right)\right]}{\partial \overrightarrow{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)}{\partial \overrightarrow{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right)\right]}{\partial \overrightarrow{u}_i}\\
+&=\left[1-\sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right]
+\end{aligned}
+$$
+这下代码应该就很容易能理解了。
+
+上式中的
+$$
+E_{v_n\sim P_n}
+$$
+对应TrainLINEThread()负采样部分中的
+
+```c++
+target = neg_table[Rand(seed)];
+label = 0;
+```
+
+边eage(u, v)中的v会在每次update时更新，u会在负采样完之后统一更新。
+
+```c++
+// 边eage(u, v)中的v会在每次update时更新
+void Update(real *vec_u, real *vec_v, real *vec_error, int label)
+{
+	xxxxx
+	for (int c = 0; c != dim; c++) vec_error[c] += g * vec_v[c];
+	for (int c = 0; c != dim; c++) vec_v[c] += g * vec_u[c];
+}
+
+void *TrainLINEThread(void *id)
+{
+	xxx
+	while (1)
+	{
+		// NEGATIVE SAMPLING
+		for (int d = 0; d != num_negative + 1; d++)
+		{
+			xxx
+		}
+        // 边eage(u, v)中的u会在负采样完之后统一更新
+		for (int c = 0; c != dim; c++) emb_vertex[c + lu] += vec_error[c];
+
+		count++;
+	}
+	xxx
+}
+```
+
+## 疑问
+
+1、本身对于LINE的疑问：reconstruct的作用其实就是把一阶关系不够的节点用其二阶节点补充。但是LINE训练的时候，一阶二阶并没有区分训练数据。
+
+2、我本身的问题，reconstruct只选取二阶关系的话，那么两种embedding是怎么算的。
+
+## 时间复杂度O(1)的Alias离散采样算法
+
+**Alias-Sampling-Method**
+
+问题：比如一个随机事件包含四种情况，每种情况发生的概率分别为：
+$$
+\frac{1}{2},\ \frac{1}{3},\ \frac{1}{12},\ \frac{1}{12}
+$$
+，问怎么用产生符合这个概率的采样方法。
+
+**最容易想到的方法**
+
+我之前有在[【数学】均匀分布生成其他分布的方法](https://blog.csdn.net/haolexiao/article/details/65157026)中写过均匀分布生成其他分布的方法，这种方法就是产生0~1之间的一个随机数，然后看起对应到这个分布的CDF中的哪一个，就是产生的一个采样。比如落在0~1/2之间就是事件A，落在1/2~5/6之间就是事件B，落在5/6~11/12之间就是事件C，落在11/12~1之间就是事件D。 
+
+但是这样的复杂度，如果用BST树来构造上面这个的话，时间复杂度为O(logN)，有没有时间复杂度更低的方法。
+
+**一个Naive的办法**
+
+一个Naive的想法如下： 
 
 
 
@@ -267,5 +417,6 @@ python3 score.py result.txt
 
 
 
+* [【数学】时间复杂度O(1)的离散采样算法—— Alias method/别名采样方法](https://blog.csdn.net/haolexiao/article/details/65157026)
 
-
+"时间复杂度O(1)的Alias离散采样算法"参考了此博客。

@@ -35,6 +35,8 @@
 
 清华大学和京东发表于 KDD 2019 的全新强化学习框架 FeedRec
 
+[5] Youtube RL Recommendation: Top-k Off-Policy Correction for a REINFORCE Recommender System , Google, WSDM, 2019
+
 # 参考文献
 
 * [推荐系统有哪些坑？-Geek An](https://www.zhihu.com/question/28247353/answer/399162539)
