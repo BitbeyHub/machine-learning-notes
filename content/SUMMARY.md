@@ -147,7 +147,7 @@
 * [基于模型的强化学习](reinforcement-learning/model-based-reinforcement-learning/model-based-reinforcement-learning.md)
 * [强化学习前景](reinforcement-learning/reinforcement-learning-prospect/reinforcement-learning-prospect.md)
 
-# 自然语言处理
+# [自然语言处理](natural-language-processing/natural-language-processing.md)
 
 - [自然语言处理概论](natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
 - [word2vec](natural-language-processing/word2vec/word2vec.md)

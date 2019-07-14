@@ -1,6 +1,23 @@
 # 自然语言处理概论
 
 * [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../natural-language-processing.md)
+* [什么是自然语言处理](#什么是自然语言处理)
+* [自然语言处理的核心技术与应用](#自然语言处理的核心技术与应用)
+* [自然语言的一些重要术语](#自然语言的一些重要术语)
+* [语言学的发展史](#语言学的发展史)
+  * [逻辑](#逻辑)
+  * [命题逻辑](#命题逻辑)
+  * [通用能力](#通用能力)
+  * [典型代表](#典型代表)
+  * [模糊逻辑](#模糊逻辑)
+  * [词的不确定性](#词的不确定性)
+  * [稀疏数据](#稀疏数据)
+  * [同意不同形](#同意不同形)
+* [NLP的发展](#NLP的发展)
+* [推荐书籍](#推荐书籍)
+
+
 
 # 什么是自然语言处理
 
@@ -47,8 +64,6 @@
 ![semantics](pic/semantics.png)
 
 # 语言学的发展史
-
-通
 
 ## 逻辑
 
@@ -109,7 +124,39 @@ Chomsky在1950s年代写了一本书叫《句法结构》（Syntactic Structures
 词的不确定性有很多层次：
 
 * 词意：苹果（电脑，手机还是水果？）
-* 
+* 词性标注：host（主人、主持）
+* 句法结构：I saw a man with a telescope(who has the telescope?)
+* 指用：Join dropped the goblet onto the glass table and it broke.(which broke?奖杯还是玻璃桌子)
+
+于是处理方法从逻辑上的真理变成了概率模型。
+
+## 稀疏数据
+
+有用的数据并没有那么多。
+
+比如单词以E开头的最多：
+
+![sparse-data](pic/sparse-data.png)
+
+![zipf's-law](pic/zipf's-law.png)
+
+![zipf's-law1](pic/zipf's-law1.png)
+
+## 同意不同形
+
+* 这个老师上课非常好，得到了同学们的肯定
+* 给这个老师的课点赞，疯狂打call
+* 好课，6666666666
+
+
+
+She gave the book to Tom vs. She gave Tom the book
+
+Some kids popped by vs. A few children visited
+
+Is that window still open? vs. Please close the window
+
+
 
 # NLP的发展
 
@@ -129,8 +176,6 @@ Attention机制最初由图像处理领域提出，后来被引入到NLP领域�
 
 Transformer是完全基于注意力机制（attention mechanism)的网络框架，使得机器翻译的效果进一步提升，为Bert的提出奠定了基础。该论文2017年发表后引用已经达到1280，GitHub上面第三方复现的star2300余次。可以说是**近年NLP界最有影响力的工作，NLP研究人员必看！**
 
-
-
 # 推荐书籍
 
 这两本书是自然语言处理中比较重要的两本教科书。
@@ -138,19 +183,15 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 * *Foundations of Statistical Natural Language Processing* by Christopher D. Manning and Hinricn Schutze
 * *Speech and Language Processing* by Daniel Jurafsky & James H. Martin
 
-
-
 # 参考资料
 
 * [01第一课：自然语言与数学之美 秦曾昌 小象学院](http://www.chinahadoop.cn/course/1344/learn#lesson/34213)
 
-
+本文来自改视频课程。
 
 
 
 [真正的完全图解Seq2Seq Attention模型](https://zhuanlan.zhihu.com/p/40920384)
-
-[经典算法·从seq2seq、attention到transformer](https://zhuanlan.zhihu.com/p/54368798)
 
 
 
