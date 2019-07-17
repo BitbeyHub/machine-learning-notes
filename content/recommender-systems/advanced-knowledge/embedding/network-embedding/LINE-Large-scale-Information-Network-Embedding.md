@@ -448,12 +448,12 @@ void Update(real *vec_u, real *vec_v, real *vec_error, int label)
 这时我们需要回到论文中，看公式（8）和公式（7）：
 $$
 \begin{aligned}
-\frac{\partial O_2}{\partial \overrightarrow{u}_i}&=w_{ij}\cdot \frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \overrightarrow{u}_i}\\
-&=\frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \overrightarrow{u}_i}\ (w_{ij}\text{通过Alias采样来近似})\\
-&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right]}{\partial \overrightarrow{u}_i}\\
-&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right)\right]}{\partial \overrightarrow{u}_i}\\
-&=\frac{\partial\ \text{log}\ \sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)}{\partial \overrightarrow{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right)\right]}{\partial \overrightarrow{u}_i}\\
-&=\left[1-\sigma({\overrightarrow{u}'_j}^T\cdot \overrightarrow{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\overrightarrow{u}'_n}^T\cdot \overrightarrow{u}_i)\right]
+\frac{\partial O_2}{\partial\vec{u}_i}&=w_{ij}\cdot \frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \vec{u}_i}\\
+&=\frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \vec{u}_i}\ (w_{ij}\text{通过Alias采样来近似})\\
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\vec{u}'_n}^T\cdot \vec{u}_i)\right]}{\partial \vec{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)}{\partial \vec{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
+&=\left[1-\sigma({\vec{u}'_j}^T\cdot \vec{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right]
 \end{aligned}
 $$
 这下代码应该就很容易能理解了。
