@@ -75,7 +75,7 @@ $$
 
 以有向边为例，有向边(i, j)定义节点v_i的上下文（邻接）节点v_j的概率为：
 $$
-p_2(v_j|v_i)=\frac{\text{exp}(\vec{u}_j'^T\cdot \vec{u}_i)}{\sum_{k=1}^{|V|}\text{exp}(\vec{u}_k'^T\cdot \vec{u}_i)}
+p_2(v_j|v_i)=\frac{\text{exp}(\vec{u}_j{'}^T\cdot \vec{u}_i)}{\sum_{k=1}^{|V|}\text{exp}(\vec{u}_k{'}^T\cdot \vec{u}_i)}
 $$
 其中|V|是上下文节点的数量。其实和一阶的思路类似，这里用softmax对邻接节点做了一下归一化。优化目标也是去最小化分布之间的距离：
 
@@ -450,10 +450,10 @@ $$
 \begin{aligned}
 \frac{\partial O_2}{\partial\vec{u}_i}&=w_{ij}\cdot \frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \vec{u}_i}\\
 &=\frac{\partial\ \text{log}\ p_2(v_j|v_i)}{\partial \vec{u}_i}\ (w_{ij}\text{通过Alias采样来近似})\\
-&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\vec{u}'_n}^T\cdot \vec{u}_i)\right]}{\partial \vec{u}_i}\\
-&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
-&=\frac{\partial\ \text{log}\ \sigma({\vec{u}'_j}^T\cdot \vec{u}_i)}{\partial \vec{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
-&=\left[1-\sigma({\vec{u}'_j}^T\cdot \vec{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\vec{u}'_n}^T\cdot \vec{u}_i)\right]
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\vec{u}{'}_n}^T\cdot \vec{u}_i)\right]}{\partial \vec{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
+&=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)}{\partial \vec{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
+&=\left[1-\sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right]
 \end{aligned}
 $$
 这下代码应该就很容易能理解了。
