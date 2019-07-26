@@ -72,7 +72,10 @@ node2vec这篇文章还是对DeepWalk随机游走方式的改进。为了使最�
 
 
 
-# NetworkhEmbedding
+# Network_Embedding
+
+什么时候更新graph embedding的文章啊，最近在做这一块，很期待
+还是找几篇论文看看吧 deepwalk note2vec line 都不难实现
 
 [深度学习中不得不学的Graph Embedding方法](https://zhuanlan.zhihu.com/p/64200072)
 

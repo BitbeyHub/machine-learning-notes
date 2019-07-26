@@ -78,38 +78,44 @@ $$
 p_2(v_j|v_i)=\frac{\text{exp}(\vec{u}_j{'}^T\cdot \vec{u}_i)}{\sum_{k=1}^{|V|}\text{exp}(\vec{u}_k{'}^T\cdot \vec{u}_i)}
 $$
 其中|V|是上下文节点的数量。其实和一阶的思路类似，这里用softmax对邻接节点做了一下归一化。优化目标也是去最小化分布之间的距离：
+$$
+O_2=\sum_{i\in V}\lambda_id\left(\hat{p}_2(\cdot|v_i)p_2(\cdot|v_i)\right)
+$$
+这里d(. , .)用于度量两个分布之间的差距。因为考虑到图中的节点重要性可能不一样，所以设置了参数λi来对节点进行加权。可以通过节点的出入度或者用pagerank等算法来估计出来。而这里的经验分布则被定义为：
+$$
+\hat{p}_2(v_i|v_j)=\frac{w_{ij}}{d_i}
+$$
+其中，w_ij是边(i, j)的权重，d_i是节点i的出度，即
+$$
+d_i=\sum_{k\in N(i)}w_{ik}
+$$
+而N(i)就是节点i的出度节点的集合。同样采用KL散度作为距离度量，可以得到如下优化目标：
+$$
+O_2=-\sum_{(i,j)=Edge}w_{ij}\text{log}\ p_2(v_j|v_i)
+$$
+**注意：**
 
-
-
-
+这里有个坑，非常容易让人误解。就是二阶边(i, j)其实根本不是上图中的5和6，同一个图里，基本不会出现同时存在二阶和一阶关系的图，一般只能二选一，具体原因见下一小节。二阶边(i, j)应该就是(1, 5)、(1, 6)这种边的关系，因为1的自身向量和5的上下文向量接近。**而为什么我们说5和6是二阶关系呢？因为是按照这种算法，算出来和5相似的就是6，所以才说5和6是二阶关系，即5和6是二阶相似，是计算的结果的体现，不是说训练数据就有(5, 6)这条边！**。
 
 ## 结合一阶近似和二阶近似
 
+文章提到暂时还不能将一阶和二阶相似度进行联合训练，只能将他们单独训练出embedding，然后在做concatenate。
 
+但是一般来说，从节点和边的性质上来说，能用一阶就不能用二阶，反之亦然。比如github上的相互关注，就是典型的一阶关系，因为彼此都是好基友。但是比如抖音上的屌丝男关注了女神，那就绝对不能用一阶关系，而应该是二阶关系。
 
 ## 负采样
+
+这个算是一个常见的技巧来，在做softmax的时候，分母的计算要遍历所有节点，这部分其实很费时，所以在分母较大的时候，经常会使用负采样技术。
+
+其实，我们想看看除了计算效率的不同以外，负采样和全局softmax有何不同。
 
 
 
 ## 边采样
 
+也是训练的一个优化，因为优化函数中由一个w权重，在实际的数据集中，因为链接的大小差异会很大，这样的话会在梯度下降训练的过程中很难去选择好一个学习率。直观的想法是把权重都变成1，然后把w权重的样本复制w份，但是这样会占用更大的内存。第二个方法是按w权重占比做采样，可以减少内存开销。
 
-
-
-
-按照权重随机梯度下降（alias采样）
-
-稠密化
-
-
-
-## 使用Alias-Sampling-Method采样边
-
-
-
-
-
-
+这篇文章就是按照第二种方法，用一种复杂度为O(1)的方法：alias采样法，该方法在本文后面有详细描述。
 
 # 源码说明与运行
 
@@ -180,7 +186,7 @@ concatenate.cpp：用于连接一阶和二阶嵌入的代码;
 
 Youtube数据集：网络中的节点代表用户，有联系的用户之间有边。YouTube网络是一个无向、无权的网络。
 
-数据集从http://socialnetworks.mpi-sws.mpg.de/data/youtube-links.txt.gz下载。下载的数据集文件中，每行有两个数字，中间以制表符隔开，代表网络中的一条边，两个数字分别代表边的起点和终点。因为是无权图，因此不需要权重的值。因为是无向图，因此每条边在文件中出现两次，如1 2和2 1，代表同一条边。
+数据集从<http://socialnetworks.mpi-sws.mpg.de/data/youtube-links.txt.gz>下载。下载的数据集文件中，每行有两个数字，中间以制表符隔开，代表网络中的一条边，两个数字分别代表边的起点和终点。因为是无权图，因此不需要权重的值。因为是无向图，因此每条边在文件中出现两次，如(1, 2)和(2, 1)，代表同一条边。
 
 数据集中共包括4945382条边（有向边，因为无向图中每条边被看做两条有向边，所以Youtube网络中有2472691条边）和至少937968个点（文件中节点的名字并不是连续的，有些节点的度为0，在数据集文件中没有出现）。
 
@@ -222,6 +228,8 @@ Youtube数据集：网络中的节点代表用户，有联系的用户之间有�
 
 ## 编译LINE源码
 
+### 编译时遇到的问题
+
 编译LINE源码时，会遇到一些问题：
 
 [linux下GSL安装](https://blog.csdn.net/waleking/article/details/8265008/)
@@ -248,7 +256,9 @@ line.cpp:(.text+0x30b8): undefined reference to `gsl_rng_uniform'
 
 具体参见[linux下GSL安装](https://blog.csdn.net/waleking/article/details/8265008/)、[can't link GSL properly?](https://www.daniweb.com/programming/software-development/threads/289812/can-t-link-gsl-properly)。
 
+### 运行时遇到的问题
 
+#### 问题1
 
 ```sh
 ../bin/reconstruct -train ../data/net_youtube.txt -output ../data/net_youtube_dense.txt -depth 2 -threshold 1000
@@ -268,7 +278,15 @@ export LD_LIBRARY_PATH=/usr/local/lib
 
 具体参见[error while loading shared libraries: libgsl.so.23: cannot open shared object file: No such file or directory](https://stackoverflow.com/questions/45665878/a-out-error-while-loading-shared-libraries-libgsl-so-23-cannot-open-shared)。
 
+#### 问题2
 
+运行代码时可能还会遇到这个问题:
+
+```shell
+../bin/line: /lib64/libm.so.6: version `GLIBC_2.15' not found (required by ../bin/line)
+```
+
+基本是因为你在其他该版本系统上编译好了，又在低版本系统上直接运行了。只需要在低版本上重新make编译一下就好。
 
 # 源码解析
 
@@ -280,7 +298,7 @@ export LD_LIBRARY_PATH=/usr/local/lib
   python3 preprocess_youtube.py youtube-links.txt net_youtube.txt
   ```
 
-- 通过reconstruct程序对原网络进行重建（1h）
+- 通过reconstruct程序对原网络进行稠密化（1h）
 
   ```shell
   ./reconstruct -train net_youtube.txt -output net_youtube_dense.txt -depth 2 -threshold 1000
@@ -453,7 +471,7 @@ $$
 &=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \sigma(-{\vec{u}{'}_n}^T\cdot \vec{u}_i)\right]}{\partial \vec{u}_i}\\
 &=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)+\sum_{i=1}^KE_{v_n\sim P_n}\left[\text{log}\ \left(1-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
 &=\frac{\partial\ \text{log}\ \sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)}{\partial \vec{u}_i}+\frac{\sum_{i=1}^KE_{v_n\sim P_n}\partial\ \left[\text{log}\ \left(1-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right)\right]}{\partial \vec{u}_i}\\
-&=\left[1-\sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)\right]+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right]
+&=\left[1-\sigma({\vec{u}{'}_j}^T\cdot \vec{u}_i)\right]\vec{u}{'}_j+\sum_{i=1}^KE_{v_n\sim P_n} \left[0-\sigma({\vec{u}{'}_n}^T\cdot \vec{u}_i)\right]\vec{u}{'}_n
 \end{aligned}
 $$
 这下代码应该就很容易能理解了。
