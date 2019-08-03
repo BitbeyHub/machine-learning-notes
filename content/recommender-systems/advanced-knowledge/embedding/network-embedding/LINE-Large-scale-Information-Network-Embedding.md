@@ -2,6 +2,30 @@
 
 * [返回顶层目录](../../../../../SUMMARY.md)
 * [返回上层目录](../embedding.md)
+* [论文解读](#论文解读)
+  * [介绍](#介绍)
+  * [定义](#定义)
+  * [一阶近似](#一阶近似)
+  * [二阶近似](#二阶近似)
+  * [结合一阶近似和二阶近似](#结合一阶近似和二阶近似)
+  * [负采样](#负采样)
+  * [边采样](#边采样)
+* [源码说明与运行](#源码说明与运行)
+  * [代码说明](#代码说明)
+  * [数据集](#数据集)
+  * [运行示例](#运行示例)
+  * [编译LINE源码](#编译LINE源码)
+    * [编译时遇到的问题](#编译时遇到的问题)
+    * [运行时遇到的问题](#运行时遇到的问题)
+* [源码解析](#源码解析)
+  * [train_youtube.sh](#train_youtube.sh)
+  * [reconstruct.cpp](#reconstruct.cpp)
+  * [line.cpp](#line.cpp)
+  * [时间复杂度O[1]的Alias离散采样算法](#时间复杂度O[1]的Alias离散采样算法)
+* [分布式实现（腾讯Angel）](#分布式实现（腾讯Angel）)
+  * [运行示例](#运行示例)
+  * [分布式实现原理](#分布式实现原理)
+* [推荐场景中的实际应用](#推荐场景中的实际应用)
 
 
 
@@ -105,7 +129,7 @@ $$
 
 ## 负采样
 
-这个算是一个常见的技巧来，在做softmax的时候，分母的计算要遍历所有节点，这部分其实很费时，所以在分母较大的时候，经常会使用负采样技术。
+这个算是一个常见的技巧，在做softmax的时候，分母的计算要遍历所有节点，这部分其实很费时，所以在分母的求和数量较大的时候，经常会使用负采样技术。
 
 其实，我们想看看除了计算效率的不同以外，负采样和全局softmax有何不同。
 
@@ -607,6 +631,74 @@ Alias Method具体算法如下：
 这样算法复杂度为O(n)
 
 至此Alias Method就讲完了，感觉还是一个非常精妙的方法，而且方法实现起来也非常的简单。值得学习。
+
+
+
+# 分布式实现（腾讯Angel）
+
+LINE(Large-scale Information Network Embedding)算法，是Network Embedding领域著名的算法之一，将图数据嵌入到向量空间，从达到用针对向量类型数据的机器学习算法来处理图数据的目的
+
+**腾讯Angel**实现了LINE的分布式版本。
+
+主页：[Angel](https://www.bookstack.cn/read/angel/README.md)，LINE：[LINE](https://www.bookstack.cn/read/angel/docs-algo-sona-line_sona.m)或者[LINE](https://github.com/Angel-ML/angel/blob/master/docs/algo/sona/line_sona.md)
+
+GITHUB：[LINE](https://github.com/Angel-ML/angel/blob/master/spark-on-angel/mllib/src/main/scala/com/tencent/angel/spark/ml/embedding/line/LINEModel.scala)，可直接从Github上把源码下载到本地IDEA编辑器中打开。
+
+## 运行示例
+
+进入`/data2/recxxxd/angel-2.2.0-bin/bin`，直接`sh SONA-example`，就可以运行了。可以打开`SONA-example`，查看其内容：
+
+```shell
+#!/bin/bash
+
+source ./spark-on-angel-env.sh
+
+$SPARK_HOME/bin/spark-submit \
+    --master yarn-cluster \
+    --conf spark.ps.jars=$SONA_ANGEL_JARS \
+    --conf spark.ps.instances=10 \
+    --conf spark.ps.cores=2 \
+    --conf spark.ps.memory=6g \
+    --conf spark.hadoop.angel.ps.env="HADOOP_MAPRED_HOME=${HADOOP_MAPRED_HOME:-"/opt/yarn"}" \
+    --conf spark.hadoop.angel.am.env="HADOOP_MAPRED_HOME=${HADOOP_MAPRED_HOME:-"/opt/yarn"}" \
+    --conf spark.hadoop.angel.staging.dir="/tmp/recommend" \
+    --jars $SONA_SPARK_JARS\
+    --name "LR-spark-on-angel" \
+    --driver-memory 10g \
+    --num-executors 10 \
+    --executor-cores 2 \
+    --executor-memory 4g \
+    --class com.tencent.angel.spark.examples.basic.LR \
+    ./../lib/spark-on-angel-examples-${ANGEL_VERSION}.jar \
+    input:hdfs://nameservice3/tmp/lu.jiawei/angel \
+    lr:0.1 \
+```
+
+，要想改源码或者替换成其他模型，那就进入`~/IdeaProjects/angel/spark-on-angel/examples`，然后进行打包编译`mvn package`。
+
+## 分布式实现原理
+
+LINE算法的实现参考了Yahoo的论文
+
+[*Network–Efficient Distributed Word2vec Training System for Large Vocabularies*](https://arxiv.org/abs/1606.08495)
+
+, 将Embedding向量按维度拆分到多个PS上，节点之间的点积运算可以在每个PS内部进行局部运算，之后再拉取到spark端合并。Spark端计算每个节点的梯度，推送到每个PS去更新每个节点对应的向量维度。
+
+![line_distribute_structure](pic/line_distribute_structure.png)
+
+
+
+
+
+# 推荐场景中的实际应用
+
+
+
+
+
+
+
+
 
 # 参考资料
 
