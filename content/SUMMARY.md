@@ -152,6 +152,7 @@
 
 - [自然语言处理概论](natural-language-processing/natural-language-processing-introduction/natural-language-processing-introduction.md)
 - [自然语言](natural-language-processing/natural-language/natural-language.md)
+- [语言模型和中文分词](natural-language-processing/language-model-and-chinese-word-segmentation/language-model-and-chinese-word-segmentation.md)
 - [word2vec](natural-language-processing/word2vec/word2vec.md)
 - [Attention注意力机制](natural-language-processing/attention-mechanism/attention-mechanism.md)
 - [Transformer](natural-language-processing/transformer/transformer.md)
