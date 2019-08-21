@@ -6,7 +6,9 @@
 * Word2vec基础
 * Word2vec的衍生及应用
 * [NetworkEmbedding](#GraphEmbedding)
-  * [LINE: Large-scale Information Network Embedding](network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
+  * [LINE: Large-scale Information Network Embedding](#LINE)
+
+
 
 # Embedding方法的学习路径
 
@@ -82,6 +84,12 @@ node2vec这篇文章还是对DeepWalk随机游走方式的改进。为了使最�
 [网络表示学习综述：一文理解Network Embedding](https://www.jiqizhixin.com/articles/2018-08-14-10)
 
 [关于Network embedding的一些笔记(内含数据集）](https://blog.csdn.net/ZhichaoDuan/article/details/79570051)
+
+## LINE
+
+LINE的介绍见：[LINE: Large-scale Information Network Embedding](network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
+
+
 
 # 论文
 
