@@ -153,3 +153,8 @@ void topk_min_heap(int arr[], int len) {
 }
 ```
 
+# 参考资料
+
+* [堆排序原理及其实现(C++)](https://blog.csdn.net/lzuacm/article/details/52853194)
+
+本文参考此博客。
