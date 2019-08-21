@@ -131,10 +131,6 @@ $$
 
 这个算是一个常见的技巧，在做softmax的时候，分母的计算要遍历所有节点，这部分其实很费时，所以在分母的求和数量较大的时候，经常会使用负采样技术。
 
-其实，我们想看看除了计算效率的不同以外，负采样和全局softmax有何不同。
-
-
-
 ## 边采样
 
 也是训练的一个优化，因为优化函数中由一个w权重，在实际的数据集中，因为链接的大小差异会很大，这样的话会在梯度下降训练的过程中很难去选择好一个学习率。直观的想法是把权重都变成1，然后把w权重的样本复制w份，但是这样会占用更大的内存。第二个方法是按w权重占比做采样，可以减少内存开销。
@@ -311,6 +307,16 @@ export LD_LIBRARY_PATH=/usr/local/lib
 ```
 
 基本是因为你在其他该版本系统上编译好了，又在低版本系统上直接运行了。只需要在低版本上重新make编译一下就好。
+
+## 源码中存在的bug
+
+源码中在计算输出的时候，数组的index是int型，如果数据量一大，就非常容易超出int的范围21亿，则就会出错，出错类型是：segment fault，这是因为超出int型范围后，index就成了负数了，则数组就会向前检索，一旦求址到达内存中的不可访问区域，则就会报错。
+
+要改正这个bug很简单，就是强制将index的数据类型改为longlong就行：
+
+```c++
+if (is_binary) for (b = 0; b < (unsigned long long)dim; b++) fwrite(&emb_vertex[a * (unsigned long long)dim + b], sizeof(real), 1, fo_vertex);
+```
 
 # 源码解析
 
@@ -692,13 +698,21 @@ LINE算法的实现参考了Yahoo的论文
 
 # 推荐场景中的实际应用
 
+LINE在推荐中有三种应用。
 
+LINE中的每个节点都有两个embedding，vectex embedding和context embedding。
 
+（1）泛User-Based策略
 
+通过vectex embedding找出相似的节点，这样就找到了相似User，然后将相似User看过的东西推荐给User。
 
+（2）User->Item策略
 
+直接通过User的vertex embedding找出相似Item的Context embedding，直接将Item推荐给User。
 
+（3）User->Item * Item->User策略
 
+通过User的vectext embedding和Item的Context embedding，计算User对Item的喜好，再通过Item的vertex embedding和User的Context embedding，计算Item对User的喜好。然后两者相乘，就是双方的匹配程度。
 
 # 参考资料
 
