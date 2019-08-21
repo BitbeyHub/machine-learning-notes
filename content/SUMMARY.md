@@ -68,6 +68,7 @@
   - [动态规划](coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
   - [递归](coding/data-structures-and-algorithms/recursion/recursion.md)
   - [排序](coding/data-structures-and-algorithms/sort/sort.md)
+    - [堆排序](coding/data-structures-and-algorithms/sort/heap-sort.md)
 - [Hadoop](coding/hadoop/hadoop.md)
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
   - [MapReduce](coding/hadoop/map-reduce.md)
