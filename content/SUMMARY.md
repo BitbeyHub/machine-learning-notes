@@ -74,7 +74,8 @@
   - [MapReduce](coding/hadoop/map-reduce.md)
 - Spark
 - [TensorFlow](coding/tensorflow/tensorflow.md)
-  - [TensorFlow基础](coding/tensorflow/tensorflow-basis.md)
+  - [TensorFlow基础](coding/tensorflow/tensorflow-basis/tensorflow-basis.md)
+  - [TensorFlow基础概念解析](coding/tensorflow/tensorflow-basic-concept-analysis/tensorflow-basic-concept-analysis.md)
 - [PyTorch](coding/pytorch/pytorch.md)
 
 

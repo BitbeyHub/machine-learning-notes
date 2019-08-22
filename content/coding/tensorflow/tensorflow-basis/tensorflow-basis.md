@@ -1,7 +1,7 @@
 # TensorFlow基础
 
-* [返回顶层目录](../../SUMMARY.md)
-* [返回上层目录](tensorflow.md)
+* [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../tensorflow.md)
 * [基础练习](#基础练习)
 * [综合练习](#综合练习)
 
