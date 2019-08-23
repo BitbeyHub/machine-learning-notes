@@ -1,9 +1,5 @@
 # NumPy
 
-[搭建模型第一步：你需要预习的NumPy基础都在这了](https://zhuanlan.zhihu.com/p/38786013)
-
-
-
 - [返回顶层目录](../../SUMMARY.md#目录)
 - [返回上层目录](python.md#python)
 - [NumPy介绍](#NumPy介绍)
@@ -1166,3 +1162,12 @@ Array数组和矩阵的基本运算都是复制或改编自这里。
 - [Python-NumPy最简洁的大纲](http://www.cnblogs.com/keepgoingon/p/7137448.html)
 
 最简洁的NumPy大纲都是复制自这里。
+
+
+
+===
+
+[搭建模型第一步：你需要预习的NumPy基础都在这了](https://zhuanlan.zhihu.com/p/38786013)
+
+[图解NumPy，这是理解数组最形象的一份教程了](https://mp.weixin.qq.com/s/_r1czXpTRL4zFfaBL6XiVA)
+

@@ -21,6 +21,20 @@
 
 
 
+# 各类梯度下降算法的演化
+
+![revolution-of-gradient-descent](pic/revolution-of-gradient-descent.jpeg)
+
+
+
+
+
+
+
+
+
+
+
 # 批量梯度下降BGD
 
 
@@ -148,6 +162,7 @@ mini-batch SGD：就是选着合适Batch Size的SGD算法，mini-batch利用噪�
   $$
 
 
+
 **为什么说Batch size的增大能使网络的梯度更准确？**
 
 梯度的方差表示： 
@@ -191,4 +206,10 @@ $$
 * [神经网络中Batch Size的理解](https://blog.csdn.net/qq_34886403/article/details/82558399)
 
 “BatchSize的理解”参考了此博客。
+
+
+
+===
+
+[10个梯度下降优化算法+备忘单](https://ai.yanxishe.com/page/TextTranslation/1603?from=singlemessage)
 

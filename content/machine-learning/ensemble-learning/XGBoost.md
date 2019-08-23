@@ -553,3 +553,14 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 * [为啥Xgboost比GradientBoost好那么多？](http://sofasofa.io/forum_main_post.php?postid=1000331)
 
 "XGBoost和GradientBoost的比较"参考这篇文档。
+
+
+
+===
+
+[30分钟看懂xgboost的基本原理](https://mp.weixin.qq.com/s/PSs0tdwWCm_6ajD9kQOHMw)
+
+[xgboost 实战以及源代码分析](https://blog.csdn.net/u010159842/article/details/77503930?from=singlemessage)
+
+[XGBoost缺失值引发的问题及其深度分析](https://mp.weixin.qq.com/s/hYuBHHfAGLO3Y0l5t6y94Q)
+

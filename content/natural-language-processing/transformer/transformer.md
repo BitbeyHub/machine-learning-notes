@@ -16,6 +16,8 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 [经典算法·从seq2seq、attention到transformer](https://zhuanlan.zhihu.com/p/54368798)
 
+[通俗易懂！使用Excel和TF实现Transformer](https://mp.weixin.qq.com/s/QRiNGxA-D9MLvv8GPnlhHg)
+
 
 
 

@@ -32,6 +32,8 @@
 
 
 
+[XGBoost+LR融合的原理和简单实现](https://zhuanlan.zhihu.com/p/42123341?utm_source=wechat_session&utm_medium=social&utm_oi=903049909593317376)
+
 
 
 

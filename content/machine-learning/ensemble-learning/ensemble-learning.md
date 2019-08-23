@@ -130,3 +130,10 @@ XgBoost的详细描述，点击[XgBoost](XgBoost.md)跳转至相关章节。
 * [用python参加Kaggle的些许经验总结](https://www.jianshu.com/p/32def2294ae6)
 
 "Stacking"部分参考此博客。
+
+
+
+===
+
+[带答案面经分享-面试中最常考的树模型！](https://mp.weixin.qq.com/s/1R9IoKnaVVSzHKD2DAjByQ)
+

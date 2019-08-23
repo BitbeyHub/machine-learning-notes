@@ -27,3 +27,11 @@
 
 “降维概述”一节参考这篇博客。
 
+
+
+
+
+===
+
+[10种常用降维算法源代码(python)](https://mp.weixin.qq.com/s/W1i9ITXPtbUkyzYYAe_JIQ)
+

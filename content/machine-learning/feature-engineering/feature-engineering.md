@@ -11,3 +11,13 @@
 
 
 
+
+
+==
+
+[特征工程的宝典-《Feature Engineering for Machine Learning》翻译及代码实现](https://mp.weixin.qq.com/s/TEBcnUTNTtSsLie-xR8LbA)
+
+我将apachecn翻译的《Feature Engineering for Machine Learning》修改成jupyter notebook格式，测试全部通过，并在我的数据科学的github提供下载，这个资料可以说是特征工程的宝典，非常值得推荐。
+
+下载地址：<https://github.com/fengdu78/Data-Science-Notes/tree/master/9.feature-engineering>
+
