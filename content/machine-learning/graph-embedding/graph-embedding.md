@@ -10,5 +10,7 @@
 
 
 
+[网络表示学习（NRL）和网络嵌入（NE）研究领域必读论文清单](https://juejin.im/entry/5b9cb236e51d450e543e4bdf)
 
+[Graph Embedding：从DeepWalk到SDNE](https://zhuanlan.zhihu.com/p/33732033)
 

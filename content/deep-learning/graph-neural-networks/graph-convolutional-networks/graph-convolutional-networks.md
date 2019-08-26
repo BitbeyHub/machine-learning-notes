@@ -5,6 +5,12 @@
 
 
 
+W是普通的MLP. 前乘的$\tilde{A}$矩阵是行变换，是把一个点的所有邻接点特征向量加权平均，赋给该点；后乘的W矩阵是列变换，是每个点特征向量各个维度之间的交互。如果没有前面那个$\tilde{A}$，$\sigma(HW)$就是把所有点的特征放到一个batch里，通过一层全连接网络输出。
+
+
+
+
+
 # 参考资料
 
 
@@ -20,6 +26,10 @@
 [如何理解 Graph Convolutional Network（GCN）？](https://ai.yanxishe.com/page/postDetail/13980?from=timeline)
 
 [入门学习 | 什么是图卷积网络？行为识别领域新星](https://mp.weixin.qq.com/s/5wSgC4pXBfRLoCX-73DLnw)
+
+[图卷积神经网络(GCN)详解:包括了数学基础(傅里叶，拉普拉斯)](https://zhuanlan.zhihu.com/p/67522582)
+
+[论文浅尝 | 图神经网络综述：方法及应用](http://blog.openkg.cn/%E8%AE%BA%E6%96%87%E6%B5%85%E5%B0%9D-%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%BC%E8%BF%B0%EF%BC%9A%E6%96%B9%E6%B3%95%E5%8F%8A%E5%BA%94%E7%94%A8/)
 
 
 

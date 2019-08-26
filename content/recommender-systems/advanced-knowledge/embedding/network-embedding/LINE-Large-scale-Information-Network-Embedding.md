@@ -726,3 +726,9 @@ LINE中的每个节点都有两个embedding，vectex embedding和context embeddi
 
 "时间复杂度O(1)的Alias离散采样算法"参考了此博客。
 
+===
+
+在2017年在北邮举办的Google开发者节上，一位来自北大的同学使用Tensorflow实现了Line的代码:
+
+[LINE的tensorflow实现](https://github.com/snowkylin/line)
+
