@@ -1,6 +1,7 @@
 # 图神经网络综述
 
 * [返回顶层目录](../../SUMMARY.md#目录)
+* [返回上层目录](graph-neural-networks.md)
 
 
 
