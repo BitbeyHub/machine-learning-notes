@@ -46,11 +46,11 @@ $$
 
 所以，我们可以反推出铁棒这样的连续一维空间的热传导方程就是：
 $$
-\frac{\part \phi}{\part t}-k\frac{\part^2\phi}{\part x^2}=0
+\frac{\partial \phi}{\partial t}-k\frac{\partial^2\phi}{\partial x^2}=0
 $$
 同理，在高维的欧氏空间中，一阶导数就推广到**梯度**，二阶导数就是我们今天讨论的主角——**拉普拉斯算子**：
 $$
-\frac{\part \phi}{\part t}-k\Delta \phi=0
+\frac{\partial \phi}{\partial t}-k\Delta \phi=0
 $$
 其中Δ这个符号代表的是对各个坐标二阶导数的加和，现在的主流写法也可以写作∇ ^2。
 
@@ -138,7 +138,7 @@ $$
 $$
 回顾刚才在连续欧氏空间的那个微分方程：
 $$
-\frac{\part \phi}{\part t}-k\Delta \phi=0
+\frac{\partial \phi}{\partial t}-k\Delta \phi=0
 $$
 **二者具有一样的形式！**我们来对比一下二者之间的关系：
 

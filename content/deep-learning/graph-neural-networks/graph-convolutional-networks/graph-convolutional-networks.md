@@ -2,6 +2,9 @@
 
 * [返回顶层目录](../../../SUMMARY.md#目录)
 * [返回上层目录](../graph-neural-networks.md)
+* [GCN图卷积网络初步理解](gcn-preliminary-understand.md)
+* [GCN图卷积网络的numpy简单实现](gcn-numpy-fulfillment.md)
+* [GCN图卷积网络本质理解](gcn-essential-understand.md)
 
 
 
