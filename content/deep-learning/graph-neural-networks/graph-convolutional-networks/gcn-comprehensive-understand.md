@@ -164,7 +164,7 @@ $$
 
 (3)随机游走归一化拉普拉斯矩阵(Random Walk Normalized Laplacian)
 $$
-L^{rw}=D^{−1}L=I-D^{-1}A
+L^{rw}=D^{\\-1}L=I-D^{\\-1}A
 $$
 有读者的留言说看到了**Graph Convolution与Diffusion相似之处**，当然从Random walk normalized Laplacian就能看出了两者确有相似之处（**其实两者只差一个相似矩阵的变换**，可以参考[Diffusion-Convolutional Neural Networks](https://arxiv.org/pdf/1511.02136.pdf)，以及下图）
 
