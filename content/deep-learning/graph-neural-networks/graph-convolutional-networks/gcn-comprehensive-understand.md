@@ -70,7 +70,7 @@ CNN是Computer Vision里的大法宝，效果为什么好呢？原因在上面�
 
 ![social-network](pic/social-network.jpg)
 
-*图3 社交网络拓扑示意（Non Euclidean Structure）*
+*社交网络拓扑示意（Non Euclidean Structure）*
 
 实际上，这样的网络结构（Non Euclidean Structure）就是图论中抽象意义上的拓扑图。
 
@@ -102,7 +102,7 @@ b.确定receptive field，按照什么方式处理包含不同数目neighbors的
 
 根据a,b两个问题设计算法，就可以实现目标了。推荐阅读这篇文章[*Learning Convolutional Neural Networks for Graphs*](http://proceedings.mlr.press/v48/niepert16.pdf)（下图是其中一张图片，可以看出大致的思路）。
 
-![vertex-domain-extract-feature](pic/vertex-domain-extract-feature.jpg)图4 
+![vertex-domain-extract-feature](pic/vertex-domain-extract-feature.jpg)
 
 *vertex domain提取空间特征示意*
 
@@ -148,7 +148,7 @@ Graph Fourier Transformation及Graph Convolution的定义都用到图的拉普�
 
 *Laplacian 矩阵的计算方法*
 
-这里要说明的是：**常用的拉普拉斯矩阵实际有三种：
+这里要说明的是：**常用的拉普拉斯矩阵实际有三种**：
 
 拉普拉斯矩阵还有几种扩展定义：
 
