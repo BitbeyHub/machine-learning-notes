@@ -44,7 +44,7 @@ GCN的公式看起来还是有点吓人的，论文里的公式更是吓破了�
 
 GCN也是一个神经网络层，它的层与层之间的传播方式是：
 $$
-H^{(l+1)}=\sigma\left(\tilde{D}^{-\frac{1}{2}}A\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}\right)
+H^{(l+1)}=\sigma\left(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}\right)
 $$
 这个公式中：
 
@@ -55,7 +55,7 @@ $$
 
 我们先不用考虑为什么要这样去设计一个公式。我们现在只用知道：
 $$
-\tilde{D}^{-\frac{1}{2}}A\tilde{D}^{-\frac{1}{2}}
+\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}
 $$
 这个部分，**是可以事先算好的**，因为D波浪由A计算而来，而A是我们的输入之一。
 

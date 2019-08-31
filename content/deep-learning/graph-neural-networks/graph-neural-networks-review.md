@@ -29,6 +29,8 @@
 
 [图神经网络综述：模型与应用](https://mp.weixin.qq.com/s/DIdJb_vG8_zLdp_t56jLXQ)
 
+[图神经网络概述第三弹：来自IEEE Fellow的GNN综述](https://zhuanlan.zhihu.com/p/54241746)
+
 [CNN已老，GNN来了！清华大学孙茂松组一文综述GNN](https://mp.weixin.qq.com/s/h4jQWJlQV2Ew3SpuF8k5Hw)
 
 [【图深度学习时代降临】清华朱文武组一文综述GraphDL五类模型](https://mp.weixin.qq.com/s/eelcT5x_kWC0dDt0_Ph4qg)

@@ -9,7 +9,11 @@ PDF: [*SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS*](https:
 
 
 
+[semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
 
+[《Semi-Supervised Classification with Graph Convolutional Networks》阅读笔记](https://zhuanlan.zhihu.com/p/31067515)
 
+[经典半监督图卷积神经网络Semi-GCN](https://zhuanlan.zhihu.com/p/5817806)
 
+[semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
 

@@ -5,6 +5,7 @@
 * [GCN图卷积网络初步理解](gcn-preliminary-understand.md)
 * [GCN图卷积网络的numpy简单实现](gcn-numpy-fulfillment.md)
 * [GCN图卷积网络本质理解](gcn-essential-understand.md)
+* [GCN图卷积网络全面理解](gcn-comprehensive-understand.md)
 
 
 
