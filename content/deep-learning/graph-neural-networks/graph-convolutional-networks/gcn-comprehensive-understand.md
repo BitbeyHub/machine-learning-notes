@@ -158,7 +158,7 @@ L=D-A
 $$
 (2)对称归一化拉普拉斯矩阵(Symmetric Normalized Laplacian)
 $$
-L^{sys}=D^{−1/2}LD^{−1/2}=I-D^{−1/2}AD^{−1/2}
+L^{sys}=D^{\text{−}1/2}LD^{−1/2}=I-D^{−1/2}AD^{−1/2}
 $$
 ，很多GCN的论文中应用的是这种拉普拉斯矩阵。
 
