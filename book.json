@@ -11,7 +11,7 @@
 		"-lunr",
 		"-search",
 		"search-pro",
-		"katex@git+https://github.com/gaoxiaosong/plugin-katex.git",
+		"mathjax",
 		"splitter",
 		"sharing",
 		"toggle-chapters",
@@ -31,6 +31,9 @@
 	],
 	
 	"pluginsConfig": {
+		"mathjax":{
+            "forceSVG": true
+        },
 		"disqus": {
 			"shortName": "machine-learning-note"
 		},
