@@ -158,7 +158,7 @@ L=D-A
 $$
 (2)对称归一化拉普拉斯矩阵(Symmetric Normalized Laplacian)
 $$
-L^{sys}=D^{\_\frac{1}{2}}LD^{\_\frac{1}{2}}=I-D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}
+L^{sys}=D^{\text{—}\frac{1}{2}}LD^{\text{—}\frac{1}{2}}=I-D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}
 $$
 ，很多GCN的论文中应用的是这种拉普拉斯矩阵。
 
@@ -433,7 +433,7 @@ $$
 $$
 \begin{aligned}
 \hat{h}\hat{f}
-=U^Th⊙U^Tf=
+=U^Th\odot U^Tf=
 \begin{bmatrix}
 \hat{h}(\lambda_1)&&\\
 &\ddots&\\
@@ -687,7 +687,7 @@ Ug_{\theta}(\Lambda)U^Tx&\approx \sum_{k=0}^1\theta_kT_k(\tilde{\Lambda})x\\
 &=\theta_0T_0(\tilde{\Lambda})x+\theta_1T_1(\tilde{\Lambda})x\\
 &=\theta_0Ix+\theta_1\tilde{\Lambda}x\\
 &=\theta_0x+\theta_1(L-I)x\\
-&=\theta_0x+\theta_1D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}x\\
+&=\theta_0x+\theta_1D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}x\\
 \end{aligned}
 $$
 上式有两个参数θ0和θ1。这两个参数可以在整个图所有节点的计算中共享。在实践中，进一步限制参数的个数能够一定程度上避免过拟合的问题，并且减少计算量。因此作者又引入了另一个假设：
@@ -696,19 +696,19 @@ $$
 $$
 做进一步的近似：
 $$
-Ug_{\theta}(\Lambda)U^Tx\approx\theta \left(I+D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}\right)x
+Ug_{\theta}(\Lambda)U^Tx\approx\theta \left(I+D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}\right)x
 $$
 注意
 $$
-I+D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}
+I+D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}
 $$
 的特征值被限制在了[0,2]中。由于这一步生成的yout可能作为下一层的输入x， 会再次与
 $$
-I+D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}
+I+D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}
 $$
 相乘重复这样的操作将会导致数值不稳定、梯度弥散/爆炸等问题。为了缓解这样的问题，作者引入了这样的再正则化(renormalization)技巧：
 $$
-I_N+D^{\_\frac{1}{2}}AD^{\_\frac{1}{2}}\ \rightarrow\ \tilde{D}^{\_\frac{1}{2}}\tilde{A}\tilde{D}^{\_\frac{1}{2}}
+I_N+D^{\text{—}\frac{1}{2}}AD^{\text{—}\frac{1}{2}}\ \rightarrow\ \tilde{D}^{\text{—}\frac{1}{2}}\tilde{A}\tilde{D}^{\text{—}\frac{1}{2}}
 $$
 ，其中
 $$
@@ -720,7 +720,7 @@ X \in \mathbb{R}^{N\times C}
 $$
 , 每个输入节点有C个通道(channels, 即每个图节点有C维特征)，卷积操作包含F个滤波器(filters)或特征映射(feature maps), 如下：
 $$
-Y=\sigma\left(\tilde{D}^{\_\frac{1}{2}}\tilde{A}\tilde{D}^{\_\frac{1}{2}}X{\Theta}\right)
+Y=\sigma\left(\tilde{D}^{\text{—}\frac{1}{2}}\tilde{A}\tilde{D}^{\text{—}\frac{1}{2}}X{\Theta}\right)
 $$
 其中
 $$
