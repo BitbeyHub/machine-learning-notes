@@ -11,7 +11,7 @@
 		"-lunr",
 		"-search",
 		"search-pro",
-		"katex",
+		"katex@git+https://github.com/gaoxiaosong/plugin-katex.git",
 		"splitter",
 		"sharing",
 		"toggle-chapters",
