@@ -279,7 +279,7 @@ $$
 
 连续域的傅里叶变换定义为：
 $$
-F(w)=\cal{F}[f(t)]=\int f(t)e^{-iwt}dt
+F(w)=\mathcal{F}[f(t)]=\int f(t)e^{-iwt}dt
 $$
 即信号f(t)与基函数$e^{−iωt}$的积分。
 
@@ -357,7 +357,7 @@ $$
 
 那么，我们将节点从空间域变换到频率域之后，怎么变换回空间域呢？传统的傅里叶逆变换是对频率ω积分：
 $$
-{\cal{F}}^{-1}[F(w)]=\frac{1}{2\pi}\int{\cal{F(w)}}e^{-iwt}dw
+{\mathcal{F}}^{-1}[F(w)]=\frac{1}{2\pi}\int{\mathcal{F(w)}}e^{-iwt}dw
 $$
 类比到离散域(图上)则为对特征值λ_l求和：
 $$
@@ -400,7 +400,7 @@ $$
 >**卷积定理**：函数卷积的傅里叶变换是函数傅里叶变换的乘积，即对于函数f(t)与h(t)两者的卷积是其傅里叶变换乘积的逆变换：
 
 $$
-f(t)*h(t)={\cal{F}}^{-1}\left[\hat{f}(w)\hat{h}(w)\right]=\frac{1}{2\pi}\int\hat{f}(w)\hat{h}(w)e^{-iwt}dw
+f(t)*h(t)={\mathcal{F}}^{-1}\left[\hat{f}(w)\hat{h}(w)\right]=\frac{1}{2\pi}\int\hat{f}(w)\hat{h}(w)e^{-iwt}dw
 $$
 
 其中*表示卷积运算，卷积核即是一个函数，在CNN上，卷积核通常是一个矩阵，表示对输入的线性变换。
