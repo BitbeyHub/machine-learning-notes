@@ -17,3 +17,9 @@ PDF: [*SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS*](https:
 
 [semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
 
+
+
+
+
+[Graph Convolutional Networks in PyTorch](https://github.com/tkipf/pygcn)
+

@@ -683,3 +683,11 @@ GBDT的主要**缺点**有：
 * [GBDT理论知识总结](https://www.cnblogs.com/bentuwuying/p/6667267.html)
 
 “GBDT的优缺点”一节参考此博客。
+
+
+
+
+
+===
+
+[从一道数学题到GBDT原理的部分推导](https://zhuanlan.zhihu.com/p/76002032)

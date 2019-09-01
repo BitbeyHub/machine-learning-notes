@@ -18,7 +18,7 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 [通俗易懂！使用Excel和TF实现Transformer](https://mp.weixin.qq.com/s/QRiNGxA-D9MLvv8GPnlhHg)
 
-
+[搞懂Transformer结构，看这篇PyTorch实现就够了（上）](https://zhuanlan.zhihu.com/p/48731949)
 
 
 

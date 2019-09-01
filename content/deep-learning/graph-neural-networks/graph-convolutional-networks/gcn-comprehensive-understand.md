@@ -52,7 +52,7 @@
 
 那么卷积核的系数如何确定的呢？是随机化初值，然后根据误差函数通过反向传播梯度下降进行迭代优化。这是一个关键点，**卷积核的参数通过优化求出才能实现特征提取的作用，GCN的理论很大一部分工作就是为了引入可以优化的卷积参数。**
 
-![cnn-feature-map](/Users/momo/Desktop/GIT/machine-learning-notes/content/deep-learning/graph-neural-networks/graph-convolutional-networks/pic/cnn-feature-map.jpg)
+![cnn-feature-map](pic/cnn-feature-map.jpg)
 
 *CNN中卷积提取feature map示意图*
 
@@ -803,5 +803,5 @@ $$
 * [知乎：如何理解 Graph Convolutional Network（GCN）？](https://www.zhihu.com/question/54504471/answer/332657604)
 * [图卷积网络Graph Convolutional Network（谱域GCN）的理解和详细推导](https://blog.csdn.net/yyl424525/article/details/100058264)
 
-本主要参考了这几篇文章。
+本文主要参考了这几篇文章。
 
