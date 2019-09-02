@@ -194,10 +194,12 @@ $$
    $$
 
 
+
 2. 预处理邻接矩阵A：
    $$
    \hat{A}=\tilde{D}^{\text{—}\frac{1}{2}}\tilde{A}\tilde{D}^{\text{—}\frac{1}{2}}
    $$
+
 
 
 3. 第一层卷积+ReLU非线性转换：
@@ -206,13 +208,15 @@ $$
    $$
 
 
+
 4. 第二层卷积+softmax转换后输出： 
    $$
    \begin{aligned}
-   Z=f(X,A)=\text{softmax}\left(\tilde{A}H^{(0)}W^{(1)}\right)=\text{softmax}\left(\tilde{A}\text{ReLU}\left(\tilde{A}XW^{(0)}\right)W^{(1)}\right)\\
-   \Rightarrow Z=H^{(1)}
+   &Z=f(X,A)=\text{softmax}\left(\tilde{A}H^{(0)}W^{(1)}\right)=\text{softmax}\left(\tilde{A}\text{ReLU}\left(\tilde{A}XW^{(0)}\right)W^{(1)}\right)\\
+   \Rightarrow &Z=H^{(1)}
    \end{aligned}
    $$
+
 
 
 实现复杂度为O(|E|CHF) ，C为X的维度，H为中间层维度、F为输出层维度。
