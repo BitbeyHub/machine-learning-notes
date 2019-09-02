@@ -208,8 +208,10 @@ $$
 
 4. 第二层卷积+softmax转换后输出： 
    $$
+   \begin{aligned}
    Z=f(X,A)=\text{softmax}\left(\tilde{A}H^{(0)}W^{(1)}\right)=\text{softmax}\left(\tilde{A}\text{ReLU}\left(\tilde{A}XW^{(0)}\right)W^{(1)}\right)\\
    \Rightarrow Z=H^{(1)}
+   \end{aligned}
    $$
 
 
