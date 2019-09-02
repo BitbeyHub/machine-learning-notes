@@ -140,6 +140,7 @@
     - [GCN图卷积网络的numpy简单实现](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-numpy-fulfillment.md)
     - [GCN图卷积网络本质理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-essential-understand.md)
     - [GCN图卷积网络全面理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-comprehensive-understand.md)
+    - [基于图卷积网络的半监督学习ICLR2017](deep-learning/graph-neural-networks/graph-convolutional-networks/SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
 * 论文
   * [权重无关的神经网络-谷歌2019](deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
 ---

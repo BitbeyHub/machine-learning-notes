@@ -6,18 +6,19 @@
 * [GCN图卷积网络的numpy简单实现](gcn-numpy-fulfillment.md)
 * [GCN图卷积网络本质理解](gcn-essential-understand.md)
 * [GCN图卷积网络全面理解](gcn-comprehensive-understand.md)
-
-
-
-W是普通的MLP. 前乘的$\tilde{A}$矩阵是行变换，是把一个点的所有邻接点特征向量加权平均，赋给该点；后乘的W矩阵是列变换，是每个点特征向量各个维度之间的交互。如果没有前面那个$\tilde{A}$，$\sigma(HW)$就是把所有点的特征放到一个batch里，通过一层全连接网络输出。
-
+* [基于图卷积网络的半监督学习ICLR2017](SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
 
 
 
 
-# 参考资料
 
 
+
+
+
+
+
+===
 
 [知乎：如何理解 Graph Convolutional Network（GCN）？](https://www.zhihu.com/question/54504471)
 
@@ -38,8 +39,6 @@ W是普通的MLP. 前乘的$\tilde{A}$矩阵是行变换，是把一个点的所
 
 
 [图卷积神经网络相关资源：附有基于图卷积神经网络的实现、示例和教程；](https://github.com/Jiakui/awesome-gcn)
-
-
 
 
 

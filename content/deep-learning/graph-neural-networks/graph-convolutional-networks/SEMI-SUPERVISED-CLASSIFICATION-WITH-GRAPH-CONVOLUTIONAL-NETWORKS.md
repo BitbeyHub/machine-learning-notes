@@ -2,6 +2,22 @@
 
 - [返回顶层目录](../../../SUMMARY.md#目录)
 - [返回上层目录](graph-convolutional-networks.md)
+- [概括](#概括)
+- [基于图的半监督学习](#基于图的半监督学习)
+- [谱图卷积简介](#谱图卷积简介)
+  - [谱图卷积](#谱图卷积)
+  - [切比雪夫近似谱卷积](#切比雪夫近似谱卷积)
+  - [基于切比雪夫近似的GCN](#基于切比雪夫近似的GCN)
+- [本文工作](#本文工作)
+  - [Layer-wise线性模型](#Layer-wise线性模型)
+  - [卷积层](#卷积层)
+  - [分层传播](#分层传播)
+  - [半监督GCN框架](#半监督GCN框架)
+  - [两层GCN例子](#两层GCN例子)
+- [效果](#效果)
+- [讨论](#讨论)
+  - [半监督模模型](#半监督模模型)
+  - [限制及未来工作](#限制及未来工作)
 
 
 
@@ -242,11 +258,12 @@ $$
 
 # 参考资料
 
-[semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
+* [semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
+* [《Semi-Supervised Classification with Graph Convolutional Networks》阅读笔记](https://zhuanlan.zhihu.com/p/31067515)
 
-[《Semi-Supervised Classification with Graph Convolutional Networks》阅读笔记](https://zhuanlan.zhihu.com/p/31067515)
+本文参考了这两篇知乎专栏文章。
+
+===
 
 [经典半监督图卷积神经网络Semi-GCN](https://zhuanlan.zhihu.com/p/5817806)
-
-[semi-GCN：基于图的半监督学习](https://zhuanlan.zhihu.com/p/65276194)
 
