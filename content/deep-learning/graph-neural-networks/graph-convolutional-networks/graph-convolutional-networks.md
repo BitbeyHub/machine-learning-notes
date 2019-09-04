@@ -6,7 +6,8 @@
 * [GCN图卷积网络的numpy简单实现](gcn-numpy-fulfillment.md)
 * [GCN图卷积网络本质理解](gcn-essential-understand.md)
 * [GCN图卷积网络全面理解](gcn-comprehensive-understand.md)
-* [基于图卷积网络的半监督学习ICLR2017](SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
+* [SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS ICLR2017](SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
+* [Graph Convolutional Neural Networks for Web-Scale Recommender Systems KDD2018](Graph-Convolutional-Neural-Networks-for-Web-Scale-Recommender-Systems.md)
 
 
 
