@@ -144,7 +144,7 @@
     * [SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS ICLR2017](content/deep-learning/graph-neural-networks/graph-convolutional-networks/SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
     * [Graph Convolutional Neural Networks for Web-Scale Recommender Systems KDD2018](content/deep-learning/graph-neural-networks/graph-convolutional-networks/Graph-Convolutional-Neural-Networks-for-Web-Scale-Recommender-Systems.md)
 * 论文
-  * [权重无关的神经网络-谷歌2019](content/deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
+  * [Weight Agnostic Neural Networks-Google2019](content/deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
 
 ---
 
