@@ -173,6 +173,9 @@
   * [word2vec源码分析](content/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
   * [word2vec实践](content/natural-language-processing/word2vec/word2vec-practice.md)
 * [Attention注意力机制](content/natural-language-processing/attention-mechanism/attention-mechanism.md)
+* [深度学习](content/natural-language-processing/deep-learning/deep-learning.md)
+  - DSSM深度语义模型
+    - [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](content/natural-language-processing/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
 * [Transformer](content/natural-language-processing/transformer/transformer.md)
 
 # 知识图谱
