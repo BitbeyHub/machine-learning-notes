@@ -5,6 +5,16 @@
 
 
 
+全面理解word2vec
+
+https://zhuanlan.zhihu.com/p/33799633
+
+词嵌入的直觉理解：从计数向量到Word2Vec
+
+https://blog.idejie.com/2017/07/15/word-embedding/
+
+
+
 论文：
 
 google发布的word2vec，要是在写论文时引用该引用它的哪一篇文章呢？

@@ -51,3 +51,15 @@
 
 [斯坦福大学最新论文|知识图卷积神经网络在推荐系统中的应用](https://mp.weixin.qq.com/s/4KS_HG7rBOQgcTII7YKsaQ)
 
+
+
+
+
+论文：《SocialGCN: An Efficient Graph Convolutional Network based Model for Social Recommendation》（AAAI2019）
+
+https://zhuanlan.zhihu.com/p/73679727
+
+菜鸟笔记之《Large-Scale Learnable Graph Convolutional Networks》
+
+https://www.jianshu.com/p/ada8730913ce
+
