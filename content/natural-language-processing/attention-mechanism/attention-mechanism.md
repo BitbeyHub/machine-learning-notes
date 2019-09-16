@@ -4,6 +4,22 @@
 
 
 
+
+
+
+
+- [完全图解RNN、RNN变体、Seq2Seq、Attention机制](https://zhuanlan.zhihu.com/p/28054589)
+
+
+
+
+
+===
+
+
+
+[翻译系统/聊天机器人Seq2Seq模型+attention](https://blog.csdn.net/weixin_37479258/article/details/99887469)
+
 **经典篇：《Neural Machine Translation by Jointly Learning to Align and Translate》**     
 
 Attention机制最初由图像处理领域提出，后来被引入到NLP领域用于解决机器翻译的问题，使得机器翻译的效果得到了显著的提升。attention是近几年NLP领域最重要的亮点之一，后续的Transformer和Bert都是基于attention机制。
@@ -25,4 +41,6 @@ Attention机制最初由图像处理领域提出，后来被引入到NLP领域�
 [计算机视觉中attention机制的理解](https://zhuanlan.zhihu.com/p/61440116?utm_source=wechat_session&utm_medium=social&utm_oi=903049909593317376)
 
 [Attention！注意力机制模型最新综述（附下载）](https://mp.weixin.qq.com/s/CrxbmG7mbsmERMLEDkGYxw)
+
+[遍地开花的 Attention，你真的懂吗？](https://zhuanlan.zhihu.com/p/77307258)
 
