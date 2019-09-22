@@ -10,3 +10,7 @@
 
 [深度学习最全优化方法总结比较（SGD，Adagrad，Adadelta，Adam，Adamax，Nadam）](https://zhuanlan.zhihu.com/p/22252270)
 
+
+
+[神经网络优化算法：Dropout、梯度消失/爆炸、Adam优化算法，一篇就够了！](https://zhuanlan.zhihu.com/p/78854514)
+

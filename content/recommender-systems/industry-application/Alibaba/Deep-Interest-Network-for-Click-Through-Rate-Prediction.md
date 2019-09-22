@@ -19,8 +19,12 @@ github:[深度兴趣网络(DIN)](https://github.com/alibaba/x-deeplearning/wiki/
 # 参考资料
 
 * [阿里深度兴趣网络模型paper学习](https://www.cnblogs.com/bentuwuying/p/8295747.html)
-
 * [CTR预估--阿里Deep Interest Network](https://zhuanlan.zhihu.com/p/39439947)
+* [计算广告CTR预估系列(五)--阿里Deep Interest Network理论](https://blog.csdn.net/u010352603/article/details/80590152)
+
+===
+
+[【阿里算法天才盖坤】解读阿里深度学习实践，CTR 预估、MLR 模型、兴趣分布网络等](https://zhuanlan.zhihu.com/p/35599271)
 
 
 
