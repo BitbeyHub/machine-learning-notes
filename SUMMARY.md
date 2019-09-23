@@ -204,6 +204,7 @@
     - [YouTube深度学习推荐系统](content/recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
   - Alibaba
     - [Learning Tree-based Deep Model for Recommender Systems KDD2018](content/recommender-systems/industry-application/Alibaba/Learning-Tree-based-Deep-Model-for-Recommender-Systems.md)
+    - [Deep Interest Network for Click-Through Rate Prediction KDD2018](content/recommender-systems/industry-application/Alibaba/Deep-Interest-Network-for-Click-Through-Rate-Prediction.md)
 - 前景与未来
 
 
