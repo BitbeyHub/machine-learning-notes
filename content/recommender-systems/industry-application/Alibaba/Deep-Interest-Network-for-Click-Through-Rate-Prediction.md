@@ -258,9 +258,9 @@ L_2(W)=||w||^2_2=\sum_{j=1}^K||w_j||^2_2=\sum_{(x,y)\in S}\sum_{j=1}^K\frac{I(x_
 $$
 其中$$I(x_j\neq0)$$表示为例子x是否有特征j，$$n_j$$表示为特征j在所有样本中的数量。上式可用mini-batch的形式表示如下：
 $$
-L_2(W)=\sum_{j=1}^K\sum_{m=1}^B\sum_{(x,y)\in \mathbb{B}_m}\frac{I(x_j\neq 0)}{n_j}||w_j||^2_2
+L_2(W)=\sum_{j=1}^K\sum_{m=1}^B\sum_{(x,y)\in \mathcal{B}_m}\frac{I(x_j\neq 0)}{n_j}||w_j||^2_2
 $$
-其中，B表示mini-batch的数量，$$\mathbb{B}_m$$表示第m个mini-batch。令$$\alpha_{mj}=\text{max}_{(x,y)\in \mathbb{B}_m}I(x_j\neq 0)$$表示只要特征j在该mini-batch中出现至少一次，就为1，一次都没出现过，就为0。则上式可近似为：
+其中，B表示mini-batch的数量，$$\mathcal{B}_m$$表示第m个mini-batch。令$$\alpha_{mj}=\text{max}_{(x,y)\in \mathcal{B}_m}I(x_j\neq 0)$$表示只要特征j在该mini-batch中出现至少一次，就为1，一次都没出现过，就为0。则上式可近似为：
 $$
 L_2(W)\approx \sum^K_{j=1}\sum_{m=1}^B\dfrac{\alpha_{mj}}{n_j}||w_j||_2^2
 $$
@@ -268,7 +268,7 @@ $$
 
 对于第m个mini-batch，考虑了embedding权重的第j个特征的权重的梯度下降更新公式为：
 $$
-w_j\leftarrow w_j-\eta\left[\frac{1}{|\mathbb{B}_m|}\sum_{(x,y)\in\mathbb{B}_m}\frac{\partial L(p(x),y)}{\partial w_j}+\lambda\frac{\alpha_{mj}}{n_j}w_j\right]
+w_j\leftarrow w_j-\eta\left[\frac{1}{|\mathcal{B}_m|}\sum_{(x,y)\in\mathcal{B}_m}\frac{\partial L(p(x),y)}{\partial w_j}+\lambda\frac{\alpha_{mj}}{n_j}w_j\right]
 $$
 所以这里做了两点：
 
