@@ -72,6 +72,7 @@
 - [Hadoop](coding/hadoop/hadoop.md)
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
   - [MapReduce](coding/hadoop/map-reduce.md)
+- [Hive](coding/hive/hive.md)
 - Spark
 - [TensorFlow](coding/tensorflow/tensorflow.md)
   - [TensorFlow基础](coding/tensorflow/tensorflow-basis/tensorflow-basis.md)
