@@ -28,6 +28,26 @@ show create table xxxx.xxxxxxxxx;
 
 
 
+## desc formatted表的存储位置查询
+
+用下面的语句查询表级别的存储位置：
+
+```sql
+desc formatted xxx.xxxxxx
+```
+
+
+
+有一类表比较特殊，各个分区是自己用命令load的。因此需要查具体的分区信息：
+
+```sql
+desc formatted xxxx partition(partition_date=xxx)
+```
+
+
+
+
+
 ## WITH AS临时表
 
 WITH 通常与AS连用，也叫做子查询部分。

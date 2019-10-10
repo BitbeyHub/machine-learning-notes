@@ -72,11 +72,21 @@
 - [Hadoop](coding/hadoop/hadoop.md)
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
   - [MapReduce](coding/hadoop/map-reduce.md)
+
 - [Hive](coding/hive/hive.md)
+
 - Spark
+
 - [TensorFlow](coding/tensorflow/tensorflow.md)
+
+  TensorFlow1.0
+
   - [TensorFlow基础](coding/tensorflow/tensorflow-basis/tensorflow-basis.md)
   - [TensorFlow基础概念解析](coding/tensorflow/tensorflow-basic-concept-analysis/tensorflow-basic-concept-analysis.md)
+  - [TensorFlow机器学习基础](coding/tensorflow/tensorflow-machine-learning-foundation/tensorflow-machine-learning-foundation.md)
+
+  TensorFlow2.0
+
 - [PyTorch](coding/pytorch/pytorch.md)
 
 
@@ -194,7 +204,7 @@
     * [DRN基于深度强化学习的新闻推荐模型](recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 * [业界应用](recommender-systems/industry-application/industry-application.md)
   * YouTube
-    * [YouTube深度学习推荐系统](recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
+    * [Deep Neural Networks for YouTube Recommendations RecSys2016](recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
   * Alibaba
     * [Learning Tree-based Deep Model for Recommender Systems KDD2018](recommender-systems/industry-application/Alibaba/Learning-Tree-based-Deep-Model-for-Recommender-Systems.md)
     * [Deep Interest Network for Click-Through Rate Prediction KDD2018](recommender-systems/industry-application/Alibaba/Deep-Interest-Network-for-Click-Through-Rate-Prediction.md)

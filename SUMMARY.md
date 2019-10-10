@@ -64,20 +64,33 @@
     * [scipy](content/coding/python/scipy.md)
     * [matplotlib](content/coding/python/matplotlib.md)
     * [scikit-learn](content/coding/python/scikit-learn.md)
+
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
     * [数据结构与算法简介](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
     * [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
     * [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
     * [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
       * [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
+
 * [Hadoop](content/coding/hadoop/hadoop.md)
     * [Hadoop简介](content/coding/hadoop/hadoop-introduction.md)
     * [MapReduce](content/coding/hadoop/map-reduce.md)
+
 * [Hive](content/coding/hive/hive.md)
+
 * Spark
+
 * [TensorFlow](content/coding/tensorflow/tensorflow.md)
+
+    TensorFlow1.0
+
     * [TensorFlow基础](content/coding/tensorflow/tensorflow-basis/tensorflow-basis.md)
     * [TensorFlow基础概念解析](content/coding/tensorflow/tensorflow-basic-concept-analysis/tensorflow-basic-concept-analysis.md)
+
+    * [TensorFlow机器学习基础](content/coding/tensorflow/tensorflow-machine-learning-foundation/tensorflow-machine-learning-foundation.md)
+
+    TensorFlow2.0
+
 * [PyTorch](content/coding/pytorch/pytorch.md)
 
 
@@ -201,7 +214,7 @@
 
 - 业界应用
   - YouTube
-    - [YouTube深度学习推荐系统](content/recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
+    - [Deep Neural Networks for YouTube Recommendations RecSys2016](content/recommender-systems/industry-application/YouTube/Deep-Neural-Networks-for-YouTube-Recommendations.md)
   - Alibaba
     - [Learning Tree-based Deep Model for Recommender Systems KDD2018](content/recommender-systems/industry-application/Alibaba/Learning-Tree-based-Deep-Model-for-Recommender-Systems.md)
     - [Deep Interest Network for Click-Through Rate Prediction KDD2018](content/recommender-systems/industry-application/Alibaba/Deep-Interest-Network-for-Click-Through-Rate-Prediction.md)
