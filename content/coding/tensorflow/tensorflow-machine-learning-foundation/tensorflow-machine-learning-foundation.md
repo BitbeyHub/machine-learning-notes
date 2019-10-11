@@ -205,39 +205,155 @@ W1 = [3.414043], W2 = [1.4546419], b = 10.848892211914062
 
 # 逻辑回归
 
+二分类问题中，最常见的分类函数就是逻辑回归了：
+$$
+f(x)=\frac{1}{1+e^{-x}}
+$$
+损失函数采用交叉熵损失：
+$$
+\text{loss}=\sum_i(y_i\cdot \text{log}(y\_predicted_i)+(1-y_i)\cdot \text{log}(1-y\_predicted_i))
+$$
+将该模型用到如下问题中：
+
+有一艘著名的船泰坦尼克号沉没了，这里有一份乘客名单，分别给出了生存人员的性别，舱位，年龄。 则根据失踪人员的对应信息，推测生存概率。
+
+数据来自kaggle竞赛的[titanic数据集](https://www.kaggle.com/c/titanic/data)，如下所示：
+
+![train](pic/train.png)
+
+我们可以学会编写读取文件的基本代码，并常见一个batch来读取多行数据。
+
+对于数据集中的属性数据，为了能在模型中使用，需要将其转换为数值型特征，一种方法是为每个可能的取值分配一个数值，即one-hot编码。例如，如果直接用1表示一等船票，2和3表示二、三等船票，这种方式会为这些取值强加一种实际并不存在的线性关系，因为我们不能说，三等船票是一等船票的3倍，正确的做法是将每个属性拓展为N维的布尔型特征，若具备该属性，则相应的维度上取值为1，这样就可以使模型独立地学习到每个可能的取值。
+
+具体代码为：
+
+```python
+import tensorflow as tf
+import os
+
+with tf.name_scope('parameters'):
+    W = tf.Variable(tf.zeros([5,1]), name='weights')
+    b = tf.Variable(0., name="bias")
+    tf.summary.histogram('weight',W)
+    tf.summary.histogram('bias',b)
+
+def combine_inputs(X):
+    return tf.matmul(X,W) + b
+
+def inference(X):
+    return tf.sigmoid(combine_inputs(X))
+
+def loss(X, Y):
+    loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=Y, logits=combine_inputs(X)))
+    tf.summary.scalar('loss', loss)
+    return loss
+
+def read_csv(batch_size, file_name, record_defaults):
+    filename_queue = tf.train.string_input_producer([os.path.join(os.getcwd(), file_name)])
+
+    reader = tf.TextLineReader(skip_header_lines=1)
+    key, value = reader.read(filename_queue)
+
+    # decode_csv will convert a Tensor from type string (the text line) in
+    # a tuple of tensor columns with the specified defaults, which also
+    # sets the data type for each column
+    decoded = tf.decode_csv(value, record_defaults=record_defaults)
+
+    # batch actually reads the file and loads "batch_size" rows in a single tensor
+    return tf.train.shuffle_batch(decoded,
+                                  batch_size=batch_size,
+                                  capacity=batch_size * 50,
+                                  min_after_dequeue=batch_size)
 
 
+def inputs():
+    passenger_id, survived, pclass, name, sex, age, sibsp, parch, ticket, fare, cabin, embarked = \
+        read_csv(100, "train.csv", [[0.0], [0.0], [0], [""], [""], [0.0], [0.0], [0.0], [""], [0.0], [""], [""]])
+
+    # convert categorical data 转换属性数据
+    is_first_class = tf.to_float(tf.equal(pclass, [1]))
+    is_second_class = tf.to_float(tf.equal(pclass, [2]))
+    is_third_class = tf.to_float(tf.equal(pclass, [3]))
+
+    gender = tf.to_float(tf.equal(sex, ["female"]))
+
+    # Finally we pack all the features in a single matrix;
+    # We then transpose to have a matrix with one example per row and one feature per column.
+    print(is_first_class, is_second_class, is_third_class, gender, age)
+    # 可以使用 tf.stack 方法将所有布尔值打包进单个张量中
+    print(tf.stack([is_first_class, is_second_class, is_third_class, gender, age]))
+    print(tf.transpose(tf.stack([is_first_class, is_second_class, is_third_class, gender, age])))
+
+    # 最终将所有特征排列在一个矩阵中，然后对该矩阵转置，使其每行对应一个样本，每列对应一种特征
+    features = tf.transpose(tf.stack([is_first_class, is_second_class, is_third_class, gender, age]))
+    survived = tf.reshape(survived, [100, 1])
+
+    return features, survived
 
 
+def train(total_loss):
+    learning_rate = 0.01
+    return tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss)
 
 
+def evaluate(sess, X, Y):
 
+    predicted = tf.cast(inference(X) > 0.5, tf.float32)
 
+    print(sess.run(tf.reduce_mean(tf.cast(tf.equal(predicted, Y), tf.float32))))
 
+# Launch the graph in a session, setup boilerplate
+with tf.Session() as sess:
 
+    tf.initialize_all_variables().run()
 
+    X, Y = inputs()
 
+    total_loss = loss(X, Y)
+    train_op = train(total_loss)
 
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
+    merged = tf.summary.merge_all()
+    writer = tf.summary.FileWriter("./my_graph", sess.graph)
+    # actual training loop
+    training_steps = 1000
+    for step in range(training_steps):
+        sess.run([train_op])
+        rs = sess.run(merged)
+        writer.add_summary(rs, step)
+        # for debugging and learning purposes, see how the loss gets decremented thru training steps
+        if step % 10 == 0:
+            print("loss: ", sess.run([total_loss]))
 
+    evaluate(sess, X, Y)
 
+    import time
+    time.sleep(5)
 
+    coord.request_stop()
+    coord.join(threads)
+    sess.close()
 
+```
 
+注：该代码来源于[这里](http://sailblade.com/blog/2018/03/01/Tensorflow-sigmoidRegression/)。
 
+输出为：
 
+```
+loss:  [0.5430653]
+loss:  [0.5220633]
+loss:  [0.50926584]
+loss:  [0.5200003]
+loss:  [0.57297224]
+0.76
+```
 
+ji
 
-
-
-
-
-
-
-
-
-
-
+# softmax分类
 
 
 
