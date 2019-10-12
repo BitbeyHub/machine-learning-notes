@@ -2,6 +2,10 @@
 
 - [返回顶层目录](../../../SUMMARY.md)
 - [返回上层目录](../tensorflow.md)
+- [有监督学习的通用代码框架](#有监督学习的通用代码框架)
+- [线性回归](#线性回归)
+- [逻辑回归](#逻辑回归)
+- [softmax分类](#softmax分类)
 
 
 
@@ -351,13 +355,142 @@ loss:  [0.57297224]
 0.76
 ```
 
-ji
+
 
 # softmax分类
 
+现在，希望能够回答具有多个选项的问题，如“你的出生地是北京、上海还是深圳？”
+
+对于这样的问题，可使用softmax函数，它是而分类逻辑回归在C个可能不同的值上的推广。
+$$
+f(x)_c=\frac{e^{-x_c}}{\sum_{j=0}^{C-1}e^{-x_j}}
+$$
+这里我们使用经典的[鸢尾花数据集Iris](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/)。该数据集种包含4个数据特征及3个可能的输出类，因此权值矩阵的维数应为4x3。
+
+因为softmax的输出也是概率值，再次使用交叉熵，并对其改造以适应多类情形。
+
+对于单个训练样本i，交叉熵的形式变为：
+$$
+\text{loss}_i=-\sum_c(y_c\cdot \text{log}(y\_predicted_c))
+$$
+则总损失值为所有训练样本的损失和：
+$$
+\text{loss}=-\sum_c\sum_c(y_{ci}\cdot \text{log}(y\_predicted_{ci}))
+$$
+代码为：
+
+```python
+import tensorflow as tf
+import os
+
+with tf.name_scope('parameters'):
+    W = tf.Variable(tf.zeros([4,3]), name='weights')
+    b = tf.Variable(tf.zeros([3]), name="bias")
+    tf.summary.histogram('weight',W)
+    tf.summary.histogram('bias',b)
+
+def combine_inputs(X):
+    return tf.matmul(X,W) + b
+
+def inference(X):
+    return tf.nn.softmax(combine_inputs(X))
+
+def loss(X, Y):
+    loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=Y, logits=combine_inputs(X)))
+    tf.summary.scalar('loss', loss)
+    return loss
+
+def read_csv(batch_size, file_name, record_defaults):
+    filename_queue = tf.train.string_input_producer([os.path.join(os.getcwd(), file_name)])
+
+    reader = tf.TextLineReader(skip_header_lines=1)
+    key, value = reader.read(filename_queue)
+
+    # decode_csv will convert a Tensor from type string (the text line) in
+    # a tuple of tensor columns with the specified defaults, which also
+    # sets the data type for each column
+    decoded = tf.decode_csv(value, record_defaults=record_defaults)
+
+    # batch actually reads the file and loads "batch_size" rows in a single tensor
+    return tf.train.shuffle_batch(decoded,
+                                  batch_size=batch_size,
+                                  capacity=batch_size * 50,
+                                  min_after_dequeue=batch_size)
 
 
+def inputs():
+    speal_length, speal_width, petal_length, petal_width, label = \
+        read_csv(100, "iris.data", [[0.0], [0.0], [0.0], [0.0], [""]])
+
+    # convert categorical data
+    label_number = tf.to_int32(tf.argmax(tf.to_int32(tf.stack([
+        tf.equal(label, ["Iris-setosa"]),
+        tf.equal(label, ["Iris-versicolor"]),
+        tf.equal(label, ["Iris-virginica"])
+    ])), 0))
+
+    # 最终将所有特征排列在一个矩阵中，然后对该矩阵转置，使其每行对应一个样本，每列对应一种特征
+    features = tf.transpose(tf.stack([speal_length, speal_width, petal_length, petal_width]))
+
+    #print(features.eval())
+    
+    return features, label_number
 
 
+def train(total_loss):
+    learning_rate = 0.01
+    return tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss)
 
+
+def evaluate(sess, X, Y):
+    predicted = tf.cast(tf.arg_max(inference(X), 1), tf.int32)
+    print(sess.run(tf.reduce_mean(tf.cast(tf.equal(predicted, Y), tf.float32))))
+
+# Launch the graph in a session, setup boilerplate
+with tf.Session() as sess:
+
+    tf.initialize_all_variables().run()
+
+    X, Y = inputs()
+
+    total_loss = loss(X, Y)
+    train_op = train(total_loss)
+
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+
+    merged = tf.summary.merge_all()
+    writer = tf.summary.FileWriter("./my_graph", sess.graph)
+    # actual training loop
+    training_steps = 1000
+    for step in range(training_steps):
+        sess.run([train_op])
+        rs = sess.run(merged)
+        writer.add_summary(rs, step)
+        # for debugging and learning purposes, see how the loss gets decremented thru training steps
+        if step % 10 == 0:
+            print("loss: ", sess.run([total_loss]))
+
+    evaluate(sess, X, Y)
+
+    import time
+    time.sleep(5)
+
+    coord.request_stop()
+    coord.join(threads)
+    sess.close()
+```
+
+注：Iris数据集iris.data最后两行是空的，必须要删除掉最后面的空行，不然程序解输入文件时会报错。
+
+输出：
+
+```
+loss:  [0.34109864]
+loss:  [0.33472022]
+loss:  [0.33161476]
+loss:  [0.34367904]
+loss:  [0.3679454]
+0.97
+```
 
