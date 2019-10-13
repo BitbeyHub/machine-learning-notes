@@ -54,7 +54,7 @@
   - [概率图简介](mathematics/probability-graphical-model/probability-graph-introduction.md)
 ---
 
-#编程基础
+# 编程基础
 
 * [python](coding/python/python.md)
   * [python语法](coding/python/python-grammar.md)
@@ -65,14 +65,18 @@
   * [scikit-learn](coding/python/scikit-learn.md)
 * [数据结构与算法](coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
   - [数据结构与算法简介](coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
-  - [动态规划](coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
-  - [递归](coding/data-structures-and-algorithms/recursion/recursion.md)
-  - [排序](coding/data-structures-and-algorithms/sort/sort.md)
-    - [堆排序](coding/data-structures-and-algorithms/sort/heap-sort.md)
+  - 数据结构
+    - [链表](coding/data-structures-and-algorithms/list/list.md)
+  - 算法思想
+    - [排序](coding/data-structures-and-algorithms/sort/sort.md)
+      - [堆排序](coding/data-structures-and-algorithms/sort/heap-sort.md)
+    - [递归](coding/data-structures-and-algorithms/recursion/recursion.md)
+    - [动态规划](coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
 - [Hadoop](coding/hadoop/hadoop.md)
+  
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
-  - [MapReduce](coding/hadoop/map-reduce.md)
-
+- [MapReduce](coding/hadoop/map-reduce.md)
+  
 - [Hive](coding/hive/hive.md)
 
 - Spark
