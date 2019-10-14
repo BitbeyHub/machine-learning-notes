@@ -67,11 +67,14 @@
 
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
     * [数据结构与算法简介](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
-    * [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
-    * [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
-    * [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
-      * [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
-
+    * 数据结构
+      - [链表](content/coding/data-structures-and-algorithms/list/list.md)
+    * 算法思想
+      - [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
+    - [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
+      - [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
+      - [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
+    
 * [Hadoop](content/coding/hadoop/hadoop.md)
     * [Hadoop简介](content/coding/hadoop/hadoop-introduction.md)
     * [MapReduce](content/coding/hadoop/map-reduce.md)
