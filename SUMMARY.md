@@ -77,6 +77,7 @@
       - [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
 
 * [Hadoop](content/coding/hadoop/hadoop.md)
+
     * [Hadoop简介](content/coding/hadoop/hadoop-introduction.md)
     * [MapReduce](content/coding/hadoop/map-reduce.md)
 
