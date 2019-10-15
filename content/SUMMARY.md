@@ -196,7 +196,7 @@
 * 基础知识
 * [进阶知识](recommender-systems/advanced-knowledge/advanced-knowledge.md)
   * 机器学习
-    * [FM](recommender-systems/advanced-knowledge/machine-learning/FM.md)
+    * [Factorization Machines ICDM2010](recommender-systems/advanced-knowledge/machine-learning/Factorization-Machines.md)
   * [embedding](recommender-systems/advanced-knowledge/embedding/embedding.md)
     * NetworkEmbedding
       * [LINE: Large-scale Information Network Embedding](recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)

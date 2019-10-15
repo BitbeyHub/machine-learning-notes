@@ -66,11 +66,15 @@
     * [scikit-learn](content/coding/python/scikit-learn.md)
 
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
+
     * [数据结构与算法简介](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
-    * [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
-    * [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
-    * [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
-      * [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
+    * 数据结构
+      - [链表](content/coding/data-structures-and-algorithms/list/list.md)
+    * 算法思想
+      - [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
+        - [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
+      - [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
+      - [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
 
 * [Hadoop](content/coding/hadoop/hadoop.md)
     * [Hadoop简介](content/coding/hadoop/hadoop-introduction.md)
@@ -201,7 +205,7 @@
 * 基础知识
 * [进阶知识](content/recommender-systems/advanced-knowledge/advanced-knowledge.md)
   * 机器学习
-    * [FM](content/recommender-systems/advanced-knowledge/machine-learning/FM.md)
+    * [Factorization Machines ICDM2010](content/recommender-systems/advanced-knowledge/machine-learning/Factorization-Machines.md)
   * [embedding](content/recommender-systems/advanced-knowledge/embedding/embedding.md)
     * NetworkEmbedding
       * [LINE: Large-scale Information Network Embedding](content/recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
