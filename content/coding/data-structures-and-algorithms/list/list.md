@@ -6,6 +6,7 @@
 * [剑指offer22：链表中倒数第k个节点](#剑指offer22：链表中倒数第k个节点)
 * [剑指offer24：反转链表](#剑指offer24：反转链表)
 * [剑指offer25：合并两个排序的链表](#剑指offer25：合并两个排序的链表)
+* [剑指offer35：复杂链表的复制](#剑指offer35：复杂链表的复制)
 
 
 
@@ -50,7 +51,7 @@ public:
 };
 ```
 
-更多请见[牛客网](https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&tqId=11156&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+[详情](https://cuijiahua.com/blog/2017/11/basis_3.html)，[练习](https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&tqId=11156&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
 
 # 剑指offer22：链表中倒数第k个节点
 
@@ -95,7 +96,7 @@ public:
 };
 ```
 
-更多请见[牛客网](https://www.nowcoder.com/practice/529d3ae5a407492994ad2a246518148a?tpId=13&tqId=11167&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+[详情](https://cuijiahua.com/blog/2017/12/basis_14.html)，[练习](https://www.nowcoder.com/practice/529d3ae5a407492994ad2a246518148a?tpId=13&tqId=11167&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
 # 剑指offer24：反转链表
 
@@ -140,7 +141,7 @@ public:
 };
 ```
 
-更多请见[牛客网](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=13&tqId=11168&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+[详情](https://cuijiahua.com/blog/2017/12/basis_15.html)，[练习](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=13&tqId=11168&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
 # 剑指offer25：合并两个排序的链表
 
@@ -184,71 +185,156 @@ public:
 };
 ```
 
-更多请见[牛客网](https://www.nowcoder.com/practice/d8b6b4358f774294a89de2a6ac4d9337?tpId=13&tqId=11169&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+[详情](https://cuijiahua.com/blog/2017/12/basis_16.html)，[练习](https://www.nowcoder.com/practice/d8b6b4358f774294a89de2a6ac4d9337?tpId=13&tqId=11169&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
 
+# 剑指offer35：复杂链表的复制
 
+>输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。
+>
+>链表定义如下：
+>
+>```c++
+>struct RandomListNode {
+>    int label;
+>    struct RandomListNode *next, *random;
+>    RandomListNode(int x) :
+>            label(x), next(NULL), random(NULL) {
+>    }
+>};
+>```
+
+下图是一个含有5个节点的复杂链表，实线箭头表示`next`指针，虚线箭头表示`random`指针。指向nullptr的指针没有画出。
+
+![list-copy](pic/list-copy.png)
+
+第一步，我们把N'连接在N的后面：
+
+![list-copy-2](pic/list-copy-2.png)
+
+第二步，链表N的`random`节点指向节点S，那么其对应复制出来的N‘是N的`next`指向的节点，同样S’也是S的`next`指向的节点。设置`next`之后的链表如下所示：
+
+![list-copy-3](pic/list-copy-3.png)
+
+第三步，把这个长表拆分为两个链表：把奇数位的节点用`next`链接起来就是原始链表，把偶数位的节点用`next`链接起来就是复制出来的链表。上图中的链表拆分之后的两个链表如下图所示。
+
+![list-copy-4](pic/list-copy-4.png)
+
+c++：
 
 ```c++
-#include <iostream>
-#include <vector>
-#include <stack>
-using namespace std;
-
-struct ListNode {
-	int val;
-	struct ListNode *next;
+class Solution {
+public:
+    void CloneNode(RandomListNode *pHead) {
+        RandomListNode *pNode = pHead;
+        while(pNode != nullptr) {
+            RandomListNode *pCloned = new RandomListNode(0);
+            pCloned->label = pNode->label;
+            pCloned->next = pNode->next;
+            pCloned->random = nullptr;
+            
+            pNode->next = pCloned;
+            pNode = pCloned->next;
+        }
+    }
+    
+    void ConnectRandomNodes(RandomListNode *pHead) {
+        RandomListNode *pNode = pHead;
+        while(pNode != nullptr) {
+            RandomListNode *pCloned = pNode->next;
+            if(pNode->random != nullptr) {
+                pCloned->random = pNode->random->next;
+            }
+            pNode = pCloned->next;
+        }
+    }
+    
+    RandomListNode* ReconnectNodes(RandomListNode* pHead) {
+        RandomListNode *pNode = pHead;
+        RandomListNode *pClonedHead = nullptr;
+        RandomListNode *pClonedNode = nullptr;
+        
+        if(pNode != nullptr) {
+            pClonedHead = pClonedNode = pNode->next;
+            pNode->next = pClonedNode->next;
+            pNode = pNode->next;
+        }
+        
+        while(pNode != nullptr) {
+            pClonedNode->next = pNode->next;
+            pClonedNode = pClonedNode->next;
+            pNode->next = pClonedNode->next;
+            pNode = pNode->next;
+        }
+        
+        return pClonedHead;
+    }
+    
+    RandomListNode* Clone(RandomListNode* pHead)
+    {
+        CloneNode(pHead);
+        ConnectRandomNodes(pHead);
+        return ReconnectNodes(pHead);
+    }
 };
-
-ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
-{
-	if (pHead1 == nullptr) return pHead2;
-	if (pHead2 == nullptr) return pHead1;
-
-	ListNode* pMergedHead = nullptr;
-
-	if (pHead1->val <= pHead2->val) {
-		pMergedHead = pHead1;
-		pMergedHead->next = Merge(pHead1->next, pHead2);
-	}
-	else {
-		pMergedHead = pHead2;
-		pMergedHead->next = Merge(pHead1, pHead2->next);
-	}
-
-	return pMergedHead;
-}
-
-int main()
-{
-    cout << "Hello World!\n"; 
-
-	ListNode list1_1, list1_3, list2_2, list2_4;
-	ListNode* pHead1, * pHead2, * pHeadM;
-	list1_1.val = 1;
-	list1_3.val = 3;
-	list2_2.val = 2;
-	list2_4.val = 4;
-	pHead1 = &list1_1;
-	list1_1.next = &list1_3;
-	list1_3.next = nullptr;
-	pHead2 = &list2_2;
-	list2_2.next = &list2_4;
-	list2_4.next = nullptr;
-
-	pHeadM = Merge(pHead1, pHead2);
-	
-	do {
-		cout << pHeadM->val << endl;
-		pHeadM = pHeadM->next;
-	} while (pHeadM != nullptr);
-	
-	
-
-	return 0;
-}
 ```
 
+[详细](https://cuijiahua.com/blog/2017/12/basis_25.html)，[练习](https://www.nowcoder.com/practice/f836b2c43afc4b35ad6adc41ec941dba?tpId=13&tqId=11178&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
+# 剑指offer52：两个链表的第一个公共结点
+
+> 输入两个链表，找出它们的第一个公共结点。
+>
+> 链表节点定义如下：
+>
+> ```c++
+> struct ListNode {
+> 	int val;
+> 	struct ListNode *next;
+> }
+> ```
+
+![list-first-common-node](pic/list-first-common-node.png)
+
+我们也可以先让把长的链表的头砍掉，让两个链表长度相同，这样，同时遍历也能找到公共结点。此时，时间复杂度O(m+n)，空间复杂度为O(MAX(m,n))。
+
+c++:
+
+```c++
+      ListNode *p1=pHead1;
+        ListNode *p2=pHead2;
+        int len1=0,len2=0,diff=0;
+        while(p1!=NULL){
+            p1=p1->next;
+            len1++;
+        }
+        while(p2!=NULL){
+            p2=p2->next;
+            len2++;
+        }
+        if(len1>len2){
+            diff=len1-len2;
+            p1=pHead1;
+            p2=pHead2;
+        }
+        else{
+            diff=len2-len1;
+            p1=pHead2;
+            p2=pHead1;
+        }
+        for(int i=0;i<diff;i++){
+            p1=p1->next;
+        }
+        while(p1!=NULL && p2!=NULL){
+            if(p1==p2)
+                break;
+            p1=p1->next;
+            p2=p2->next;
+        }
+        return p1;
+    }
+```
+
+[详细](https://cuijiahua.com/blog/2018/01/basis_36.html)，[练习](https://www.nowcoder.com/practice/6ab1d9a29e88450685099d45c9e31e46?tpId=13&tqId=11189&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
 
 
