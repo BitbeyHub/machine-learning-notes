@@ -336,6 +336,169 @@ c++:
 
 [详细](https://cuijiahua.com/blog/2018/01/basis_36.html)，[练习](https://www.nowcoder.com/practice/6ab1d9a29e88450685099d45c9e31e46?tpId=13&tqId=11189&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
+# 剑指offerxx：链表中环的入口结点
+
+>一个链表中包含环，请找出该链表的环的入口结点。
+>
+>链表节点定义如下：
+>
+>```c++
+>struct ListNode {
+>    int val;
+>    struct ListNode *next;
+>};
+>```
+
+可以用两个指针来解决这个问题。先定义两个指针P1和P2指向链表的头结点。如果链表中的环有n个结点，指针P1先在链表上向前移动n步，然后两个指针以相同的速度向前移动。当第二个指针指向的入口结点时，第一个指针已经围绕着揍了一圈又回到了入口结点。
+
+以下图为例，指针P1和P2在初始化时都指向链表的头结点。由于环中有4个结点，指针P1先在链表上向前移动4步。接下来两个指针以相同的速度在链表上向前移动，直到它们相遇。它们相遇的结点正好是环的入口结点。
+
+![list-circle-entrance](pic/list-circle-entrance.png)
+
+**现在，关键问题在于怎么知道环中有几个结点呢？**
+
+可以使用快慢指针，一个每次走一步，一个每次走两步。如果两个指针相遇，表明链表中存在环，并且两个指针相遇的结点一定在环中。
+
+随后，我们就从相遇的这个环中结点出发，一边继续向前移动一边计数，当再次回到这个结点时，就可以得到环中结点数目了。
+
+c++:
+
+```c++
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead)
+    {
+        if(pHead == nullptr) return nullptr;
+        
+        ListNode *pFast = pHead, *pSlow = pHead->next;
+        if(pSlow == nullptr) return nullptr;
+        while(pFast != pSlow) {
+            if(pFast == nullptr || pSlow == nullptr) return nullptr;
+            pFast = pFast->next;
+            if(pFast != nullptr) {
+                pFast = pFast->next;
+            } else {
+                return nullptr;
+            }
+            pSlow = pSlow->next;
+        }
+        
+        int n = 1;
+        ListNode *pFlag = pSlow;
+        pSlow = pSlow->next;
+        while(pSlow != pFlag) {
+            pSlow = pSlow->next;
+            n++;
+        }
+        
+        pFast = pSlow = pHead;
+        for(; n > 0; n--) {
+            pFast = pFast->next;
+        }
+        while(pFast != pSlow) {
+            pFast = pFast->next;
+            pSlow = pSlow->next;
+        }
+        
+        return pFast;
+    }
+};
+```
+
+[详细](https://cuijiahua.com/blog/2018/01/basis_55.html)，[练习](https://www.nowcoder.com/practice/253d2c59ec3e4bc68da16833f79a38e4?tpId=13&tqId=11208&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+# 剑指Offerxxx：删除链表中重复的结点
+
+> 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5。
+>
+> 链表节点定义如下：
+>
+> ```c++
+> struct ListNode {
+>     int val;
+>     struct ListNode *next;
+> };
+> ```
+
+删除重复结点，只需要记录当前结点前的最晚访问过的不重复结点pPre、当前结点pCur、指向当前结点后面的结点pNext的三个指针即可。如果当前节点和它后面的几个结点数值相同，那么这些结点都要被剔除，然后更新pPre和pCur；如果不相同，则直接更新pPre和pCur。
+
+需要考虑的是，如果第一个结点是重复结点我们该怎么办？这里我们分别处理一下就好，如果第一个结点是重复结点，那么就把头指针pHead也更新一下。
+
+c++:
+
+```c++
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* pHead)
+    {
+        if(pHead == nullptr) return nullptr;
+        
+        ListNode* pPre = nullptr;
+        ListNode* pCur = pHead;
+        ListNode* pNext = nullptr;
+        
+        while(pCur != nullptr) {
+            if(pCur->next != nullptr && pCur->val == pCur->next->val) {
+                pNext = pCur->next;
+                while(pNext->next != nullptr && pNext->next->val == pCur->val) {
+                    pNext = pNext->next;
+                }
+                if(pCur != pHead) {
+                    pPre->next = pNext->next;
+                } else {
+                    pHead = pNext->next;
+                }
+                pCur = pNext->next;
+            } else {
+                pPre = pCur;
+                pCur = pCur->next;
+            }
+        }
+        return pHead;
+    }
+};
+```
+
+[详细](https://cuijiahua.com/blog/2018/01/basis_56.html)，[练习](https://www.nowcoder.com/practice/fc533c45b73a41b0b44ccba763f866ef?tpId=13&tqId=11209&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 参考资料
+
 
 
 

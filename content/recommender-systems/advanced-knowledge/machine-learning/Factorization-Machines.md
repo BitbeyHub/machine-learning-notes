@@ -47,7 +47,7 @@ MF（Matrix Factorization，矩阵分解）模型是个在推荐系统领域里�
 
 ![fm-mf-2](pic/fm-mf-2.jpg)
 
-当训练完成，每个用户和物品得到对应的低维embedding表达后，如果要预测某个 ![[公式]](https://www.zhihu.com/equation?tex=User_i) 对 ![[公式]](https://www.zhihu.com/equation?tex=Item_j) 的评分的时候，只要它们做个内积计算$$<User_i, Item_i>$$，这个得分就是预测得分。看到这里，让你想起了什么吗？
+当训练完成，每个用户和物品得到对应的低维embedding表达后，如果要预测某个$$\text{User}_i$$对的$$\text{Item}_j$$评分的时候，只要它们做个内积计算$$<\text{User}_i, \text{Item}_j>$$，这个得分就是预测得分。看到这里，让你想起了什么吗？
 
 身为推荐算法工程师，我假设你对它还是比较熟悉的，更多的就不展开说了，相关资料很多，我们重点说MF和FM的关系问题。
 
@@ -220,7 +220,7 @@ $$
 \sum_i\sum_j<U_i,U_j>
 \end{aligned}
 $$
-其实两者是等价的，建议您可以推导一下（这其实不就是上面在介绍FM公式改写的第三步转换吗？当然，跟完全版本的FM比，我们没有考虑U和I特征集合内部任意两个特征的组合，等会会说这个问题）。
+其实两者是等价的，建议您可以推导一下（这其实不就是上面在介绍FM公式改写的第三步转换吗？当然，跟完全版本的FM比，**我们没有考虑U和I特征集合内部任意两个特征的组合**，等会会说这个问题）。
 
 也可以这么思考问题：在上文我们说过，FM为了提升计算效率，对公式进行了改写，改写后的高效计算公式的第一个平方项其实等价于：把所有特征embedding向量逐位累加成一个求和向量V，然后自己和自己做个内积操作<V,V>。这样等价于根据FM的原则计算了任意两个特征的二阶特征组合了。而上面描述的方法，和标准的FM的做法其实是一样的，区别无非是**将特征集合划分为两个子集合U和I，分别代表用户相关特征及物品相关特征。而上述做法其实等价于在用户特征U和物品特征I之间做两两特征组合，只是少了U内部之间特征，及I内部特征之间的特征组合而已**。一般而言，其实我们不需要做U内部特征之间以及I内部特征之间的特征组合，对最终效果影响很小。于是，沿着这个思考路径，我们也可以推导出上述做法基本和FM标准计算过程是等价的。
 
@@ -303,7 +303,23 @@ $$
 
 当然，上面都是分析结果，并非实测，所以不能确定实际应用起来也能达到上述理论分析的效果。
 
-# tensorflow代码详解
+# 直接用FM交叉特征做召回存在的问题
+
+如果FM召回模型采用的特征和两阶段模型的FM排序模型采用相同的特征，那么两者的推荐效果是等价的。这里有些遗憾，召回模式只有交叉特征，而直接用fm排序，既有交叉特征又有非交叉特征。这样的话效果上应该会有偏差，可以直接等价吗？
+
+回答：有实验证明FM加上一阶的那个LR和不加其实效果差不多。
+
+又有人说：在自己的数据集上试了试，同样的参数，3000万样本，120万维度，同样的参数，加上LR，AUC从0.79 提升到 0.80，这个还是要看数据集？
+
+本回答来自[这里](https://zhuanlan.zhihu.com/p/58160982)的评论。
+
+# 使用xlearn
+
+##安装xlearn
+
+参考[xlearn详细安装指南](https://xlearn-doc-cn.readthedocs.io/en/latest/install/index.html#)进行安装。
+
+注意：在最后一步的时候，可能需要把python换成你使用的python路径，不然就把xlearn安装到其他版本的python里去了。
 
 
 
@@ -311,19 +327,14 @@ $$
 
 # 参考资料
 
-[* 推荐系统召回四模型之：全能的FM模型](https://zhuanlan.zhihu.com/p/58160982)
-
-[神盾推荐系统的超大规模参数学习探究](https://www.toutiao.com/a6680099746641609227)
-
-
-
+* [推荐系统召回四模型之：全能的FM模型](https://zhuanlan.zhihu.com/p/58160982)
+* [因子分解机（libffm+xlearn）](https://blog.csdn.net/songbinxu/article/details/79662665)
+* [xLearn Tutorials](https://xlearn-doc-cn.readthedocs.io/en/latest/tutorial/index.html)
+* [xLearn详细安装指](https://xlearn-doc-cn.readthedocs.io/en/latest/install/index.html)
 
 
-[推荐算法之—FM](https://www.jianshu.com/p/40c7358040c9)
 
-[FM算法](https://www.jianshu.com/p/1687f8964a32)
 
-[推荐系统遇上深度学习(一)--FM模型理论和实践](https://www.jianshu.com/p/152ae633fb00)
 
 
 
