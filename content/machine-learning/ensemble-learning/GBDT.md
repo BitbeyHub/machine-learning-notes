@@ -691,3 +691,6 @@ GBDT的主要**缺点**有：
 ===
 
 [从一道数学题到GBDT原理的部分推导](https://zhuanlan.zhihu.com/p/76002032)
+
+[面试官如何判断面试者的机器学习水平？](https://www.zhihu.com/question/62482926/answer/781604373)
+
