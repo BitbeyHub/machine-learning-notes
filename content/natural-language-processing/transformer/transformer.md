@@ -22,6 +22,10 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 
 
+===
+
+[深度学习：transformer模型](https://blog.csdn.net/pipisorry/article/details/84946653)
+
 
 
 
