@@ -564,3 +564,7 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
 [XGBoost缺失值引发的问题及其深度分析](https://mp.weixin.qq.com/s/hYuBHHfAGLO3Y0l5t6y94Q)
 
+[灵魂拷问，你看过Xgboost原文吗？](https://zhuanlan.zhihu.com/p/86816771)
+
+[GBDT、XGBoost、LightGBM 的使用及参数调优](https://zhuanlan.zhihu.com/p/33700459)
+

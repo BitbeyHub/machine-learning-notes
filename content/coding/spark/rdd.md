@@ -79,3 +79,6 @@ res5: Int = 4
 
 "分区"参考此文章。
 
+===
+
+[Spark笔记：RDD基本操作（上）](https://www.cnblogs.com/sharpxiajun/p/5506822.html)

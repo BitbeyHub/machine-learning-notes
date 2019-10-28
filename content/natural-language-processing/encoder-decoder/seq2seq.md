@@ -9,6 +9,16 @@ seq2seq属于encoder-decoder结构的一种，这里看看常见的encoder-decod
 
 
 
+Seq2seq
+
+下面这段是我论文里的一段简短的介绍, 我就不翻译了...
+
+这是2014年Google提出的一个模型[（论文链接）](https://arxiv.org/abs/1409.3215)，知乎和各大博客网站上有很多介绍，这里就不赘述了。简单来说，seq2seq又两个RNN组成，一个是encoder，一个是decoder。拿MT举例子，比如我们要把源语言“我爱中国”翻译成目标语言“I love China”，那么定义输入序列：
+
+
+
+
+
 # 参考资料
 
 * [如何理解seq2seq？](http://f.dataguru.cn/thread-907291-1-1.html)

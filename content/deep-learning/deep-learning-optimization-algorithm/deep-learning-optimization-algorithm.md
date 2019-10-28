@@ -20,3 +20,5 @@
 
 
 
+[深度学习 | Batch Size大小对训练过程的影响（转）](https://zhuanlan.zhihu.com/p/86529347)
+

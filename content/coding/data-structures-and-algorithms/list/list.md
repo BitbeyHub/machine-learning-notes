@@ -336,7 +336,7 @@ c++:
 
 [详细](https://cuijiahua.com/blog/2018/01/basis_36.html)，[练习](https://www.nowcoder.com/practice/6ab1d9a29e88450685099d45c9e31e46?tpId=13&tqId=11189&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
-# 剑指offerxx：链表中环的入口结点
+# 剑指offer23：链表中环的入口结点
 
 >一个链表中包含环，请找出该链表的环的入口结点。
 >

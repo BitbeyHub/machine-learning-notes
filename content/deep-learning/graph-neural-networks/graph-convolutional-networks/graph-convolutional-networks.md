@@ -63,3 +63,9 @@ https://zhuanlan.zhihu.com/p/73679727
 
 https://www.jianshu.com/p/ada8730913ce
 
+
+
+[Google图嵌入工业界最新大招，高效解决训练大规模深度图卷积神经网络问题](https://mp.weixin.qq.com/s?__biz=MzU2ODA0NTUyOQ==&mid=2247483775&idx=1&sn=735e671a4223e47149197c5eacd94e0a&chksm=fc92bbc9cbe532df3742dbad41c7364d536a6e56dd18030a41fadd7ad409a7e8fb02ac027bc6&scene=21#wechat_redirect)
+
+[ICCV 2019 | 成功从3/4层拓展到56层，训练超级深层的图卷积神经网络,tf](https://zhuanlan.zhihu.com/p/86352650)
+

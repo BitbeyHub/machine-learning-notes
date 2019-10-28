@@ -313,7 +313,7 @@ $$
 
 本回答来自[这里](https://zhuanlan.zhihu.com/p/58160982)的评论。
 
-# 使用xlearn
+# 使用xlearn实现FM
 
 ##安装xlearn
 
@@ -323,11 +323,22 @@ $$
 
 
 
+## 构建LibSVM特征
+
+
+
+
+
+
+
 
 
 # 参考资料
 
 * [推荐系统召回四模型之：全能的FM模型](https://zhuanlan.zhihu.com/p/58160982)
+
+本文的FM原理部分主要复制了这篇文章。
+
 * [因子分解机（libffm+xlearn）](https://blog.csdn.net/songbinxu/article/details/79662665)
 * [xLearn Tutorials](https://xlearn-doc-cn.readthedocs.io/en/latest/tutorial/index.html)
 * [xLearn详细安装指](https://xlearn-doc-cn.readthedocs.io/en/latest/install/index.html)

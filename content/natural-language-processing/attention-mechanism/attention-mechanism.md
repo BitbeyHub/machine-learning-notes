@@ -4,6 +4,12 @@
 
 
 
+Attention[Attention和Transformer](https://zhuanlan.zhihu.com/p/38485843)
+
+同样是在MT问题中，在seq2seq的基础上提出了attention机制（Bahadanau attention）[（论文地址）](https://arxiv.org/abs/1409.0473)。现在由于性能相对没有attention的原始模型太优越，现在提到的seq2seq一般都指加入了attention机制的模型。同样上面的问题，通过encoder，把 ![[公式]](https://www.zhihu.com/equation?tex=X%3D%28x_0%2Cx_1%2Cx_2%2Cx_3%29) 映射为一个隐层状态 ![[公式]](https://www.zhihu.com/equation?tex=H%3D%28h_0%2Ch_1%2Ch_2%2Ch_3%29) ，再经由decoder将 ![[公式]](https://www.zhihu.com/equation?tex=H%3D%28h_0%2Ch_1%2Ch_2%2Ch_3%29) 映射为 ![[公式]](https://www.zhihu.com/equation?tex=Y%3D%28y_0%2Cy_1%2Cy_2%29) 。这里精妙的地方就在于，Y中的每一个元素都与H中的所有元素相连，而**每个元素通过不同的权值给与Y不同的贡献**。
+
+
+
 
 
 
