@@ -10,6 +10,29 @@
 
 # 主要函数
 
+## 增删
+
+### 增加列
+
+```sql
+ALTER TABLE xxx.xxx ADD COLUMNS (
+  xxx bigint COMMENT 'xxx'
+)
+```
+
+### 删除列
+
+Hive没有删除指定列的命令，Hive通过replace命令变向实现删除列的功能。
+replace命令将用新的列信息替换之前的列信息，相当于删除之前全部的列，再用新的列代替。
+
+```sql
+ALTER TABLE xxx.xxx REPLACE COLUMNS (
+  xxx bigint COMMENT 'xxx'
+)
+```
+
+
+
 
 
 ## LOAD DATA INPATH数据导入函数

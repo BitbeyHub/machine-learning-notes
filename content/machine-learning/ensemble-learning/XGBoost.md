@@ -568,3 +568,5 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
 [GBDT、XGBoost、LightGBM 的使用及参数调优](https://zhuanlan.zhihu.com/p/33700459)
 
+[详解《XGBoost: A Scalable Tree Boosting System》](https://zhuanlan.zhihu.com/p/89546007)
+
