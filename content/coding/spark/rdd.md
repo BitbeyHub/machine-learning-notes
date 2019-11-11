@@ -7,6 +7,60 @@
 
 # RDD基本转换操作
 
+## 输入
+
+### parallelize
+
+调用SparkContext 的 parallelize()，将一个存在的集合，变成一个RDD，这种方式试用于学习spark和做一些spark的测试
+
+> def parallelize[T](seq: Seq[T], numSlices: Int = defaultParallelism)(implicit arg0: ClassTag[T]): RDD[T]
+>
+> - 第一个参数一是一个 Seq集合
+> - 第二个参数是分区数
+> - 返回的是RDD[T]
+
+```scala
+scala> sc.parallelize(List("shenzhen", "is a beautiful city"))
+res1: org.apache.spark.rdd.RDD[String] = ParallelCollectionRDD[1] at parallelize at <console>:22
+```
+
+
+
+### makeRDD
+
+只有scala版本的才有makeRDD
+
+> def makeRDD\[T\](seq : scala.Seq[T], numSlices : scala.Int = { /* compiled code */ })
+
+跟parallelize类似
+
+```scala
+sc.makeRDD(List("shenzhen", "is a beautiful city"))
+```
+
+
+
+### textFile
+
+调用SparkContext.textFile()方法，从外部存储中读取数据来创建 RDD
+例如在我本地F:\dataexample\wordcount\input下有个sample.txt文件，文件随便写了点内容，我需要将里面的内容读取出来创建RDD
+
+```scala
+var lines = sc.textFile("F:\\dataexample\\wordcount\\input") 
+```
+
+注: textFile支持分区，支持模式匹配，例如把F:\dataexample\wordcount\目录下inp开头的给转换成RDD
+
+```scala
+var lines = sc.textFile("F:\\dataexample\\wordcount\\inp*")
+```
+
+多个路径可以使用逗号分隔，例如
+
+```scala
+var lines = sc.textFile("dir1,dir2",3)
+```
+
 
 
 ## 分区
@@ -78,6 +132,10 @@ res5: Int = 4
 * [Spark算子：RDD基本转换操作(2)–coalesce、repartition](http://lxw1234.com/archives/2015/07/341.htm)
 
 "分区"参考此文章。
+
+* [spark RDD算子（一） parallelize，makeRDD，textFile](https://blog.csdn.net/T1DMzks/article/details/70189509)
+
+"输入"参考此文章。
 
 ===
 

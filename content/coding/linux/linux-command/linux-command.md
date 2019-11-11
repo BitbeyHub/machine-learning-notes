@@ -1,6 +1,6 @@
-# Linux常见操作
+# Linux常见命令
 
-* [返回顶层目录](../../SUMMARY.md)
+* [返回顶层目录](../../../SUMMARY.md)
 * [查看文件](#)
   * [head/tail/sed查看或截取超大文件](#head/tail/sed查看或截取超大文件)
 * [传输文件](#传输文件)
@@ -12,6 +12,9 @@
 * [权限](#权限)
   * [chmod更改文件权限](#chmod更改文件权限)
   * [chown更改文件拥有者](#chown更改文件拥有者)
+* [终端/后台](#终端/后台)
+  * [nohup](#nohup)
+  * [screen](#screen)
 
 
 
@@ -73,7 +76,7 @@ sed -n ‘10,10000p’ /var/lib/mysql/slowquery.log > temp.log
 ## scp本地文件上传到开发机
 
 ```shell
-scp /tmp/Anaconda3-2019.03-Linux-x86_64.sh  dm004.dx:/tmp/
+scp /tmp/Anaconda3-2019.03-Linux-x86_64.sh  ml004.dx:/tmp/
 ```
 
 
@@ -170,10 +173,10 @@ du 命令用于查看当前目录的总大小：
 
 当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用ln命令链接（link）它就可以，不必重复的占用磁盘空间。
 
-比如，/data的控价特别大，而当前文件夹data所在的磁盘空间不足，但是还想把文件放在当前文件夹data下，那就可以建一个软连接，看起来是把文件放在data下了，其实文件是存放在/data/rec/lu.wei/dada中的。
+比如，/data的空间特别大，而当前文件夹data所在的磁盘空间不足，但是还想把文件放在当前文件夹data下，那就可以建一个软连接，看起来是把文件放在data下了，其实文件是存放在/data/lu.wei/dada中的。
 
 ```shell
-ln -s /data/rec/lu.wei/dada/ data
+ln -s /data/lu.wei/dada/ data
 ```
 
 参考资料：
@@ -353,8 +356,68 @@ chown -R James:users  *
 - [Linux权限详解（chmod、600、644、666、700、711、755、777、4755、6755、7755）](https://blog.csdn.net/u013197629/article/details/73608613)
 
 
+# 终端/后台
+
+## nohup
+
+后台运行
+
+```shell
+nohup python -u xxx.py 1>./log.txt 2>&1 &
+```
+
+python需要加-u，这样才会使得所有输出到输出到log里。
+
+## screen
+
+在VPS中执行一些非常耗时的任务时（如下载，压缩，解压缩，编译，安装等），我们通常是单独开一个远程终端窗口来执行这个任务，且在任务执行过程中不能关闭这个窗口或者中断连接，否则正在执行的任务会被终止掉。而有了screen，我们可以在一个窗口中安装程序，然后在另一个窗口中下载文件，再在第三个窗口中编译程序，只需要一个SSH连接就可以同时执行这三个任务，还可以方便的在不同会话或窗口中切换，即使因为意外导致窗口关闭或者连接中断，也不会影响这三个任务的执行。
 
 
+
+screen的说明相当复杂，反正我是看得头晕了。但事实上，我们只需要掌握下面五个命令就足够我们使用了：
+
+* 创建一个名为test1的会话
+
+```shell
+screen -S test1
+```
+
+* 进入test1后输入下面的命令，退出test1会话，但会话中的任务会继续执行
+
+```shell
+screen -d
+or
+press Ctrl-A 和 D
+```
+
+* 列出所有会话
+
+```shell
+screen -ls
+```
+
+* 恢复名为test1的会话
+
+```shell
+screen -r test1
+or
+screen -r pid(number)
+```
+
+* 退出并彻底关闭当前窗口，会话中的任务也会被关闭
+
+```shell
+exit
+or
+Ctrl+D
+```
+
+
+
+参考资料：
+
+* [screen 命令使用及示例](https://linux.cn/article-8215-1.html)
+* []()
 
 
 

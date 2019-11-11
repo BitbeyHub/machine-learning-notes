@@ -20,6 +20,10 @@
 
 [GraphSAGE：我寻思GCN也没我牛逼](https://zhuanlan.zhihu.com/p/74242097)
 
+[LR+FTRL算法原理以及工程化实现](https://zhuanlan.zhihu.com/p/55135954)
+
+
+
 # 任务
 
 rnn

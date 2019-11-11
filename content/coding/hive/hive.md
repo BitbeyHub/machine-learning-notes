@@ -10,9 +10,11 @@
 
 # 主要函数
 
-## 增删
+## ALTER TABLE
 
-### 增加列
+### 增删
+
+#### 增加列
 
 ```sql
 ALTER TABLE xxx.xxx ADD COLUMNS (
@@ -20,7 +22,7 @@ ALTER TABLE xxx.xxx ADD COLUMNS (
 )
 ```
 
-### 删除列
+#### 删除列
 
 Hive没有删除指定列的命令，Hive通过replace命令变向实现删除列的功能。
 replace命令将用新的列信息替换之前的列信息，相当于删除之前全部的列，再用新的列代替。
@@ -31,7 +33,25 @@ ALTER TABLE xxx.xxx REPLACE COLUMNS (
 )
 ```
 
+### 内外表转换
 
+外部表转为内部表
+
+```sql
+alter table xxx.xxxx set TBLPROPERTIES('EXTERNAL'='false')
+```
+
+参考资料：
+
+* [Hive外部表和内部表区别以及相互转换](https://blog.csdn.net/shawnhu007/article/details/83055135)
+
+### 删除分区
+
+```sql
+ALTER TABLE xxx.xxxx DROP IF EXISTS PARTITION(partition_date='20191002', partition_version='xxx')
+```
+
+注意：如果是外部表，则仅仅会删除表的meta信息，实际的数据是不会删除的。如果非要删除外部表的实际数据，则需要把外部表先转为内部表。
 
 
 
