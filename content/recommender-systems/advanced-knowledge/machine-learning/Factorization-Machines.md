@@ -7,17 +7,78 @@
 
 ![FM-paper](pic/FM-paper.png)
 
-pdf:[Factorization Machines](https://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/Rendle2010FM.pdf)
-
-
+pdf: [Factorization Machines](https://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/Rendle2010FM.pdf)
 
 FM模型其实有些年头了，是2010年由Rendle提出的，但是真正在各大厂大规模在CTR预估和推荐领域广泛使用，其实也就是最近几年的事。
 
 FM模型比较简单，网上介绍的内容也比较多，细节不展开说它了。不过我给个个人判断：我觉得FM是推荐系统工程师应该熟练掌握和应用的必备算法，即使你看很多DNN版本的排序模型，你应该大多数情况会看到它的影子，原因其实很简单：特征组合对于推荐排序是非常非常重要的，而FM这个思路已经很简洁优雅地体现了这个思想了（主要是二阶特征组合）。DNN模型一样离不开这个特点，而MLP结构是种低效率地捕获特征组合的结构，所以即使是深度模型，目前一样还离不开类似FM这个能够直白地直接去组合特征的部分。这是你会反复发现它的原因所在，当然也许是它本人，也许不一定是它本人，但是一定是它的变体。
 
+# FM的原理
+
+FM和FFM模型是最近几年提出的模型，凭借其在数据量比较大并且特征稀疏的情况下，仍然能够得到优秀的性能和效果的特性，屡次在各大公司举办的CTR预估比赛中获得不错的战绩。
+
+FM（Factorization Machine）是由Konstanz大学Steffen Rendle（现任职于Google）于2010年最早提出的，旨在解决稀疏数据下的特征组合问题[[7\]](http://www.algo.uni-konstanz.de/members/rendle/pdf/Rendle2010FM.pdf)。下面以一个示例引入FM模型。假设一个广告分类的问题，根据用户和广告位相关的特征，预测用户是否点击了广告。源数据如下
+
+![fm-example1](pic/fm-example1.png)
+
+“Clicked?“是label，Country、Day、Ad_type是特征。由于三种特征都是categorical类型的，需要经过独热编码（One-Hot Encoding）转换成数值型特征。
+
+![fm-example2](pic/fm-example2.png)
+
+由上表可以看出，经过One-Hot编码之后，大部分样本数据特征是比较稀疏的。上面的样例中，每个样本有7维特征，但平均仅有3维特征具有非零值。实际上，这种情况并不是此例独有的，在真实应用场景中这种情况普遍存在。例如，CTR/CVR预测时，用户的性别、职业、教育水平、品类偏好，商品的品类等，经过One-Hot编码转换后都会导致样本数据的稀疏性。特别是商品品类这种类型的特征，如商品的末级品类约有550个，采用One-Hot编码生成550个数值特征，但每个样本的这550个特征，有且仅有一个是有效的（非零）。由此可见，数据稀疏性是实际问题中不可避免的挑战。
+
+One-Hot编码的另一个特点就是导致特征空间大。例如，商品品类有550维特征，一个categorical特征转换为550维数值特征，特征空间剧增。
+
+同时通过观察大量的样本数据可以发现，某些特征经过关联之后，与label之间的相关性就会提高。例如，`USA`与`Thanksgiving`、`China`与`Chinese New Year`这样的关联特征，对用户的点击有着正向的影响。换句话说，来自`China`的用户很可能会在`Chinese New Year`有大量的浏览、购买行为，而在`Thanksgiving`却不会有特别的消费行为。这种关联特征与label的正向相关性在实际问题中是普遍存在的，如`化妆品`类商品与`女性`，`球类运动配件`的商品与`男性`，`电影票`的商品与`电影`品类偏好等。因此，引入两个特征的组合是非常有意义的。
+
+**多项式模型是包含特征组合的最直观的模型**。在多项式模型中，特征$$x_i$$和$$x_j$$的组合采用$$x_ix_j$$表示，**即$$x_i$$和$$x_j$$都非零时，组合特征$$x_ix_j$$才有意义**。从对比的角度，本文只讨论二阶多项式模型。模型的表达式如下
+$$
+y(x)=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^nw_{ij}x_ix_j
+$$
+其中，$$n$$代表样本的特征数量，$$x_i$$是第$$i$$个特征的值，$$w_0$$、$$w_i$$、$$w_{ij}$$是模型参数。
+
+从上式可以看出，**组合特征的参数一共有$$\frac{n(n−1)}{2}$$个**，任意两个参数都是独立的。然而，在数据稀疏性普遍存在的实际应用场景中，**二次项参数的训练是很困难的**。其原因是，每个**参数$$w_{ij}$$的训练需要大量$$x_i$$和$$x_j$$都非零的样本；由于样本数据本来就比较稀疏，满足“$$x_i$$和$$x_j$$都非零”的样本将会非常少。训练样本的不足，很容易导致参数$$w_{ij}$$不准确**，最终将严重影响模型的性能。
+
+那么，如何解决二次项参数的训练问题呢？矩阵分解提供了一种解决思路。在model-based的协同过滤中，一个rating矩阵可以分解为user矩阵和item矩阵，每个user和item都可以采用一个隐向量表示。比如在下图中的例子中，我们把每个user表示成一个二维向量，同时把每个item表示成一个二维向量，两个向量的点积就是矩阵中user对item的打分。
+
+![fm-example3](pic/fm-example3.png)
+
+类似地，所有二次项参数$$w_{ij}$$可以组成一个对称阵$$W$$（为了方便说明FM的由来，对角元素可以设置为正实数），那么这个矩阵就可以分解为$$W=V^TV$$，**$$V$$的第$$j$$列便是第$$j$$维特征的隐向量。换句话说，每个参数$$w_{ij}=\left \langle v_i, v_j \right \rangle$$，这就是FM模型的核心思想**。因此，FM的模型方程为（本文不讨论FM的高阶形式）
+$$
+\begin{aligned}
+y(x)&=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^nw_{ij}x_ix_j\\
+&=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^n\left \langle v_i, v_j \right \rangle x_ix_j
+\end{aligned}
+$$
+其中，$$v_i$$是第$$i$$维特征的隐向量，$$\left \langle \cdot\ ,\ \cdot \right \rangle$$代表向量点积。隐向量的长度为$$k\ (k\ll n)$$，包含$$k$$个描述特征的因子。根据上式，**二次项的参数数量减少为$$kn$$个，远少于多项式模型的参数数量$$\frac{n(n−1)}{2}$$个**。另外，参数因子化使得$$x_hx_i$$的参数和$$x_ix_j$$的参数不再是相互独立的，因此我们可以在样本稀疏的情况下相对合理地估计FM的二次项参数。具体来说，$$x_hx_i$$和$$x_ix_j$$的系数分别为$$\left \langle v_h,\ v_i \right \rangle$$和$$\left \langle v_i,\ v_j \right \rangle$$，它们之间有共同项$$v_i$$。也就是说，**所有包含“$$x_i$$的非零组合特征”（存在某个$$j\neq i$$，使得$$x_ix_j\neq 0$$）的样本都可以用来学习隐向量$$v_i$$，这很大程度上避免了数据稀疏性造成的影响。而在多项式模型中，$$w_{hi}$$和$$w_{ij}$$是相互独立的**。
+
+显而易见，上式是一个通用的拟合方程，**可以采用不同的损失函数用于解决回归、二元分类等问题**，比如可以采用`MSE（Mean Square Error）`损失函数来求解回归问题，也可以采用`Hinge`/`Cross-Entropy`损失来求解分类问题。当然，在进行二元分类时，FM的输出需要经过sigmoid变换，这与Logistic回归是一样的。直观上看，FM的复杂度是$$O(kn^2)$$。但是，通过下式的等式（该公式的证明见下节），FM的二次项可以化简，其**复杂度可以优化到$$O(kn)$$**。由此可见，FM可以在线性时间对新样本作出预测。
+$$
+\sum_{i=1}^n\sum_{j=i+1}^n\left \langle v_i, v_j \right \rangle x_ix_j=\frac{1}{2}\sum_{f=1}^k\left(\left(\sum_{i=1}^nv_{i,f}x_i\right)^2-\sum_{i=1}^nv_{i,f}^2x_i^2\right)
+$$
+也就是说，我们把多项式模型的二阶项的系数从$$w_{ij}$$变为了特征的pair对$$\left \langle v_i ,\ v_j \right \rangle$$。这是核心思想，即：
+$$
+w_{i,j}=\left \langle v_i ,\ v_j \right \rangle
+$$
+其中，$$v_i$$是k维空间的向量。
+
+前面说到不同特征之间存在关联，即
+
+> `USA`与`Thanksgiving`、`China`与`Chinese New Year`这样的关联特征，对用户的点击有着正向的影响。
+
+可以用下面的图来表示（这里是关键之处，来自[CMU的FM课件](http://www.cs.cmu.edu/~wcohen/10-605/2015-guest-lecture/FM.pdf)）：
+
+![fm-feature-vec](pic/fm-feature-vec.png)
+
+可以看到不同特征pair对的权值并不是完全独立的，比如`USA`与`Thanksgiving`这两个特征的向量就靠的很近，则其特征交叉的权值就会比较大，`China`与`Chinese New Year`这两个特征向量同理。
+
+
+
+# 演进到FM模型的两条路径
+
 下面我从两个角度来简单介绍下FM模型，一个角度是从特征组合模型的进化角度来讲；另外一个角度从协同过滤模型的进化角度来讲。FM模型就处于这两类模型进化的交汇口。
 
-# 从LR到SVM再到FM模型
+## 从LR到SVM再到FM模型
 
 ![fm-linear-lr](pic/fm-linear-lr.jpg)
 
@@ -37,7 +98,7 @@ LR模型是CTR预估领域早期最成功的模型，大多工业推荐排序系
 
 其实本质上，这也是目前很多花样的embedding的最核心特点，就是**从0/1这种二值硬核匹配，切换为向量软匹配，使得原先匹配不上的，现在能在一定程度上算密切程度了，具备很好的泛化性能**。
 
-# 从MF到FM模型
+## 从MF到FM模型
 
 FM我们大致应该知道是怎么个意思了，这里又突然冒出个MF，长得跟FM貌似还有点像，那么MF又是什么呢？它跟FM又有什么关系？
 
@@ -65,7 +126,7 @@ MF和FM不仅在名字简称上看着有点像，其实他们本质思想上也�
 
 其二：从实际大规模数据场景下的应用来讲，在排序阶段，绝大多数只使用ID信息的模型是不实用的，没有引入Side Information，也就是除了User ID／Item ID外的很多其它可用特征的模型，是不具备实战价值的。原因很简单，大多数真实应用场景中，User/Item有很多信息可用，而协同数据只是其中的一种，引入更多特征明显对于更精准地进行个性化推荐是非常有帮助的。而如果模型不支持更多特征的便捷引入，明显受限严重，很难真正实用，这也是为何矩阵分解类的方法很少看到在Ranking阶段使用，通常是作为一路召回形式存在的原因。
 
-# FM算法的计算复杂度
+# FM算法的计算复杂度及梯度求导
 
 从FM的原始数学公式看，因为在进行二阶（2-order）特征组合的时候，假设有n个不同的特征，那么二阶特征组合意味着任意两个特征都要进行交叉组合，所以可以直接推论得出：FM的时间复杂度是n的平方。但是如果故事仅仅讲到这里，FM模型是不太可能如此广泛地被工业界使用的。因为现实生活应用中的n往往是个非常巨大的特征数，如果FM是n平方的时间复杂度，那估计基本就没人带它玩了。
 
@@ -338,6 +399,12 @@ $$
 * [推荐系统召回四模型之：全能的FM模型](https://zhuanlan.zhihu.com/p/58160982)
 
 本文的FM原理部分主要复制了这篇文章。
+
+* [深入FFM原理与实践](https://tech.meituan.com/2016/03/03/deep-understanding-of-ffm-principles-and-practices.html)
+
+* [CMU的FM课件](http://www.cs.cmu.edu/~wcohen/10-605/2015-guest-lecture/FM.pdf)
+
+“FM原理”参考了上述文章。
 
 * [因子分解机（libffm+xlearn）](https://blog.csdn.net/songbinxu/article/details/79662665)
 * [xLearn Tutorials](https://xlearn-doc-cn.readthedocs.io/en/latest/tutorial/index.html)

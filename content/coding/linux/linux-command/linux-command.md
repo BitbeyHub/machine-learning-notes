@@ -3,6 +3,8 @@
 * [返回顶层目录](../../../SUMMARY.md)
 * [查看文件](#)
   * [head/tail/sed查看或截取超大文件](#head/tail/sed查看或截取超大文件)
+  * [less直接查看超大文件](#less直接查看超大文件)
+  * [cat文件内容打印到屏幕](#cat文件内容打印到屏幕)
 * [传输文件](#传输文件)
   * [scp本地文件上传到开发机](#scp本地文件上传到开发机)
 * [磁盘](#磁盘)
@@ -15,6 +17,10 @@
 * [终端/后台](#终端/后台)
   * [nohup](#nohup)
   * [screen](#screen)
+* 过滤
+  * [grep关键字查找](#grep关键字查找)
+
+
 
 
 
@@ -68,6 +74,34 @@ sed -n ‘10,10000p’ /var/lib/mysql/slowquery.log > temp.log
 参考资料：
 
 * [Linux打开超大文件方法](https://blog.csdn.net/liurwei/article/details/82225245)
+
+
+
+## less直接查看超大文件
+
+less 与 more 类似，但使用 less 可以随意浏览文件，而 more 仅能向前移动，却不能向后移动，而且 **less 在查看之前不会加载整个文件**。
+
+```shell
+less abc.txt
+```
+
+参考资料：
+
+- [Linux less命令](https://www.runoob.com/linux/linux-comm-less.html)
+
+
+
+## cat文件内容打印到屏幕
+
+cat 命令用于连接文件并**直接打印到标准输出设备上**。
+
+```shell
+cat abc.txt
+```
+
+参考资料：
+
+* [Linux cat命令](https://www.runoob.com/linux/linux-comm-cat.html)
 
 
 
@@ -372,8 +406,6 @@ python需要加-u，这样才会使得所有输出到输出到log里。
 
 在VPS中执行一些非常耗时的任务时（如下载，压缩，解压缩，编译，安装等），我们通常是单独开一个远程终端窗口来执行这个任务，且在任务执行过程中不能关闭这个窗口或者中断连接，否则正在执行的任务会被终止掉。而有了screen，我们可以在一个窗口中安装程序，然后在另一个窗口中下载文件，再在第三个窗口中编译程序，只需要一个SSH连接就可以同时执行这三个任务，还可以方便的在不同会话或窗口中切换，即使因为意外导致窗口关闭或者连接中断，也不会影响这三个任务的执行。
 
-
-
 screen的说明相当复杂，反正我是看得头晕了。但事实上，我们只需要掌握下面五个命令就足够我们使用了：
 
 * 创建一个名为test1的会话
@@ -417,7 +449,42 @@ Ctrl+D
 参考资料：
 
 * [screen 命令使用及示例](https://linux.cn/article-8215-1.html)
-* []()
+
+
+
+# 过滤
+
+## grep关键字查找
+
+从文件abc.txt中查找含有xxx字符串的行
+
+```shell
+grep "xxx" abc.txt
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
