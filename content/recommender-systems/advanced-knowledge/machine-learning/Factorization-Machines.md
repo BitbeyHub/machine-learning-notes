@@ -1,7 +1,7 @@
 # Factorization Machines
 
-* [返回顶层目录](../../../../SUMMARY.md)
-* [返回上层目录](deep-learning.md)
+* [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../advanced-knowledge.md)
 * [FM的原理](#FM的原理)
 * [演进到FM模型的两条路径](#演进到FM模型的两条路径)
   * [从LR到SVM再到FM模型](#从LR到SVM再到FM模型)
@@ -88,7 +88,7 @@ $$
 
 可以用下面的图来表示（这里是**关键之处**，来自[CMU的FM课件](http://www.cs.cmu.edu/~wcohen/10-605/2015-guest-lecture/FM.pdf)）：
 
-![fm-feature-vec](/Users/momo/Desktop/fm-feature-vec.png)
+![fm-feature-vec](pic/fm-feature-vec.png)
 
 可以看到不同特征pair对的权值并不是完全独立的，比如`USA`与`Thanksgiving`这两个特征的向量就靠的很近，则其特征交叉的权值就会比较大，`China`与`Chinese New Year`这两个特征向量同理。
 
