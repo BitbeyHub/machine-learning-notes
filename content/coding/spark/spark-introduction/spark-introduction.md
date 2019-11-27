@@ -1,7 +1,27 @@
 # Spark简介
 
-* [返回顶层目录](../../SUMMARY.md)
-* [返回上层目录](spark.md)
+* [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../spark.md)
+
+
+
+# 学习spark
+
+建议从学习Spark官方文档开始：
+
+[Quick Start - Spark 2.1.1 Documentation](https://spark.apache.org/docs/latest/quick-start.html)
+
+[Spark Programming Guide](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
+
+这里有对应的中译版：
+
+[Spark官方文档－快速入门](http://coredumper.cn/index.php/2017/07/08/spark-quick-start/)
+
+[Spark官方文档-Spark编程指南](http://coredumper.cn/index.php/2017/09/30/spark-programming-guide-1/)
+
+---
+
+spark本身的知识点这里面讲的很全了：[https://github.com/JerryLead/Sp..](https://link.zhihu.com/?target=https%3A//github.com/JerryLead/SparkInternals)，from[基于spark大规模LR模型调优总结](https://zhuanlan.zhihu.com/p/31307675)
 
 
 

@@ -3,6 +3,7 @@
 * [返回顶层目录](../../../SUMMARY.md)
 * [返回上层目录](../advanced-knowledge.md)
 * [FM的原理](#FM的原理)
+* [FM与其他模型的对比](#FM与其他模型的对比)
 * [演进到FM模型的两条路径](#演进到FM模型的两条路径)
   * [从LR到SVM再到FM模型](#从LR到SVM再到FM模型)
   * [从MF到FM模型](#从MF到FM模型)
@@ -17,7 +18,7 @@
   * [如何将多路召回融入FM召回模型](#如何将多路召回融入FM召回模型)
   * [FM模型能否将召回和排序阶段一体化](#FM模型能否将召回和排序阶段一体化)
 * [直接用FM交叉特征做召回存在的问题](#直接用FM交叉特征做召回存在的问题)
-* [使用xlearn实现FM](#使用xlearn实现FM)
+* [使用xlearn实现单机版FM](#使用xlearn实现单机版FM)
   * [安装xlearn](#安装xlearn)
   * [构建LibSVM格式训练数据](#构建LibSVM格式训练数据)
   * [进行训练](#进行训练)
@@ -28,6 +29,8 @@
 ![FM-paper](pic/FM-paper.png)
 
 pdf: [Factorization Machines](https://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/Rendle2010FM.pdf)
+
+pdf:[Factorization Machines with libFM](https://www.csie.ntu.edu.tw/~b97053/paper/Factorization%20Machines%20with%20libFM.pdf)
 
 FM模型其实有些年头了，是2010年由Rendle提出的，但是真正在各大厂大规模在CTR预估和推荐领域广泛使用，其实也就是最近几年的事。
 
@@ -91,6 +94,18 @@ $$
 ![fm-feature-vec](pic/fm-feature-vec.png)
 
 可以看到不同特征pair对的权值并不是完全独立的，比如`USA`与`Thanksgiving`这两个特征的向量就靠的很近，则其特征交叉的权值就会比较大，`China`与`Chinese New Year`这两个特征向量同理。
+
+# FM与其他模型的对比
+
+FM是一种比较灵活的模型，通过合适的特征变换方式，FM可以模拟二阶多项式核的SVM模型、MF模型、SVD++模型等。
+
+相比SVM的二阶多项式核而言，FM在样本稀疏的情况下是有优势的；而且，FM的训练/预测复杂度是线性的，而二项多项式核SVM需要计算核矩阵，核矩阵复杂度就是N平方。
+
+相比MF而言，我们把MF中每一项的rating分改写为$$r_{ui}\sim\beta_u+\gamma_i+x_u^Ty_i$$，从下式
+$$
+y(x)=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^n\left \langle v_i, v_j \right \rangle x_ix_j
+$$
+中可以看出，这相当于只有两类特征$$u$$和$$i$$的FM模型。对于FM而言，我们可以加任意多的特征，比如user的历史购买平均值，item的历史购买平均值等，但是MF只能局限在两类特征。SVD++与MF类似，在特征的扩展性上都不如FM，在此不再赘述。
 
 # 演进到FM模型的两条路径
 
@@ -404,7 +419,7 @@ $$
 
 本回答来自[这里](https://zhuanlan.zhihu.com/p/58160982)的评论。
 
-# 使用xlearn实现FM
+# 使用xlearn实现单机版FM
 
 xlearn使用文档：[xlearn-doc](https://xlearn-doc-cn.readthedocs.io/en/latest/index.html)
 
@@ -580,6 +595,21 @@ print("real line num is {}".format(real_line_num))
 print("avg_pos_score =  {0}; avg_neg_sore = {1}".format(round(avg_pos_score, 4), round(avg_neg_score, 4)))
 print("============================================")   
 ```
+
+
+
+# 基于Spark的分布式版FM
+
+github有个Inter的FM的Spark实现[FM-Spark](https://github.com/Intel-bigdata/FM-Spark)，它里面有个错误，有人提交了issue：
+
+>weightsArray(pos + i) -= thisIterStepSize * ((sum(f) * v - weights(pos + f) * v * v) * mult + r2 * weightsArray(pos + i))
+>是不是应该改成
+>weightsArray(pos + f) -= thisIterStepSize * ((sum(f) * v - weights(pos + f) * v * v) * mult + r2 * weightsArray(pos + f))
+>？
+
+需要修改一下。
+
+我自己按照
 
 
 

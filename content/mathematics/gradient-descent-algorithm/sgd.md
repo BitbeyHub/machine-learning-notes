@@ -1,7 +1,8 @@
-# 梯度下降算法
+# 随机梯度下降
 
 - [返回顶层目录](../../SUMMARY.md#目录)
-- [返回上层目录](numerical-calculation-and-optimization.md)
+- [返回上层目录](gradient-descent-algorithm.md)
+- [各类梯度下降算法的演化](#各类梯度下降算法的演化)
 - [批量梯度下降BGD](#批量梯度下降BGD)
 - [随机梯度下降SGD](#随机梯度下降SGD)
   - [大数据中一般梯度下降算法的问题](#大数据中一般梯度下降算法的问题)
@@ -163,6 +164,8 @@ mini-batch SGD：就是选着合适Batch Size的SGD算法，mini-batch利用噪�
 
 
 
+
+
 **为什么说Batch size的增大能使网络的梯度更准确？**
 
 梯度的方差表示： 
@@ -213,3 +216,4 @@ $$
 
 [10个梯度下降优化算法+备忘单](https://ai.yanxishe.com/page/TextTranslation/1603?from=singlemessage)
 
+[深度学习——优化器算法Optimizer详解（BGD、SGD、MBGD、Momentum、NAG、Adagrad、Adadelta、RMSprop、Adam）](https://www.cnblogs.com/guoyaohua/p/8542554.html)
