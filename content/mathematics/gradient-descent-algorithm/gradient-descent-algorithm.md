@@ -13,7 +13,7 @@
 - [AMSGrad](amsgrad.md)
 - [AdasMax](adamax.md)
 
-
+![optimization-on-loss-surface-contours](pic/optimization-on-loss-surface-contours.gif)
 
 # 各类梯度下降算法的演化
 
@@ -21,6 +21,10 @@
 
 
 
+
+
 # 参考资料
 
 * [Deep Learning 之 最优化方法](https://blog.csdn.net/BVL10101111/article/details/72614711)
+* [从 SGD 到 Adam —— 深度学习优化算法概览(一)](https://zhuanlan.zhihu.com/p/32626442)
+* [深度学习最全优化方法总结比较（SGD，Adagrad，Adadelta，Adam，Adamax，Nadam）](https://zhuanlan.zhihu.com/p/22252270)

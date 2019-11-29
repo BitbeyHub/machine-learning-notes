@@ -587,6 +587,7 @@ $$
 
 
 
+
 下面将从直观分析和理论推导两个角度来说明L1、L2正则化的效果。
 
 ### L2正则化直观理解
@@ -800,6 +801,7 @@ $$
   $$
   \frac{\alpha}{H_{jj}}
   $$
+
 
 
 
@@ -1269,6 +1271,7 @@ $$
   $$
 
 
+
 显示ROC曲线的图称为"ROC图”。下图（a）给出了一个示意图，显然 ，对角线对应于 "随机猜测" 模型，而点(0, 1)则对应于将所有正例排在所有反例之前的“理想模型”。
 
 ![ROC-AUC](pic/ROC-AUC.png)
@@ -1289,6 +1292,12 @@ $$
 $$
 \text{AUC}=1-\text{loss}_{\text{rank}}
 $$
+
+[AUC为啥对正负样本比例不敏感？](https://zhuanlan.zhihu.com/p/79698237)
+
+[深入理解AUC](https://tracholar.github.io/machine-learning/2018/01/26/auc.html)
+
+
 
 ## ROC曲线和PR曲线的关系
 

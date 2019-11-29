@@ -481,6 +481,15 @@ val b = a.value
 
 
 
+# 论文
+
+学习一下Spark的RDD，据说这篇论文一定要看
+
+[Resilient Distributed Datasets: A Fault-Tolerant Abstraction for
+In-Memory Cluster Computing](https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf)
+
+
+
 
 
 # 参考资料

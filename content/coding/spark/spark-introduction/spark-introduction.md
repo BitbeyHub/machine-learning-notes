@@ -21,6 +21,12 @@
 
 ---
 
+[Spark 2.2.x 中文官方参考文档](https://spark-reference-doc-cn.readthedocs.io/zh_CN/latest/index.html)
+
+[Spark 2.2.0 中文文档](https://spark.apachecn.org/)
+
+---
+
 spark本身的知识点这里面讲的很全了：[https://github.com/JerryLead/Sp..](https://link.zhihu.com/?target=https%3A//github.com/JerryLead/SparkInternals)，from[基于spark大规模LR模型调优总结](https://zhuanlan.zhihu.com/p/31307675)
 
 
@@ -80,6 +86,16 @@ textFile.count()  --输出长度
 
 ```sh
 ./bin/spark-submit filepath.py
+```
+
+
+
+# spark相关操作
+
+## kill
+
+```shll
+yarn application -kill application_15xxxxx
 ```
 
 

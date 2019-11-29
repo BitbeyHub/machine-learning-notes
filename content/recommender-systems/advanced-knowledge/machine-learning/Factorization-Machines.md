@@ -251,6 +251,57 @@ $$
 \end{aligned}
 $$
 
+
+
+## 损失函数
+
+对于解决分类问题的FM模型，
+
+当标签为[1, 0]时，其损失函数为交叉熵损失：
+$$
+Loss=y\ \text{log} \hat{y}+(1-y)\text{log}(1-\hat{y})
+$$
+当标签为[1, -1]时，其损失函数为
+$$
+Loss=\text{log}\left(1+\text{exp}(-yf(x))\right)
+$$
+其中，f(x)是$$w\cdot x$$，不是$$\hat{y}$$。
+
+这两种损失函数其实是完全等价的。
+
+（1）当为正样本时，损失为
+
+* 标签为[1, 0]
+  $$
+  Loss=-y\text{log}(\hat{y})=-\text{log}\frac{1}{1+\text{exp}(-wx)}=\text{log}(1+\text{exp}(-wx)
+  $$
+
+* 标签为[1, -1]
+  $$
+  Loss=\text{log}\left(1+\text{exp}(-yf(x))\right)=\text{log}\left(1+\text{exp}(-wx)\right)
+  $$
+
+
+（2）当为负样本时，损失为
+
+- 标签为[1, 0]
+  $$
+  \begin{aligned}
+  Loss&=-(1-y)\text{log}(1-\hat{y})=-\text{log}(1-\frac{1}{1+\text{exp}(-wx)})\\
+  &=\text{log}(1+\text{exp}(wx))
+  \end{aligned}
+  $$
+
+- 标签为[1, -1]
+  $$
+  Loss=\text{log}\left(1+\text{exp}(-yf(x))\right)=\text{log}\left(1+\text{exp}(wx)\right)
+  $$
+
+
+可见，两种损失函数的值完全一样。
+
+
+
 # 利用FM模型做统一的召回模型
 
 目前工业界推荐系统在召回阶段，大多数采用了多路召回策略，比如典型的召回路有：基于用户兴趣标签的召回；基于协同过滤的召回；基于热点的召回；基于地域的召回；基于Topic的召回；基于命名实体的召回等等，除此外还有很多其它类型的召回路。
