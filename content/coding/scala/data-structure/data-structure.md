@@ -527,15 +527,15 @@ scala> a.isNaN
 res1: Boolean = true
 ```
 
-# 系统时间和时间戳
+## 系统时间和时间戳
 
-## 获取时间戳
+### 获取时间戳
 
 ```scala
 System.currentTimeMillis()
 ```
 
-# 获取系统时间
+### 获取系统时间
 
 ```scala
 import java.text.SimpleDateFormat
@@ -545,6 +545,25 @@ val df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 val systemTime1 = df.format(new Date())
 val systemTime2 = df.format(System.currentTimeMillis())
 ```
+
+## MD5Hash
+
+获取md5 hash的16进制的字符串，并转化为Long型整数。
+
+```scala
+import java.security.MessageDigest
+def hashMD5(content: String): String = {
+      val md5 = MessageDigest.getInstance("MD5")
+      val encoded = md5.digest((content).getBytes)
+      encoded.map("%02x".format(_)).mkString
+    }
+
+val a = hashMD5("abcd")
+
+java.lang.Long.decode("0x" + a.slice(0,10))
+```
+
+注意：只取hash字符串的前10位是因为为了保证转换后的数值范围处于Long整型范围内。
 
 
 
@@ -583,4 +602,8 @@ val systemTime2 = df.format(System.currentTimeMillis())
 * [scala获取当前系统时间的两种方式](https://blog.csdn.net/qq_34885598/article/details/86583307)
 
 "系统时间和时间戳"参考此博客。
+
+* [scala Md5加密](https://blog.csdn.net/sunny_xsc1994/article/details/90606893)
+
+"MD5Hash"参考此博客。
 
