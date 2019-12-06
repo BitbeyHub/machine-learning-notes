@@ -50,7 +50,6 @@
     * [等式约束的拉格朗日乘子法](content/mathematics/numerical-calculation-and-optimization/lagrangian-multiplier-method.md)
     * [凸优化](content/mathematics/numerical-calculation-and-optimization/convex-optimization.md)
 * [梯度下降算法](content/mathematics/gradient-descent-algorithm/gradient-descent-algorithm.md)
-    - [随机梯度下降](content/mathematics/gradient-descent-algorithm/sgd.md)
     - [随机梯度下降SGD](content/mathematics/gradient-descent-algorithm/sgd.md)
     - [动量法Momentum](content/mathematics/gradient-descent-algorithm/momentum.md)
     - [牛顿动量Nesterov](content/mathematics/gradient-descent-algorithm/nesterov.md)
