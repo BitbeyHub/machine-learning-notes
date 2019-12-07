@@ -466,6 +466,7 @@ Ctrl+D
 参考资料：
 
 * [screen 命令使用及示例](https://linux.cn/article-8215-1.html)
+* [linux文件权限查看及修改-chmod ------入门的一些常识](https://blog.csdn.net/haydenwang8287/article/details/1753883)
 
 
 
