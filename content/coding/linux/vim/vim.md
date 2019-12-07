@@ -59,3 +59,17 @@ Vim默认最多只能打开10个标签页。你可以用set tabpagemax=15改变�
 
 参考资料：[vim-tabe多标签切换](https://www.cnblogs.com/liqiu/archive/2013/03/26/2981949.html)
 
+
+
+# 显示不可见字符
+
+在Linux中，`cat -A file`可以把文件中的所有可见的和不可见的字符都显示出来，在Vim中，如何将不可见字符也显示出来呢？
+
+只需要`:set invlist`即可以将不可见的字符显示出来，例如，会以`^I`表示一个tab符，`$`表示一个回车符等。
+
+最后，`:set nolist`可以回到正常的模式。
+
+
+
+参考资料：[Vim中显示不可见字符](http://yejinxin.github.io/show-nonprinting-character-in-vim)
+

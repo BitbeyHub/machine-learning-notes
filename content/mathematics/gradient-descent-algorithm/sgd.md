@@ -197,7 +197,7 @@ $$
 $$
 x_{i+1}=x_i-\alpha \bigtriangledown f_{x_i}
 $$
-而最速下降法的这个步长$$\alpha_k​$$是通过一个优化函数结算得到的。
+而最速下降法的这个步长$$\alpha_k$$是通过一个优化函数结算得到的。
 $$
 \alpha_k=\text{argmin}_{\alpha_k}f(x_i-\alpha_k)\bigtriangledown f_{x_i}
 $$
