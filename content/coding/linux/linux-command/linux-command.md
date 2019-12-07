@@ -5,7 +5,8 @@
   * [head/tail/sed查看或截取超大文件](#head/tail/sed查看或截取超大文件)
   * [less直接查看超大文件](#less直接查看超大文件)
   * [cat文件内容打印到屏幕](#cat文件内容打印到屏幕)
-* [传输文件](#传输文件)
+* [移动/传输文件](#移动/传输文件)
+  * [mv移动文件/重命名](#mv移动文件/重命名)
   * [scp本地文件上传到开发机](#scp本地文件上传到开发机)
 * [磁盘](#磁盘)
   * [df查看磁盘分区空间](#df查看磁盘分区空间)
@@ -105,7 +106,31 @@ cat abc.txt
 
 
 
-# 传输文件
+# 移动/传输文件
+
+## mv移动文件/重命名
+
+在一些情况下，我们需要将很多个文件同时移动到一个指定的目录下，如果一个一个移动，那太蛋疼了。
+
+今天用man mv查到一个选项-t，是指定目标文件夹，就是我们所要将文件移至的文件夹，很省事儿，分享给大家。
+
+比如当前目录下有a.dir  b.dir   c.dir  1.txt  2.txt  des.dir.我们现在要将a.dir  b.dir   c.dir  1.txt  2.txt这几个文件移动到des.dir 目录下。
+
+执行：
+
+```shell
+mv  a.dir  b.dir   c.dir  1.txt  2.txt  -t  des.dir
+```
+
+就可以一次将这些文件移动到des.dir下。
+
+
+
+参考资料：
+
+* [linux命令mv同时移动多个文件至一个目录](https://jingyan.baidu.com/article/d8072ac4686a1dec95cefd8d.html)
+
+
 
 ## scp本地文件上传到开发机
 
@@ -113,7 +138,7 @@ cat abc.txt
 scp /tmp/Anaconda3-2019.03-Linux-x86_64.sh  ml004.dx:/tmp/
 ```
 
-
+同样也可以将文件从开发机下载到本地。
 
 # 磁盘
 

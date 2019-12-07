@@ -68,7 +68,12 @@
 
 # 编程基础
 
+* linux
+  * [shell](content/coding/linux/shell/shell.md)
+    * [输入输出重定向](content/coding/linux/shell/input_output_redirection/input_output_redirection.md)
+
 * [python](content/coding/python/python.md)
+
     * [python语法](content/coding/python/python-grammar.md)
     * [numpy](content/coding/python/numpy.md)
     * [pandas](content/coding/python/pandas.md)
