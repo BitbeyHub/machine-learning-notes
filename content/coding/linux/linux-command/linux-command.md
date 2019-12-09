@@ -561,7 +561,9 @@ crontab [ -u user ] file
 
 **注意：**当程序在你所指定的时间执行后，系统会寄一封信给你，显示该程序执行的内容，若是你不希望收到这样的信，请在每一行空一格之后加上`> /dev/null 2>&1`即可。
 
+**查看log**：
 
+crontab的运行记录在/var/log/cron-201xxxxx中，直接vim打开这个文件，或者可以用tail -f /var/log/cron.log观察。
 
 参考资料：
 

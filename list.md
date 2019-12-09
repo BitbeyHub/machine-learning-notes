@@ -22,7 +22,9 @@
 
 [LR+FTRL算法原理以及工程化实现](https://zhuanlan.zhihu.com/p/55135954)
 
+[结合YouTube Top-K 论文谈谈强化学习落地](https://zhuanlan.zhihu.com/p/92839767)
 
+[图神经网络（GCN、GraphSage、GAT）等在公司实际推荐系统中有应用么？](https://www.zhihu.com/question/315872728)
 
 # 任务
 
