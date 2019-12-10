@@ -1,7 +1,7 @@
 # TensorFlow基础
 
-* [返回顶层目录](../../../SUMMARY.md)
-* [返回上层目录](../tensorflow.md)
+* [返回顶层目录](../../../../SUMMARY.md)
+* [返回上层目录](../../tensorflow.md)
 * [基础练习](#基础练习)
 * [综合练习](#综合练习)
 
@@ -214,24 +214,5 @@ tensorboard --logdir "imroved_graph"
 * 《面向机器智TensorFlow实践》
 
 本文主要参考此书对应章节。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
