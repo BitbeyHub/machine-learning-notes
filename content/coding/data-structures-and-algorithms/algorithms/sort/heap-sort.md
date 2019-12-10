@@ -1,6 +1,6 @@
 # 堆排序
 
-* [返回顶层目录](../../../SUMMARY.md)
+* [返回顶层目录](../../../../SUMMARY.md)
 * [返回上层目录](sort.md)
 * [堆排序的引入](#堆排序的引入)
 * [什么是堆](#什么是堆)
@@ -158,3 +158,8 @@ void topk_min_heap(int arr[], int len) {
 * [堆排序原理及其实现(C++)](https://blog.csdn.net/lzuacm/article/details/52853194)
 
 本文参考此博客。
+
+===
+
+[堆排序是什么鬼？](https://mp.weixin.qq.com/s/B0ImTjuQJiR7ahRzBpslcg)
+

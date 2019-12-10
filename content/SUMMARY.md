@@ -80,6 +80,7 @@
 * [数据结构与算法](coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
   - [数据结构](coding/data-structures-and-algorithms/data-structures/data-structures.md)
   - [算法思想](coding/data-structures-and-algorithms/algorithms/algorithms.md)
+    - [recursion](coding/data-structures-and-algorithms/algorithms/recursion/recursion.md)
   - [剑指offer](coding/data-structures-and-algorithms/jianzhi-offer/jianzhi-offer.md)
     - [链表](coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
     - [二叉树](coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
