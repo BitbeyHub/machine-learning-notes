@@ -83,14 +83,12 @@
 
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
 
-    * [数据结构与算法简介](content/coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
-    * 数据结构
-      - [链表](content/coding/data-structures-and-algorithms/list/list.md)
-    * 算法思想
-      - [排序](content/coding/data-structures-and-algorithms/sort/sort.md)
-        - [堆排序](content/coding/data-structures-and-algorithms/sort/heap-sort.md)
-      - [递归](content/coding/data-structures-and-algorithms/recursion/recursion.md)
-      - [动态规划](content/coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
+    * [数据结构](content/coding/data-structures-and-algorithms/data-structures/data-structures.md)
+    * [算法思想](content/coding/data-structures-and-algorithms/algorithms/algorithms.md)
+    * [剑指offer](content/coding/data-structures-and-algorithms/jianzhi-offer/jianzhi-offer.md)
+      - [链表](content/coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
+      - [二叉树](content/coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
+    * leetcode
 
 * [Hadoop](content/coding/hadoop/hadoop.md)
 

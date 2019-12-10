@@ -78,14 +78,12 @@
   * [matplotlib](coding/python/matplotlib.md)
   * [scikit-learn](coding/python/scikit-learn.md)
 * [数据结构与算法](coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
-  - [数据结构与算法简介](coding/data-structures-and-algorithms/data-structures-and-algorithms-introduction/data-structures-and-algorithms-introduction.md)
-  - 数据结构
-    - [链表](coding/data-structures-and-algorithms/list/list.md)
-  - 算法思想
-    - [排序](coding/data-structures-and-algorithms/sort/sort.md)
-      - [堆排序](coding/data-structures-and-algorithms/sort/heap-sort.md)
-    - [递归](coding/data-structures-and-algorithms/recursion/recursion.md)
-    - [动态规划](coding/data-structures-and-algorithms/dynamic-programming/dynamic-programming.md)
+  - [数据结构](coding/data-structures-and-algorithms/data-structures/data-structures.md)
+  - [算法思想](coding/data-structures-and-algorithms/algorithms/algorithms.md)
+  - [剑指offer](coding/data-structures-and-algorithms/jianzhi-offer/jianzhi-offer.md)
+    - [链表](coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
+    - [二叉树](coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
+  - leetcode
 - [Hadoop](coding/hadoop/hadoop.md)
 
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
@@ -200,6 +198,7 @@
     - [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](natural-language-processing/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
 - [Attention注意力机制](natural-language-processing/attention-mechanism/attention-mechanism.md)
 - [Transformer](natural-language-processing/transformer/transformer.md)
+- Self Attension
 
 # 知识图谱
 

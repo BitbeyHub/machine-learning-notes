@@ -1,31 +1,10 @@
 # 数据结构与算法
 
 * [返回顶层目录](../../SUMMARY.md)
-* [数据结构与算法简介](data-structures-and-algorithms-introduction.md)
-* 数据结构
-
-  * 数组
-  * 字符串
-  * 哈希表
-  * [链表](list/list.md)
-  * 栈
-  * 队列
-  * 堆
-  * 树
-  * 其他结构
-
-* 算法思想
-  * 排序
-    * [堆排序](sort/heap-sort.md)
-  * 递归
-  * 双指针
-  * 位运算
-  * 分治
-  * BFS与DFS
-  * 贪心
-  * 回溯
-  * 动态规划
-  * 数学算法
+* [数据结构](data-structures/data-structures.md)
+* [算法思想](algorithms/algorithms.md)
+* [剑指offer](jianzhi-offer/jianzhi-offer.md)
+* leetcode
 
 
 
