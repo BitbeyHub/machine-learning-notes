@@ -85,7 +85,7 @@
 
     * [数据结构](content/coding/data-structures-and-algorithms/data-structures/data-structures.md)
     * [算法思想](content/coding/data-structures-and-algorithms/algorithms/algorithms.md)
-      * [recursion](content/coding/data-structures-and-algorithms/algorithms/recursion/recursion.md)
+      * [递归](content/coding/data-structures-and-algorithms/algorithms/recursion/recursion.md)
     * [剑指offer](content/coding/data-structures-and-algorithms/jianzhi-offer/jianzhi-offer.md)
       - [链表](content/coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
       - [二叉树](content/coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)

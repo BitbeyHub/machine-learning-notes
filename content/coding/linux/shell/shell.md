@@ -1,6 +1,9 @@
 # shell编程
 
 - [返回顶层目录](../../../SUMMARY.md)
+- [shell基础](basis/basis.md)
+- [变量](variable/variable.md)
+- [命令](command/command.md)
 - [过程控制](process-control/process-control.md)
 - [输入输出重定向](input_output_redirection/input_output_redirection.md)
 
