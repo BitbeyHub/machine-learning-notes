@@ -1,7 +1,7 @@
 # 链表
 
-* [返回顶层目录](../../../SUMMARY.md)
-* [返回上层目录](../data-structures-and-algorithms.md)
+* [返回顶层目录](../../../../SUMMARY.md)
+* [返回上层目录](../jianzhi-offer.md)
 * [剑指offer6：从尾到头打印链表](#剑指offer6：从尾到头打印链表)
 * [剑指offer22：链表中倒数第k个节点](#剑指offer22：链表中倒数第k个节点)
 * [剑指offer24：反转链表](#剑指offer24：反转链表)
