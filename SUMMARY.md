@@ -89,6 +89,7 @@
     * [剑指offer](content/coding/data-structures-and-algorithms/jianzhi-offer/jianzhi-offer.md)
       - [链表](content/coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
       - [二叉树](content/coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
+      - [数组](content/coding/data-structures-and-algorithms/jianzhi-offer/array/array.md)
     * leetcode
 
 * [Hadoop](content/coding/hadoop/hadoop.md)
