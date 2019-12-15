@@ -7,6 +7,9 @@
 * [剑指offer24：反转链表](#剑指offer24：反转链表)
 * [剑指offer25：合并两个排序的链表](#剑指offer25：合并两个排序的链表)
 * [剑指offer35：复杂链表的复制](#剑指offer35：复杂链表的复制)
+* [剑指offer52：两个链表的第一个公共结点](#剑指offer52：两个链表的第一个公共结点)
+* [剑指offer23：链表中环的入口结点](#剑指offer23：链表中环的入口结点)
+* [剑指Offer18-2：删除链表中重复的结点](#剑指Offer18-2：删除链表中重复的结点)
 
 
 
@@ -407,7 +410,7 @@ public:
 
 [详细](https://cuijiahua.com/blog/2018/01/basis_55.html)，[练习](https://www.nowcoder.com/practice/253d2c59ec3e4bc68da16833f79a38e4?tpId=13&tqId=11208&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
 
-# 剑指Offerxxx：删除链表中重复的结点
+# 剑指Offer18-2：删除链表中重复的结点
 
 > 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5。
 >
@@ -463,47 +466,9 @@ public:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 参考资料
 
+- [剑指Offer系列刷题笔记汇总](https://cuijiahua.com/blog/2018/02/basis_67.html)
 
-
-
-
-===
-
-[面试常考-链表反转解析](https://mp.weixin.qq.com/s/zDRnSq_-pXg2iXHmVSDDbA)
+本文参考此博客。
 
