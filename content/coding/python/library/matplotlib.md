@@ -297,7 +297,7 @@ http://blog.csdn.net/mmc2015/article/details/47746195
 
 
 
-![Figure_10](/Users/momo/Desktop/GIT/machine-learning-notes/content/coding/python/pic/Figure_10.png)
+![Figure_10](pic/Figure_10.png)
 
 ```python
 import matplotlib.pyplot as plt
@@ -324,9 +324,9 @@ plt.show()
 
 
 
-![Figure_11_1](/Users/momo/Desktop/GIT/machine-learning-notes/content/coding/python/pic/Figure_11_1.png)
+![Figure_11_1](pic/Figure_11_1.png)
 
-![Figure_11_1](/Users/momo/Desktop/GIT/machine-learning-notes/content/coding/python/pic/Figure_11_2.png)
+![Figure_11_1](pic/Figure_11_2.png)
 
 ```python
 import matplotlib.pyplot as plt
@@ -353,7 +353,7 @@ plt.show()
 
 
 
-![Figure_12](/Users/momo/Desktop/GIT/machine-learning-notes/content/coding/python/pic/Figure_12.png)
+![Figure_12](pic/Figure_12.png)
 
 
 
