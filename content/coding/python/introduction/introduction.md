@@ -1,7 +1,7 @@
 # python简介
 
 * [返回顶层目录](../../../SUMMARY.md)
-
+* [返回上层目录](../python.md)
 * [python介绍](#python介绍)
 * [机器学习用到的python](#机器学习用到的python)
 * [用anaconda安装python](#用anaconda安装python)

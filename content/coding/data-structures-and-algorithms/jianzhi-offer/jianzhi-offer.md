@@ -5,6 +5,7 @@
 * [链表](list/list.md)
 * [二叉树](binary-tree/binary-tree.md)
 * [数组](array/array.md)
+* [字符串](string/string.md)
 
 
 

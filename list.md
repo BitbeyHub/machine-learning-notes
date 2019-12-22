@@ -26,6 +26,12 @@
 
 [图神经网络（GCN、GraphSage、GAT）等在公司实际推荐系统中有应用么？](https://www.zhihu.com/question/315872728)
 
+[强化学习在推荐算法的应用论文整理（二）](https://zhuanlan.zhihu.com/p/77694065)
+
+[Generative Adversarial User Model for Reinforcement Learning Based Recommendation System](http://proceedings.mlr.press/v97/chen19f/chen19f.pdf)
+
+[BERT4REC：使用Bert进行推荐](https://zhuanlan.zhihu.com/p/97123417)
+
 # 任务
 
 rnn

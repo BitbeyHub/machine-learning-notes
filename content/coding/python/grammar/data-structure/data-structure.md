@@ -6,10 +6,15 @@
 * [字符串](#字符串)
   * [字符串操作](#字符串操作)
   * [字符串常用内置方法](#字符串常用内置方法)
-
 * [列表](#列表)
+  * [对列表进行增删改查](#对列表进行增删改查)
+  * [列表去重](#列表去重)
 * [元组](#元组)
 * [字典](#字典)
+  * [基本操作](#基本操作)
+  * [字典的增删改查操作](#字典的增删改查操作)
+  * [使用循环来遍历字典](#使用循环来遍历字典)
+  * [清空字典](#清空字典)
 * [集合](#集合)
 
 
@@ -352,6 +357,19 @@ for person in info_lists:
   print(num_list.count(6))# 3
   ```
 
+## 列表去重
+
+使用内置set方法来去重：
+
+```python
+lst1 = [2, 1, 3, 4, 1]
+lst2 = list(set(lst1))
+print(lst2)
+# [1, 2, 3, 4]
+```
+
+
+
 # 元组
 
 - 循序存储相同/不同类型的元素
@@ -437,7 +455,7 @@ while i < len(db_info):
 
 
 
-基本操作
+## 基本操作
 
 ```python
 user_if_dict = {"name":"悟空","age":100,"gender":"male","job":"取经"}
@@ -452,11 +470,7 @@ print(user_if_dict["job"])
 
 存储大量数据也能够准确查找和修改。
 
-
-
 不支持通过下标来查询指定位置的元素的值。
-
-
 
 Key不能重复出现，否则后面的值会覆盖前面的值
 
@@ -465,9 +479,7 @@ user_if_dict = {"name":"悟空","age":100,"gender":"male","job":"取经","name":
 print("{}的年龄：{}，性别：{}，工作内容：{}".format(user_if_dict["name"],user_if_dict["age"],user_if_dict["gender"],user_if_dict["job"]))
 ```
 
-
-
-字典的增删改查操作
+## 字典的增删改查操作
 
 ```python
 # 字典的增删改查操作
@@ -499,7 +511,7 @@ else:
 print(user_if_dict.get("tel","19911116666"))# None
 ```
 
-使用循环来遍历字典
+## 使用循环来遍历字典
 
 ```python
 # 使用循环来遍历字典
@@ -521,9 +533,7 @@ for key,value in user_if_dict.items():
     print("{}:{}".format(key,value))
 ```
 
-
-
-清空字典
+## 清空字典
 
 ```python
 user_if_dict = {"name":"悟空","age":100,"gender":"male","job":"取经","name":"白骨精"}

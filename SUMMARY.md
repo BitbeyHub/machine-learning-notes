@@ -71,9 +71,7 @@
 * linux
   * [shell](content/coding/linux/shell/shell.md)
     * [输入输出重定向](content/coding/linux/shell/input_output_redirection/input_output_redirection.md)
-
 * [python](content/coding/python/python.md)
-
     * [python简介](content/coding/python/introduction/introduction.md)
     * [python语法](content/coding/python/grammar/grammar.md)
         * [基础语法](content/coding/python/grammar/basis/basis.md)
@@ -91,9 +89,7 @@
         * [scikit-learn](content/coding/python/library/scikit-learn.md)
     * [python应用](content/coding/python/application/application.md)
         * [排序算法](content/coding/python/application/sort/sort.md)
-
 * [数据结构与算法](content/coding/data-structures-and-algorithms/data-structures-and-algorithms.md)
-
     * [数据结构](content/coding/data-structures-and-algorithms/data-structures/data-structures.md)
     * [算法思想](content/coding/data-structures-and-algorithms/algorithms/algorithms.md)
       * [递归](content/coding/data-structures-and-algorithms/algorithms/recursion/recursion.md)
@@ -101,28 +97,20 @@
       - [链表](content/coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
       - [二叉树](content/coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
       - [数组](content/coding/data-structures-and-algorithms/jianzhi-offer/array/array.md)
+      - [字符串](content/coding/data-structures-and-algorithms/jianzhi-offer/string/string.md)
     * leetcode
-
 * [Hadoop](content/coding/hadoop/hadoop.md)
 
     * [Hadoop简介](content/coding/hadoop/hadoop-introduction.md)
     * [MapReduce](content/coding/hadoop/map-reduce.md)
-
 * [Hive](content/coding/hive/hive.md)
-
 * Spark
-
 * [TensorFlow](content/coding/tensorflow/tensorflow.md)
-
-    TensorFlow1.0
-
-    * [TensorFlow基础](content/coding/tensorflow/tensorflow-basis/tensorflow-basis.md)
-    * [TensorFlow基础概念解析](content/coding/tensorflow/tensorflow-basic-concept-analysis/tensorflow-basic-concept-analysis.md)
-
-    * [TensorFlow机器学习基础](content/coding/tensorflow/tensorflow-machine-learning-foundation/tensorflow-machine-learning-foundation.md)
-
-    TensorFlow2.0
-
+    - [TensorFlow1.0](content/coding/tensorflow/tensorflow1.0/tensorflow1.0.md)
+      - [TensorFlow基础](content/coding/tensorflow/tensorflow1.0/basis/basis.md)
+      - [TensorFlow基础概念解析](content/coding/tensorflow/tensorflow1.0/basic-concept-analysis/basic-concept-analysis.md)
+      - [TensorFlow机器学习基础](content/coding/tensorflow/tensorflow1.0/machine-learning-foundation/machine-learning-foundation.md)
+    - [TensorFlow2.0](content/coding/tensorflow/tensorflow2.0/tensorflow2.0.md)
 * [PyTorch](content/coding/pytorch/pytorch.md)
 
 

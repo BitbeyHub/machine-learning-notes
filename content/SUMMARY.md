@@ -69,7 +69,7 @@
 * linux
   * [shell](coding/linux/shell/shell.md)
     * [输入输出重定向](coding/linux/shell/input_output_redirection/input_output_redirection.md)
-* [python](content/coding/python/python.md)
+* [python](coding/python/python.md)
   - [python简介](coding/python/introduction/introduction.md)
   - [python语法](coding/python/grammar/grammar.md)
     - [基础语法](coding/python/grammar/basis/basis.md)
@@ -95,26 +95,20 @@
     - [链表](coding/data-structures-and-algorithms/jianzhi-offer/list/list.md)
     - [二叉树](coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
     - [数组](coding/data-structures-and-algorithms/jianzhi-offer/array/array.md)
+    - [字符串](coding/data-structures-and-algorithms/jianzhi-offer/string/string.md)
   - leetcode
 - [Hadoop](coding/hadoop/hadoop.md)
 
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
 - [MapReduce](coding/hadoop/map-reduce.md)
-
 - [Hive](coding/hive/hive.md)
-
 - Spark
-
 - [TensorFlow](coding/tensorflow/tensorflow.md)
-
-  TensorFlow1.0
-
-  - [TensorFlow基础](coding/tensorflow/tensorflow1.0/tensorflow-basis/tensorflow-basis.md)
-  - [TensorFlow基础概念解析](coding/tensorflow/tensorflow1.0/tensorflow-basic-concept-analysis/tensorflow-basic-concept-analysis.md)
-  - [TensorFlow机器学习基础](coding/tensorflow/tensorflow1.0/tensorflow-machine-learning-foundation/tensorflow-machine-learning-foundation.md)
-
-  TensorFlow2.0
-
+  - [TensorFlow1.0](coding/tensorflow/tensorflow1.0/tensorflow1.0.md)
+    - [TensorFlow基础](coding/tensorflow/tensorflow1.0/basis/basis.md)
+    - [TensorFlow基础概念解析](coding/tensorflow/tensorflow1.0/basic-concept-analysis/basic-concept-analysis.md)
+    - [TensorFlow机器学习基础](coding/tensorflow/tensorflow1.0/machine-learning-foundation/machine-learning-foundation.md)
+  - [TensorFlow2.0](coding/tensorflow/tensorflow2.0/tensorflow2.0.md)
 - [PyTorch](coding/pytorch/pytorch.md)
 
 
