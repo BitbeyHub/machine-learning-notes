@@ -98,6 +98,8 @@
       - [二叉树](content/coding/data-structures-and-algorithms/jianzhi-offer/binary-tree/binary-tree.md)
       - [数组](content/coding/data-structures-and-algorithms/jianzhi-offer/array/array.md)
       - [字符串](content/coding/data-structures-and-algorithms/jianzhi-offer/string/string.md)
+      - [栈和队列](content/coding/data-structures-and-algorithms/jianzhi-offer/stack-and-queue/stack-and-queue.md)
+      - [递归](content/coding/data-structures-and-algorithms/jianzhi-offer/recursion/recursion.md)
     * leetcode
 * [Hadoop](content/coding/hadoop/hadoop.md)
 
