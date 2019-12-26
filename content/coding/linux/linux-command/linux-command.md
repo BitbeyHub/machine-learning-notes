@@ -8,6 +8,11 @@
 * [移动/传输文件](#移动/传输文件)
   * [mv移动文件/重命名](#mv移动文件/重命名)
   * [scp本地文件上传到开发机](#scp本地文件上传到开发机)
+* [压缩文件](#压缩文件)
+  * [zip压缩文件](#zip压缩文件)
+* [文本处理](#文本处理)
+  * [wc计算字数行数](#wc计算字数行数)
+  * [awk文本分析](#awk文本分析)
 * [磁盘](#磁盘)
   * [df查看磁盘分区空间](#df查看磁盘分区空间)
   * [du查看当前目录的总大小](#du查看当前目录的总大小)
@@ -16,10 +21,12 @@
   * [chmod更改文件权限](#chmod更改文件权限)
   * [chown更改文件拥有者](#chown更改文件拥有者)
 * [终端/后台](#终端/后台)
-  * [nohup](#nohup)
-  * [screen](#screen)
-* 过滤
+  * [nohup后台运行](#nohup后台运行)
+  * [screen会话窗口保留](#screen会话窗口保留)
+* [过滤](#过滤)
   * [grep关键字查找](#grep关键字查找)
+* [定时任务](#定时任务)
+  * [crontab定时运行](#crontab定时运行)
 
 
 
@@ -132,6 +139,428 @@ scp /tmp/Anaconda3-2019.03-Linux-x86_64.sh  ml004.dx:/tmp/
 
 同样也可以将文件从开发机下载到本地。
 
+
+
+# 压缩文件
+
+## zip压缩文件
+
+```js
+-d 从压缩文件内删除指定的文件。
+-q 不显示指令执行过程。
+-r 递归处理，将指定目录下的所有文件和子目录一并处理。
+-v 显示指令执行过程或显示版本信息。
+```
+
+实例：
+
+* 将/home/html/ 这个目录下所有文件和文件夹打包为当前目录下的 html.zip：
+
+  ```shell
+  zip -q -r html.zip /home/html
+  ```
+
+* 如果在我们在 /home/html 目录下，可以执行以下命令：
+
+  ```shell
+  zip -q -r html.zip *
+  ```
+
+* 从压缩文件 cp.zip 中删除文件 a.c
+
+  ```shell
+  zip -dv cp.zip a.c
+  ```
+
+
+
+参考资料：
+
+- [Linux zip命令](https://www.runoob.com/linux/linux-comm-zip.html)
+
+
+
+# 文本处理
+
+## wc计算字数行数
+
+利用wc指令我们可以计算文件的Byte数、字数、或是列数，若不指定文件名称、或是所给予的文件名为"-"，则wc指令会从标准输入设备读取数据。
+
+```shell
+wc [-clw][--help][--version][文件...]
+```
+
+**参数**：
+
+- -c或--bytes或--chars 只显示Bytes数。
+- -l或--lines 只显示行数。
+- -w或--words 只显示字数。
+- --help 在线帮助。
+- --version 显示版本信息。
+
+实例：
+
+在默认的情况下，wc将计算指定文件的行数、字数，以及字节数。使用的命令为：
+
+```shell
+wc testfile
+```
+
+使用 wc统计，结果如下：
+
+```shell
+wc testfile  # testfile文件的统计信息  
+# 3 92 598 testfile
+# testfile文件的行数为3、单词数92、字节数598 
+```
+
+其中，3 个数字分别表示testfile文件的行数、单词数，以及该文件的字节数。
+
+如果想同时统计多个文件的信息，例如同时统计testfile、testfile_1、testfile_2，可使用如下命令：
+
+```shell
+wc testfile testfile_1 testfile_2   #统计三个文件的信息 
+```
+
+输出结果如下：
+
+```shell
+#统计三个文件的信息  
+wc testfile testfile_1 testfile_2
+#3 92 598 testfile
+# 第一个文件行数为3、单词数92、字节数598  
+# 9 18 78 testfile_1
+# 第二个文件的行数为9、单词数18、字节数78  
+# 3 6 32 testfile_2
+# 第三个文件的行数为3、单词数6、字节数32  
+# 15 116 708 总用量
+# 三个文件总共的行数为15、单词数116、字节数708 
+```
+
+
+
+参考资料：
+
+- [Linux wc命令](https://www.runoob.com/linux/linux-comm-wc.html)
+
+
+
+## awk文本分析
+
+AWK是一种处理文本文件的语言，是一个强大的文本分析工具。
+
+之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的 Family Name 的首字符。
+
+**语法**
+
+```shell
+awk [选项参数] 'script' var=value file(s)
+或
+awk [选项参数] -f scriptfile var=value file(s)
+```
+
+**选项参数说明：**
+
+- -F fs or --field-separator fs
+  指定输入文件折分隔符，fs是一个字符串或者是一个正则表达式，如-F:。
+- -v var=value or --asign var=value
+  赋值一个用户定义变量。
+- -f scripfile or --file scriptfile
+  从脚本文件中读取awk命令。
+- -mf nnn and -mr nnn
+  对nnn值设置内在限制，-mf选项限制分配给nnn的最大块数目；-mr选项限制记录的最大数目。这两个功能是Bell实验室版awk的扩展功能，在标准awk中不适用。
+- -W compact or --compat, -W traditional or --traditional
+  在兼容模式下运行awk。所以gawk的行为和标准的awk完全一样，所有的awk扩展都被忽略。
+- -W copyleft or --copyleft, -W copyright or --copyright
+  打印简短的版权信息。
+- -W help or --help, -W usage or --usage
+  打印全部awk选项和每个选项的简短说明。
+- -W lint or --lint
+  打印不能向传统unix平台移植的结构的警告。
+- -W lint-old or --lint-old
+  打印关于不能向传统unix平台移植的结构的警告。
+- -W posix
+  打开兼容模式。但有以下限制，不识别：/x、函数关键字、func、换码序列以及当fs是一个空格时，将新行作为一个域分隔符；操作符**和**=不能代替^和^=；fflush无效。
+- -W re-interval or --re-inerval
+  允许间隔正则表达式的使用，参考(grep中的Posix字符类)，如括号表达式[[:alpha:]]。
+- -W source program-text or --source program-text
+  使用program-text作为源代码，可与-f命令混用。
+- -W version or --version
+  打印bug报告信息的版本。
+
+
+
+**基本用法**
+
+```shell
+# 行匹配语句 awk '' 只能用单引号
+awk '{[pattern] action}' {filenames}
+
+#-F相当于内置变量FS, 指定分割字符
+awk -F
+
+# 设置变量
+awk -v
+
+# 使用脚本
+awk -f {awk脚本} {文件名}
+```
+
+例如：
+
+log.txt文本内容如下：
+
+```js
+2 this is a test
+3 Are you like awk
+This's a test
+10 There are orange,apple,mongo
+```
+
+用法如下：
+
+```shell
+# 每行按空格或TAB分割，输出文本中的1、4项
+awk '{print $1,$4}' log.txt
+
+# 格式化输出
+awk '{printf "%-8s %-10s\n",$1,$4}' log.txt
+
+# 使用","分割
+awk -F, '{print $1,$2}' log.txt
+
+# 或者使用内建变量
+awk 'BEGIN{FS=","} {print $1,$2}' log.txt
+
+# 使用多个分隔符.先使用空格分割，然后对分割结果再使用","分割
+awk -F '[ ,]'  '{print $1,$2,$5}' log.txt
+
+awk -va=1 '{print $1,$1+a}' log.txt
+# 2 3
+
+awk -va=1 -vb=s '{print $1,$1+a,$1b}' log.txt
+# 2 3 2s
+```
+
+
+
+**运算符**
+
+| 运算符                  | 描述                             |
+| ----------------------- | -------------------------------- |
+| = += -= *= /= %= ^= **= | 赋值                             |
+| ?:                      | C条件表达式                      |
+| \|\|                    | 逻辑或                           |
+| &&                      | 逻辑与                           |
+| ~ 和 !~                 | 匹配正则表达式和不匹配正则表达式 |
+| < <= > >= != ==         | 关系运算符                       |
+| 空格                    | 连接                             |
+| + -                     | 加，减                           |
+| * / %                   | 乘，除与求余                     |
+| + - !                   | 一元加，减和逻辑非               |
+| ^ ***                   | 求幂                             |
+| ++ --                   | 增加或减少，作为前缀或后缀       |
+| $                       | 字段引用                         |
+| in                      | 数组成员                         |
+
+过滤第一列大于2的行
+
+```shell
+awk '$1>2' log.txt
+# 输出
+# 3 Are you like awk
+# This's a test
+# 10 There are orange,apple,mongo
+```
+
+过滤第一列等于2的行
+
+```shell
+awk '$1==2 {print $1,$3}' log.txt
+# 输出
+# 2 is
+```
+
+过滤第一列大于2并且第二列等于'Are'的行
+
+```shell
+awk '$1>2 && $2=="Are" {print $1,$2,$3}' log.txt
+# 输出
+# 3 Are you
+```
+
+
+
+**内建变量**
+
+| 变量        | 描述                                                       |
+| ----------- | ---------------------------------------------------------- |
+| $n          | 当前记录的第n个字段，字段间由FS分隔                        |
+| $0          | 完整的输入记录                                             |
+| ARGC        | 命令行参数的数目                                           |
+| ARGIND      | 命令行中当前文件的位置(从0开始算)                          |
+| ARGV        | 包含命令行参数的数组                                       |
+| CONVFMT     | 数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组          |
+| ERRNO       | 最后一个系统错误的描述                                     |
+| FIELDWIDTHS | 字段宽度列表(用空格键分隔)                                 |
+| FILENAME    | 当前文件名                                                 |
+| FNR         | 各文件分别计数的行号                                       |
+| FS          | 字段分隔符(默认是任何空格)                                 |
+| IGNORECASE  | 如果为真，则进行忽略大小写的匹配                           |
+| NF          | 一条记录的字段的数目                                       |
+| NR          | 已经读出的记录数，就是行号，从1开始                        |
+| OFMT        | 数字的输出格式(默认值是%.6g)                               |
+| OFS         | 输出记录分隔符（输出换行符），输出时用指定的符号代替换行符 |
+| ORS         | 输出记录分隔符(默认值是一个换行符)                         |
+| RLENGTH     | 由match函数所匹配的字符串的长度                            |
+| RS          | 记录分隔符(默认是一个换行符)                               |
+| RSTART      | 由match函数所匹配的字符串的第一个位置                      |
+| SUBSEP      | 数组下标分隔符(默认值是/034)                               |
+
+```shell
+awk 'BEGIN{printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n","FILENAME","ARGC","FNR","FS","NF","NR","OFS","ORS","RS";printf "---------------------------------------------\n"} {printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n",FILENAME,ARGC,FNR,FS,NF,NR,OFS,ORS,RS}'  log.txt
+# FILENAME ARGC  FNR   FS   NF   NR  OFS  ORS   RS
+# ---------------------------------------------
+# log.txt    2    1         5    1
+# log.txt    2    2         5    2
+# log.txt    2    3         3    3
+# log.txt    2    4         4    4
+```
+
+
+
+**使用正则，字符串匹配**
+
+**~ 表示模式开始。// 中是模式。**
+
+```shell
+# 输出第二列包含 "th"，并打印第二列与第四列
+awk '$2 ~ /th/ {print $2,$4}' log.txt
+# this a
+
+# 输出包含"re" 的行
+awk '/re/ ' log.txt
+# 3 Are you like awk
+# 10 There are orange,apple,mongo
+```
+
+
+
+**忽略大小写**
+
+```shell
+awk 'BEGIN{IGNORECASE=1} /this/' log.txt
+# 2 this is a test
+# This's a test
+```
+
+
+
+**模式取反**
+
+```shell
+awk '$2 !~ /th/ {print $2,$4}' log.txt
+# Are like
+# a
+# There orange,apple,mongo
+awk '!/th/ {print $2,$4}' log.txt
+# Are like
+# a
+# There orange,apple,mongo
+```
+
+
+
+**awk脚本**
+
+关于awk脚本，我们需要注意两个关键词BEGIN和END。
+
+- BEGIN{ 这里面放的是执行前的语句 }
+- END {这里面放的是处理完所有的行后要执行的语句 }
+- {这里面放的是处理每一行时要执行的语句}
+
+假设有这么一个文件（学生成绩表）：
+
+```shell
+cat score.txt
+# Marry   2143 78 84 77
+# Jack    2321 66 78 45
+# Tom     2122 48 77 71
+# Mike    2537 87 97 95
+# Bob     2415 40 57 62
+```
+
+我们的awk脚本如下：
+
+```shell
+$ cat cal.awk
+#!/bin/awk -f
+#运行前
+BEGIN {
+    math = 0
+    english = 0
+    computer = 0
+ 
+    printf "NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL\n"
+    printf "---------------------------------------------\n"
+}
+#运行中
+{
+    math+=$3
+    english+=$4
+    computer+=$5
+    printf "%-6s %-6s %4d %8d %8d %8d\n", $1, $2, $3,$4,$5, $3+$4+$5
+}
+#运行后
+END {
+    printf "---------------------------------------------\n"
+    printf "  TOTAL:%10d %8d %8d \n", math, english, computer
+    printf "AVERAGE:%10.2f %8.2f %8.2f\n", math/NR, english/NR, computer/NR
+}
+```
+
+我们来看一下执行结果：
+
+```shell
+$ awk -f cal.awk score.txt
+NAME    NO.   MATH  ENGLISH  COMPUTER   TOTAL
+---------------------------------------------
+Marry  2143     78       84       77      239
+Jack   2321     66       78       45      189
+Tom    2122     48       77       71      196
+Mike   2537     87       97       95      279
+Bob    2415     40       57       62      159
+---------------------------------------------
+  TOTAL:       319      393      350
+AVERAGE:     63.80    78.60    70.00
+```
+
+
+
+**另外一些实例**
+
+计算文件大小
+
+```shell
+ls -l *.txt | awk '{sum+=$6} END {print sum}'
+```
+
+
+
+从文件中找出长度大于80的行
+
+```shell
+awk 'length>80' log.txt
+```
+
+
+
+参考资料：
+
+* [Linux awk 命令](https://www.runoob.com/linux/linux-comm-awk.html)
+
+
+
 # 磁盘
 
 ## df查看磁盘分区空间
@@ -224,10 +653,10 @@ du 命令用于查看当前目录的总大小：
 
 当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用ln命令链接（link）它就可以，不必重复的占用磁盘空间。
 
-比如，/data的空间特别大，而当前文件夹data所在的磁盘空间不足，但是还想把文件放在当前文件夹data下，那就可以建一个软连接，看起来是把文件放在data下了，其实文件是存放在/data/lu.wei/dada中的。
+比如，/data的空间特别大，而当前文件夹data1所在的磁盘空间不足，但是还想把文件放在当前文件夹data下，那就可以建一个软连接，看起来是把文件放在data下了，其实文件是存放在/data/lu.wei/dada中的。
 
 ```shell
-ln -s /data/lu.wei/dada/ data
+ln -s /data/lu.wei/dada/ data1
 ```
 
 参考资料：
@@ -407,9 +836,10 @@ chown -R James:users  *
 - [Linux权限详解（chmod、600、644、666、700、711、755、777、4755、6755、7755）](https://blog.csdn.net/u013197629/article/details/73608613)
 
 
+
 # 终端/后台
 
-## nohup
+## nohup后台运行
 
 后台运行
 
@@ -419,7 +849,7 @@ nohup python -u xxx.py 1>./log.txt 2>&1 &
 
 python需要加-u，这样才会使得所有输出到输出到log里。
 
-## screen
+## screen会话窗口保留
 
 在VPS中执行一些非常耗时的任务时（如下载，压缩，解压缩，编译，安装等），我们通常是单独开一个远程终端窗口来执行这个任务，且在任务执行过程中不能关闭这个窗口或者中断连接，否则正在执行的任务会被终止掉。而有了screen，我们可以在一个窗口中安装程序，然后在另一个窗口中下载文件，再在第三个窗口中编译程序，只需要一个SSH连接就可以同时执行这三个任务，还可以方便的在不同会话或窗口中切换，即使因为意外导致窗口关闭或者连接中断，也不会影响这三个任务的执行。
 
@@ -568,6 +998,5 @@ crontab的运行记录在/var/log/cron-201xxxxx中，直接vim打开这个文件
 参考资料：
 
 - [Linux crontab命令](https://www.runoob.com/linux/linux-comm-crontab.html)
-
 
 

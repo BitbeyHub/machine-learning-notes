@@ -7,7 +7,7 @@
 * [数组](array/array.md)
 * [字符串](string/string.md)
 * [栈和队列](stack-and-queue/stack-and-queue.md)
-* [递归](recursion/recursion.md)
+* [递归和回溯法](recursion-and-back-tracking/recursion-and-back-tracking.md)
 
 
 

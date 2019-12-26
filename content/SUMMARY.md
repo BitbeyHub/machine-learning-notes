@@ -97,7 +97,7 @@
     - [数组](coding/data-structures-and-algorithms/jianzhi-offer/array/array.md)
     - [字符串](coding/data-structures-and-algorithms/jianzhi-offer/string/string.md)
     - [栈和队列](coding/data-structures-and-algorithms/jianzhi-offer/stack-and-queue/stack-and-queue.md)
-    - [递归](coding/data-structures-and-algorithms/jianzhi-offer/recursion/recursion.md)
+    - [递归和回溯法](coding/data-structures-and-algorithms/jianzhi-offer/recursion-and-back-tracking/recursion-and-back-tracking.md)
   - leetcode
 - [Hadoop](coding/hadoop/hadoop.md)
 
