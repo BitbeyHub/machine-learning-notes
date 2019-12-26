@@ -68,7 +68,8 @@
 
 # 编程基础
 
-* linux
+* [linux](content/coding/linux/linux.md)
+  * [linux常用命令](content/coding/linux/linux-command/linux-command.md)
   * [shell](content/coding/linux/shell/shell.md)
     * [输入输出重定向](content/coding/linux/shell/input_output_redirection/input_output_redirection.md)
 * [python](content/coding/python/python.md)

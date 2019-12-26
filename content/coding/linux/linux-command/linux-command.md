@@ -1,6 +1,7 @@
-# Linux常见命令
+# Linux常用命令
 
 * [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../linux.md)
 * [查看文件](#)
   * [head/tail/sed查看或截取超大文件](#head/tail/sed查看或截取超大文件)
   * [less直接查看超大文件](#less直接查看超大文件)
