@@ -99,9 +99,9 @@
     - [字符串](coding/data-structures-and-algorithms/jianzhi-offer/string/string.md)
     - [栈和队列](coding/data-structures-and-algorithms/jianzhi-offer/stack-and-queue/stack-and-queue.md)
     - [递归和回溯法](coding/data-structures-and-algorithms/jianzhi-offer/recursion-and-back-tracking/recursion-and-back-tracking.md)
-  - leetcode
+    - [动态规划](coding/data-structures-and-algorithms/jianzhi-offer/dynamic-programming/dynamic-programming.md)
+  - [leetcode](coding/data-structures-and-algorithms/leetcode/leetcode.md)
 - [Hadoop](coding/hadoop/hadoop.md)
-
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
 - [MapReduce](coding/hadoop/map-reduce.md)
 - [Hive](coding/hive/hive.md)

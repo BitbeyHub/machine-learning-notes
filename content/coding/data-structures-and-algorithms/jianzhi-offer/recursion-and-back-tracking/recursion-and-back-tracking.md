@@ -123,6 +123,8 @@ public:
 
 # 回溯法
 
+
+
 ## 剑指offer12：矩阵中的路径
 
 > 题目：请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。 例如在下面的3x4的矩阵中包含一条字符串"bcced"的路径（路径中的字母用斜体表示）。但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入这个格子。
@@ -187,6 +189,56 @@ private:
 ```
 
 [详情](https://cuijiahua.com/blog/2018/02/basis_65.html)，[练习](https://www.nowcoder.com/practice/c61c6999eecb4b8f88a98f66b273a3cc?tpId=13&tqId=11218&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
+
+
+## 剑指offer13：机器人的运动范围
+
+> 题目：地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
+
+和上一道题十分相似，只不过这次的限制条件变成了坐标位数之和。对于求坐标位数之和，我们单独用一个函数实现，然后套入上一道题的代码中即可。
+
+c++:
+
+```c++
+class Solution {
+public:
+    int movingCount(int threshold, int rows, int cols)
+    {
+        int count = 0;
+        if(threshold < 1 || rows < 1 || cols < 1){
+            return count;
+        }
+        bool* visited = new bool[rows*cols];
+        memset(visited, 0, rows*cols);
+        count = movingCountCore(threshold, rows, cols, 0, 0, visited);
+        delete[] visited;
+        return count;
+    }
+private:
+    int movingCountCore(int threshold, int rows, int cols, int row, int col, bool* visited){
+        int count = 0;
+        if(row >= 0 && row < rows && col >= 0 && col < cols && getDigitSum(row)+getDigitSum(col) <= threshold && !visited[row*cols+col]){
+            visited[row*cols+col] = true;
+            count = 1 + movingCountCore(threshold, rows, cols, row+1, col, visited)
+                + movingCountCore(threshold, rows, cols, row-1, col, visited)
+                + movingCountCore(threshold, rows, cols, row, col+1, visited)
+                + movingCountCore(threshold, rows, cols, row, col-1, visited);
+        }
+        return count;
+    }
+    int getDigitSum(int num){
+        int sum = 0;
+        while(num){
+            sum += num % 10;
+            num /= 10;
+        }
+        return sum;
+    }
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/02/basis_66.html)，[练习](https://www.nowcoder.com/practice/6e5207314b5241fb83f2329e89fdecc8?tpId=13&tqId=11219&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
 
 
 

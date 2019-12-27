@@ -4,7 +4,7 @@
 * [数据结构](data-structures/data-structures.md)
 * [算法思想](algorithms/algorithms.md)
 * [剑指offer](jianzhi-offer/jianzhi-offer.md)
-* leetcode
+* [leetcode](leetcode/leetcode.md)
 
 
 

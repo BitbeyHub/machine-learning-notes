@@ -538,6 +538,48 @@ AVERAGE:     63.80    78.60    70.00
 
 
 
+**awk关联数组**
+
+在awk中，数组都是关联数组.
+
+所谓关联数组就是每一个数组元素实际都包含两部分：key和value，类似python里面的字典。在awk中数组之间是无序的，一个数组的key值是数值，例如1，2，3，并不代表该数组元素在数组中的出现的位置。
+
+awk中的数组有以下特性：
+
+1. 数组无需定义，直接使用
+2. 数组自动扩展
+3. 下标可以是数值型或者字符串型
+
+元素赋值：
+
+```shell
+arr[0]=123
+arr[“one”]=123
+```
+
+数组长度：
+
+```shell
+length(arr)
+```
+
+data.txt:
+
+```js
+a1 b1 1
+a2 b1 1
+a1 b2 1
+a3 b2 1
+```
+
+统计第一列和第二列中的去重数量：
+
+```shell
+awk -F"\t"  '{hash1[$1]+=1; hash2[$2]+=1}END{print length(hash1) "\t" length(hash2)}' data.txt
+```
+
+
+
 **另外一些实例**
 
 计算文件大小
@@ -559,6 +601,7 @@ awk 'length>80' log.txt
 参考资料：
 
 * [Linux awk 命令](https://www.runoob.com/linux/linux-comm-awk.html)
+* [awk关联数组](https://blog.csdn.net/qinyushuang/article/details/50342875)
 
 
 
