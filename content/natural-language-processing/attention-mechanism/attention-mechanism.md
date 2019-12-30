@@ -50,3 +50,5 @@ Attention机制最初由图像处理领域提出，后来被引入到NLP领域�
 
 [遍地开花的 Attention，你真的懂吗？](https://zhuanlan.zhihu.com/p/77307258)
 
+[一文看懂 Attention（本质原理+3大优点+5大类型）](https://zhuanlan.zhihu.com/p/91839581)
+

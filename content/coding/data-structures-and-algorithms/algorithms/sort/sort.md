@@ -4,6 +4,7 @@
 * [返上层目录](../algorithms.md)
 * [堆排序](heap-sort.md)
 * [归并排序](merge-sort.md)
+* [快速排序](quick-sort.md)
 
 
 
