@@ -12,7 +12,7 @@
 
 直接看视频：[堆排序(heapsort)](https://www.bilibili.com/video/av47196993?from=search&seid=17162511716605883584)。
 
-<iframe height="400" width="600" src="//player.bilibili.com/player.html?aid=47196993&cid=82656324&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe src="//player.bilibili.com/player.html?aid=47196993&cid=82656324&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 # 堆排序的引入
 
