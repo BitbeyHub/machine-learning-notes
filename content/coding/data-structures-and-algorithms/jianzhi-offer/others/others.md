@@ -147,6 +147,69 @@ public:
 
 
 
+# 剑指offer40：最小的K个数
+
+> 题目：输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4。
+
+维护k个元素的最大堆，即用容量为k的最大堆存储最先遍历到的k个数，并假设他们是最小的k个数。继续遍历数列，每次遍历到一个元素，将它与堆顶元素比较，若小于堆顶元素，更新堆，否则，不更新堆。
+
+c++:
+
+```c++
+class Solution {
+public:
+    vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+        vector<int> result;
+        int length = input.size();
+        bool need_update = true;
+        if(length <= 0 || k <= 0 || k > length){
+            return result;
+        }
+        
+        for(int i = 0; i < input.size(); i++){
+            if(result.size() < k){
+                result.push_back(input[i]);
+            }
+            else{
+                if(need_update) {
+                    for(int j = k / 2 - 1; j >= 0; j--){
+                        HeadAdjust(result, j, k);
+                    }
+                    need_update = false;
+                }
+                if(result[0] > input[i]) {
+                    swap(result[0], result[k - 1]);
+                    result[k-1] = input[i];
+                    need_update = true;
+                }
+            }
+        }
+       
+        return result;
+    }
+private:
+    void HeadAdjust(vector<int> &input, int parent, int length){
+        int temp = input[parent];
+        int child = 2 * parent + 1;
+        while(child < length){
+            if(child + 1 < length && input[child] < input[child+1]){
+                child++;
+            }
+            if(temp >= input[child]){
+                break;
+            }
+            input[parent] = input[child];
+            
+            parent = child;
+            child = 2 * parent + 1;
+        }
+        input[parent] = temp;
+    }
+};
+```
+
+[详情](https://cuijiahua.com/blog/2017/12/basis_29.html)，[练习](https://www.nowcoder.com/practice/6a296eb82cf844ca8539b57c23e6e9bf?tpId=13&tqId=11182&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
 
 
 
