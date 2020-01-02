@@ -149,11 +149,29 @@ _ (下划线)以空格填充
 
 在任何标记之后还允许一个可选的域宽度指定，它是一个十进制数字。作为一个可选的修饰声明，它可以是E，在可能的情况下使用本地环境关联的表示方式；或者是O，在可能的情况下使用本地环境关联的数字符号。
 
+## 获取其他时间的日期
+
+linux中用shell获取昨天、明天或多天前的日期:
+
+```shell
+DATE=$(date +%Y%m%d --date '2 days ago') #获取昨天或多天前的日期
+date -d next-day +%Y%m%d #明天日期 
+date -d last-day +%Y%m%d #昨天日期 
+date -d tomorrow +%Y%m%d #明天日期 
+date -d yesterday +%Y%m%d #昨天日期 
+date -d last-month +%Y%m #上个月日期 
+date -d next-month +%Y%m #下个月日期 
+date -d next-year +%Y #明年日期 
+```
+
+
+
 
 
 # 参考资料
 
 * [Linux下date命令，格式化输出，时间设置](https://blog.csdn.net/jk110333/article/details/8590746/)
+* [bash中获取其他时间的日期](https://blog.51cto.com/liucb/1845201)
 
 "date系统时间"参考此博客。
 
