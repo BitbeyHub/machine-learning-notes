@@ -104,6 +104,7 @@
     - [栈和队列](coding/data-structures-and-algorithms/jianzhi-offer/stack-and-queue/stack-and-queue.md)
     - [递归和回溯法](coding/data-structures-and-algorithms/jianzhi-offer/recursion-and-back-tracking/recursion-and-back-tracking.md)
     - [动态规划](coding/data-structures-and-algorithms/jianzhi-offer/dynamic-programming/dynamic-programming.md)
+    - [其他](coding/data-structures-and-algorithms/jianzhi-offer/others/others.md)
   - [leetcode](coding/data-structures-and-algorithms/leetcode/leetcode.md)
 - [Hadoop](coding/hadoop/hadoop.md)
   - [Hadoop简介](coding/hadoop/hadoop-introduction.md)
