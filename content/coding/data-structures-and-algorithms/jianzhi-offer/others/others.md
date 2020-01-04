@@ -2,7 +2,21 @@
 
 * [返回顶层目录](../../../../SUMMARY.md)
 * [返回上层目录](../jianzhi-offer.md)
-* [剑指offer14：剪绳子](#剑指offer14：剪绳子)
+* [剑指offer15：二进制中1的个数](#剑指offer15：二进制中1的个数)
+* [剑指offer16：数值的整数次方](#剑指offer16：数值的整数次方)
+* [剑指offer29：顺时针打印矩阵](#剑指offer29：顺时针打印矩阵)
+* [剑指offer40：最小的K个数](#剑指offer40：最小的K个数)
+* [剑指offer43：从1到n整数中1出现的次数](#剑指offer43：从1到n整数中1出现的次数)
+* [剑指offer49：丑数](#剑指offer49：丑数)
+* [剑指offer57-1：和为S的两个数字](#剑指offer57-1：和为S的两个数字)
+* [剑指offer57-2：和为S的连续正数序列](#剑指offer57-2：和为S的连续正数序列)
+* [剑指offer61：扑克牌顺子](#剑指offer61：扑克牌顺子)
+* [剑指offer62：圆圈中最后剩下的数](#剑指offer62：圆圈中最后剩下的数)
+* [剑指offer64：求1+2+3+…+n](#剑指offer64：求1+2+3+…+n)
+* [剑指offer65：不用加减乘除做加法](#剑指offer65：不用加减乘除做加法)
+* [剑指offerxx：字符流中第一个不重复的字符](#剑指offerxx：字符流中第一个不重复的字符)
+* [剑指offer41：数据流中的中位数](#剑指offer41：数据流中的中位数)
+* [剑指offer59：滑动窗口的最大值](#剑指offer59：滑动窗口的最大值)
 
 
 
@@ -443,8 +457,6 @@ public:
 
 
 
-
-
 # 剑指offer62：圆圈中最后剩下的数
 
 > 题目：每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)
@@ -531,7 +543,268 @@ public:
 
 
 
+# 剑指offer64：求1+2+3+…+n
 
+> 题目：求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+
+没什么好说的，这是一道超级无敌送分题，使用递归即可。
+
+c++:
+
+```c++
+class Solution {
+public:
+    int Sum_Solution(int n) {
+        int ans = n;
+        // &&就是逻辑与，逻辑与有个短路特点，前面为假，后面不计算。即递归终止条件
+        ans && (ans += Sum_Solution(n - 1));
+        return ans;
+    }
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/01/basis_47.html)，[练习](https://www.nowcoder.com/practice/7a0da8fc483247ff8800059e12d7caf1?tpId=13&tqId=11200&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
+
+
+# 剑指offer65：不用加减乘除做加法
+
+> 题目：写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+
+首先看十进制是如何做的： 5+7=12，
+
+可以使用三步走：
+
+第一步：相加各位的值，不算进位，得到2。
+
+第二步：计算进位值，得到10. 如果这一步的进位值为0，那么第一步得到的值就是最终结果。
+
+第三步：重复上述两步，只是相加的值变成上述两步的得到的结果2和10，得到12。 同样我们可以
+
+三步走的方式计算二进制值相加： 5-101，7-111
+
+第一步：相加各位的值，不算进位，得到010，二进制每位相加就相当于各位做异或操作，101^111。
+
+第二步：计算进位值，得到1010，相当于各位做与操作得到101，再向左移一位得到1010，(101&111)<<1。
+
+第三步：重复上述两步， 各位相加 010^1010=1000，进位值为100=(010&1010)<<1。
+
+继续重复上述两步：1000^100 = 1100，进位值为0，跳出循环，1100为最终结果。
+
+c++:
+
+```c++
+class Solution {
+public:
+    int Add(int num1, int num2)
+    {
+        return num2 ? Add(num1 ^ num2, (num1 & num2) << 1) : num1;
+    }
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/01/basis_48.html)，[练习](https://www.nowcoder.com/practice/59ac416b4b944300b617d4f7f111b215?tpId=13&tqId=11201&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
+
+
+# 剑指offerxx：字符流中第一个不重复的字符
+
+> 题目：请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+>
+> 输出描述：
+>
+> 如果当前字符流没有存在出现一次的字符，返回#字符。
+
+这道题还是很简单的。将字节流保存起来，通过哈希表统计字符流中每个字符出现的次数，顺便将字符流保存在string中，然后再遍历string，从哈希表中找到第一个出现一次的字符。
+
+c++:
+
+```c++
+class Solution
+{
+public:
+  //Insert one char from stringstream
+    void Insert(char ch)
+    {
+        s += ch;
+        count[ch]++;
+    }
+  //return the first appearence once char in current stringstream
+    char FirstAppearingOnce()
+    {
+        int length = s.size();
+        for(int i = 0; i < length; i++){
+            if(count[s[i]] == 1){
+                return s[i];
+            }
+        }
+        return '#';
+    }
+private:
+    string s;
+    int count[256] = {0};
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/01/basis_54.html)，[练习](https://www.nowcoder.com/practice/00de97733b8e4f97a3fb5c680ee10720?tpId=13&tqId=11207&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
+
+
+# 剑指offer41：数据流中的中位数
+
+> 题目：如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+
+这道题的解法有很多，文本使用最大堆和最小堆实现。
+
+主要思想：
+
+最大堆 | 最小堆
+
+我们将数据分为两部分，位于左边最大堆的数据比右边最小堆的数据要小，左、右两边内部的数据没有排序，也可以根据左边最大的数及右边最小的数得到中位数。
+
+接下来考虑用最大堆和最小堆实现的一些细节。
+
+首先要保证数据平均分配到两个堆中，因此两个堆中数据的数目之差不能超过1.为了实现平均分配，可以在数据的总数目是偶数时把新数据插入到最小堆中，否则插入到最大堆中。
+
+此外，还要保证最大堆中所有数据小于最小堆中数据。所以，新传入的数据需要先和最大堆的最大值或者最小堆中的最小值进行比较。以总数目为偶数为例，按照我们制定的规则，新的数据会被插入到最小堆中，但是在这之前，我们需要判断这个数据和最大堆中的最大值谁更大，如果最大堆中的数据比较大，那么我们就需要把当前数据插入最大堆，然后弹出新的最大值，再插入到最小堆中。由于最终插入到最小堆的数字是原最大堆中最大的数字，这样就保证了最小堆中所有数字都大于最大堆的数字。
+
+
+
+下面代码中，我们基于stl中的函数push_heap、pop_heap以及vector实现堆。比较仿函数less和greater分别用来实现最大堆和最小堆。
+
+c++:
+
+```c++
+class Solution {
+public:
+    void Insert(int num)
+    {
+        // 如果已有数据为偶数，则放入最小堆
+        if(((max.size() + min.size()) & 1) == 0){
+            // 如果插入的数字小于最大堆里的最大的数，则将数字插入最大堆
+            // 并将最大堆中的最大的数字插入到最小堆
+            if(max.size() > 0 && num < max[0]){
+                // 插入数据插入到最大堆数组
+                max.push_back(num);
+                // 调整最大堆
+                push_heap(max.begin(), max.end(), less<int>());
+                // 拿出最大堆中的最大数
+                num = max[0];
+                // 删除最大堆的栈顶元素
+                pop_heap(max.begin(), max.end(), less<int>());
+                max.pop_back();
+            }
+            // 将数据插入最小堆数组
+            min.push_back(num);
+            // 调整最小堆
+            push_heap(min.begin(), min.end(), greater<int>());
+        }
+        // 已有数据为奇数，则放入最大堆
+        else{
+            if(min.size() > 0 && num > min[0]){
+                // 将数据插入最小堆
+                min.push_back(num);
+                // 调整最小堆
+                push_heap(min.begin(), min.end(), greater<int>());
+                // 拿出最小堆的最小数
+                num = min[0];
+                // 删除最小堆的栈顶元素
+                pop_heap(min.begin(), min.end(), greater<int>());
+                min.pop_back();
+            }
+            // 将数据插入最大堆
+            max.push_back(num);
+            push_heap(max.begin(), max.end(), less<int>());
+        }
+    }
+    double GetMedian()
+    {
+        // 统计数据大小
+        int size = min.size() + max.size();
+        if(size == 0){
+            return 0;
+        }
+        // 如果数据为偶数
+        if((size & 1) == 0){
+            return (min[0] + max[0]) / 2.0;
+        }
+        // 奇数
+        else{
+            return min[0];
+        }
+    }
+private:
+    // 使用vector建立最大堆和最小堆,min是最小堆数组,max是最大堆数组
+    vector<int> min;
+    vector<int> max;
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/02/basis_63.html)，[练习](https://www.nowcoder.com/practice/9be0172896bd43948f8a32fb954e1be1?tpId=13&tqId=11216&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
+
+
+
+
+
+# 剑指offer59：滑动窗口的最大值
+
+> 题目：给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}。
+
+针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}，如下图所示：
+
+![others-59](pic/others-59.png)
+
+我们可以使用一个双端队列deque。
+
+我们可以用STL中的deque来实现，接下来我们以数组{2,3,4,2,6,2,5,1}为例，来细说整体思路。
+
+数组的第一个数字是2，把它存入队列中。第二个数字是3，比2大，所以2不可能是滑动窗口中的最大值，因此把2从队列里删除，再把3存入队列中。第三个数字是4，比3大，同样的删3存4。此时滑动窗口中已经有3个数字，而它的最大值4位于队列的头部。
+
+第四个数字2比4小，但是当4滑出之后它还是有可能成为最大值的，所以我们把2存入队列的尾部。下一个数字是6，比4和2都大，删4和2，存6。就这样依次进行，最大值永远位于队列的头部。
+
+但是我们怎样判断滑动窗口是否包括一个数字？应该在队列里存入数字在数组里的下标，而不是数值。当一个数字的下标与当前处理的数字的下标之差大于或者相等于滑动窗口大小时，这个数字已经从窗口中滑出，可以从队列中删除。
+
+整体过程示意图：
+
+![others-59-2](pic/others-59-2.png)
+
+c++:
+
+```c++
+class Solution {
+public:
+    vector<int> maxInWindows(const vector<int>& num, unsigned int size)
+    {
+        vector<int> maxInWindows;
+        // 数组大小要大于等于窗口大小，并且窗口大小大于等于1
+        if(num.size() >= size && size >= 1){
+            deque<int> index;
+            for(unsigned int i = 0; i < size; i++){
+                // 如果index非空，并且新添加的数字大于等于队列中最小的数字，则删除队列中最小的数字
+                while(!index.empty() && num[i] >= num[index.back()]){
+                    index.pop_back();
+                }
+                index.push_back(i);
+            }
+            for(unsigned int i = size; i < num.size(); i++){
+                maxInWindows.push_back(num[index.front()]);
+                while(!index.empty() && num[i] >= num[index.back()]){
+                    index.pop_back();
+                }
+                // 控制窗口大小为size
+                if(!index.empty() && index.front() <= int(i - size)){
+                    index.pop_front();
+                }
+                index.push_back(i);
+            }
+            maxInWindows.push_back(num[index.front()]);
+        }
+        return maxInWindows;
+    }
+};
+```
+
+[详情](https://cuijiahua.com/blog/2018/02/basis_64.html)，[练习](https://www.nowcoder.com/practice/1624bc35a45c42c0bc17d17fa0cba788?tpId=13&tqId=11217&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
 
 
 

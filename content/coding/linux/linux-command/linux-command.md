@@ -14,6 +14,7 @@
 * [文本处理](#文本处理)
   * [wc计算字数行数](#wc计算字数行数)
   * [awk文本分析](#awk文本分析)
+  * [sort文本排序](#sort文本排序)
 * [磁盘](#磁盘)
   * [df查看磁盘分区空间](#df查看磁盘分区空间)
   * [du查看当前目录的总大小](#du查看当前目录的总大小)
@@ -602,6 +603,53 @@ awk 'length>80' log.txt
 
 * [Linux awk 命令](https://www.runoob.com/linux/linux-comm-awk.html)
 * [awk关联数组](https://blog.csdn.net/qinyushuang/article/details/50342875)
+
+
+
+## sort文本排序
+
+**sort命令**是在Linux里非常有用，它将文件进行排序，并将排序结果标准输出。
+
+sort的-n、-r、-k、-t选项的使用：
+
+```shell
+[root@mail text]# cat sort.txt
+AAA:BB:CC
+aaa:30:1.6
+ccc:50:3.3
+ddd:20:4.2
+bbb:10:2.5
+eee:40:5.4
+eee:60:5.1
+
+#将BB列按照数字从小到大顺序排列：
+[root@mail text]# sort -nk 2 -t: sort.txt
+AAA:BB:CC
+bbb:10:2.5
+ddd:20:4.2
+aaa:30:1.6
+eee:40:5.4
+ccc:50:3.3
+eee:60:5.1
+
+#将CC列数字从大到小顺序排列：
+[root@mail text]# sort -nrk 3 -t: sort.txt
+eee:40:5.4
+eee:60:5.1
+ddd:20:4.2
+ccc:50:3.3
+bbb:10:2.5
+aaa:30:1.6
+AAA:BB:CC
+
+# -n是按照数字大小排序，-r是以相反顺序，-k是指定需要爱排序的栏位，-t指定栏位分隔符为冒号
+```
+
+
+
+参考资料：
+
+* [sort命令](https://man.linuxde.net/sort)
 
 
 
