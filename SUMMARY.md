@@ -216,8 +216,6 @@
   * [word2vec实践](content/natural-language-processing/word2vec/word2vec-practice.md)
 * [Attention注意力机制](content/natural-language-processing/attention-mechanism/attention-mechanism.md)
 * [深度学习](content/natural-language-processing/deep-learning/deep-learning.md)
-  - DSSM深度语义模型
-    - [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](content/natural-language-processing/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
 * [Transformer](content/natural-language-processing/transformer/transformer.md)
 
 # 知识图谱
@@ -235,9 +233,8 @@
     * NetworkEmbedding
       * [LINE: Large-scale Information Network Embedding](content/recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
   * [深度学习](content/recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
-    * [DeepMatch](content/recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
-    * [DeepFM](content/recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
-    * [Attention](content/recommender-systems/advanced-knowledge/deep-learning/attention.md)
+    * [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction 2017](content/recommender-systems/advanced-knowledge/deep-learning/DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction.md)
+    * [DSSM: Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](content/recommender-systems/advanced-knowledge/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
   * [强化学习](content/recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](content/recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 
@@ -248,8 +245,5 @@
     - [Learning Tree-based Deep Model for Recommender Systems KDD2018](content/recommender-systems/industry-application/Alibaba/Learning-Tree-based-Deep-Model-for-Recommender-Systems.md)
     - [Deep Interest Network for Click-Through Rate Prediction KDD2018](content/recommender-systems/industry-application/Alibaba/Deep-Interest-Network-for-Click-Through-Rate-Prediction.md)
 - 前景与未来
-
-
-
 
 

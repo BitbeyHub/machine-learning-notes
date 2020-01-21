@@ -20,11 +20,12 @@
 >链表节点定义如下：
 >
 >```c++
->struct ListNode
->{
->	int m_nKey;
->	ListNode* m_pNext;
->}
+>struct ListNode {
+>	int val;
+>    struct ListNode *next;
+>    ListNode(int x) :
+>        val(x), next(NULL) {}
+>};
 >```
 
 遍历链表是从头到尾，但是输出确实从尾到头，这就是典型的“后进先出“，可以用栈实现这个顺序。即每经过一个节点，将该节点放到一个栈中，当遍历完整个链表后，再从栈顶开始逐个输出节点的值，这时输出的节点顺序已经反过来了。
@@ -74,27 +75,23 @@ c++：
 class Solution {
 public:
     ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
-        if(pListHead == nullptr || k == 0) {
-            return nullptr;
+        if(pListHead == NULL || k == 0){
+            return NULL;
         }
-        
         ListNode *pAhead = pListHead;
-        ListNode *pBehead = nullptr;
-        
-        for(unsigned int i = 0; i < k - 1; i++) {
-            if(pAhead->next != nullptr) {
+        ListNode *pBehind = pListHead;
+        for(unsigned int i = 0; i < k - 1; i++){
+            if(pAhead->next != NULL){
                 pAhead = pAhead->next;
             } else {
-                return nullptr;
+                return NULL;
             }
         }
-        
-        while(pAhead->next != nullptr) {
+        while(pAhead->next != NULL){
             pAhead = pAhead->next;
-            pBehead = pBehead->next;
+            pBehind = pBehind->next;
         }
-        
-        return pBehead;
+        return pBehind;
     }
 };
 ```

@@ -208,8 +208,6 @@
 - [语言模型和中文分词](natural-language-processing/language-model-and-chinese-word-segmentation/language-model-and-chinese-word-segmentation.md)
 - [word2vec](natural-language-processing/word2vec/word2vec.md)
 - [深度学习](natural-language-processing/deep-learning/deep-learning.md)
-  - DSSM深度语义模型
-    - [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](natural-language-processing/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
 - [Attention注意力机制](natural-language-processing/attention-mechanism/attention-mechanism.md)
 - [Transformer](natural-language-processing/transformer/transformer.md)
 - Self Attension
@@ -228,9 +226,8 @@
     * NetworkEmbedding
       * [LINE: Large-scale Information Network Embedding](recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
   * [深度学习](recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
-    * [DeepMatch](recommender-systems/advanced-knowledge/deep-learning/DeepMatch.md)
-    * [DeepFM](recommender-systems/advanced-knowledge/deep-learning/DeepFM.md)
-    * [Attention](recommender-systems/advanced-knowledge/attention/attention.md)
+    * [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction 2017](recommender-systems/advanced-knowledge/deep-learning/DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction.md)
+    * [DSSM: Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](recommender-systems/advanced-knowledge/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
   * [强化学习](recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 * [业界应用](recommender-systems/industry-application/industry-application.md)

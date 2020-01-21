@@ -1,26 +1,13 @@
 # 进阶知识
 
 * [返回顶层目录](../../SUMMARY.md)
-* 机器学习
-  * 召回
-    * [FM](machine-learning/FM.md)
-* [embedding](embedding/embedding.md)
-  * 召回
-    * NetworkEmbedding
-      * [LINE: Large-scale Information Network Embedding](embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
+* [机器学习](machine-learning/machine-learning.md)
+* [Embedding](embedding/embedding.md)
 * [深度学习](deep-learning/deep-learning.md)
-  * 召回
-    * [DeepMatch](deep-learning/DeepMatch.md)
-  * 排序
-    * [DeepFM](deep-learning/DeepFM.md)
-    * [Wide&Deep](deep-learning/wide-and-deep.md)
-    * [DeepFFM](deep-learning/DeepFFM.md)
+* [图卷积网络](graph-convolutional-network/graph-convolutional-network.md)
 * [强化学习](reinforcement-learning/reinforcement-learning.md)
-  * 排序
-    * [DRN基于深度强化学习的新闻推荐模型](reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
-* [可解释性]()
-* [探索与开发](#探索与开发)
-* 生成对抗网络
+
+
 
 # 排序模型概述
 

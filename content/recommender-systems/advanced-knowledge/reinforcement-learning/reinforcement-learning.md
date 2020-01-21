@@ -2,10 +2,9 @@
 
 * [返回顶层目录](../../../../SUMMARY.md)
 * [返回上层目录](../advanced-knowledge.md)
+* [DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation](DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 
 
-
-[增强学习在推荐系统有什么最新进展？](https://www.zhihu.com/question/57388498/answer/570874226)
 
 # 为什么要将强化学习用在推荐系统上
 
@@ -19,11 +18,17 @@
 
 
 
-# 论文解读
+# 参考文献
 
-## [DRN基于深度强化学习的新闻推荐模型](paper/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
+* [推荐系统有哪些坑？-Geek An](https://www.zhihu.com/question/28247353/answer/399162539)
 
-# 论文
+"为什么要将强化学习用在推荐系统上"一节参考了此回答。
+
+===
+
+[增强学习在推荐系统有什么最新进展？](https://www.zhihu.com/question/57388498/answer/570874226)
+
+
 
 [1] Dulac-Arnold G, Evans R, van Hasselt H, et al. Deep reinforcement learning in large discrete action spaces[J]. arXiv preprint arXiv:1512.07679, 2015.
 
@@ -36,16 +41,6 @@
 清华大学和京东发表于 KDD 2019 的全新强化学习框架 FeedRec
 
 [5] Youtube RL Recommendation: Top-k Off-Policy Correction for a REINFORCE Recommender System , Google, WSDM, 2019
-
-# 参考文献
-
-* [推荐系统有哪些坑？-Geek An](https://www.zhihu.com/question/28247353/answer/399162539)
-
-"为什么要将强化学习用在推荐系统上"一节参考了此回答。
-
-
-
-
 
 
 

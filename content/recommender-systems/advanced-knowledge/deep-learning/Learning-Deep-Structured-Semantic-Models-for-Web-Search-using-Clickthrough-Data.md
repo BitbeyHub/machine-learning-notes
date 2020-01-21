@@ -1,6 +1,16 @@
-# 基于深度学习的语义模型
+# DSSM基于深度学习的语义模型
 
-![DSSM-paper](pic/DSSM-paper.png)
+- [返回顶层目录](../../../../SUMMARY.md)
+- [返回上层目录](deep-learning.md)
+
+* [简介](#简介)
+* [DSSM原理](#DSSM原理)
+  * [计算语义特征的DNN模型](#计算语义特征的DNN模型)
+  * [word hash](#word hash)
+  * [DSSM的损失函数](#DSSM的损失函数)
+* [实验](#实验)
+
+![dssm-paper](pic/dssm-paper.png)
 
 > 论文：Learning Deep Structured Semantic Models for Web Search using Clickthrough Data
 > 作者：Po-Sen Huang, Xiaodong He, Jianfeng Gao, Li Deng
@@ -42,7 +52,7 @@ PDF: [*Learning Deep Structured Semantic Models for Web Search using Clickthroug
 
 DNN架构如下图所示。输入的原始文本特征是高维向量，输出是低维语义特征空间的向量。
 
-![dnn-architecture](pic/dnn-architecture.png)
+![dssm-dnn-architecture](pic/dssm-dnn-architecture.png)
 
 DNN模型的作用如下：
 
@@ -93,17 +103,17 @@ word hash用于减小输入x（词袋向量）的维度，它基于n-gram，最�
 $$
 P(D|Q)=\frac{\text{exp}(\gamma R(Q,D))}{\sum_{D'\in \mathbf{D}}\text{exp}(\gamma R(Q,D'))}
 $$
-其中，γ是平滑因子，需要经验性设置。**D**为待排序的候选doc集。
+其中，$$\gamma$$是平滑因子，需要经验性设置。**D**为待排序的候选doc集。
 
 理论上，**D**应该包含所有可能的doc，但实际上，对于每一个实际发生的(query, clicked-doc)pair对，用
 $$
 (Q, D^+)
 $$
-表示，即Q是query，D+是点击过的doc。
+表示，即$$Q$$是query，$$D^+$$是点击过的doc。
 
 **负采样：**
 
-我们将理论上包含了所有doc的集合D近似为包含了D+和四个随机选择的未点击的doc（负样本）。
+我们将理论上包含了所有doc的集合D近似为包含了$$D^+$$和四个随机选择的未点击的doc（负样本）。
 
 而且这里作者说，并没有观察到不同的选择未点击doc的负采样策略会导致显著差异。
 
