@@ -2,7 +2,7 @@
 
 * [返回顶层目录](../../../SUMMARY.md)
 * [返回上层目录](../advanced-knowledge.md)
-* [FM](Factorization-Machines.md)
+* [Factorization Machines ICDM2010](Factorization-Machines.md)
 * [FFM](FFM.md)
 
 

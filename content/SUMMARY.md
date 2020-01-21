@@ -182,7 +182,6 @@
     - [GCN图卷积网络本质理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-essential-understand.md)
     - [GCN图卷积网络全面理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-comprehensive-understand.md)
     - [SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS ICLR2017](deep-learning/graph-neural-networks/graph-convolutional-networks/SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
-    - [Graph Convolutional Neural Networks for Web-Scale Recommender Systems KDD2018](deep-learning/graph-neural-networks/graph-convolutional-networks/Graph-Convolutional-Neural-Networks-for-Web-Scale-Recommender-Systems.md)
 * 论文
   * [Weight Agnostic Neural Networks-Google2019](deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
 ---
@@ -220,14 +219,16 @@
 
 * 基础知识
 * [进阶知识](recommender-systems/advanced-knowledge/advanced-knowledge.md)
-  * 机器学习
+  * [机器学习](recommender-systems/advanced-knowledge/machine-learning/machine-learning.md)
     * [Factorization Machines ICDM2010](recommender-systems/advanced-knowledge/machine-learning/Factorization-Machines.md)
   * [embedding](recommender-systems/advanced-knowledge/embedding/embedding.md)
-    * NetworkEmbedding
+    * Network Embedding
       * [LINE: Large-scale Information Network Embedding](recommender-systems/advanced-knowledge/embedding/network-embedding/LINE-Large-scale-Information-Network-Embedding.md)
   * [深度学习](recommender-systems/advanced-knowledge/deep-learning/deep-learning.md)
     * [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction 2017](recommender-systems/advanced-knowledge/deep-learning/DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction.md)
     * [DSSM: Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](recommender-systems/advanced-knowledge/deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
+  * [图卷积网络](recommender-systems/advanced-knowledge/graph-convolutional-network/graph-convolutional-network.md)
+    * [Graph Convolutional Neural Networks for Web-Scale Recommender Systems KDD2018](recommender-systems/advanced-knowledge/graph-convolutional-network/Graph-Convolutional-Neural-Networks-for-Web-Scale-Recommender-Systems.md)
   * [强化学习](recommender-systems/advanced-knowledge/reinforcement-learning/reinforcement-learning.md)
     * [DRN基于深度强化学习的新闻推荐模型](recommender-systems/advanced-knowledge/reinforcement-learning/DRN-A-Deep-Reinforcement-Learning-Framework-for-News-Recommendation.md)
 * [业界应用](recommender-systems/industry-application/industry-application.md)
