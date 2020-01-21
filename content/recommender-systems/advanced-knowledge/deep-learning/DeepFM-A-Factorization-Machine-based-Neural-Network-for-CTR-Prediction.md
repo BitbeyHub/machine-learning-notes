@@ -79,3 +79,7 @@ FM部分和Deep部分共享了特征的Embedding层，该层具体结构如下�
 
 [【通俗易懂】手把手带你实现DeepFM！](https://mp.weixin.qq.com/s/QrO48ZdP483TY_EnnWFhsQ)
 
+[推荐系统遇上深度学习(三)--DeepFM模型理论和实践](https://www.jianshu.com/p/6f1c2643d31b)
+
+[推荐算法——从FM到XDeepFM](https://zhuanlan.zhihu.com/p/81937617)
+
