@@ -122,8 +122,8 @@ bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2)
     bool result = false;
     if(pRoot1 != NULL && pRoot2 != NULL){
         if(pRoot1->val == pRoot2->val){
-        result = DoesTree1HasTree2(pRoot1, pRoot2);
-    }
+        	result = DoesTree1HasTree2(pRoot1, pRoot2);
+    	}
         if(!result){
             result = HasSubtree(pRoot1->left, pRoot2);
         }
@@ -253,8 +253,8 @@ vector<int> PrintFromTopToBottom(TreeNode* root) {
     return result;
 }
 private:
-vector<int> result;
-queue<TreeNode*> que;
+	vector<int> result;
+	queue<TreeNode*> que;
 ```
 
 [详情](https://cuijiahua.com/blog/2017/12/basis_22.html)，[练习](https://www.nowcoder.com/practice/7fe2212963db4790b57431d9ed259701?tpId=13&tqId=11175&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
@@ -505,7 +505,7 @@ private:
 
 接着我们分析一下结点没有右子树的情形。如果结点是它父结点的左子结点，那么它的下一个结点就是它的父结点。例如，途中结点d的下一个结点是b，f的下一个结点是c。
 
-如果一个结点既没有右子树，并且它还是父结点的右子结点，这种情形就比较复杂。我们可以沿着指向父结点的指针一直向上遍历，直到找到一个是它父结点的左子结点的结点。如果这样的结点存在，那么这个结点的父结点就是我们要找的下一个结点。例如，为了找到结点g的下一个结点，我们沿着指向父结点的指针向上遍历，先到达结点c。由于结点c是父结点a的右结点，我们继续向上遍历到达结点a。由于结点a是树的根结点。它没有父结点。因此结点g没有下一个结点。
+如果一个结点既没有右子树，并且它还是父结点的右子结点，这种情形就比较复杂。我们可以沿着指向父结点的指针一直向上遍历，直到找到一个是它父结点的左子结点的结点。如果这样的结点存在，那么这个结点的**父结点**就是我们要找的下一个结点。例如，为了找到结点g的下一个结点，我们沿着指向父结点的指针向上遍历，先到达结点c。由于结点c是父结点a的右结点，我们继续向上遍历到达结点a。由于结点a是树的根结点。它没有父结点。因此结点g没有下一个结点。
 
 c++:
 

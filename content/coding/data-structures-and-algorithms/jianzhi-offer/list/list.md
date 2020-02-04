@@ -300,38 +300,50 @@ public:
 c++:
 
 ```c++
-      ListNode *p1=pHead1;
-        ListNode *p2=pHead2;
-        int len1=0,len2=0,diff=0;
-        while(p1!=NULL){
-            p1=p1->next;
+class Solution {
+public:
+    ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {        
+        ListNode* p1 = pHead1;
+        ListNode* p2 = pHead2;
+        
+        if(p1 == nullptr || p2 == nullptr) {
+            return nullptr;
+        }
+        
+        int len1 = 0, len2 = 0;
+        while(p1 != nullptr) {
+            p1 = p1->next;
             len1++;
         }
-        while(p2!=NULL){
-            p2=p2->next;
+        while(p2 != nullptr) {
+            p2 = p2->next;
             len2++;
         }
-        if(len1>len2){
-            diff=len1-len2;
-            p1=pHead1;
-            p2=pHead2;
+        
+        p1 = pHead1;
+        p2 = pHead2;
+        
+        if(len1 > len2) {
+            for(int i = 0; i < len1 - len2; i++) {
+                p1 = p1->next;
+            }
+        } else if(len1 < len2) {
+            for(int i = 0; i < len2 - len1; i++) {
+                p2 = p2->next;
+            }
         }
-        else{
-            diff=len2-len1;
-            p1=pHead2;
-            p2=pHead1;
+        
+        while(p1 != nullptr && p2 != nullptr) {
+            if(p1 == p2) {
+                return p1;
+            }
+            p1 = p1->next;
+            p2 = p2->next;
         }
-        for(int i=0;i<diff;i++){
-            p1=p1->next;
-        }
-        while(p1!=NULL && p2!=NULL){
-            if(p1==p2)
-                break;
-            p1=p1->next;
-            p2=p2->next;
-        }
-        return p1;
+        
+        return nullptr;
     }
+};
 ```
 
 [详细](https://cuijiahua.com/blog/2018/01/basis_36.html)，[练习](https://www.nowcoder.com/practice/6ab1d9a29e88450685099d45c9e31e46?tpId=13&tqId=11189&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
@@ -370,23 +382,22 @@ public:
     {
         if(pHead == nullptr) return nullptr;
         
-        ListNode *pFast = pHead, *pSlow = pHead->next;
-        if(pSlow == nullptr) return nullptr;
+        ListNode* pFast = pHead->next;
+        ListNode* pSlow = pHead;
+        
         while(pFast != pSlow) {
-            if(pFast == nullptr || pSlow == nullptr) return nullptr;
-            pFast = pFast->next;
-            if(pFast != nullptr) {
-                pFast = pFast->next;
+            if(pFast != nullptr && pFast->next != nullptr && pSlow != nullptr) {
+                pFast = pFast->next->next;
+                pSlow = pSlow->next;
             } else {
                 return nullptr;
             }
-            pSlow = pSlow->next;
         }
         
+        ListNode* pInCircle = pSlow;
+        pSlow = pInCircle->next;
         int n = 1;
-        ListNode *pFlag = pSlow;
-        pSlow = pSlow->next;
-        while(pSlow != pFlag) {
+        while(pSlow != pInCircle) {
             pSlow = pSlow->next;
             n++;
         }
