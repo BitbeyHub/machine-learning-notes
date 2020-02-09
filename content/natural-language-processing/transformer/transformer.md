@@ -36,3 +36,13 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 
 
+作者采用Attention机制的原因是考虑到RNN（或者LSTM，GRU等）的计算限制为是有顺序的，也就是说RNN相关算法只能从做向右依次计算或者从右向左依次计算，这种机制带来了两个问题：
+
+1、时间片t的计算以来t-1时刻的计算结果，这样限制了模型的并行能力；
+
+2、顺序计算的过程中信息会丢失，尽管LSTM等门机制的结构一定程度上缓解了长期依赖的问题，但是对于特别长期的依赖现象，LSTM依旧无能为力。
+
+Transformer的提出解决了上面两个问题，首先它使用了Attention机制，将序列中的任意两个位置之间的距离缩小为了一个常量；其次它不是类似于RNN的顺序结构，因此具有更好的并行性，符合现有的GPU框架。论文中给出Transformer的定义是：Transformer is the first transduction model relying entirely on self-attention to compute representations of its input and output without using sequence aligned RNNs or convolution。
+
+
+

@@ -21,3 +21,7 @@
 
 下载地址：<https://github.com/fengdu78/Data-Science-Notes/tree/master/9.feature-engineering>
 
+===
+
+[2.2w字长文详解推荐系统之数据与特征工程](https://zhuanlan.zhihu.com/p/100864696)
+

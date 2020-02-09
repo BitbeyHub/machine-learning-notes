@@ -12,27 +12,3 @@
 * [树](tree/tree.md)
 * 其他结构
 
-
-
-# c++中常见的STL容器类型
-
-## 向量vector
-
-* assign
-
-  vector.assign(que.begin(), que.end());
-
-* 1
-
-
-
-## 队列queue
-
-
-
-
-
-## 双队列deque
-
-* push_front
-* push_back

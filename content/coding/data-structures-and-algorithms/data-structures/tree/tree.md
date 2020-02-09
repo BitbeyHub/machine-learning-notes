@@ -33,6 +33,7 @@
 
 
 
+
 * 堆的最后一个非叶子节点有左右两个孩子
 
   树的节点数为奇数，如上图为7
@@ -42,6 +43,7 @@
   \Rightarrow&i=(n-3)/2=(n-1)/2-1=[n/2]-1
   \end{aligned}
   $$
+
 
 
 
@@ -60,6 +62,12 @@
 # 伸展树
 
 [伸展树(Splay tree)图解与实现](https://blog.csdn.net/u014634338/article/details/49586689)
+
+
+
+# 红黑树
+
+[我画了 20 张图，给女朋友讲清楚红黑树](https://zhuanlan.zhihu.com/p/95892351)
 
 
 

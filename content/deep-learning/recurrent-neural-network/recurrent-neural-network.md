@@ -54,3 +54,7 @@ https://zhuanlan.zhihu.com/p/37428697
 
 [【Deep Learning】通俗大白话详述RNN理论和LSTM理论](https://mp.weixin.qq.com/s/3Rpq1EvYi-_9wvJ5fUB5dQ)
 
+
+
+[深度学习实战教程(五)：循环神经网络](https://cuijiahua.com/blog/2018/12/dl-11.html)
+
