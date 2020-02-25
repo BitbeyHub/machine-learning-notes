@@ -90,6 +90,18 @@
 
 ### list链表
 
+* iterator
+
+  ```c++
+  list<int>::iterator current = numbers.begin();
+  ```
+
+* erase
+
+  ```c++
+  numbers.erase(current);
+  ```
+
 
 
 

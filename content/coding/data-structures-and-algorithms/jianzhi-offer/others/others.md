@@ -53,9 +53,11 @@ public:
 
 # 剑指offer16：数值的整数次方
 
-> 题目：输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
+> 题目：给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
 
-不右移输入的数字n，左移数字1。
+当指数为负数的时候，可以先对指数求绝对值，然后算出次方的结果之后再取倒数。如果底数为0，则直接返回0。此时的次方在数学上是没有意义的。
+
+除此之外，我们要**注意**：由于计算机表示小数（包括float和double型小数）都有误差，我们不能直接用等号（==）判断两个小数是否相等。如果两个小数的差的绝对值很小，比如小于0.0000001，就可以认为它们相等。
 
 c++:
 
@@ -124,7 +126,7 @@ public:
         int cols = matrix[0].size();		//列数
         vector<int> result;
         
-        if(rows == 0 && cols == 0){
+        if(rows == 0 || cols == 0){
             return result;
         }
         int left = 0, right = cols - 1, top = 0, bottom = rows - 1;
@@ -173,51 +175,53 @@ c++:
 class Solution {
 public:
     vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
-        vector<int> result;
-        int length = input.size();
-        bool need_update = true;
-        if(length <= 0 || k <= 0 || k > length){
-            return result;
+        vector<int> minVec;
+        
+        int size = input.size();
+        if(size < k || k <= 0 || size <= 0) return minVec;
+        else if(size == k) return input;
+        
+        for(int i = 0; i < k; i++) {
+            minVec.push_back(input[i]);
         }
         
-        for(int i = 0; i < input.size(); i++){
-            if(result.size() < k){
-                result.push_back(input[i]);
-            }
-            else{
-                if(need_update) {
-                    for(int j = k / 2 - 1; j >= 0; j--){
-                        HeadAdjust(result, j, k);
-                    }
-                    need_update = false;
-                }
-                if(result[0] > input[i]) {
-                    swap(result[0], result[k - 1]);
-                    result[k-1] = input[i];
-                    need_update = true;
-                }
+        // 建立大顶堆
+        build_heap(minVec);
+        
+        for(int i = k; i < size; i++) {
+            if(input[i] < minVec[0]) {
+                minVec[0] = input[i];
+                heapify(minVec, 0);
             }
         }
-       
-        return result;
+        
+        return minVec;
     }
 private:
-    void HeadAdjust(vector<int> &input, int parent, int length){
-        int temp = input[parent];
-        int child = 2 * parent + 1;
-        while(child < length){
-            if(child + 1 < length && input[child] < input[child+1]){
-                child++;
-            }
-            if(temp >= input[child]){
-                break;
-            }
-            input[parent] = input[child];
-            
-            parent = child;
-            child = 2 * parent + 1;
+    void heapify(vector<int> &tree, int i) {
+        int size = tree.size();
+        int last_index = size - 1;
+        if(i > (last_index - 1) / 2) return;
+        
+        int max = i, left_child = 2 * i + 1, right_child = 2 * i + 2;
+        if(left_child < size && tree[left_child] > tree[max]) {
+            max = left_child;
         }
-        input[parent] = temp;
+        if(right_child < size && tree[right_child] > tree[max]) {
+            max = right_child;
+        }
+        if(max != i) {
+            swap(tree[i], tree[max]);
+            heapify(tree, max);
+        }
+    }
+    
+    void build_heap(vector<int> &tree) {
+        int size = tree.size();
+        int last_index = size - 1;
+        for(int i = (last_index - 1) / 2; i >= 0; i--) {
+            heapify(tree, i);
+        }
     }
 };
 ```
@@ -413,11 +417,14 @@ public:
 
 > 题目：LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张😊)...他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何。为了方便起见,你可以认为大小王是0。
 
-这道题还是蛮简单的。
+这题说了一堆，提取主要信息，我们不难整理出，满足如下条件才可以认为是顺子：
 
-设定两个指针，一个指向第一个数，一个指向最后一个数，在此之前需要设定第一个数和最后一个数的值，由于是正数序列，所以可以把第一个数设为1，最后一个数为2（因为是要求是连续正数序列，最后不可能和第一个数重合）。下一步就是不断改变第一个数和最后一个数的值，如果从第一个数到最后一个数的和刚好是要求的和，那么把所有的数都添加到一个序列中；如果大于要求的和，则说明从第一个数到最后一个数之间的范围太大，因此减小范围，需要把第一个数的值加1，同时把当前和减去原来的第一个数的值；如果小于要求的和，说明范围太小，因此把最后一个数加1，同时把当前的和加上改变之后的最后一个数的值。这样，不断修改第一个数和最后一个数的值，就能确定所有连续正数序列的和等于S的序列了。
+- 输入数据个数为5；
+- 输入数据都在0-13之间；
+- 没有相同的数字；
+- 最大值与最小值的差值不大于5。
 
-注意：初中的求和公式应该记得吧，首项加尾项的和乘以个数除以2，即sum = (a + b) * n / 2。
+PS：大小王可以当成任意数。
 
 c++:
 
@@ -425,30 +432,23 @@ c++:
 class Solution {
 public:
     bool IsContinuous( vector<int> numbers ) {
-        if(numbers.size() == 0)
-            return false;
-
-        int len = numbers.size();
-        int zero_count = 0;
-        int gap_count = 0;
-
+        int size = numbers.size();
+        if(size <= 0) return false;
+        
         sort(numbers.begin(), numbers.end());
-        int I = 0;
-        for(; I<len; I++)
-            if(numbers[I] == 0)
-                ++zero_count;
-
-        int small = zero_count;
-        int big = small + 1;
-        while(big < len)
-        {
-            if(numbers[small] == numbers[big])
-                return false;
-            gap_count += numbers[big] - numbers[small] -1;
-            small = big;
-            ++big;
+        
+        int zeroNum = 0;
+        for(int i = 0; i < size; i++) {
+            if(numbers[i] == 0) zeroNum++;
         }
-        return (gap_count > zero_count)? false: true;
+        
+        int gapNum = 0;
+        for(int j = zeroNum; j < size - 1; j++) {
+            if(numbers[j] == numbers[j + 1]) return false;
+            gapNum += numbers[j + 1] - numbers[j] - 1;
+        }
+        
+        return gapNum <= zeroNum? true: false;
     }
 };
 ```
@@ -474,32 +474,29 @@ class Solution {
 public:
     int LastRemaining_Solution(int n, int m)
     {
-        if(n < 1 || m < 1) {
-            return -1;
-        }
-        list<int> numbers;
-        for(int i = 0; i < n; ++i) {
-            numbers.push_back(i);
-        }
-        list<int>::iterator current = numbers.begin();
+        if(n < 1 || m < 1) return -1;
         
-        while(numbers.size() > 1) {
-            for(int i = 1; i < m; ++i) {
-                current ++;
-                if(current == numbers.end()) {
-                    current = numbers.begin();
+        vector<int> circle;
+        for(int i = 0; i < n; i++) {
+            circle.push_back(i);
+        }
+        
+        vector<int>::iterator point = circle.begin();
+        while(circle.size() > 1) {
+            // 这里从1开始，是因为从0开始的话还要后退一位
+            for(int i = 1; i < m; i++) {
+                point++;
+                if(point == circle.end()) {
+                    point = circle.begin();
                 }
             }
-            list<int>::iterator next = ++ current;
-            if(next == numbers.end()) {
-                next = numbers.begin();
+            // 删除操作后返回下一个地址
+            point = circle.erase(point); 
+            if(point == circle.end()) {
+                point = circle.begin();
             }
-            -- current;
-            numbers.erase(current);
-            current = next;
         }
-        
-        return *(current);
+        return *point;
     }
 };
 ```
@@ -742,7 +739,92 @@ private:
 
 [详情](https://cuijiahua.com/blog/2018/02/basis_63.html)，[练习](https://www.nowcoder.com/practice/9be0172896bd43948f8a32fb954e1be1?tpId=13&tqId=11216&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)。
 
+当然，上述的那些内置函数也很难记住，那就自己动手丰衣足食，自己写堆排序，如下所示：
 
+```c++
+class Solution {
+public:
+	void Insert(int num)
+	{
+		if((max_heap.size() + min_heap.size()) % 2 == 0) {
+			if(max_heap.size() > 0 && num <= max_heap[0]) {
+				add_build(max_heap, num, greater);
+				num = max_heap[0];
+				erase_build(max_heap, greater);
+			}
+			add_build(min_heap, num, less);
+		} else {
+			if(min_heap.size() > 0 && num >= min_heap[0]) {
+				add_build(min_heap, num, less);
+				num = min_heap[0];
+				erase_build(min_heap, less);
+			}
+			add_build(max_heap, num, greater);
+		}
+	}
+
+	double GetMedian()
+	{
+		if((max_heap.size() + min_heap.size()) == 0) {
+			return 0;
+		} else if((max_heap.size() + min_heap.size()) % 2 == 0) {
+			return (max_heap[0] + min_heap[0]) / 2.0;
+		} else {
+			return min_heap[0];
+		}
+	}
+private:
+	vector<int> max_heap;
+	vector<int> min_heap;
+
+	static bool less(int i, int j) {
+		return i < j? true: false;
+	}
+
+	static bool greater(int i, int j) {
+		return i > j? true: false;
+	}
+
+	void heapify(vector<int> &heap, int i, bool (*cmp)(int, int)) {
+		int size = heap.size();
+
+		int max_min_index = i;
+		if((2 * i + 1) < size && cmp(heap[2 * i + 1], heap[i])) {
+			max_min_index = 2 * i + 1;
+		}
+		if((2 * i + 2) < size && cmp(heap[2 * i + 2], heap[max_min_index])) {
+			max_min_index = 2 * i + 2;
+		}
+		if(max_min_index != i) {
+			int temp = heap[i];
+			heap[i] = heap[max_min_index];
+			heap[max_min_index] = temp;
+			heapify(heap, max_min_index, cmp);
+		}
+	}
+
+	void build_heap(vector<int> &heap, bool (*cmp)(int, int)) {
+		if(heap.size() <= 1) {
+			return;
+		}
+		int size = heap.size();
+		int last_index = size - 1;
+		for(int i = (last_index - 1) / 2; i >= 0; i--) {
+			heapify(heap, i, cmp);
+		}
+	}
+
+	void add_build(vector<int> &heap, int num, bool (*cmp)(int, int)) {
+		heap.push_back(num);
+		build_heap(heap, cmp);
+	}
+
+	void erase_build(vector<int> &heap, bool (*cmp)(int, int)) {
+		heap.erase(heap.begin());
+		build_heap(heap, cmp);
+	}
+};
+```
 
 
 
@@ -775,31 +857,29 @@ class Solution {
 public:
     vector<int> maxInWindows(const vector<int>& num, unsigned int size)
     {
-        vector<int> maxInWindows;
-        // 数组大小要大于等于窗口大小，并且窗口大小大于等于1
-        if(num.size() >= size && size >= 1){
-            deque<int> index;
-            for(unsigned int i = 0; i < size; i++){
-                // 如果index非空，并且新添加的数字大于等于队列中最小的数字，则删除队列中最小的数字
-                while(!index.empty() && num[i] >= num[index.back()]){
-                    index.pop_back();
-                }
-                index.push_back(i);
+        vector<int> maxVec;
+        if(num.size() < size || size <= 0) return maxVec;
+        
+        deque<int> maxIndex;
+        for(int i = 0; i < size; i++) {
+            while(!maxIndex.empty() && num[i] >= num[maxIndex.back()]) {
+                maxIndex.pop_back();
             }
-            for(unsigned int i = size; i < num.size(); i++){
-                maxInWindows.push_back(num[index.front()]);
-                while(!index.empty() && num[i] >= num[index.back()]){
-                    index.pop_back();
-                }
-                // 控制窗口大小为size
-                if(!index.empty() && index.front() <= int(i - size)){
-                    index.pop_front();
-                }
-                index.push_back(i);
-            }
-            maxInWindows.push_back(num[index.front()]);
+            maxIndex.push_back(i);
         }
-        return maxInWindows;
+        maxVec.push_back(num[maxIndex.front()]);
+        
+        for(int i = size; i < num.size(); i++) {
+            if(maxIndex.front() <= i - size) {
+                maxIndex.pop_front();
+            }
+            while(!maxIndex.empty() && num[i] >= num[maxIndex.back()]) {
+                maxIndex.pop_back();
+            }
+            maxIndex.push_back(i);
+            maxVec.push_back(num[maxIndex.front()]);
+        }
+        return maxVec;
     }
 };
 ```

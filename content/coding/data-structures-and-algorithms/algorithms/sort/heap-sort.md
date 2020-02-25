@@ -75,64 +75,72 @@
 # C++源码实现
 
 ```c++
-// 小顶堆
-#include <stdio.h>
 #include <iostream>
-#include<algorithm>
+#include <string>
 using namespace std;
 
-void adjust_heap(int arr[], int i, int len) {
-	int left = 2 * i + 1;
-	int right = 2 * i + 2;
+void swap(int& i, int& j) {
+	int temp = i;
+	i = j;
+	j = temp;
+}
+
+void heapify(int tree[], int n, int i) {
+	int last_index = n;
+	if(i > (last_index - 1) / 2) return;
+
+	int left_child = 2 * i + 1;
+	int right_child = 2 * i + 2;
+
 	int max_index = i;
-	int temp;
+	if(left_child < n && tree[max_index] < tree[left_child]) {
+		max_index = left_child;
+	}
+	if(right_child < n && tree[max_index] < tree[right_child]) {
+		max_index = right_child;
+	}
 
-	if(left < len && arr[left] > arr[max_index]) max_index = left;
-	// max_index是3个数中最大数的下标
-	if(right < len && arr[right] > arr[max_index]) max_index = right;
-
-	if(max_index != i) {  // 如果max_index的值有更新
-		temp = arr[max_index];
-		arr[max_index] = arr[i];
-		arr[i] = temp;
-		// 递归调整其他不满足堆性质的部分
-		adjust_heap(arr, max_index, len);
+	if(max_index != i) {
+		swap(tree[i], tree[max_index]);
+		heapify(tree, n, max_index);
 	}
 }
 
-void heap_sort(int arr[], int len) {
-	int temp;
-
-	// 对每一个非叶结点进行堆调整(从最后一个非叶结点开始)
-	for(int i = len / 2 - 1; i >= 0; i--) {
-		adjust_heap(arr, i, len);
-	}
-
-	for(int i = len - 1; i >= 1; i--) {
-		// 将当前最大的放置到数组末尾
-		temp = arr[0];
-		arr[0] = arr[i];
-		arr[i] = temp;
-		// 将未完成排序的部分继续进行堆排序
-		adjust_heap(arr, 0, i);
+void creat_heap(int* tree, int n) {
+	int last_index = n - 1;
+	for(int i = (last_index - 1) / 2; i >= 0; i--) {
+		heapify(tree, n, i);
 	}
 }
 
-int main() {
-	int arr[] = {4, 6, 8, 5, 9};
-	int len = sizeof(arr)/sizeof(int);
-	cout << "length = " << len << endl;
+void heap_sort(int* tree, int n) {
+	creat_heap(tree, n);
+	for(int i = n; i > 0; i--) {
+		swap(tree[0], tree[i]);
+		heapify(tree, i, 0);
+	}
 
-	heap_sort(arr, len);
+}
 
-	for (int i = 0; i < len; i++) cout << arr[i] << " ";
+int main()
+{
+	int tree[] = {1, 10, 3, 50, 3, 60, 70};
+	int n = sizeof(tree) / sizeof(tree[0]);
+
+	for(int i = 0; i < n; i++) {
+		cout << tree[i] << " ";
+	}
 	cout << endl;
 
-	return 0;
+	heap_sort(tree, n);
+
+	for(int i = 0; i < n; i++) {
+		cout << tree[i] << " ";
+	}
 }
 ```
 
-这里还有一个不是排序，而是找TopK的代码。相当于维护一个小顶堆，不断用其他数和小顶堆的顶部去比较，如果比小顶堆的数要大，则替换小顶堆，然后重构一遍小顶堆。
+这里还有一个不是排序，而是找TopK大的代码。相当于维护一个小顶堆，不断用其他数和小顶堆的顶部去比较，如果比小顶堆的数要大，则替换小顶堆，然后重构一遍小顶堆。
 
 ```c++
 void topk_min_heap(int arr[], int len) {
@@ -144,15 +152,17 @@ void topk_min_heap(int arr[], int len) {
 
 	// 开始逐渐向下调整
 	while(LeftChild <= len) {
-		if(LeftChild < len && arr[LeftChild] > arr[LeftChild + 1])
+		if(LeftChild < len && arr[LeftChild] > arr[LeftChild + 1]){
 			MinChild = LeftChild + 1;  // Child指向子节点中最小的那个
+        }
 		if(temp > arr[MinChild]) {
 			arr[root] = arr[MinChild];
 			root = MinChild;  // 重新调整跟结点指向
 			LeftChild = 2 * root + 1;  // 重新调整左孩子指向
 			MinChild = LeftChild;  // 重新调整孩子指向
-		}
-		else break;
+		} else {
+			break;
+        }
 	}
 	arr[root] = temp;
 }

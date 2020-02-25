@@ -32,6 +32,10 @@
 
 [BERT4REC：使用Bert进行推荐](https://zhuanlan.zhihu.com/p/97123417)
 
+[Next Item Recommendation with Self-Attention](https://blog.csdn.net/qq_40210472/article/details/89819021)
+
+[《Next Item Recommendation with Self-Attention》阅读笔记](http://www.rabin.tech/2019/01/11/%E3%80%8ANext-Item-Recommendation-with-Self-Attention%E3%80%8B%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/)
+
 # 任务
 
 rnn
@@ -47,3 +51,47 @@ transformer
 # zp
 
 [阿里妈妈定向广告RANK团队-社招（北京）求贤若渴](https://zhuanlan.zhihu.com/p/81360918)
+
+
+
+阿里的论文：
+
+作者：jifei
+
+链接：https://www.zhihu.com/question/364275212/answer/964712757
+
+来源：知乎
+
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+可以看看阿里的一些公开论文
+
+## 召回
+
+•[MIND][arxiv 19][Alibaba] Multi-Interest Network with Dynamic Routing for Recommendation at Tmall
+
+•[SDM][CIKM 19][Alibaba] Sequential Deep Matching Model for Online Large-scale Recommender System
+
+•[TDM][KDD 18][Alibaba] Learning Tree-based Deep Model for Recommender Systems
+
+## 排序
+
+•[BERT4Rec][CIKM 19][Alibaba] BERT4Rec_Sequential Recommendation with Bidirectional Encoder Representations from Transformer
+
+•[BST][DLP-KDD 19][Alibaba] Behavior Sequence Transformer for E-commerce Recommendation in Alibaba
+
+## 重排序
+
+•[PRM][RecSys 19][Alibaba] Personalized Re-ranking for Recommendation
+
+## Embedding
+
+•[Airbnb Embedding][KDD 18][Airbnb] Real-time Personalization using Embeddings for Search Ranking at Airbnb
+
+•[Alibaba Embedding][KDD 18][Alibaba] Billion-scale Commodity Embedding for E-commerce Recommendation in Alibaba
+
+## 多任务学习
+
+•[RecSys 19][Alibaba] A Pareto-Efficient Algorithm for Multiple Objective Optimization in E-Commerce Recommendation
+
+•[ESMM][SIGIR 18][Alibaba] Entire Space Multi-Task Model_An Effective Approach for Estimating Post-Click Conversion Rate

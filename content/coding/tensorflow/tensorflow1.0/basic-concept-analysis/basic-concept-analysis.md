@@ -618,3 +618,8 @@ https://jacobbuckman.com/post/tensorflow-the-confusing-parts-1/#understanding-te
 * [这是我看过解释TensorFlow最透彻的文章！](https://juejin.im/post/5b345a49f265da599c561b25)
 
 本文主要参考这篇博客。
+
+===
+
+[Tensorflow中的图（tf.Graph）和会话（tf.Session）](http://looop.cn/?p=3365)
+

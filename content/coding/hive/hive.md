@@ -829,6 +829,20 @@ sort by不同于order by，它不受hive.mapred.mode属性的影响，sort by的
 
 
 
+### sort_array对数组由小到大排序取极值
+
+```sql
+select arr[0] as min_val, arr[4] as max_val 
+from(
+     select sort_array(array(a,b,c,d,e)) arr 
+     from test2
+)a;
+```
+
+
+
+
+
 ### split分割字符串
 
 **语法**: split(string str, string pat)

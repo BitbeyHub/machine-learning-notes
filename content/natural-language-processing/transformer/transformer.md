@@ -34,6 +34,10 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 [Transformers 研究指南](https://mp.weixin.qq.com/s?src=11×tamp=1571917795&ver=1932&signature=DLFKFrYQf7TOR7MXG3wvOYvj0ohuNjLUhNG8AQyEEveK3Zs-vCzNZvbl3*KNKIOLGerlgfPcfpfRylMzxUi*wIafeZDU3J9b0ARWA1vuYxHMGDaI3lEE9a*bTQonVDeo&new=1)
 
+阿里杭州发的deep session interest nerwork DSIN 使用transformer还是有一些道理的，bert4rec相对就……
+
+[BERT4REC：使用Bert进行推荐](https://zhuanlan.zhihu.com/p/97123417)
+
 
 
 作者采用Attention机制的原因是考虑到RNN（或者LSTM，GRU等）的计算限制为是有顺序的，也就是说RNN相关算法只能从做向右依次计算或者从右向左依次计算，这种机制带来了两个问题：

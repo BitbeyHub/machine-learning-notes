@@ -344,11 +344,11 @@ private:
 
 # 剑指offer19：正则表达式匹配
 
-> 题目：请实现一个函数用来匹配包括'.'和'\*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配。
+> 题目：请实现一个函数用来匹配包括'.'和'\*'的正则表达式。模式中的字符'.'表示任意一个字符，而'\*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab\*ac\*a"匹配，但是与"aa.a"和"ab\*a"均不匹配。
 
 这道题有些绕，需要好好思考下。
 
-我们先来分析下如何匹配一个字符，现在只考虑字符'.'，不考虑'*'看一下：
+我们先来分析下如何匹配一个字符，现在只考虑字符'.'，不考虑'\*'看一下：
 
 如果字符串和模式串的当前字符相等，那么我们继续匹配它们的下一个字符；如果模式串中的字符是'.'，那么它可以匹配字符串中的任意字符，我们也可以继续匹配它们的下一个字符。
 
@@ -358,19 +358,19 @@ private:
 
 - 模式串的下一个字符不是'*'，也就是上面说的只有字符'.'的情况。
 
-如果字符串中的第一个字符和模式串中的第一个字符相匹配，那么字符串的模式串都向后移动一个字符，然后匹配剩余的字符串和模式串。如果字符串中的第一个字符和模式中的第一个字符不相匹配，则直接返回false。
+如果字符串中的第一个字符和模式串中的第一个字符相匹配，那么字符串和模式串都向后移动一个字符，然后匹配剩余的字符串和模式串。如果字符串中的第一个字符和模式中的第一个字符不相匹配，则直接返回false。
 
 - 模式串的下一个字符是'*'，此时就要复杂一些。
 
 因为可能有多种不同的匹配方式。
 
-选择一：无论字符串和模式串当前字符相不相等，我们都将模式串后移两个字符，相当于把模式串中的当前字符和'*'忽略掉，因为'*'可以匹配任意次的字符，所以出现0次也可以。
+选择一：无论字符串和模式串当前字符相不相等，我们都将模式串后移两个字符，相当于把模式串中的当前字符和'*\'忽略掉，因为'\*'可以匹配任意次的字符，所以出现0次也可以。
 
 选择二：如果字符串和模式串当前字符相等，则字符串向后移动一个字符。而模式串此时有两个选择：
 
 1、我们可以在模式串向后移动两个字符，继续匹配；
 
-2、也可以保持模式串不变，这样相当于用字符'*'继续匹配字符串，也就是模式串中的字符'*'匹配字符串中的字符多个的情况。
+2、也可以保持模式串不变，这样相当于用字符'\*'继续匹配字符串，也就是模式串中的字符'\*'匹配字符串中的字符多个的情况。
 
 用一张图表示如下：
 
@@ -417,12 +417,12 @@ private:
         if(*(pattern + 1) == '*'){
             // 如果字符串和模式串相等，或者模式串是'.'，并且字符串没有到结尾，则继续匹配
             if(*str == *pattern || (*pattern == '.' && *str != '\0')){
-                // 进入下一个状态，就是匹配到了一个
+                // 进入下一个状态，就是匹配到了仅仅一个
                 return matchCore(str + 1, pattern + 2) ||
-                    // 保持当前状态，就是继续那这个'*'去匹配
+                    // 保持当前状态，就是继续拿这个'*'去匹配
                     matchCore(str + 1, pattern) ||
                     // 跳过这个'*'
-                    matchCore(str, pattern + 2);
+                    matchCore(str, pattern + 2); // 防止出现这个: a  a*a
             }
             // 如果字符串和模式串不相等，则跳过当前模式串的字符和'*'，进入新一轮的匹配
             else{
@@ -464,59 +464,55 @@ c++:
 ```c++
 class Solution {
 public:
-    // 数字的格式可以用A[.[B]][e|EC]或者.B[e|EC]表示，
-    // 其中A和C都是整数（可以有正负号，也可以没有）
-    // 而B是一个无符号整数
     bool isNumeric(char* string)
     {
-        // 非法输入处理
-        if(string == NULL || *string == '\0'){
-            return false;
+        if(string == nullptr || *string == '\0') return false;
+        
+        if(*string == '+' || *string == '-') {
+            string++;
+            if(*string == '\0') return false;
         }
-        // 正负号判断
-        if(*string == '+' || *string == '-'){
-            ++string;
-        }
-        bool numeric = true;
-        scanDigits(&string);
-        if(*string != '\0'){
-            // 小数判断
-            if(*string == '.'){
-                ++string;
-                scanDigits(&string);
-                if(*string == 'e' || *string == 'E'){
-                    numeric = isExponential(&string);
-                }
-            }
-            // 整数判断
-            else if(*string == 'e' || *string == 'E'){
-                numeric = isExponential(&string);
-            }
-            else{
-                numeric = false;
+        
+        takeNum(&string);
+        
+        if(*string == '\0') {
+            return true;
+        } else if(*string == 'e' || *string == 'E') {
+            string++;
+            return isExp(&string);
+        } else if(*string == '.') {
+            string++;
+            takeNum(&string);
+            if(*string == '\0') {
+                return true;
+            } else if(*string == 'e' || *string == 'E') {
+                string++;
+                return isExp(&string);
+            } else {
+                return false;
             }
         }
-        return numeric && *string == '\0';
+        return false;
     }
 private:
-    // 扫描数字，对于合法数字，直接跳过
-    void scanDigits(char** string){
-        while(**string != '\0' && **string >= '0' && **string <= '9'){
-            ++(*string);
+    void takeNum(char** string) {
+        while(**string >= '0' && **string <= '9') {
+            (*string)++;
         }
     }
-    // 用来潘达un科学计数法表示的数值的结尾部分是否合法
-    bool isExponential(char** string){
-        ++(*string);
-        if(**string == '+' || **string == '-'){
-            ++(*string);
+    bool isExp(char** string) {
+        if(**string == '\0') {
+            return false;
+        } else if(**string == '+' || **string == '-') {
+            (*string)++;
+            if(**string == '\0') return false;
         }
-        if(**string == '\0'){
+        takeNum(string);
+        if(**string == '\0') {
+            return true;
+        } else {
             return false;
         }
-        scanDigits(string);
-        // 判断是否结尾，如果没有结尾，说明还有其他非法字符串
-        return (**string == '\0') ? true : false;
     }
 };
 ```
