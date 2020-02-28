@@ -251,8 +251,6 @@ $$
 \end{aligned}
 $$
 
-
-
 ## 损失函数
 
 对于解决分类问题的FM模型，
@@ -284,6 +282,7 @@ $$
 
 
 
+
 （2）当为负样本时，损失为
 
 - 标签为[1, 0]
@@ -300,9 +299,85 @@ $$
   $$
 
 
-
-
 可见，两种损失函数的值完全一样。
+
+## 基于损失函数的梯度更新
+
+假设损失函数是交叉熵损失函数：
+$$
+Loss=-p\ \text{log} \hat{p}-(1-p)\text{log}(1-\hat{p})
+$$
+其中，$$p$$是真实的概率（即实际的标签，为1或者0），$$\hat{p}$$是预测的概率，其公式为
+$$
+\hat{p}(y)=\frac{1}{1+e^{-y}}
+$$
+其中，$$y$$是FM的预估值，即
+$$
+\begin{aligned}
+y(x)&=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^nw_{ij}x_ix_j\\
+&=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^n\left \langle v_i, v_j \right \rangle x_ix_j\\
+&=w_0+\sum_{i=1}^nw_ix_i+\frac{1}{2}\sum_{f=1}^k\left(\left(\sum_{i=1}^nv_{i,f}x_i\right)^2-\sum_{i=1}^nv_{i,f}^2x_i^2\right)
+\end{aligned}
+$$
+我们根据链式求导法则，求损失到FM变量$$\theta$$（$$\theta \in [w_0, w_i, v_{i,f}]$$）的梯度：
+$$
+\frac{\part{Loss}}{\part{\theta}}=\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}} \cdot \frac{\part{y}}{\part{\theta}}
+$$
+其中，
+$$
+\frac{\part{Loss}}{\part{\hat{p}}}=-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}
+$$
+
+$$
+\begin{aligned}
+\frac{\part{\hat{p}}}{\part{y}}&=\frac{e^{-y}}{(1+e^{-y})^2}=\frac{1+e^{-y}-1}{(1+e^{-y})^2}\\
+&=\frac{1}{1+e^{-y}}(1-\frac{1}{1+e^{-y}})=\hat{p}(1-\hat{p})
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}}&=\left(-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}\right)\cdot[\hat{p}(1-\hat{p})]\\
+&=-p(1-\hat{p})+(1-p)\hat{p}\\
+&=\left\{\begin{matrix}
+&\hat{p}-1,&\text{if}\ p=1\\ 
+&\hat{p},&\text{if}\ p=0\\ 
+\end{matrix}\right.
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\frac{\partial y(x)}{\partial \theta}=
+\left\{\begin{matrix}
+&1,&\text{if }\theta\ \text{is }w_0\\ 
+&x_i,&\text{if }\theta\ \text{is }w_i\\ 
+&x_i\sum_{j=1}^nv_{j,f}x_j-v_{i,f}x_i^2,&\text{if }\theta\ \text{is }v_{i,f}\\ 
+\end{matrix}\right.
+\end{aligned}
+$$
+
+所以，整个完整的梯度就是
+$$
+\begin{aligned}
+\frac{\part{Loss}}{\part{\theta}}
+&=\left(\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}}\right) \cdot \frac{\part{y}}{\part{\theta}}\\
+&=\left\{\begin{matrix}
+&\hat{p}-1,&\text{if}\ p=1\\ 
+&\hat{p},&\text{if}\ p=0\\ 
+\end{matrix}\right.
+\ \cdot \ 
+\left\{\begin{matrix}
+&1,&\text{if }\theta\ \text{is }w_0\\ 
+&x_i,&\text{if }\theta\ \text{is }w_i\\ 
+&x_i\sum_{j=1}^nv_{j,f}x_j-v_{i,f}x_i^2,&\text{if }\theta\ \text{is }v_{i,f}\\ 
+\end{matrix}\right.
+\end{aligned}
+$$
+则可对参数进行梯度更新：
+$$
+\theta_{i}=\theta_{i-1}-\text{lr}\cdot \frac{\part{Loss}}{\part{\theta}}
+$$
 
 # 利用FM模型做统一的召回模型
 

@@ -116,6 +116,7 @@
     - [TensorFlow基础](coding/tensorflow/tensorflow1.0/basis/basis.md)
     - [TensorFlow基础概念解析](coding/tensorflow/tensorflow1.0/basic-concept-analysis/basic-concept-analysis.md)
     - [TensorFlow机器学习基础](coding/tensorflow/tensorflow1.0/machine-learning-foundation/machine-learning-foundation.md)
+    - [Tensorflow分布式架构](coding/tensorflow/tensorflow1.0/distributed-architecture/distributed-architecture.md)
   - [TensorFlow2.0](coding/tensorflow/tensorflow2.0/tensorflow2.0.md)
 - [PyTorch](coding/pytorch/pytorch.md)
 
