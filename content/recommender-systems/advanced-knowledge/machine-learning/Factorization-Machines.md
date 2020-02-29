@@ -321,23 +321,23 @@ y(x)&=w_0+\sum_{i=1}^nw_ix_i+\sum_{i=1}^n\sum_{j=i+1}^nw_{ij}x_ix_j\\
 $$
 我们根据链式求导法则，求损失到FM变量$$\theta$$（$$\theta \in [w_0, w_i, v_{i,f}]$$）的梯度：
 $$
-\frac{\part{Loss}}{\part{\theta}}=\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}} \cdot \frac{\part{y}}{\part{\theta}}
+\frac{\partial Loss}{\partial \theta}=\frac{\partial Loss}{\partial \hat{p}} \cdot \frac{\partial \hat{p}}{\partial y} \cdot \frac{\partial y}{\partial \theta}
 $$
 其中，
 $$
-\frac{\part{Loss}}{\part{\hat{p}}}=-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}
+\frac{\partial Loss}{\partial \hat{p}}=-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}
 $$
 
 $$
 \begin{aligned}
-\frac{\part{\hat{p}}}{\part{y}}&=\frac{e^{-y}}{(1+e^{-y})^2}=\frac{1+e^{-y}-1}{(1+e^{-y})^2}\\
+\frac{\partial \hat{p}}{\partial y}&=\frac{e^{-y}}{(1+e^{-y})^2}=\frac{1+e^{-y}-1}{(1+e^{-y})^2}\\
 &=\frac{1}{1+e^{-y}}(1-\frac{1}{1+e^{-y}})=\hat{p}(1-\hat{p})
 \end{aligned}
 $$
 
 $$
 \begin{aligned}
-\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}}&=\left(-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}\right)\cdot[\hat{p}(1-\hat{p})]\\
+\frac{\partial Loss}{\partial \hat{p}} \cdot \frac{\partial \hat{p}}{\partial y}&=\left(-\frac{p}{\hat{p}}+\frac{1-p}{1-\hat{p}}\right)\cdot[\hat{p}(1-\hat{p})]\\
 &=-p(1-\hat{p})+(1-p)\hat{p}\\
 &=\left\{\begin{matrix}
 &\hat{p}-1,&\text{if}\ p=1\\ 
@@ -360,8 +360,8 @@ $$
 所以，整个完整的梯度就是
 $$
 \begin{aligned}
-\frac{\part{Loss}}{\part{\theta}}
-&=\left(\frac{\part{Loss}}{\part{\hat{p}}} \cdot \frac{\part{\hat{p}}}{\part{y}}\right) \cdot \frac{\part{y}}{\part{\theta}}\\
+\frac{\partial Loss}{\partial \theta}
+&=\left(\frac{\partial Loss}{\partial \hat{p}} \cdot \frac{\partial \hat{p}}{\partial y}\right) \cdot \frac{\partial y}{\partial \theta}\\
 &=\left\{\begin{matrix}
 &\hat{p}-1,&\text{if}\ p=1\\ 
 &\hat{p},&\text{if}\ p=0\\ 
