@@ -21,6 +21,10 @@ Seq2seq
 
 # 参考资料
 
+* [seq2seq 与attention机制 网易公开课](https://study.163.com/course/courseMain.htm?courseId=1006498029)
+
+
+
 * [如何理解seq2seq？](http://f.dataguru.cn/thread-907291-1-1.html)
 
 

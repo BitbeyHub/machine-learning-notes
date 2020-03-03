@@ -10,12 +10,7 @@
 
 * [深度学习](deep-learning/deep-learning.md)
 
-  * DSSM深度语义模型
-    - [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data CIKM2013](deep-learning/Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data.md)
-
-
-
-
+  * 
 
 
 
