@@ -155,5 +155,7 @@ Memory更新：memory中原有值为$$c$$，然后乘上遗忘门的控制信号
 
 [Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/)
 
+[Understanding LSTM Networks翻译：如何简单的理解LSTM——其实没有那么复杂](https://www.jianshu.com/p/4b4701beba92)
+
 [谁能用比较通俗有趣的语言解释RNN和LSTM？](https://www.zhihu.com/question/314002073)
 

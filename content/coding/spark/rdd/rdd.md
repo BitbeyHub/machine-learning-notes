@@ -125,6 +125,46 @@ scala> rdd2.partitions.size
 res5: Int = 4
 ```
 
+### map和mapPartitions
+
+Spark中的map函数是将每个rdd都进行自定义函数处理
+ mapPartitions则是将多个rdd进行分区，对每个分区内部的rdd进行自定义函数的处理
+
+mapPartitions常用于**需要多次加载外部文件的情况下**，若此时仍然使用map函数  那么对于每条记录都需要进行文件读取加载，比较费时费性能
+
+一段pyspark的代码很清楚地将两者的本质不同展现了出来：
+
+```python
+from pyspark.sql import SparkSession
+from pyspark import SparkConf,SparkContext
+
+def map_func(row):
+    print ("====")
+    re = row*2
+    return re
+
+def mapPartition_func(part):
+    print ("====")
+    for row in part:
+        re = row*2
+        yield re
+    return re
+
+conf = SparkConf().setAppName("test")
+sc = SparkContext(conf=conf)
+
+a = sc.parallelize([1,2,3,4,5],5)
+re = a.map(map_func)
+for line in re.collect():
+    print (line)
+
+re = a.mapPartitions(mapPartition_func)
+for line in re.collect():
+    print (line)
+```
+
+
+
 ## 操作
 
 ### reduce
@@ -499,6 +539,7 @@ In-Memory Cluster Computing](https://www.usenix.org/system/files/conference/nsdi
 "输入"参考此文章。
 
 * [Spark算子：RDD基本转换操作(2)–coalesce、repartition](http://lxw1234.com/archives/2015/07/341.htm)
+* [mapPartitions 使用](https://www.jianshu.com/p/eabfb80a35a0)
 
 "分区"参考此文章。
 

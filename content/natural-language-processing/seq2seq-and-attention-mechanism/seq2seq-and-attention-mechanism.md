@@ -2,6 +2,9 @@
 
 - [返回顶层目录](../../../SUMMARY.md)
 - [返回上层目录](../natural-language-processing.md)
+- [seq2seq介绍]
+
+
 
 
 
@@ -10,6 +13,8 @@
 pdf: [NEURAL MACHINE TRANSLATION BY JOINTLY LEARNING TO ALIGN AND TRANSLATE](https://arxiv.org/pdf/1409.0473.pdf)
 
 
+
+# encoder-decoder结构
 
 seq2seq属于encoder-decoder结构的一种，这里看看常见的encoder-decoder结构，基本思想就是利用两个RNN，一个RNN作为encoder，另一个RNN作为decoder。encoder负责将输入序列压缩成指定长度的向量，这个向量就可以看成是这个序列的语义，这个过程称为编码，如下图，获取语义向量最简单的方式就是直接将最后一个输入的隐状态作为语义向量C。也可以对最后一个隐含状态做一个变换得到语义向量，还可以将输入序列的所有隐含状态做一个变换得到语义变量。
 

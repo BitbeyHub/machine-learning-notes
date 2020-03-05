@@ -108,8 +108,9 @@ RNN的读取方向不仅可以是按照句子的顺序，也可以是反过来�
 # 参考资料
 
 * [李宏毅教授讲解 RNN LSTM的视频](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/RNN1.mp4)
+* [B站李宏毅深度学习RNN2019](https://www.bilibili.com/video/av73798762?p=43)
 
-本文参考了该视频。
+本文参考了该视频。两个视频都一样。
 
 ===
 

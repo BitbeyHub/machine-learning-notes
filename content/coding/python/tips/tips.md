@@ -454,6 +454,10 @@ print ([id(ele) for ele in wilber])
 
 ## yield
 
+为了掌握yield的精髓，你一定要理解它的要点：当你调用这个函数的时候，你写在这个函数中的代码并没有真正的运行。这个函数仅仅只是返回一个生成器对象。有点过于奇技淫巧:-)
+
+然后，你的代码会在每次for使用生成器的时候run起来。
+
 [python中yield的用法详解——最简单，最清晰的解释](https://blog.csdn.net/mieleizhi0522/article/details/82142856)
 
 [Python的yield用法与原理](https://blog.csdn.net/alvine008/article/details/43410079)

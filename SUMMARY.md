@@ -176,7 +176,7 @@
 * [深度学习优化算法](content/deep-learning/deep-learning-optimization-algorithm/deep-learning-optimization-algorithm.md)
 * [RNN循环神经网络](content/deep-learning/recurrent-neural-network/recurrent-neural-network.md)
 * [LSTM长短期记忆网络](content/deep-learning/long-short-term-memory-networks/long-short-term-memory-networks.md)
-* [Attention注意力机制](content/deep-learning/attention-mechanism/attention-mechanism.md)
+* [GRU门控循环单元](content/deep-learning/gated-recurrent-unit/gated-recurrent-unit.md)
 * [GNN图神经网络](content/deep-learning/graph-neural-networks/graph-neural-networks.md)
   * [GNN图神经网络综述](content/deep-learning/graph-neural-networks/graph-neural-networks-review.md)
   * [GCN图卷积网络](content/deep-learning/graph-neural-networks/graph-convolutional-networks/graph-convolutional-networks.md)
