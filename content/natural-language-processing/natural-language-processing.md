@@ -8,9 +8,7 @@
 
 * [语言模型和中文分词](language-model-and-chinese-word-segmentation/language-model-and-chinese-word-segmentation.md)
 
-* [深度学习](deep-learning/deep-learning.md)
-
-  * 
+* [seq2seq模型和attention机制](seq2seq-and-attention-mechanism/seq2seq-and-attention-mechanism.md)
 
 
 

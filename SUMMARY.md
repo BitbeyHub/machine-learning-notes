@@ -214,9 +214,8 @@
   * [word2vec算法原理](content/natural-language-processing/word2vec/word2vec-algorithm-principle.md)
   * [word2vec源码分析](content/natural-language-processing/word2vec/word2vec-source-code-analysis.md)
   * [word2vec实践](content/natural-language-processing/word2vec/word2vec-practice.md)
-* [Attention注意力机制](content/natural-language-processing/attention-mechanism/attention-mechanism.md)
-* [深度学习](content/natural-language-processing/deep-learning/deep-learning.md)
-* [Transformer](content/natural-language-processing/transformer/transformer.md)
+* [seq2seq模型和attention机制](content/natural-language-processing/seq2seq-and-attention-mechanism/seq2seq-and-attention-mechanism.md)
+* [Self-Attention和Transformer](content/natural-language-processing/transformer/transformer.md)
 
 # 知识图谱
 

@@ -12,13 +12,13 @@
 
 # 什么是LSTM
 
-LSTM网络如下图所示，虽然看起来太复杂了，第一词看到的人都是一脸懵逼，这是啥？有用吗？但是原理不难，我们一点点分析。
+LSTM网络如下图所示，虽然看起来太复杂了，第一次看到的人都是一脸懵逼，这是啥？有用吗？但是原理不难，我们一点点分析。
 
 ![multiple-layer-LSTM](pic/multiple-layer-LSTM.jpg)
 
 ## LSTM的结构
 
-前面讲的[Simple ]RNN只是RNN中最简单的版本，里面的memory是最简单的，可以随时把值写入，也可随时把值读出。但现在常用的memory称为Long Short-term Memory(LSTM)。
+前面讲的SimpleRNN只是RNN中最简单的版本，里面的memory是最简单的，可以随时把值写入，也可随时把值读出。但现在常用的memory称为Long Short-term Memory(LSTM)。
 
 ![LSTM](pic/LSTM.jpg)
 

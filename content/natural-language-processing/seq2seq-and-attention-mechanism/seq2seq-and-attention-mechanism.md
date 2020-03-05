@@ -1,7 +1,13 @@
-# seq2seq
+# seq2seq和注意力机制
 
 - [返回顶层目录](../../../SUMMARY.md)
 - [返回上层目录](../natural-language-processing.md)
+
+
+
+![paper](pic/paper.png)
+
+pdf: [NEURAL MACHINE TRANSLATION BY JOINTLY LEARNING TO ALIGN AND TRANSLATE](https://arxiv.org/pdf/1409.0473.pdf)
 
 
 
@@ -62,4 +68,10 @@ seq2seq 模型分析
 
 
 [翻译系统/聊天机器人Seq2Seq模型+attention](https://blog.csdn.net/weixin_37479258/article/details/99887469)
+
+
+
+[真正的完全图解Seq2Seq Attention模型](https://zhuanlan.zhihu.com/p/40920384)
+
+
 

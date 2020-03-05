@@ -280,7 +280,7 @@ aggregate执行结构图:
 
 **这种聚合操作是有缺陷的，就是所有SeqOp操作对分区的执行结果都只能全部返回给Driver端，然后在对返回的结果和初始值执行CombOp操作，这样数据量大的时候很容易导致Driver端内存溢出，所以，就出现了优化函数treeAggregate。**
 
-### treeAggregatetreeAggregate
+### treeAggregate
 
 treeAggregate在aggregate的基础上做了一些优化，因为aggregate是在每个分区计算完成后，把所有的数据拉倒driver端，进行统一的遍历合并，这样如果数据量很大，在driver端可能会OOM。
 

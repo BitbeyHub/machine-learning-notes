@@ -191,12 +191,6 @@ Transformer是完全基于注意力机制（attention mechanism)的网络框架�
 
 
 
-[真正的完全图解Seq2Seq Attention模型](https://zhuanlan.zhihu.com/p/40920384)
-
-
-
-
-
 
 
 

@@ -207,10 +207,8 @@
 - [自然语言](natural-language-processing/natural-language/natural-language.md)
 - [语言模型和中文分词](natural-language-processing/language-model-and-chinese-word-segmentation/language-model-and-chinese-word-segmentation.md)
 - [word2vec](natural-language-processing/word2vec/word2vec.md)
-- [深度学习](natural-language-processing/deep-learning/deep-learning.md)
-- [Attention注意力机制](natural-language-processing/attention-mechanism/attention-mechanism.md)
-- [Transformer](natural-language-processing/transformer/transformer.md)
-- Self Attension
+- [seq2seq模型和attention机制](natural-language-processing/seq2seq-and-attention-mechanism/seq2seq-and-attention-mechanism.md)
+- [Self-Attension和Transformer](natural-language-processing/transformer/transformer.md)
 
 # 知识图谱
 
