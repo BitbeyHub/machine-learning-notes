@@ -60,5 +60,5 @@ LSTM的一个稍微更显着的变化是由[Cho](http://arxiv.org/pdf/1406.1078v
 
 ===
 
-[人人都能看懂的GRU](https://zhuanlan.zhihu.com/p/32481747)
+[GRU神经网络](https://blog.csdn.net/wangyangzhizhou/article/details/77332582)
 
