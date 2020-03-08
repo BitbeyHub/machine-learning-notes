@@ -36,6 +36,8 @@
 
 [《Next Item Recommendation with Self-Attention》阅读笔记](http://www.rabin.tech/2019/01/11/%E3%80%8ANext-Item-Recommendation-with-Self-Attention%E3%80%8B%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/)
 
+[多任务学习在推荐算法中的应用](https://zhuanlan.zhihu.com/p/109835504)
+
 # 任务
 
 rnn

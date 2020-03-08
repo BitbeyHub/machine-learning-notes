@@ -1,6 +1,11 @@
 # Batch Normalization
 
 * [返回顶层目录](../../../SUMMARY.md#目录)
+* [返回上层目录](../tips.md)
+* [BN用在哪里](#BN用在哪里)
+* [BN怎么操作](#BN怎么操作)
+* [深入理解BN](#深入理解BN)
+* [总结](#总结)
 
 
 
@@ -38,11 +43,11 @@ OK，我们想要的是上图表示的第三种情况，激活函数的修剪率
 
 ![batch-normalizing-transform](pic/batch-normalizing-transform.png)
 
-第一步，我们获得了一个mini-batch的输入$$\cal{B} = {x_1,..., x_m}$$，可以看出batch size就是$$m$$。
+第一步，我们获得了一个mini-batch的输入$$\mathcal{B} = {x_1,..., x_m}$$，可以看出batch size就是$$m$$。
 
 第二步，求这个batch的均值$$\mu$$和方差$$\sigma$$
 
-第三步，对所有$$x_i\in \cal{B}$$，进行一个标准化，得到$$\hat{x}_i$$。
+第三步，对所有$$x_i\in \mathcal{B}$$，进行一个标准化，得到$$\hat{x}_i$$。
 
 第四步，对$$\hat{x}_i$$做一个线性变换，得到输出$$y_i$$。
 
