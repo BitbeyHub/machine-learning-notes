@@ -578,3 +578,11 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
 [左手论文 右手代码 深入理解网红算法XGBoost](https://zhuanlan.zhihu.com/p/91817667)
 
+
+
+[从Boosting到BDT再到GBDT](https://zhuanlan.zhihu.com/p/105990013)
+
+[再从GBDT到XGBoost!](https://zhuanlan.zhihu.com/p/106129630)
+
+[XGBoost从原理到调参](https://zhuanlan.zhihu.com/p/106432182)
+
