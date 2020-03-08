@@ -38,6 +38,12 @@
 
 [多任务学习在推荐算法中的应用](https://zhuanlan.zhihu.com/p/109835504)
 
+阿里杭州发的deep session interest nerwork DSIN 使用transformer还是有一些道理的，bert4rec相对就……
+
+[BERT4REC：使用Bert进行推荐](https://zhuanlan.zhihu.com/p/97123417)
+
+
+
 # 任务
 
 rnn
