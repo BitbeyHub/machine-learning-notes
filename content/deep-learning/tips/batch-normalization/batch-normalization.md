@@ -61,7 +61,7 @@ $$
 
 对于自然界很多分布，都可以用（类）高斯分布来建模。同样，可以用这个公式$$\hat{x} = (x- \mu)/\sigma$$来进行标准化（这个标准化公式不仅适用高斯分布），标准化之后的分布满足期望为**0**，方差为**1**。比较一下标准化公式和第三步的公式：
 $$
-\hat{x}_i\leftarrow \frac{x_i-\mu_{\cal{B}}}{\sqrt{\sigma^2_{\cal{B}}+\epsilon}}
+\hat{x}_i\leftarrow \frac{x_i-\mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}}+\epsilon}}
 $$
 多了一个$$\epsilon$$，这里的$$\epsilon$$是一个很小的数，避免由分母等于0带来的系统错误，所以其实两个公式是等价的。
 
