@@ -103,7 +103,11 @@ RNN的读取方向不仅可以是按照句子的顺序，也可以是反过来�
 
 用双向RNN的好处，就是网络产生输出的时候，看的范围比较广。如果只有正向的RNN，在产生$$y^{t+1}$$的时候，网络只看过$$x^1$$一直到$$x^{t+1}$$，但是如果是双向的RNN，在产生$$y^{t+1}$$的时候，网络不只是看过$$x^1$$一直到$$x^{t+1}$$，也看了从句尾一直到$$x^{t+1}$$。就是说，**网络是看了整个sequence后，才决定输出是什么**，会比只看句子的一半得到更好的性能。
 
+# RNN的梯度消失问题
 
+RNN的缺陷是梯度消失问题，即便是LSTM也只能缓解该问题。
+
+![rnn-vanishing-gradient](pic/rnn-vanishing-gradient.png)
 
 # 参考资料
 
@@ -111,6 +115,11 @@ RNN的读取方向不仅可以是按照句子的顺序，也可以是反过来�
 * [B站李宏毅深度学习RNN2019](https://www.bilibili.com/video/av73798762?p=43)
 
 本文参考了该视频。两个视频都一样。
+
+* [Recurrent Neural Networks (RNN) - The Vanishing Gradient Problem](https://www.superdatascience.com/blogs/recurrent-neural-networks-rnn-the-vanishing-gradient-problem)
+* [paper: On the difficulty of training recurrent neural networks](http://proceedings.mlr.press/v28/pascanu13.pdf?source=post_page---------------------------)
+
+"RNN的梯度消失问题"参考该博客，paper没看，但是觉得有用。
 
 ===
 
@@ -146,4 +155,6 @@ http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduc
 [【Deep Learning】通俗大白话详述RNN理论和LSTM理论](https://mp.weixin.qq.com/s/3Rpq1EvYi-_9wvJ5fUB5dQ)
 
 [深度学习实战教程(五)：循环神经网络](https://cuijiahua.com/blog/2018/12/dl-11.html)
+
+[The Ultimate Guide to Recurrent Neural Networks (RNN)](https://www.superdatascience.com/blogs/the-ultimate-guide-to-recurrent-neural-networks-rnn)
 

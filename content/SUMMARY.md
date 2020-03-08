@@ -167,10 +167,12 @@
 * [机器学习算法总结](machine-learning/machine-learning-algorithm-summary/machine-learning-algorithm-summary.md)
 ---
 
-# 深度学习
+# [深度学习](deep-learning/deep-learning.md)
 
 * [深度学习概论](deep-learning/deep-learning-introduction/deep-learning-introduction.md)
 * [ANN人工神经网络](deep-learning/artificial-neural-network/artificial-neural-network.md)
+* [知识点](deep-learning/tips/tips.md)
+  * [Batch Normalization](deep-learning/tips/batch-normalization/batch-normalization.md)
 * [CNN卷积神经网络](deep-learning/convolutional-neural-network/convolutional-neural-network.md)
 * [深度学习优化算法](deep-learning/deep-learning-optimization-algorithm/deep-learning-optimization-algorithm.md)
 * [RNN循环神经网络](deep-learning/recurrent-neural-network/recurrent-neural-network.md)
@@ -184,8 +186,9 @@
     - [GCN图卷积网络本质理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-essential-understand.md)
     - [GCN图卷积网络全面理解](deep-learning/graph-neural-networks/graph-convolutional-networks/gcn-comprehensive-understand.md)
     - [SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS ICLR2017](deep-learning/graph-neural-networks/graph-convolutional-networks/SEMI-SUPERVISED-CLASSIFICATION-WITH-GRAPH-CONVOLUTIONAL-NETWORKS.md)
-* 论文
-  * [Weight Agnostic Neural Networks-Google2019](deep-learning/paper/Weight-Agnostic-Neural-Networks.md)
+* [神经网络架构搜索](deep-learning/neural-architecture-search/neural-architecture-search.md)
+  * [Weight-Agnostic-Neural-Networks Google2019](deep-learning/neural-architecture-search/Weight-Agnostic-Neural-Networks.md)
+
 ---
 
 # 强化学习

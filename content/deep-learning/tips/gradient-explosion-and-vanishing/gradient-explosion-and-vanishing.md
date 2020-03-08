@@ -1,14 +1,13 @@
-# 深度学习优化算法
+# 梯度爆炸和梯度消失
 
-* [返回顶层目录](../../SUMMARY.md#目录)
-
-
-
-[深度学习优化算法总结](https://zhuanlan.zhihu.com/p/61955391)
+* [返回顶层目录](../../../SUMMARY.md#目录)
+* [返回上层目录](../tips.md)
 
 
 
-[深度学习最全优化方法总结比较（SGD，Adagrad，Adadelta，Adam，Adamax，Nadam）](https://zhuanlan.zhihu.com/p/22252270)
+[吴恩达Vanishing/Exploding Gradients (C2W1L10)](https://www.youtube.com/watch?v=qhXZsFVxGKo)
+
+
 
 
 
