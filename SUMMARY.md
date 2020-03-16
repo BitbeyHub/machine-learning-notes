@@ -151,7 +151,9 @@
             * [BoostingTree](content/machine-learning/ensemble-learning/BoostingTree.md)
         * GradientBoosting
             * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
-            * [XGBoost](content/machine-learning/ensemble-learning/XGBoost.md)
+            * [XGBoost](content/machine-learning/ensemble-learning/xgboost/XGBoost.md)
+              * [XGBoost理论](content/machine-learning/ensemble-learning/xgboost/XGBoost-theory.md)
+              * [XGBoost实践](content/machine-learning/ensemble-learning/xgboost/XGBoost-practice.md)
     * Stacking
 * [降维](content/machine-learning/dimensionality-reduction/dimensionality-reduction.md)
     * [PCA主成分分析](content/machine-learning/dimensionality-reduction/principal-component-analysis.md)

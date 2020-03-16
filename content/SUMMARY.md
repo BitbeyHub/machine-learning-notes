@@ -150,7 +150,9 @@
       - [BoostingTree](machine-learning/ensemble-learning/BoostingTree.md)
     - GradientBoosting
       - [GBDT](machine-learning/ensemble-learning/GBDT.md)
-      - [XGBoost](machine-learning/ensemble-learning/XGBoost.md)
+      - [XGBoost](machine-learning/ensemble-learning/xgboost/XGBoost.md)
+        - [XGBoost理论](machine-learning/ensemble-learning/xgboost/XGBoost-theory.md)
+        - [XGBoost实践](machine-learning/ensemble-learning/xgboost/XGBoost-practice.md)
   * Stacking
 * [降维](machine-learning/dimensionality-reduction/dimensionality-reduction.md)
 

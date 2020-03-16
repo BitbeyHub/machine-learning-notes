@@ -10,7 +10,7 @@
     * [BoostingTree](#BoostingTree)
   * [GradientBoosting](#GradientBoosting)
     * [GBDT](#GBDT)
-    * [XgBoost](#XgBoost)
+    * [XgBoost](#xgboost/XGBoost.md)
 * [Stacking](#Stacking)
 
 
