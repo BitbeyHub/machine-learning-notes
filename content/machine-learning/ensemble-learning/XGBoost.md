@@ -3,7 +3,6 @@
 * [返回顶层目录](../../SUMMARY.md)
 * [返回上层目录](ensemble-learning.md)
 * [XGBoost概述](#XGBoost概述)
-* [XGBoost陈天奇论文及官网](#XGBoost陈天奇论文及官网)
 * [模型](#模型)
 * [损失函数](#损失函数)
   * [正则项](#正则项)
@@ -13,19 +12,63 @@
 * [优化算法](#优化算法)
   * [XGBoost的增益函数](#XGBoost的增益函数)
   * [树结点分裂方法（split finding）](#树结点分裂方法（split finding）)
-    * [精确算法](#精确算法)
-    * [近似算法](#近似算法)
+    * [暴力枚举（Basic Exact Greedy Algorithm）](#暴力枚举（Basic Exact Greedy Algorithm）)
+    * [近似算法（Approximate Algo for Split Finding）](#近似算法（Approximate Algo for Split Finding）)
+    * [加权分位点（Weighted Quantile Sketch）](#加权分位点（Weighted Quantile Sketch）)
     * [结点分裂时多机并行](#结点分裂时多机并行)
-    * [加权分位点](#加权分位点)
-  * [稀疏值处理](#稀疏值处理)
-* [XGBoost的其他特性](#XGBoost的其他特性)
+  * [稀疏感知分割（缺失值处理）](#稀疏感知分割（缺失值处理）)
 * [XGBoost的系统设计](#XGBoost的系统设计)
-  * [Column Block for Parallel Learning](#Column Block for Parallel Learning)
-  * [Cache Aware Access](#Cache Aware Access)
-  * [Blocks for Out-of-core Computation](#Blocks for Out-of-core Computation)
-* [XGBoost和GradientBoost的比较](#XGBoost和GradientBoost的比较)
+  * [分块并行（Column Block for Parallel Learning）](#分块并行（Column Block for Parallel Learning）)
+  * [缓存优化（Cache Aware Access）](#缓存优化（Cache Aware Access）)
+  * [核外块计算（Blocks for Out-of-core Computation）](#核外块计算（Blocks for Out-of-core Computation）)
+  * [XGBoost的其他特性](#XGBoost的其他特性)
+* [XGBoost总结](#XGBoost总结)
+  * [XGBoost优点](#XGBoost优点)
+  * [XGBoost缺点](#XGBoost缺点)
+  * [XGBoost和GradientBoost的比较](#XGBoost和GradientBoost的比较)
+* [Xgboost使用经验总结](#Xgboost使用经验总结)
+* [XGBoost常见面试题](#XGBoost常见面试题)
+  * [简单介绍一下XGBoost ](#简单介绍一下XGBoost )
+  * [XGBoost与GBDT有什么不同](#XGBoost与GBDT有什么不同)
+  * [XGBoost为什么使用泰勒二阶展开](#XGBoost为什么使用泰勒二阶展开)
+  * [XGBoost为什么可以并行训练](#XGBoost为什么可以并行训练)
+  * [XGBoost为什么快](#XGBoost为什么快)
+  * [XGBoost防止过拟合的方法](#XGBoost防止过拟合的方法)
+  * [XGBoost如何处理缺失值](#XGBoost如何处理缺失值)
+  * [XGBoost中叶子结点的权重如何计算出来](#XGBoost中叶子结点的权重如何计算出来)
+  * [XGBoost中的一棵树的停止生长条件](#XGBoost中的一棵树的停止生长条件)
+  * [RF和GBDT的区别](#RF和GBDT的区别)
+  * [XGBoost如何处理不平衡数据](#XGBoost如何处理不平衡数据)
+  * [比较LR和GBDT，说说什么情景下GBDT不如LR](#比较LR和GBDT，说说什么情景下GBDT不如LR)
+  * [XGBoost中如何对树进行剪枝](#XGBoost中如何对树进行剪枝)
+  * [XGBoost如何选择最佳分裂点](#XGBoost如何选择最佳分裂点)
+  * [XGBoost的Scalable性如何体现](#XGBoost的Scalable性如何体现)
+  * [XGBoost如何评价特征的重要性](#XGBoost如何评价特征的重要性)
+  * [XGBooost参数调优的一般步骤](#XGBooost参数调优的一般步骤)
+  * [XGBoost模型如果过拟合了怎么解决](#XGBoost模型如果过拟合了怎么解决)
+  * [为什么XGBoost相比某些模型对缺失值不敏感](#为什么XGBoost相比某些模型对缺失值不敏感)
+* [XGBoost代码实践](#XGBoost代码实践)
+  * [XGBoost运行环境搭建](#XGBoost运行环境搭建)
+    * [通过pip安装](#通过pip安装)
+    * [通过源码编译安装](#通过源码编译安装)
+  * [XGBoost参数详解](#XGBoost参数详解)
+    * [常规参数](#常规参数)
+    * [模型参数Tree Booster](#模型参数Tree Booster)
+    * [模型参数Linear Booster](#模型参数Linear Booster)
+    * [学习任务参数](#学习任务参数)
+    * [min_child_weight参数详解](#min_child_weight参数详解)
+    * [正常调参方法](#正常调参方法)
+  * [XGBoost实战](#XGBoost实战)
+    * [数据格式](#数据格式)
+    * [代码简单实践：毒蘑菇判定](#代码简单实践：毒蘑菇判定)
+    * [基于XGBoost原生接口的分类](#基于XGBoost原生接口的分类)
+    * [基于XGBoost原生接口的回归](#基于XGBoost原生接口的回归)
+    * [基于Scikit-learn接口的分类](#基于Scikit-learn接口的分类)
+    * [基于Scikit-learn接口的回归](#基于Scikit-learn接口的回归)
 
+![xgboost-paper](pic/xgboost-paper.png)
 
+![xgboost-dmlc](pic/xgboost-dmlc.jpg)
 
 
 XGBoost是从决策树一步步发展而来的：
@@ -45,9 +88,11 @@ XGBoost本质只过不就是函数空间上的牛顿法（也可理解为自适�
 
 最近引起关注的一个Gradient Boosting算法：XGBoost，在计算速度和准确率上，较GBDT有明显的提升。XGBoost 的全称是eXtreme Gradient Boosting，它是Gradient Boosting Machine的一个c++实现，作者为正在华盛顿大学研究机器学习的大牛陈天奇 。XGBoost最大的特点在于，它能够自动利用CPU的多线程进行并行，同时在算法上加以改进提高了精度。它的处女秀是Kaggle的希格斯子信号识别竞赛，因为出众的效率与较高的预测准确度在比赛论坛中引起了参赛选手的广泛关注。值得我们在GBDT的基础上对其进一步探索学习。
 
-# XGBoost陈天奇论文及官网
+**陈天奇论文及官网**：
 
-[陈天奇论文《XGBoost: A Scalable Tree Boosting System》](https://arxiv.org/pdf/1603.02754v1.pdf)
+![xgboost-paper](pic/xgboost-paper.png)
+
+[陈天奇论文《XGBoost: A Scalable Tree Boosting System》](https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf)
 
 [陈天奇演讲PPT《Introduction to Boosted Trees 》](https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf)
 
@@ -57,15 +102,15 @@ XGBoost本质只过不就是函数空间上的牛顿法（也可理解为自适�
 
 # 模型
 
-给定数据集$$D = \{ (x_i, y_i) \}$$，XGBoost进行additive training，学习K棵树，采用以下函数对样本进行预测：
+给定数据集$$D = \{ (x_i, y_i) \}$$，XGBoost进行additive training，学习$$K$$棵树，采用以下函数对样本进行预测：
 $$
 \hat{y}_i=\phi(x_i)=\sum_{k=1}^Kf_k(x_i),\quad f_k\in F
 $$
-，这里F是假设空间，$$f(x)$$是回归树（CART）：
+，这里$$F$$是假设空间，$$f(x)$$是回归树（CART）：
 $$
 F=\{ f(x)=w_{q(x)} \}\ (q: \mathbb{R}^m\rightarrow T, w\in\mathbb{R}^T)
 $$
-$$q(x)$$表示将样本x分到了某个叶子节点上，w是叶子节点的分数（leaf score），所以，$$w_{q(x)}$$表示回归树对样本的预测值。
+$$q(x)$$表示将样本$$x$$分到了某个叶子节点上，$$w$$是叶子节点的分数（leaf score），所以，$$w_{q(x)}$$表示回归树对样本的预测值。
 
 **例子**：预测一个人是否喜欢玩电脑游戏
 
@@ -86,7 +131,7 @@ $$
 $$
 \Omega(f)=\gamma T+\frac{1}{2}\lambda||w||^2
 $$
-上式中，Ω(f)为正则项，对每棵回归树的复杂度进行了惩罚。
+上式中，$$\Omega(f)$$为正则项，对每棵回归树的复杂度进行了惩罚。
 
 相比原始的GBDT，XGBoost的目标函数多了正则项，使得学习出来的模型更加不容易过拟合。
 
@@ -104,37 +149,29 @@ $$
 
 ## 牛顿法
 
-在看下一节前，有必要讲下牛顿法。
+在看下一节前，有必要讲下[牛顿法](https://blog.csdn.net/qq_41577045/article/details/80343252?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)。
 
-将L(θ^t)在θ^(t-1)处进行二阶泰勒展开：
+将$$L(\theta^t)$$在$$\theta^{t-1}$$处进行二阶泰勒展开：
 $$
 L(\theta^t)\approx L(\theta^{t-1})+L'(\theta^{t-1})\bigtriangleup\theta+L''(\theta^{t-1})\frac{\bigtriangleup\theta^2}{2}
 $$
-为了简化分析，假设参数是标量（即θ只有一维），则可将一阶和二阶导数分别记为g和h：
+为了简化分析，假设参数是标量（即$$\theta$$只有一维），则可将一阶和二阶导数分别记为$$g$$和$$h$$：
 $$
 L(\theta^t)\approx L(\theta^{t-1})+g\bigtriangleup\theta+h\frac{\bigtriangleup\theta^2}{2}
 $$
-要使L(θ^t)极小，即让
-$$
-g\bigtriangleup\theta+h\frac{\bigtriangleup\theta^2}{2}
-$$
-极小，可令：
+要使$$L(\theta^t)$$极小，即让$$g\bigtriangleup\theta+h\frac{\bigtriangleup\theta^2}{2}$$极小，可令：
 $$
 \frac{\partial \left( g\bigtriangleup \theta + h\frac{\bigtriangleup\theta^2}{2} \right)}{\partial \bigtriangleup \theta}=0
 $$
-求得
-$$
-\bigtriangleup\theta=-\frac{g}{h}
-$$
-，故
+求得$$\bigtriangleup\theta=-\frac{g}{h}$$，故
 $$
 \theta^t=\theta^{t-1}+\bigtriangleup\theta=\theta^{t-1}-\frac{g}{h}
 $$
-将参数θ推广到向量形式，迭代公式：
+将参数$$\theta$$推广到向量形式，迭代公式：
 $$
 \theta^t=\theta^{t-1}-H^{-1}g
 $$
-这里H是海森矩阵。
+这里$$H$$是海森矩阵。
 
 怎么理解上面的迭代公式呢？其实很简单，可以理解为**自适应变步长的梯度下降法**。
 
@@ -142,11 +179,11 @@ $$
 $$
 \theta^t=\theta^{t-1}-\alpha L'(\theta^{t-1})=\theta^{t-1}-\alpha g
 $$
-看出来了没？牛顿法的-(1/h)g就相当于梯度下降法的-αg，也就是**牛顿法中的梯度下降的学习率不再是固定的α了，而是自适应的1/h了**，这个1/h是怎么自适应的呢？h是二阶导，h较大的时候，说明函数变化剧烈，所以学习率1/h就会很小；而h较小的时候，说明函数变化不剧烈，几乎就是一条直线，那么学习率1/h就会变大。所以**牛顿法要比梯度下降法收敛迅速**，因为它还获知了函数的二阶导数这一信息。
+看出来了没？牛顿法的$$-(1/h)g$$就相当于梯度下降法的$$-\alpha g$$，也就是**牛顿法中的梯度下降的学习率不再是固定的$$\alpha$$了，而是自适应的$$1/h$$了**，这个$$1/h$$是怎么自适应的呢？$$h$$是二阶导，$$h$$较大的时候，说明函数变化剧烈，所以学习率$$1/h$$就会很小；而$$h$$较小的时候，说明函数变化不剧烈，几乎就是一条直线，那么学习率$$1/h$$就会变大。所以**牛顿法要比梯度下降法收敛迅速**，因为它还获知了函数的二阶导数这一信息。
 
 ## 损失函数的二阶泰勒展开
 
-第t次迭代后，模型的也测等于前t-1次的模型预测加上第t棵树的预测：
+第$$t$$次迭代后，模型的也测等于前$$t-1$$次的模型预测加上第$$t$$棵树的预测：
 $$
 \hat{y}^{(t)}_i=\hat{y}_i^{(t-1)}+f_t(x_i)
 $$
@@ -154,7 +191,7 @@ $$
 $$
 L^{(t)}=\sum_{i=1}^nl(y_i,\hat{y}_i^{(t-1)}+f_t(x_i))+\Omega(f_t)
 $$
-公式中，$$y_i,\hat{y}_i^{(t-1)}$$都已知，模型要学习的只有第t棵树ft。
+公式中，$$y_i,\hat{y}_i^{(t-1)}$$都已知，模型要学习的只有第$$t$$棵树$$f_t$$。
 
 将损失函数在$$\hat{y}_i^{(t-1)}$$处进行二阶泰勒展开：
 $$
@@ -165,7 +202,7 @@ $$
 g_i=\frac{\partial l(y_i, \hat{y}^{(t-1)})}{\partial \hat{y}^{(t-1)}},\quad
 h_i=\frac{\partial^2 l(y_i, \hat{y}^{(t-1)})}{\partial^2 \hat{y}^{(t-1)}}
 $$
-来，答一个小问题，在优化第t棵树时，有多少个$$g_i$$和$$h_i$$要计算？嗯，没错就是各有N个，N是训练样本的数量。如果有10万样本，在优化第t棵树时，就需要计算出个10万个$$g_i$$和$$h_i$$。感觉好像很麻烦是不是？但是你再想一想，**这10万个$$g_i$$之间是不是没有啥关系？是不是可以并行计算呢？**聪明的你想必再一次感受到了，为什么XGBoost会辣么快！因为$$g_i$$和$$h_i$$可以并行求出来。                                                                                                                                                                                                                       
+来，答一个小问题，在优化第$$t$$棵树时，有多少个$$g_i$$和$$h_i$$要计算？嗯，没错就是各有$$N$$个，$$N$$是训练样本的数量。如果有10万样本，在优化第$$t$$棵树时，就需要计算出个10万个$$g_i$$和$$h_i$$。感觉好像很麻烦是不是？但是你再想一想，**这10万个$$g_i$$之间是不是没有啥关系？是不是可以并行计算呢？**聪明的你想必再一次感受到了，为什么XGBoost会辣么快！因为$$g_i$$和$$h_i$$可以并行求出来。
 
 而且，$$g_i$$和$$h_i$$是不依赖于损失函数的形式的，只要这个损失函数二次可微就可以了。这有什么好处呢？好处就是XGBoost可以**支持自定义损失函数**，只需满足二次可微即可。强大了我的哥是不是？
 
@@ -173,11 +210,11 @@ $$
 $$
 \tilde{L}^{(t)}=\sum_{i=1}^n\left[ g_if_t(x_i)+\frac{1}{2}h_if^2_t(x_i) \right]+\Omega(f_t)
 $$
-把$$f_t, \Omega(f_t)$$写成树结构的形式，即把下式带入损失函数中
+把$$f_t, \Omega(f_t)$$写成**树结构的形式**，即把下式带入损失函数中
 $$
 f(x)=w_{q(x)},\quad \Omega(f)=\gamma T+\frac{1}{2}||w||^2
 $$
-**注意：**这里出现了γ和λ，这是XGBoost自己定义的，在使用XGBoost时，你可以设定它们的值，显然，γ越大，表示越希望获得结构简单的树，因为此时对较多叶子节点的树的惩罚越大。λ越大也是越希望获得结构简单的树。为什么XGBoost要选择这样的正则化项？很简单，好使！效果好才是真的好。
+**注意：**这里出现了$$\gamma$$和$$\lambda$$，这是XGBoost自己定义的，在使用XGBoost时，你可以设定它们的值，显然，$$\gamma$$越大，表示越希望获得结构简单的树，因为此时对较多叶子节点的树的惩罚越大。$$\lambda$$越大也是越希望获得结构简单的树。为什么XGBoost要选择这样的正则化项？很简单，好使！效果好才是真的好。
 
 得到：
 $$
@@ -188,11 +225,11 @@ $$
 $$
 注意上式最后一行的**左边是对样本的累加**，**右边是对叶节点的累加**，这该怎么**统一**起来？
 
-定义每个叶节点$$j$$上的样本集合为（这里需要停一停，这里很重要，但是也不难理解，小学知识，认真体会下。$$I_j$$代表什么？它代表一个集合，集合中每个值代表一个训练样本的序号，整个集合就是被第t棵CART树分到了第j个叶子节点上的训练样本。）
+定义每个叶节点$$j$$上的样本集合为（这里需要停一停，这里很重要，但是也不难理解，小学知识，认真体会下。$$I_j$$代表什么？它代表一个集合，即被分到第$$j$$颗树的所有样本集合，集合中每个值代表一个训练样本的序号，整个集合就是被第$$t$$棵CART树分到了第$$j$$个叶子节点上的训练样本。）
 $$
 I_j=\{ i|q(x_i)=j \}
 $$
-需要解释下这个$$w_{q(x)}$$的定义，首先，一棵树有T个叶子节点，这T个叶子节点的值组成了一个T维向量w，$$q(x)$$是一个映射，用来将样本映射成1到T的某个值，也就是把它分到某个叶子节点，**$$q(x)$$其实就代表了CART树的结构。$$w_{q(x)}$$自然就是这棵树对样本x的预测值了。**
+需要解释下这个$$w_{q(x)}$$的定义，首先，一棵树有$$T$$个叶子节点，这$$T$$个叶子节点的值组成了一个$$T$$维向量$$w$$，$$q(x)$$是一个映射，用来将样本映射成1到$$T$$的某个值，也就是把它分到某个叶子节点，**$$q(x)$$其实就代表了CART树的结构。$$w_{q(x)}$$自然就是这棵树对样本$$x$$的预测值了。**
 
 则损失函数可以写成按**叶节点**累加的形式：
 $$
@@ -202,7 +239,7 @@ $$
 &=\sum_{j=1}^T\left[ G_jw_j+\frac{1}{2}\left(H_j+\lambda\right)w^2_j \right]+\gamma T\\
 \end{aligned}
 $$
-**这里是XGBoost最精髓的部分，它将基于样本的loss转化为了基于叶子节点的loss，即完成了参数的转变，这样才能 将loss部分和正则部分都转为叶子节点T的目标方程**。
+**这里是XGBoost最精髓的部分，它将基于样本的loss转化为了基于叶子节点的loss，即完成了参数的转变，这样才能将loss部分和正则部分都转为叶子节点$$T$$的目标方程**。
 
 ## 损失函数求导得最优值
 
@@ -224,11 +261,13 @@ $$
 $$
 \tilde{L}^*=-\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{H_j+\lambda}+\gamma T
 $$
-$$\tilde{L}^*$$代表了什么呢？它表示了这棵树的结构有多好，值越小，代表这样结构越好！也就是说，它是衡量第t棵CART树的结构好坏的标准。注意~注意~注意~，这个值仅仅是用来衡量结构的好坏的，与叶子节点的值可是无关的。为什么？请再仔细看一下$$\tilde{L}^*$$的推导过程。$$\tilde{L}^*$$只和$$G_j$$和$$H_j$$和T有关，而它们又只和树的结构$$q(x)$$有关，与叶子节点的值可是半毛关系没有。如下图所示：
+$$\tilde{L}^*$$代表了什么呢？它表示了**这棵树的结构有多好**，值越小，代表这样结构越好！也就是说，它是衡量第$$t$$棵CART树的结构好坏的标准。注意~注意~注意~，这个值仅仅是用来衡量结构的好坏的，与叶子节点的值可是无关的。为什么？请再仔细看一下$$\tilde{L}^*$$的推导过程。$$\tilde{L}^*$$只和$$G_j$$和$$H_j$$和$$T$$有关，而它们又只和树的结构$$q(x)$$有关，与叶子节点的值可是半毛关系没有。
+
+上式能视作衡量函数来测量树结构$$q$$的质量，类似不纯度（基尼系数）的**衡量指标**，来衡量一棵树的优劣程度。下图展示了如何计算一棵树的分值：
 
 ![Gi-Hi](pic/Gi-Hi.png)
 
-这里，我们对$$w^{*}_j$$给出一个直觉的解释，以便能获得感性的认识。我们假设分到 j 这个叶子节点上的样本只有一个。那么，$$w^{*}_j$$就变成如下这个样子：
+这里，我们对$$w^{*}_j$$给出一个直觉的解释，以便能获得感性的认识。我们假设分到$$j$$这个叶子节点上的样本只有一个。那么，$$w^{*}_j$$就变成如下这个样子：
 $$
 w_j^*=\left(\frac{1}{h_j+\lambda}\right)\cdot(-g_j)
 $$
@@ -246,7 +285,7 @@ $$
 $$
 **，而GBDT下一棵树的输入是$$(x_i,-G_i)$$。但是XGBoost已经把这种梯度带入到CART分裂目标和节点权重上去了，表现在其叶子节点的值是$$-G_j/(H_j+\lambda)$$，而非对$$y_i$$的拟合。**
 
-**也就是说，XGBoost不刻意拟合任何数值，它在第t步只是寻找一种能使当前损失最小的树。因此它不像adaboost（拟合带权值样本集）和gbdt（拟合负梯度）一样以拟合为核心，而是以使损失函数最低为核心。它的方法就是通过分裂节点，使得新树的gain大于原来树的gain，从而降低损失函数，而不是数据拟合。**
+**也就是说，XGBoost不刻意拟合任何数值，它在第$$t$$步只是寻找一种能使当前损失最小的树。因此它不像adaboost（拟合带权值样本集）和gbdt（拟合负梯度）一样以拟合为核心，而是以使损失函数最低为核心。它的方法就是通过分裂节点，使得新树的gain大于原来树的gain，从而降低损失函数，而不是数据拟合。**
 
 在目标函数是二分类log loss损失函数下，这里给出一阶导$$g_i$$和二阶导$$g_i$$的推导：
 $$
@@ -276,7 +315,7 @@ $$
 
 # 优化算法
 
-当回归树的结构确定时，我们前面已经推导出其最优的叶节点分数以及对应的最小损失值，问题是怎么确定树的结构？
+当回归树的结构确定时，我们前面已经推导出其最优的叶节点分数以及对应的最小损失值，问题是**怎么确定树的结构**？
 
 * 暴力枚举所有的树结构，选择损失值最小的—NP难问题
 * **贪心法，每次尝试分裂一个叶节点，计算分裂前后的增益，选择增益最大的**
@@ -304,62 +343,86 @@ $$
 $$
 衡量了每个叶子结点对总体损失的贡献，我们希望损失越小越好，则标红部分的值越大越好。
 
+一棵树在该衡量指标下分值越低，说明这个树的结构越好（表示的是损失）。训练数据可能有很多特征，构建一棵树可能有许多种不同的构建形式，我们不可能枚举所有可能的树结构$$q$$来一一计算它的分值。所以主要采用贪心算法来解决这个问题，贪心算法从一个单独树叶开始，迭代地增加分支，直到最后停止。（如何更快地生成树是关键）
+
 因此，对一个叶子结点进行分裂，分裂前后的增益定义为：
 $$
-\text{Gain}_{\text{split}}=\frac{1}{2}\left[ \frac{(\sum_{i\in I_L} g_i)^2}{\sum_{i\in I_L} h_i+\lambda} + \frac{(\sum_{i\in I_R} g_i)^2}{\sum_{i\in I_R} h_i+\lambda} - \frac{(\sum_{i\in I} g_i)^2}{\sum_{i\in I} h_i+\lambda} \right]-\gamma
+\begin{aligned}
+&\text{Gain}_{\text{split}}\\
+=&\tilde{L}^*_{pre\_split}-\tilde{L}^*_{aft\_split}\\
+=&\left(-\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{H_j+\lambda}+\gamma\right)-\left(-\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{H_j+\lambda}-\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{H_j+\lambda}+2\gamma\right)\\
+=&\frac{1}{2}\left[ \frac{(\sum_{i\in I_L} g_i)^2}{\sum_{i\in I_L} h_i+\lambda} + \frac{(\sum_{i\in I_R} g_i)^2}{\sum_{i\in I_R} h_i+\lambda} - \frac{(\sum_{i\in I} g_i)^2}{\sum_{i\in I} h_i+\lambda} \right]-\gamma
+\end{aligned}
 $$
-Gain的值越大，分裂后损失函数减小越多。所以当对一个叶节点分割时，计算所有候选(feature, value)对应的Gain，选取Gain最大的进行分割。
+这个公式的计算结果，通常用于在实践中评估候选分裂节点是不是应该分裂的划分依据，我们尽量找到使之最大的特征值划分点。
 
-这个Gain实际上就是单节点的$$\tilde{L}^*$$减去切分后的两个节点的树$$\tilde{L}^*$$，Gain如果是正的，并且值越大，表示切分后$$\tilde{L}^*$$越小于单节点的$$\tilde{L}^*$$，就越值得切分。同时，我们还可以观察到，Gain的左半部分如果小于右侧的$$\gamma$$，则Gain就是负的，表明切分后$$\tilde{L}^*$$反而变大了。$$\gamma$$在这里实际上是一个临界值，它的值越大，表示我们对切分后$$\tilde{L}^*$$下降幅度要求越严。这个值也是可以在xgboost中设定的。
+$$Gain$$的值越大，分裂后损失函数减小越多。所以当对一个叶节点分割时，计算所有候选(feature, value)对应的$$Gain$$，选取$$Gain$$最大的进行分割。
+
+这个$$Gain$$实际上就是单节点的$$\tilde{L}^*$$减去切分后的两个节点的树$$\tilde{L}^*$$，$$Gain$$如果是正的，并且值越大，表示切分后$$\tilde{L}^*$$越小于单节点的$$\tilde{L}^*$$，就越值得切分。**同时**，我们还可以观察到，$$Gain$$的左半部分如果小于右侧的$$\gamma$$，则$$Gain$$就是负的，表明切分后$$\tilde{L}^*$$反而变大了。$$\gamma$$在这里实际上是一个临界值，它的值越大，表示我们对切分后$$\tilde{L}^*$$下降幅度要求越严。这个值也是可以在xgboost中设定的。
 
 扫描结束后，我们就可以确定是否切分，如果切分，对切分出来的两个节点，递归地调用这个切分过程，我们就能获得一个相对较好的树结构。
 
-注意：xgboost的切分操作和普通的决策树切分过程是不一样的。普通的决策树在切分的时候并不考虑树的复杂度，而依赖后续的剪枝操作来控制。xgboost在切分的时候就已经考虑了树的复杂度，就是那个γ参数。所以，它不需要进行单独的剪枝操作。
+注意：xgboost的切分操作和普通的决策树切分过程是不一样的。普通的决策树在切分的时候并不考虑树的复杂度，而依赖后续的剪枝操作来控制。**xgboost在切分的时候就已经考虑了树的复杂度，就是那个$$\gamma$$参数**。所以，它不需要进行单独的剪枝操作。
 
-最优的树结构找到后，确定最优的叶子节点就很容易了。我们成功地找出了第t棵树！
+为了限制树的生长，我们可以加入阈值，当增益大于阈值时才让节点分裂，上式中的$$\gamma$$即阈值，它是正则项里叶子节点数$$T$$的系数，所以xgboost在优化目标函数的同时相当于做了**预剪枝**。另外，上式中还有一个系数$$\lambda$$，是正则项里leaf score的L2模平方的系数，对leaf score做了平滑，也起到了**防止过拟合**的作用，这个是传统GBDT里不具备的特性。
+
+最优的树结构找到后，确定最优的叶子节点就很容易了。我们成功地找出了第$$t$$棵树！
 
 ## 树结点分裂方法（split finding）
 
-**注意：**xgboost的切分操作和普通的决策树切分过程是不一样的。普通的决策树在切分的时候并不考虑树的复杂度，而依赖后续的剪枝操作来控制。xgboost在切分的时候就已经考虑了树的复杂度，就是那个Gain(split)中的γ参数。所以，它不需要进行单独的剪枝操作。
+**注意：**xgboost的切分操作和普通的决策树切分过程是不一样的。普通的决策树在切分的时候并不考虑树的复杂度，而依赖后续的剪枝操作来控制。xgboost在切分的时候就已经考虑了树的复杂度，就是那个$$Gain_{split}$$中的$$\gamma$$参数。所以，它不需要进行单独的剪枝操作。
 
-### 精确算法
+### 暴力枚举（Basic Exact Greedy Algorithm）
 
-遍历所有特征的所有可能的分割点，计算gain值，选取值最大的(feature, value)去分割
+在树学习中，一个关键问题是**如何找到每一个特征上的分裂点**。为了找到最佳分裂节点，分裂算法枚举特征上所有可能的分裂点，然后计算得分，这种算法称为Exact Greedy Algorithm，单机版本的XGBoost支持这种Exact Greedy Algorithm，算法如下所示：
+
+遍历所有特征的所有可能的分割点，计算$$gain$$值，选取值最大的(feature, value)去分割
 
 ![exact-greedy-algorithm-for-split-finding](pic/exact-greedy-algorithm-for-split-finding.png)
 
-### 近似算法
+为了有效率的找到最佳分裂节点，算法必须先将该特征的所有取值进行排序，之后按顺序取分裂节点计算$$L_{s p l i t}$$。时间复杂度是$$O(N_u)$$，$$N_u$$是这个特征不同取值的个数。
 
-对于每个特征，只考察分位点，减少计算复杂度
+### 近似算法（Approximate Algo for Split Finding）
 
-1. Global：学习每棵树前，提出候选切分点
-2. Local：每次分列前，重新提出候选切分点
+Exact Greedy Algorithm使用贪婪算法非常有效地找到分裂节点，但是当数据量很大时，数据不可能一次性的全部读入到内存中，或者在分布式计算中，这样不可能事先对所有值进行排序，且无法使用所有数据来计算分裂节点之后的树结构得分。为解决这个问题，近似算法被设计出来。近似算法首先按照特征取值中统计分布的一些百分位点确定一些候选分裂点，然后算法将连续的值映射到buckets中，接着汇总统计数据，并根据聚合统计数据在候选节点中找到最佳节点。
+
+XGBoost采用的近似算法对于每个特征，只考察分位点，减少复杂度，主要有两个变体：
+
+- Global variant：学习每棵树前就提出候选切分点，并在每次分裂时都采用这种分割
+- Local variant：每次分裂前将重新提出候选切分点
+
+全局划分建议比局部划分建议需要更少的步骤，但需要更多的划分候选点才能达到局部划分建议的准确率。如下图所示：
+
+![global-local-variant](pic/global-local-variant.jpg)
+
+$$1 / \epsilon$$表示buckets数，在同等准确率的情况global比local需要更多的候选点。
+
+作者的系统实现了贪婪算法，也可以选择全局划分和局部划分来实现近似算法。
 
 ![approximate-algorithm-for-split-finding](pic/approximate-algorithm-for-split-finding.png)
 
-
-
-**近似算法举例**：三分位数
+具体算法如上，这里按照三分位点举例：
 
 ![approximate-algorithm-examplee](pic/approximate-algorithm-examplee.png)
+
+找到其中最大的信息增量的划分方法：
 $$
 \begin{aligned}
-\text{Gain}=\text{max}\{ \text{Gain}, &\frac{G_1^2}{H_1+\lambda}+\frac{G_{23}^2}{H_{23}+\lambda} - \frac{G_{123}^2}{H_{123}+\lambda}-\gamma,\\
+\text{Gain}=\text{max}\{ 
+&\text{Gain}, \\
+&\frac{G_1^2}{H_1+\lambda}+\frac{G_{23}^2}{H_{23}+\lambda} - \frac{G_{123}^2}{H_{123}+\lambda}-\gamma,\\
 &\frac{G_{12}^2}{H_{12}+\lambda}+\frac{G_3^2}{H_3+\lambda} - \frac{G_{123}^2}{H_{123}+\lambda}-\gamma
 \}
 \end{aligned}
 $$
 
-### 结点分裂时多机并行
+然而，这种划分分位点的方法在实际中可能效果不是很好，所以XGBoost实际采用的是加权分位数的方法做近似划分算法。
 
-节点分裂的时候是按照哪个顺序来的，比如第一次分裂后有两个叶子节点，先裂哪一个？ 
-答案：呃，同一层级的（多机）并行，确立如何分裂或者不分裂成为叶子节点。
-
-### 加权分位点
+### 加权分位点（Weighted Quantile Sketch）
 
 **带权重直方图算法**
 
-主要用于近似算法中分位点的计算。
+由于用暴力枚举来划分分位点的方法在实际中可能效果不是很好，为了优化该问题，XGBoost实际采用的是一种新颖的分布式加权分位点算法，该算法的优点是解决了带权重的直方图算法问题，以及有理论保证。主要用于近似算法中分位点的计算。
 
 实际上，XGBoost不是简单地按照样本个数进行分类，而是以二阶导数值作为权重。
 
@@ -371,24 +434,26 @@ $$
 $$
 D_k=\{(x_{1k},h_1),(x_{2k},h_2),..,(x_{nk},h_n)\}
 $$
-表示所有样本的第k个特征值及二阶导数。
+表示所有样本的第$$k$$个特征值及二阶导数。
 
 ![approximate-algorithm-second-order-weights-select-split](pic/approximate-algorithm-second-order-weights-select-split.png)
 
-则可以定义一个排序函数如下：
+则可以定义一个排序函数如下，该Rank函数的输入为某个特征值$$z$$，计算的是该特征所有可取值中小于$$z$$的特征值的总权重占总的所有可取值的总权重和的比例，输出为一个比例值，类似于概率密度函数$$f(x)$$的积分$$F(x)$$，变化范围由0到1。
 $$
 \begin{aligned}
-r_k:\mathbb{R}\rightarrow [0,+\infty)\ \text{as}\\
-r_k(z)=\frac{1}{\sum_{(x,h)\in D_k}h}\sum_{(x,h)\in D_k,x<z}h
+&r_k:\mathbb{R}\rightarrow [0,+\infty)\ \text{as}\\
+&r_k(z)=\frac{1}{\sum_{(x,h)\in D_k}h}\sum_{(x,h)\in D_k,x<z}h
 \end{aligned}
 $$
-希望得到的分位点满足如下条件：
+该函数表示特征值$$k$$小于$$z$$的实例比例。目标就是寻找候选分裂点集$$\{s_{k 1}, s_{k 2}, \dots s_{k l}\}$$。希望得到的分位点满足如下条件：
 $$
 |r_k(s_{k,j})-r_k(s_{k,j+1})|<\epsilon,\ s_{k1}=\mathop{\text{min}}_{i}\ x_{ik},\ s_{kl}=\mathop{\text{max}}_{i}\ x_{ik}
 $$
-这意味着大概有1/ε个分位点。
+$$s_{k1}$$是特征$$k$$的取值中最小的值$$x_{ik}$$，$$s_{kl}$$是特征$$k$$的取值中最大的值$$x_{ik}$$，这是分位数缩略图要求**需要保留原序列中的最小值和最大值**。这里$$\epsilon$$是近似因子或者说是扫描步幅，按照步幅$$\epsilon$$挑选出特征$$k$$的取值候选点，组成候选点集。这意味着大概有$$1/\epsilon$$个分位点。
 
-**为什么每个数据点都用二阶代数hi作为权重呢？**（这里不太理解，哪里用hi做权重了。。。）
+**二阶导数h为权重的解释**：
+
+这里每个数据点的权重$$h_i$$，从图上看可能更明显一些。**为什么每个数据点都用二阶代数$$h_i$$作为权重进行加权分位呢？**
 
 因为损失函数还可以写成带权重的形式：
 $$
@@ -397,90 +462,133 @@ $$
 &=\sum_{i=1^n}\frac{1}{2}h_i(f_t(x_i)-g_i/h_i)^2+\Omega(f_t)+\text{Constant}
 \end{aligned}
 $$
-上式相当带权重时的损失函数，权重为hi。可以看出hi有对loss加权的作用。
+上式就是一个加权平方误差，权重为$$h_i$$，label 为$$-\frac{g_i}{h_i}$$。可以看出$$h_i$$有对loss加权的作用，所以可以将特征$$k$$的取值权重看成对应的$$h_{i}$$。
 
-为了优化该问题，本文还提出了一种新颖的分布式加权分位点算法，该算法的优点是解决了带权重的直方图算法问题，以及有理论保证。
+如果损失函数是square loss，即$$Loss(y,\hat{y})=(y−\hat{y})^2$$，则$$h=2$$，那么实际上是不带权。 如果损失函数是log loss，则$$h=pred\cdot (1−pred)$$，这是个开口朝下的一元二次函数，所以最大值在0.5。当$$pred$$在0.5附近，这个值是非常不稳定的，很容易误判，$$h$$作为权重则因此变大，那么直方图划分，这部分就会被切分的更细：
 
-## 稀疏值处理
+![approximate-algorithm-second-order-weights-select-split-2](pic/approximate-algorithm-second-order-weights-select-split-2.png)
 
-稀疏值是指：缺失，类别one-hot编码，大量0值。当特征出现缺失值时，XGBoost可以学习出默认的节点分裂方向。
+当数据量非常大时，也需要使用quantile summary的方式来近似计算分位点。
 
-XGBoost还特别设计了针对稀疏数据的算法，假设样本的第i个特征缺失时，无法利用该特征对样本进行划分，这里的做法是将该样本默认地分到指定的子节点，至于具体地分到哪个节点还需要下面的算法来计算：
+在xgboost中，需要根据特征值以及样本的权重分布，近似计算特征值的分位点，实现近似分割算法。近似计算特征值分位点的算法称为：weighted quantile sketch，该算法满足quantile summary通常的两个操作：merge和prune。
+
+### 结点分裂时多机并行
+
+节点分裂的时候是按照哪个顺序来的，比如第一次分裂后有两个叶子节点，先裂哪一个？ 
+答案：呃，**同一层级**的（多机）并行，确立如何分裂或者不分裂成为叶子节点。
+
+## 稀疏感知分割（缺失值处理）
+
+在很多现实业务数据中，训练数据$$x$$可能很稀疏。造成这个问题得原因可能是：
+
+1. 存在大量缺失值
+2. 太多0值
+3. one-hot encoding 所致
+
+算法能够处理稀疏模式数据非常重要，XGBoost 在树节点中**添加默认划分方向**的方法来解决这个问题，如下图所示：
+
+![missing-value](pic/missing-value.jpg)
+
+XGBoost还特别设计了针对稀疏数据的算法，假设样本的第$$i$$个特征缺失时，无法利用该特征对样本进行划分，系统将实例分到默认方向的叶子节点。每个分支都有两个默认方向，最佳的默认方向可以从训练数据中学习到。算法如下：
 
 ![sparsity-aware-spilit-finding](pic/sparsity-aware-spilit-finding.png)
 
 该算法的主要思想是：**分别假设特征缺失的样本属于右子树和左子树，而且只在不缺失的样本上迭代，分别计算缺失样本属于右子树和左子树的增益，选择增益最大的方向为缺失数据的默认方向**。
 
-# XGBoost的其他特性
-
-注：具体请查看陈天奇的论文。这里只是概述，待后续详细研究补充，现在我没有时间，也缺少实践。
-
-* 行抽样（row sample）
-
-
-* 列抽样（column sample）
-
-
-* 借鉴随机森林
-
-
-* Shrinkage（缩减），即学习速率
-
-
-* 将学习速率调小，迭代次数增多，有正则化作用
-
-
-* 支持自定义损失函数（需二阶可导）
-
-  ![user-define-loss-function-example](pic/user-define-loss-function-example.png)
-
 # XGBoost的系统设计
 
-注：具体请查看陈天奇的论文。这里只是概述，待后续详细研究补充，现在我没有时间，也缺少实践。
+XGBoost 的快还体现在良好的系统设计，体现在几个方面：
 
-## Column Block for Parallel Learning
+## 分块并行（Column Block for Parallel Learning）
 
-算法中最耗时的部分就是预排序，为了节省排序的时间，XGBoost将数据存在内存单元block中，同时在block采用CSC 格式存放(Compressed Column format)，每一列(一个属性列)均升序存放，这样，一次读入数据并排好序后，以后均可使用。在精确贪心算法中，将所有数据均导入内存，算法只要在数据中线性扫描已经预排序过的特征就可以。对于近似算法，可以用多个block(Multiple blocks)分别存储不同的样本集，多个block可以并行计算，
-重要的是，由于将数据按列存储，可以同时访问所有列，那么可以对所有属性同时执行split finding算法，从而并行化split finding.
+在建树的过程中，最耗时是找最优的切分点，为了节省排序的时间，XGBoost将数据存在内存单元block中，同时在block采用CSC 格式存放（Compressed Column format），每一列（一个属性列）均升序存放，这样，一次读入数据并排好序后，后面节点分裂时直接根据索引得到梯度信息，大大减少计算量。在精确贪心算法中，将所有数据均导入内存，算法只要在数据中线性扫描已经预排序过的特征就可以。对于近似算法，可以用多个block（Multiple blocks）分别存储不同的样本集，多个block可以并行计算，
+
+重要的是，由于这种块结构将数据按列存储，可以同时访问所有列，那么可以对所有属性同时执行split finding算法，从而并行化split finding.
 
 * 特征预排序，以column block的结构存于内存中
-* 存储样本索引（instance indices）
-* block中的数据以稀疏格式（CSC）存储
+* 每个特征会存储指向样本梯度统计值的索引，方便计算一阶导和二阶导数值（instance indices）
+* block 的每个块结构中都采用了稀疏矩阵存储格式（Compressed Sparse Columns Format，CSC）进行存储，一个 block 存储一个或多个特征值
+* 缺失特征值将不进行排序
+* 对于列的 blocks，并行的 split finding 算法很容实现
+
+这种块结构存储的特征之间相互独立，方便计算机进行并行计算。在对节点进行分裂时需要选择增益最大的特征作为分裂，这时各个特征的增益计算可以同时进行，这也是 XGBoost 能够实现分布式或者多线程计算的原因。
 
 这个结构加速split finding的过程，只需要在建树前排序一次，后面节点分裂时直接根据索引得到梯度信息。
 
 ![column-block](pic/column-block.png)
 
-## Cache Aware Access
+![column-block-2](pic/column-block-2.png)
 
-由于样本按特征进行了预排序，样本对应的统计量（一阶和二阶梯度）需要根据行索引来查找，这导致了内存的不连续访问，容易导致cpu cache命中率降低。（这块没太搞懂）
+## 缓存优化（Cache Aware Access）
 
-* column block按特征大小顺序存储，相应的样本的梯度信息是分散的，造成内存的不连续访问，降低CPU cache命中率
+虽然Column Block的设计可以减少节点分裂时的计算量，但其按特征大小顺序存储，相应的样本的梯度信息（一阶和二阶梯度）是分散的，造成内存的不连续访问，降低CPU cache命中率。解决办法是：为每个线程分配一个连续的缓存区，将需要的梯度信息存放在缓冲区中，这样就是实现了非连续空间到连续空间的转换，提高了算法效率。
 
+- 缓存优化方法
+  - 预取数据到buffer中（非连续->连续），再统计梯度信息
+  - 适当调整块大小，也可以有助于缓存优化。
 
-* 缓存优化方法
-  * 预取数据到buffer中（非连续->连续），再统计梯度信息
-  * 调节块的大小
+## 核外块计算（Blocks for Out-of-core Computation）
 
-## Blocks for Out-of-core Computation
+当数据量过大时无法将数据全部加载到内存中，只能先将无法加载到内存中的数据暂存到硬盘中，并分成多个block存在磁盘上，直到需要时再进行加载计算，而这种操作必然涉及到因内存与硬盘速度不同而造成的资源浪费和性能瓶颈。
 
-（这块没太搞懂）
+为了解决这个问题，XGBoost 独立一个线程专门用于从硬盘读入数据，以实现处理数据和读入数据同时进行。但是由于磁盘IO速度太慢，通常跟不上计算的速度。所以，XGBoost还采用了下面两种方法优化速度和存储：
 
-为了更好地利用计算机的磁盘空间，对于不能一次性导入到内存的数据（数据比较大），我们将数据分成多个block存在磁盘上，在计算过程中，用另外的线程读取数据，但是由于磁盘IO速度太慢，通常更不上计算的速度。所以，我们采用了下面两种方法有优化速度和存储：
+- **块压缩（Block compression）：**对 Block 进行按列压缩，并在读取时进行解压。具体是将block按列压缩，对于行索引，只保存第一个索引值，然后只保存该数据与第一个索引值之差（offset），一共用16个bits来保存offset,因此，一个block一般有2^16个样本。
+- **块拆分（Block sharding）：**将每个块存储到不同的磁盘中，从多个磁盘读取可以增加吞吐量。
 
-* Block compression
+## XGBoost的其他特性
 
-  将block按列压缩，对于行索引，只保存第一个索引值，然后只保存该数据与第一个索引值之差（offset），一共用16个bits来保存offset,因此，一个block一般有2^16个样本。
+- 行抽样（row sample）
 
-* Block sharding
+  子采样：每轮计算可以不使用全部样本，使算法更加保守
 
-  提高磁盘的吞吐量
+- 列抽样（column sample）
 
-# XGBoost和GradientBoost的比较
+  XGBoost 借鉴了随机森林的做法，支持列抽样，不仅能降低过拟合，还能减少计算。训练的时候只用一部分特征（不考虑剩余的block块即可）
+
+- Shrinkage（缩减），即学习速率
+
+  XGBoost在进行完一次迭代后，会将叶子节点的权重乘上该系数，主要是为了削弱每棵树的影响，让后面有更大的学习空间；将学习速率调小，迭代次数增多，有正则化作用
+
+- 支持自定义损失函数（需二阶可导）
+
+  ![user-define-loss-function-example](/Users/momo/Desktop/machine-learning-notes/content/machine-learning/ensemble-learning/pic/user-define-loss-function-example.png)
+
+#XGBoost总结
+
+## XGBoost优点
+
+1. 利用了二阶梯度来对节点进行划分，相对其他 GBM 来说，精度更加高。
+2. 利用局部近似算法对分裂节点的贪心算法优化，取适当的 eps 时，可以保持算法的性能且提高算法的运算速度。
+3. 在损失函数中加入了 L1/L2 项，控制模型的复杂度，提高模型的鲁棒性。
+4. 提供并行计算能力，主要是在树节点求不同的候选的分裂点的 Gain Infomation（分裂后，损失函数的差值）。
+5. 可以找到精确的划分条件
+6. 精度更高：GBDT 只用到一阶泰勒展开，而 XGBoost 对损失函数进行了二阶泰勒展开。XGBoost 引入二阶导一方面是为了增加精度，另一方面也是为了能够自定义损失函数，二阶泰勒展开可以近似大量损失函数；
+7. 灵活性更强：GBDT 以 CART 作为基分类器，XGBoost 不仅支持 CART 还支持线性分类器，（使用线性分类器的 XGBoost 相当于带 L1 和 L2 正则化项的逻辑斯蒂回归（分类问题）或者线性回归（回归问题））。此外，XGBoost 工具支持自定义损失函数，只需函数支持一阶和二阶求导；
+8. 正则化：XGBoost 在目标函数中加入了正则项，用于控制模型的复杂度。正则项里包含了树的叶子节点个数、叶子节点权重的 L2 范式。正则项降低了模型的方差，使学习出来的模型更加简单，有助于防止过拟合；
+9. Shrinkage（缩减）：相当于学习速率。XGBoost 在进行完一次迭代后，会将叶子节点的权重乘上该系数，主要是为了削弱每棵树的影响，让后面有更大的学习空间；
+10. 列抽样：XGBoost 借鉴了随机森林的做法，支持列抽样，不仅能降低过拟合，还能减少计算；
+11. 缺失值处理：XGBoost 采用的稀疏感知算法极大的加快了节点分裂的速度；
+12. 可以并行化操作：块结构可以很好的支持并行计算。
+
+## XGBoost缺点
+
+1. 每次迭代训练时需要读取整个数据集，耗时耗内存；每轮迭代时，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。
+2. 使用 Basic Exact Greedy Algorithm 计算最佳分裂节点时需要预先将特征的取值进行排序，排序之后为了保存排序的结果，费时又费内存；需要pre-sorted，这个会耗掉很多的内存空间（2 * #data * # features）。
+3. 计算分裂节点时需要遍历每一个候选节点，然后计算分裂之后的信息增益，费时；数据分割点上，由于 XGBoost 对不同的数据特征使用 pre-sorted 算法而不同特征其排序顺序是不同的，所以分裂时需要对每个特征单独做依次分割，遍历次数为 (#data * #features) 来将数据分裂到左右子节点上。
+4. 由于 pre-sorted 处理数据，在寻找特征分裂点时（level-wise），会产生大量的cache随机访问。生成决策树是 level-wise 级别的，也就是预先设置好树的深度之后，每一颗树都需要生长到设置的那个深度，这样有些树在某一次分裂之后效果甚至没有提升但仍然会继续划分树枝，然后再次划分….之后就是无用功了，耗时。
+5. 尽管使用了局部近似计算，但是处理粒度还是太细了。
+6. 计算量巨大
+7. 内存占用巨大
+8. 易产生过拟合
+9. 虽然利用预排序和近似算法可以降低寻找最佳分裂点的计算量，但在节点分裂过程中仍需要遍历数据集；
+10. 预排序过程的空间复杂度过高，不仅需要存储特征值，还需要存储特征对应样本的梯度统计值的索引，相当于消耗了两倍的内存。
+
+## XGBoost和GradientBoost的比较
 
 首先**XGBoost**是Gradient Boosting的一种高效系统实现，只是陈天奇写的一个工具包，本身并不是一种单一算法。XGBoost可以看作是对GradientBoost的优化。其原理还是基于GradientBoost，它的创新之处是用了**二阶导数**和**正则项**。
 
-GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度逐渐最小化Object目标；XGBoost版本通过使得当前Object目标最小化，构造出回归树f，更直接。两者都是求得f对历史累积F进行修正。
+GBDT将树$$f$$类比于参数，通过$$f$$对负梯度进行回归，通过负梯度逐渐最小化Object目标；XGBoost版本通过使得当前Object目标最小化，构造出回归树$$f$$，更直接。两者都是求得$$f$$对历史累积$$F$$进行修正。
 
 下面具体地进行比较：
 
@@ -496,13 +604,13 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
     GBDT直接拿一阶导数来作为下一棵决策树的预测值，进行学习（具体树怎么学习不负责）；XGBoost则是拿一阶和二阶导数直接作为下一棵决策树的增益score指导树的学习。
 
-    GBDT主要对loss L(y,F)关于F求梯度，利用回归树拟合该负梯度；XGBOOST主要对loss L(y,F)二阶泰勒展开，然后求解析解，以解析解obj作为标准，贪心搜索split树是否obj更优。
+    GBDT主要对loss $$L(y,F)$$关于$$F$$求梯度，利用回归树拟合该负梯度；XGBOOST主要对loss $$L(y,F)$$二阶泰勒展开，然后求解析解，以解析解$$obj$$作为标准，贪心搜索split树是否$$obj$$更优。
 
     之前的GBM模型（GBDT、GBRank、LambdaMART等）都把Loss加在的树间而未改动单棵CART内部逻辑（或者说无伤大雅懒得改），XGBoost因为正则化要考虑优化树复杂度的原因，把Loss带入到CART分裂目标和节点权重上去了（或者说把树内和树间的优化目标统一了）
 
 - 优化算法
 
-  - GBDT使用了square loss的一阶求导，并且没有树本身因素的正则化部分。XGBoost使用了square loss的一阶和二阶求导，使用了树叶子节点（T）和叶子权重（w平方）作为正则化。**这里是XGBoost最精髓的部分，它将基于样本的loss转化为了基于叶子节点的loss，即完成了参数的转变，这样才能 将loss部分和正则部分都转为叶子节点T的目标方程**。
+  - GBDT使用了square loss的一阶求导，并且没有树本身因素的正则化部分。XGBoost使用了square loss的一阶和二阶求导，使用了树叶子节点（T）和叶子权重（w平方）作为正则化。**这里是XGBoost最精髓的部分，它将基于样本的loss转化为了基于叶子节点的loss，即完成了参数的转变，这样才能 将loss部分和正则部分都转为叶子节点$$T$$的目标方程**。
 
     传统GBDT在优化时只用到一阶导数信息，**XGBoost则对损失函数进行了二阶泰勒展开，同时用到了一阶和二阶导数**。顺便提一下，XGBoost工具支持自定义代价函数，只要函数可一阶和二阶求导
 
@@ -522,15 +630,1021 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
     XGBoost借鉴了随机森林的做法，支持列抽样，不仅能降低过拟合，还能减少计算，这也是XGBoost异于传统GBDT的一个特性
 
-  - XGBoost对于特征的值有**缺失**的样本，XGBoost可以自动学习出它的分裂方向
+  - XGBoost对于特征值有**缺失**的样本，XGBoost可以自动学习出它的分裂方向
 
   - XGBoost工具**支持并行**
 
-    boosting不是一种串行的结构吗?怎么并行的？注意XGBoost的并行不是tree粒度的并行，XGBoost也是一次迭代完才能进行下一次迭代的（第t次迭代的代价函数里包含了前面t-1次迭代的预测值）。XGBoost的并行是在特征粒度上的（树的粒度上是串行）。我们知道，**决策树的学习最耗时的一个步骤就是对特征的值进行排序（因为要确定最佳分割点）**，XGBoost在训练之前，预先对数据进行了排序，然后保存为block结构，后面的迭代中重复地使用这个结构，大大减小计算量。这个block结构也使得并行成为了可能，在进行节点的分裂时，需要计算每个特征的增益，最终选增益最大的那个特征去做分裂，那么**各个特征的增益计算就可以开多线程进行**
+    boosting不是一种串行的结构吗？怎么并行的？注意XGBoost的并行不是tree粒度的并行，XGBoost也是一次迭代完才能进行下一次迭代的（第$$t$$次迭代的代价函数里包含了前面$$t-1$$次迭代的预测值）。XGBoost的并行是在特征粒度上的（树的粒度上是串行）。
+
+    我们知道，**决策树的学习最耗时的一个步骤就是对特征的值进行排序（因为要确定最佳分割点）**，XGBoost在训练之前，预先对数据进行了排序，然后保存为block结构，后面的迭代中重复地使用这个结构，大大减小计算量。这个block结构也使得并行成为了可能。在进行节点的分裂时，需要计算每个特征的增益，最终选增益最大的那个特征去做分裂，那么**各个特征的增益计算就可以开多线程进行**。
 
   - 可并行的近似直方图算法。树节点在进行分裂时，我们需要计算每个特征的每个分割点对应的增益，即用贪心法枚举所有可能的分割点。当数据无法一次载入内存或者在分布式情况下，贪心算法效率就会变得很低，所以XGBoost还提出了一种可并行的近似直方图算法，用于高效地生成候选的分割点
 
   - NULL值的特殊处理，作为一个特殊值来处理（实践中很有用）
+
+# Xgboost使用经验总结
+
+1. 多类别分类时，类别需要从0开始编码
+2. Watchlist不会影响模型训练。
+3. **类别特征必须编码**，因为xgboost把特征默认都当成数值型的
+4. 训练的时候，为了结果可复现，记得设置随机数种子。
+5. **XGBoost的特征重要性**是如何得到的？某个特征的重要性（feature score），等于它被选中为树节点分裂特征的次数的和，比如特征A在第一次迭代中（即第一棵树）被选中了1次去分裂树节点，在第二次迭代被选中2次…..那么最终特征A的feature score就是 1+2+….
+
+# XGBoost常见面试题
+
+## 简单介绍一下XGBoost 
+
+首先需要说一说GBDT，它是一种基于boosting增强策略的加法模型，训练的时候采用前向分布算法进行贪婪的学习，每次迭代都学习一棵CART树来拟合之前 t-1 棵树的预测结果与训练样本真实值的残差。
+
+XGBoost对GBDT进行了一系列优化，比如损失函数进行了二阶泰勒展开、目标函数加入正则项、支持并行和默认缺失值处理等，在可扩展性和训练速度上有了巨大的提升，但其核心思想没有大的变化。
+
+## XGBoost与GBDT有什么不同
+
+- **基分类器**：XGBoost的基分类器不仅支持CART决策树，还支持线性分类器，此时XGBoost相当于带L1和L2正则化项的Logistic回归（分类问题）或者线性回归（回归问题）。
+- **导数信息**：XGBoost对损失函数做了二阶泰勒展开，GBDT只用了一阶导数信息，并且XGBoost还支持自定义损失函数，只要损失函数一阶、二阶可导。
+- **正则项**：XGBoost的目标函数加了正则项， 相当于预剪枝，使得学习出来的模型更加不容易过拟合。
+- **列抽样**：XGBoost支持列采样，与随机森林类似，用于防止过拟合。
+- **缺失值处理**：对树中的每个非叶子结点，XGBoost可以自动学习出它的默认分裂方向。如果某个样本该特征值缺失，会将其划入默认分支。
+- **并行化**：注意不是tree维度的并行，而是特征维度的并行。XGBoost预先将每个特征按特征值排好序，存储为块结构，分裂结点时可以采用多线程并行查找每个特征的最佳分割点，极大提升训练速度。
+
+## XGBoost为什么使用泰勒二阶展开
+
+- **精准性**：相对于GBDT的一阶泰勒展开，XGBoost采用二阶泰勒展开，可以更为精准的逼近真实的损失函数
+- **可扩展性**：损失函数支持自定义，只需要新的损失函数二阶可导。
+
+## XGBoost为什么可以并行训练
+
+- XGBoost的并行，并不是说每棵树可以并行训练，XGB本质上仍然采用boosting思想，每棵树训练前需要等前面的树训练完成才能开始训练。
+- XGBoost的并行，指的是特征维度的并行：在训练之前，每个特征按特征值对样本进行预排序，并存储为Block结构，在后面查找特征分割点时可以重复使用，而且特征已经被存储为一个个block结构，那么在寻找每个特征的最佳分割点时，可以利用多线程对每个block并行计算。
+
+## XGBoost为什么快
+
+- **分块并行**：训练前每个特征按特征值进行排序并存储为Block结构，后面查找特征分割点时重复使用，并且支持并行查找每个特征的分割点
+- **候选分位点**：每个特征采用常数个分位点作为候选分割点
+- **CPU cache 命中优化**： 使用缓存预取的方法，对每个线程分配一个连续的buffer，读取每个block中样本的梯度信息并存入连续的Buffer中。
+- **Block 处理优化**：Block预先放入内存；Block按列进行解压缩；将Block划分到不同硬盘来提高吞吐
+
+## XGBoost防止过拟合的方法
+
+XGBoost在设计时，为了防止过拟合做了很多优化，具体如下：
+
+- **目标函数添加正则项**：叶子节点个数+叶子节点权重的L2正则化
+- **列抽样**：训练的时候只用一部分特征（不考虑剩余的block块即可）
+- **子采样**：每轮计算可以不使用全部样本，使算法更加保守
+- **shrinkage**: 可以叫学习率或步长，为了给后面的训练留出更多的学习空间
+
+## XGBoost如何处理缺失值
+
+XGBoost模型的一个优点就是允许特征存在缺失值。对缺失值的处理方式如下：
+
+- 在特征k上寻找最佳split point时，不会对该列特征missing的样本进行遍历，而只对该列特征值为non-missing的样本上对应的特征值进行遍历，通过这个技巧来减少了为稀疏离散特征寻找split point的时间开销。
+- 在逻辑实现上，为了保证完备性，会将该特征值missing的样本分别分配到左叶子结点和右叶子结点，两种情形都计算一遍后，选择分裂后增益最大的那个方向（左分支或是右分支），作为预测时特征值缺失样本的默认分支方向。
+- 如果在训练中没有缺失值而在预测中出现缺失，那么会自动将缺失值的划分方向放到右子结点。
+
+## XGBoost中叶子结点的权重如何计算出来
+
+XGBoost目标函数最终推导形式如下：
+$$
+\begin{aligned}
+\tilde{L}^{(t)}&=\sum_{i=1}^n\left[ g_iw_{q(x_i)}+\frac{1}{2}h_iw_{q(x_i)}^2 \right]+\gamma T +\lambda\frac{1}{2}\sum_{j=1}^Tw_j^2\\
+&=\sum_{j=1}^T\left[ \left(\sum_{i\in I_j}g_i\right)w_j+\frac{1}{2}\left(\sum_{i\in I_j}h_i+\lambda\right)w^2_j \right]+\gamma T\\
+&=\sum_{j=1}^T\left[ G_jw_j+\frac{1}{2}\left(H_j+\lambda\right)w^2_j \right]+\gamma T\\
+\end{aligned}
+$$
+利用一元二次函数求最值的知识，当目标函数达到最小值$$Obj^{*}$$时，每个叶子结点的权重为$$w^{*}_j$$。
+
+具体公式如下：
+
+![leaf-w](pic/leaf-w.jpeg)
+
+## XGBoost中的一棵树的停止生长条件
+
+- 当新引入的一次分裂所带来的增益Gain<0时，放弃当前的分裂。这是训练损失和模型结构复杂度的博弈过程。
+- 当树达到最大深度时，停止建树，因为树的深度太深容易出现过拟合，这里需要设置一个超参数max_depth。
+- 当引入一次分裂后，重新计算新生成的左、右两个叶子结点的样本权重和。如果任一个叶子结点的样本权重低于某一个阈值，也会放弃此次分裂。这涉及到一个超参数:最小样本权重和，是指如果一个叶子节点包含的样本数量太少也会放弃分裂，防止树分的太细。
+
+## RF和GBDT的区别
+
+**相同点：**
+
+- 都是由多棵树组成，最终的结果都是由多棵树一起决定。
+
+**不同点：**
+
+- **集成学习**：RF属于bagging思想，而GBDT是boosting思想
+- **偏差-方差权衡**：RF不断的降低模型的方差，而GBDT不断的降低模型的偏差
+- **训练样本**：RF每次迭代的样本是从全部训练集中有放回抽样形成的，而GBDT每次使用全部样本
+- **并行性**：RF的树可以并行生成，而GBDT只能顺序生成(需要等上一棵树完全生成)
+- **最终结果**：RF最终是多棵树进行多数表决（回归问题是取平均），而GBDT是加权融合
+- **数据敏感性**：RF对异常值不敏感，而GBDT对异常值比较敏感
+- **泛化能力**：RF不易过拟合，而GBDT容易过拟合
+
+## XGBoost如何处理不平衡数据
+
+对于不平衡的数据集，例如用户的购买行为，肯定是极其不平衡的，这对XGBoost的训练有很大的影响，XGBoost有两种自带的方法来解决：
+
+第一种，如果你在意AUC，采用AUC来评估模型的性能，那你可以通过设置scale_pos_weight来平衡正样本和负样本的权重。例如，当正负样本比例为1:10时，scale_pos_weight可以取10；
+
+第二种，如果你在意概率(预测得分的合理性)，你不能重新平衡数据集(会破坏数据的真实分布)，应该设置max_delta_step为一个有限数字来帮助收敛（基模型为LR时有效）。
+
+原话是这么说的：
+
+>```
+>For common cases such as ads clickthrough log, the dataset is extremely imbalanced. This can affect the training of xgboost model, and there are two ways to improve it.
+>
+>If you care only about the ranking order (AUC) of your prediction        Balance the positive and negative weights, via scale_pos_weight        Use AUC for evaluation
+>
+>If you care about predicting the right probability
+>	In such a case, you cannot re-balance the dataset  
+>	In such a case, set parameter max_delta_step to a finite number (say 1) will help convergence
+>```
+
+那么，源码到底是怎么利用**scale_pos_weight**来平衡样本的呢，是调节权重还是过采样呢？请看源码：
+
+```c++
+if (info.labels[i] == 1.0f)  w *= param_.scale_pos_weight
+```
+
+可以看出，应该是增大了少数样本的权重。
+
+除此之外，还可以通过上采样、下采样、SMOTE算法或者自定义代价函数的方式解决正负样本不平衡的问题。
+
+## 比较LR和GBDT，说说什么情景下GBDT不如LR
+
+先说说LR和GBDT的区别：
+
+- LR是线性模型，可解释性强，很容易并行化，但学习能力有限，需要大量的人工特征工程
+- GBDT是非线性模型，具有天然的特征组合优势，特征表达能力强，但是树与树之间无法并行训练，而且树模型很容易过拟合；
+
+当在高维稀疏特征的场景下，LR的效果一般会比GBDT好。原因如下：
+
+先看一个例子：
+
+> 假设一个二分类问题，label为0和1，特征有100维，如果有1w个样本，但其中只要10个正样本1，而这些样本的特征$$f_1$$的值为全为1，而其余9990条样本的$$f_1$$特征都为0(在高维稀疏的情况下这种情况很常见)。
+>
+> 我们都知道在这种情况下，树模型很容易优化出一个使用$$f_1$$特征作为重要分裂节点的树，因为这个结点直接能够将训练数据划分的很好，但是当测试的时候，却会发现效果很差，因为这个特征$$f_1$$只是刚好偶然间跟$$y$$拟合到了这个规律，这也是我们常说的过拟合。
+
+那么这种情况下，如果采用LR的话，应该也会出现类似过拟合的情况呀：
+$$
+y = W_1*f_1 + W_i*f_i+\ ...
+$$
+，其中$$W_1$$特别大以拟合这10个样本。为什么此时树模型就过拟合的更严重呢？
+
+仔细想想发现，因为现在的模型普遍都会带着正则项，而LR等线性模型的正则项是对权重的惩罚，也就是$$W_1$$一旦过大，惩罚就会很大，进一步压缩$$W_1$$的值，使他不至于过大。但是，树模型则不一样，树模型的惩罚项通常为叶子节点数和深度等，而我们都知道，对于上面这种case，**树只需要一个节点就可以完美分割9990和10个样本，一个结点，最终产生的惩罚项极其之小**。
+
+这也就是为什么在高维稀疏特征的时候，线性模型会比非线性模型好的原因了：**带正则化的线性模型比较不容易对稀疏特征过拟合。**
+
+## XGBoost中如何对树进行剪枝
+
+- 在目标函数中增加了正则项：使用叶子结点的数目和叶子结点权重的L2模的平方，控制树的复杂度。
+- 在结点分裂时，定义了一个阈值，如果分裂后目标函数的增益小于该阈值，则不分裂。
+- 当引入一次分裂后，重新计算新生成的左、右两个叶子结点的样本权重和。如果任一个叶子结点的样本权重低于某一个阈值（最小样本权重和），也会放弃此次分裂。
+- XGBoost 先从顶到底建立树直到最大深度，再从底到顶反向检查是否有不满足分裂条件的结点，进行剪枝。
+
+## XGBoost如何选择最佳分裂点
+
+XGBoost在训练前预先将特征按照特征值进行了排序，并存储为block结构，以后在结点分裂时可以重复使用该结构。
+
+因此，可以采用特征并行的方法利用多个线程分别计算每个特征的最佳分割点，根据每次分裂后产生的增益，最终选择增益最大的那个特征的特征值作为最佳分裂点。
+
+如果在计算每个特征的最佳分割点时，对每个样本都进行遍历，计算复杂度会很大，这种全局扫描的方法并不适用大数据的场景。XGBoost还提供了一种直方图近似算法，对特征排序后仅选择常数个候选分裂位置作为候选分裂点，极大提升了结点分裂时的计算效率。
+
+## XGBoost的Scalable性如何体现
+
+- **基分类器的scalability**：弱分类器可以支持CART决策树，也可以支持LR和Linear。
+- **目标函数的scalability**：支持自定义loss function，只需要其一阶、二阶可导。有这个特性是因为泰勒二阶展开，得到通用的目标函数形式。
+- **学习方法的scalability**：Block结构支持并行化，支持Out-of-core计算。
+
+## XGBoost如何评价特征的重要性
+
+我们采用三种方法来评判XGBoost模型中特征的重要程度：
+
+> ```
+> 官方文档：
+> （1）weight - the number of times a feature is used to split the data across all trees. 
+> （2）gain - the average gain of the feature when it is used in trees. 
+> （3）cover - the average coverage of the feature when it is used in trees.
+> ```
+
+- **weight** ：该特征在所有树中被用作分割样本的特征的总次数。
+- **gain** ：该特征在其出现过的所有树中产生的平均增益。
+- **cover** ：该特征在其出现过的所有树中的平均覆盖范围。
+
+注意：覆盖范围这里指的是一个特征用作分割点后，其影响的样本数量，即有多少样本经过该特征分割到两个子节点。
+
+## XGBooost参数调优的一般步骤
+
+首先需要初始化一些基本变量，例如：
+
+- max_depth = 5
+- min_child_weight = 1
+- gamma = 0
+- subsample, colsample_bytree = 0.8
+- scale_pos_weight = 1
+
+**(1) 确定learning rate和estimator的数量**
+
+learning rate可以先用0.1，用cv来寻找最优的estimators
+
+**(2) max_depth和 min_child_weight**
+
+我们调整这两个参数是因为，这两个参数对输出结果的影响很大。我们首先将这两个参数设置为较大的数，然后通过迭代的方式不断修正，缩小范围。
+
+max_depth，每棵子树的最大深度，check from range(3,10,2)。
+
+min_child_weight，子节点的权重阈值，check from range(1,6,2)。
+
+如果一个结点分裂后，它的所有子节点的权重之和都大于该阈值，该叶子节点才可以划分。
+
+**(3) gamma**
+
+也称作最小划分损失`min_split_loss`，check from 0.1 to 0.5，指的是，对于一个叶子节点，当对它采取划分之后，损失函数的降低值的阈值。
+
+- 如果大于该阈值，则该叶子节点值得继续划分
+- 如果小于该阈值，则该叶子节点不值得继续划分
+
+**(4) subsample, colsample_bytree**
+
+subsample是对训练的采样比例
+
+colsample_bytree是对特征的采样比例
+
+both check from 0.6 to 0.9
+
+**(5) 正则化参数**
+
+alpha 是L1正则化系数，try 1e-5, 1e-2, 0.1, 1, 100
+
+lambda 是L2正则化系数
+
+**(6) 降低学习率**
+
+降低学习率的同时增加树的数量，通常最后设置学习率为0.01~0.1
+
+## XGBoost模型如果过拟合了怎么解决
+
+当出现过拟合时，有两类参数可以缓解：
+
+第一类参数：用于直接控制模型的复杂度。包括`max_depth,min_child_weight,gamma` 等参数
+
+第二类参数：用于增加随机性，从而使得模型在训练时对于噪音不敏感。包括`subsample,colsample_bytree`
+
+还有就是直接减小`learning rate`，但需要同时增加`estimator` 参数。
+
+## 为什么XGBoost相比某些模型对缺失值不敏感
+
+对存在缺失值的特征，一般的解决方法是：
+
+- 离散型变量：用出现次数最多的特征值填充；
+- 连续型变量：用中位数或均值填充；
+
+一些模型如SVM和KNN，其模型原理中涉及到了对样本距离的度量，如果缺失值处理不当，最终会导致模型预测效果很差。
+
+而树模型对缺失值的敏感度低，大部分时候可以在数据缺失时时使用。原因就是，一棵树中每个结点在分裂时，寻找的是某个特征的最佳分裂点（特征值），完全可以不考虑存在特征值缺失的样本，也就是说，如果某些样本缺失的特征值缺失，对寻找最佳分割点的影响不是很大。
+
+XGBoost对缺失数据有特定的处理方法，[详情参考上篇文章第7题](http://mp.weixin.qq.com/s?__biz=Mzg2MjI5Mzk0MA==&mid=2247484181&idx=1&sn=8d0e51fb0cb974f042e66659e1daf447&chksm=ce0b59cef97cd0d8cf7f9ae1e91e41017ff6d4c4b43a4c19b476c0b6d37f15769f954c2965ef&scene=21#wechat_redirect)。
+
+因此，对于有缺失值的数据在经过缺失处理后：
+
+- 当数据量很小时，优先用朴素贝叶斯
+- 数据量适中或者较大，用树模型，优先XGBoost
+- 数据量较大，也可以用神经网络
+- 避免使用距离度量相关的模型，如KNN和SVM
+
+# XGBoost代码实践
+
+## XGBoost运行环境搭建
+
+XGBoost安装分为两种方式，一种是直接通过pip安装（适用于Ptyhon），另一种是直接编译源码安装。
+
+### 通过pip安装
+
+通过pip安装Python包既简单又方便。如果读者准备在Python环境下使用XGBoost，即可以采用此方法。只需执行如下命令：
+
+```shell
+pip install xgboost
+```
+
+若Python版本为3.X，则执行命令为pip3 install xgboost。安装完毕后，即可在Python里直接引用XGBoost包，如下：
+
+```python
+import xgboost as xgb
+```
+
+### 通过源码编译安装
+
+虽然通过pip安装XGBoost虽然方便，但其安装的XGBoost可能并非最新版本。源码编译安装XGBoost主要分为两个步骤：① 通过C++代码构建共享库；② 安装相应语言包。
+
+**（1）构建共享库**
+
+Linux下首先通过Git将XGBoost项目从github上克隆下来。因为XGBoost使用了Git submodules来管理依赖，因此在执行克隆时需加上--recursive选项，然后通过make对源码直接编译，如下：
+
+```shell
+git clone --recursive https://github.com/dmlc/xgboost
+cd xgboost
+make
+```
+
+但是如果你是Mac系统，你可能会遇到下面的[问题](https://stackoverflow.com/questions/36211018/clang-error-errorunsupported-option-fopenmp-on-mac-osx-el-capitan-buildin)：
+
+```shell
+clang: error: : errorunsupported option '-fopenmp' on Mac OSX El Capitan building XGBoost
+```
+
+你需要下载完git之后，
+
+```shell
+brew uninstall gcc
+brew install gcc
+cd xgboost
+cp make/config.mk ./config.mk;
+```
+
+首先
+
+```shell
+ls /usr/local/bin/*
+```
+
+里面可能会有
+
+```shell
+/usr/local/bin/gcc-9
+/usr/local/bin/g++-9
+```
+
+找到其中的gcc g++,然后
+
+将./config.mk中的CC和CXX改成自己的路径
+
+```shell
+export CC=/usr/local/bin/gcc-9  #自己的安装路经
+export CXX=/usr/local/bin/g++-9 #自己的安装路径
+```
+
+之后，再
+
+```shell
+make -j4
+```
+
+即可。
+
+但是又会出现
+
+```shell
+ld: symbol(s) not found for architecture x86_64
+```
+
+我也是醉了。
+
+算了，还是直接`pip install xgboost`。
+
+**（2）Python包安装**
+
+共享库编译完成之后，即可安装相应的语言包，此处以Python包为例。XGBoost使用Distutils来实现Python环境中的构建和安装，对于用户来讲安装过程十分简单。XGBoost的Python包在python-package中，用户只需进入该目录然后执行安装命令即可，如下：
+
+```shell
+cd python-package
+sudo python setup.py install
+```
+
+## XGBoost参数详解
+
+xgboost的python版本有原生版本和为了与sklearn相适应的sklearn接口版本
+原生版本更灵活，而sklearn版本能够使用sklearn的Gridsearch，二者互有优缺。
+
+对比预测结果，原生xgb与sklearn接口的训练过程相同，结果也相同。
+不同之处在于：
+
+1. 原生采用xgb.train()训练，sklearn接口采用model.fit() 。
+2. sklearn接口中的参数n_estimators在原生xgb中定义在xgb.train()的num_boost_round
+3. sklearnwatchlist为[(xtrain,ytrain),(xtest,ytest)]形式，而原生则是(dtrain,'train'),(dtest,'test')],在数据和标签都在DMatrix中，元组里可以定位输出时的名字。
+
+下面的参数以原生版本为例。
+
+在运行XGboost之前，必须设置三种类型成熟：general parameters，booster parameters和task parameters：
+
+- **General parameters** 
+  该参数参数控制在提升(boosting)过程中使用哪种booster，常用的booster有树模型(tree)和线性模型(linear model)
+- **Booster parameters** 
+  这取决于使用哪种booster
+- **Task parameters** 
+  控制学习的场景，例如在回归问题中会使用不同的参数控制排序
+
+这是一个字典，里面包含着训练中的参数关键字和对应的值，形式如下：
+
+### 常规参数
+* booster [default=gbtree]：有两种模型可以选择gbtree和gblinear。gbtree使用基于树的模型进行提升计算，gblinear使用线性模型进行提升计算。缺省值为gbtree。
+* silent [default=0]：取0时表示打印出运行时信息，取1时表示以缄默方式运行，不打印运行时信息。缺省值为0。（True、False也可以）
+* nthread ：XGBoost运行时的线程数。缺省值是当前系统可以获得的最大线程数
+* num_pbuffer：无需自己手动设置。预测缓冲区的大小，通常设置为训练实例数。缓冲区用于保存上一个树生长的预测结果。
+* num_feature：特征数量，无需自己手动设置。
+
+### 模型参数Tree Booster
+
+* eta [default=0.3]：为了防止过拟合，更新过程中用到的收缩步长。在每次提升计算之后，算法会直接获得新特征的权重。 eta通过缩减特征的权重使提升计算过程更加保守。缺省值为0.3，取值范围为：[0,1]。
+* gamma [default=0]：分裂节点时，损失函数减小值只有大于等于gamma节点才分裂，gamma值越大，算法越保守，越不容易过拟合，但性能就不一定能保证，需要平衡，取值范围为：[0,∞]。
+* max_depth [default=6]：数的最大深度。缺省值为6，取值范围为：[1,∞]。值越大，树越大，模型越复杂，可以用来防止过拟合，典型值是3-10。
+* min_child_weight [default=1]：一个子集的所有观察值的最小权重和。如果新分裂的节点的样本权重和小于min_child_weight则停止分裂 。这个可以用来减少过拟合，但是也不能太高，会导致欠拟合。该指数越大越大算法越保守，取值范围为: [0,∞]。
+* max_delta_step [default=0]：每棵树所被允许的权重估计为最大增量。如果该值设置为0，则表示没有约束。如果将其设置为正值，则有助于使更新步骤更加保守。通常不需要这个参数，但当类极不平衡时，它可能有助于logistic回归。将其设置为1-10可能有助于控制更新，取值范围为：[0,∞]。
+* subsample [default=1]：构建每棵树对样本的采样率，用于训练模型的子样本占整个样本集合的比例。如果设置为0.5则意味着XGBoost将随机的冲整个样本集合中随机的抽取出50%的子样本建立树模型，这能够防止过拟合。取值范围为：(0,1]。
+* colsample_bytree [default=1]：列采样率，也就是特征采样率。在建立树时对特征采样的比例。缺省值为1，取值范围：(0,1]。
+* colsample_bylevel [default=1]：构建每一层时，列采样率。
+* lambda [default=1, alias: reg_lambda]：L2正则化，这个参数是用来控制XGBoost的正则化部分的。虽然大部分数据科学家很少用到这个参数，但是这个参数在减少过拟合上还是可以挖掘出更多用处的。
+* alpha [default=0, alias: reg_alpha]：L1正则化，增加该值会让模型更加收敛
+* scale_pos_weight, [default=1]：在类别高度不平衡的情况下，将参数设置大于0，可以加快收敛。
+
+### 模型参数Linear Booster
+
+- lambda [default=0]：L2 正则的惩罚系数
+- alpha [default=0]：L1 正则的惩罚系数
+- lambda_bias：在偏置上的L2正则。缺省值为0（在L1上没有偏置项的正则，因为L1时偏置不重要）
+
+### 学习任务参数
+
+* objective [default=reg:linear]：定义学习任务及相应的学习目标，可选的目标函数如下：
+
+  ```python
+  “reg:linear” –线性回归。
+  “reg:logistic” –逻辑回归。
+  “binary:logistic”–二分类的逻辑回归问题，输出为概率。
+  “binary:logitraw”–二分类逻辑回归，输出是逻辑为0/1的前一步的分数。
+  “count:poisson”–计数问题的poisson回归，输出结果为poisson分布。在poisson回归中，max_delta_step的缺省值为0.7。
+  “multi:softmax” –让XGBoost采用softmax目标函数处理多分类问题，同时需要设置参数num_class（类别个数）
+  “multi:softprob” –和softmax一样，但是输出的是ndata * nclass的向量，可以将该向量reshape成ndata行nclass列的矩阵。每个数据属于各个类别的概率。
+  “rank:pairwise”–让Xgboost 做排名任务，通过最小化(Learn to rank的一种方法)
+  ```
+
+* base_score [default=0.5]：所有实例的初始预测得分，全局偏差；为了足够的迭代次数，改变这个值将不会有太大的影响。
+
+* eval_metric [**默认值取决于objective参数的取值**]：校验数据所需要的评价指标，不同的目标函数将会有缺省的评价指标（回归：rmse，分类：误差，排序：平均精度）。用户可以添加多种评价指标，对于Python用户要以list传递参数对给程序，而不是map参数，list参数不会覆盖’eval_metric’。
+
+  对于有效数据的度量方法。对于回归问题，默认值是rmse，对于分类问题，默认值是error。典型值有：
+
+  ```python
+  rmse：均方根误差
+  mae：平均绝对误差
+  logloss：负对数似然函数值
+  error：二分类错误率(阈值为0.5)
+  merror：多分类错误率
+  mlogloss：多分类logloss损失函数
+  auc：曲线下面积
+  ```
+
+* seed[ default=0 ]：随机数的种子。缺省值为0
+
+* dtrain：训练的数据
+
+* num_boost_round：这是指提升迭代的次数，也就是生成多少基模型。即树的棵树。
+
+* evals：这是一个列表，用于对训练过程中进行评估列表中的元素。形式是evals = [(dtrain,'train'),(dval,'val')]或者是evals = [(dtrain,'train')]，对于第一种情况，它使得我们可以在训练过程中观察验证集的效果
+
+* obj：自定义目的函数
+
+* feval：自定义评估函数
+
+* maximize：是否对评估函数进行最大化
+
+* early_stopping_rounds：早期停止次数 ，假设为100，验证集的误差迭代到一定程度在100次内不能再继续降低，就停止迭代。这要求evals 里至少有一个元素，如果有多个，按最后一个去执行。返回的是最后的迭代次数（不是最好的）。如果early_stopping_rounds存在，则模型会生成三个属性，bst.best_score，bst.best_iteration和bst.best_ntree_limit
+
+* evals_result：字典，存储在watchlist中的元素的评估结果。
+
+* verbose_eval ：(可以输入布尔型或数值型)，也要求evals里至少有 一个元素。如果为True,则对evals中元素的评估结果会输出在结果中；如果输入数字，假设为5，则每隔5个迭代输出一次。
+
+* learning_rates：每一次提升的学习率的列表，
+
+* xgb_model：在训练之前用于加载的xgb model。
+
+### min_child_weight参数详解
+
+The [definition](http://xgboost.readthedocs.io/en/latest/parameter.html) of the min_child_weight parameter in xgboost is given as the:
+
+> minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process **will give up further partitioning**. In linear regression mode, this simply corresponds to minimum number of instances needed to be in each node. The larger, the more conservative the algorithm will be.
+
+min_child_weight，意思是，当一个节点进行分裂后，发现子节点中至少有一个节点的二阶导之和如果小于min_child_weight，就不再进行下一次分裂（本次分裂则保留，不会回退停止）。
+
+1、对于回归问题，假设损失函数是均方误差函数，每个样本的二阶导数是一个常数，这个时候 min_child_weight就是这个叶子结点中样本的数目。如果这个值设置的太小，那么会出现单个样本成一个叶子结点的情况，这很容易过拟合。
+
+2、对于分类问题，假设为二分类问题，损失函数为交叉熵，则每个样本的二阶导数可以写成几个因子相乘的形式，其中一项为$$sigmoid(\hat{y})\cdot (1-sigmoid(\hat{y}))$$。对分类问题，我们考虑叶子结点的纯度。假设某个叶子节点只包含一类，$$y = 1$$，那个这个节点有很大的可能是：该节点包含的$$\hat{y}$$非常正，也就是我们给这个节点打分非常正，这个时候$$sigmoid(\hat{y})$$非常接近1，上面的式子接近0；反之，假设某个叶子节点只包含$$y=0$$，情况也是类似的。从分析中可知，如果某个叶子结点的二阶导之和越小，或者越接近0，这个节点就越纯，这种情况下容易过拟合。
+
+而二阶导数恰巧就是
+$$
+\begin{aligned}
+h_i&=\frac{\partial^2 l(y_i, \hat{y}^{(t-1)})}{\partial^2 \hat{y}^{(t-1)}}\\
+&=\frac{\text{exp}(-\hat{y}_i^{(t-1)})}{\left( 1+\text{exp}(-\hat{y}_i^{(t-1)}) \right)^2}\\
+&=\text{Pred}\cdot (1-\text{Pred})\\
+\end{aligned}
+$$
+
+### 正常调参方法
+
+1. 确定学习速率和提升参数调优的初始值
+2. max_depth 和 min_child_weight 参数调优
+3. gamma参数调优
+4. subsample 和 colsample_bytree 参数优
+5. 正则化参数alpha调优
+6. 降低学习速率和使用更多的决策树
+
+## XGBoost实战
+
+XGBoost有两大类接口：**XGBoost原生接口** 和 **scikit-learn接口** ，并且XGBoost能够实现 **分类** 和 **回归** 两种任务。因此，本章节分四个小块来介绍！
+
+### 数据格式
+
+XGBoost可以加载多种数据格式的训练数据：　　
+
+1. **libsvm** 格式的文本数据；
+2. **Numpy** 的二维数组；
+3. **XGBoost** 的二进制的缓存文件。加载的数据存储在对象 **DMatrix** 中。
+
+下面一一列举：
+
+- 加载libsvm格式的数据
+
+```python
+dtrain1 = xgb.DMatrix('train.svm.txt')
+```
+
+- 加载二进制的缓存文件
+
+```python
+dtrain2 = xgb.DMatrix('train.svm.buffer')
+```
+
+- 加载numpy的数组
+
+```python
+data = np.random.rand(5,10) # 5 entities, each contains 10 features
+label = np.random.randint(2, size=5) # binary target
+dtrain = xgb.DMatrix( data, label=label)
+```
+
+- 将scipy.sparse格式的数据转化为 **DMatrix** 格式
+
+```python
+csr = scipy.sparse.csr_matrix( (dat, (row,col)) )
+dtrain = xgb.DMatrix( csr ) 
+```
+
+- 将 DMatrix 格式的数据保存成XGBoost的二进制格式，在下次加载时可以提高加载速度，使用方式如下
+
+```python
+dtrain = xgb.DMatrix('train.svm.txt')
+dtrain.save_binary("train.buffer")
+```
+
+- 可以用如下方式处理 DMatrix中的缺失值：
+
+```python
+dtrain = xgb.DMatrix( data, label=label, missing = -999.0)
+```
+
+- 当需要给样本设置权重时，可以用如下方式
+
+```python
+w = np.random.rand(5,1)
+dtrain = xgb.DMatrix( data, label=label, missing = -999.0, weight=w)
+```
+
+### 代码简单实践：毒蘑菇判定
+
+XGBoost安装完成后，本节通过一个简单的示例，介绍如何使用XGBoost解决机器学习问题。该示例使用的是XGBoost自带的数据集（位于/demo/data文件夹下），该数据集描述的是不同蘑菇的相关特征，比如大小、颜色等，并且每一种蘑菇都会被标记为可食用的（标记为0）或有毒的（标记为1）。
+
+**我们的任务是对蘑菇特征数据进行学习，训练相关模型，然后利用训练好的模型预测未知的蘑菇样本是否具有毒性。**下面用XGBoost解决该问题，如下：
+
+```python
+import xgboost as xgb
+
+# 数据读取
+XGBOOST_PATH="/Users/momo/xgboost"
+xgb_train = xgb.DMatrix(XGBOOST_PATH + '/demo/data/agaricus.txt.train')
+xgb_test = xgb.DMatrix(XGBOOST_PATH + '/demo/data/agaricus.txt.test')
+print(type(xgb_train))
+print(xgb_train.num_col())
+print(xgb_train.num_row())
+print(xgb_train.feature_names)
+
+# 定义模型训练参数
+params = {
+    "objective": "binary:logistic",
+    "booster": "gbtree",
+    "max_depth": 3
+         }
+# 训练轮数
+num_round = 5
+
+# 训练过程中实时输出评估结果
+watchlist = [(xgb_train, 'train'), (xgb_test, 'test')]
+
+# 模型训练
+model = xgb.train(params, xgb_train, num_round, watchlist)
+```
+
+**首先读取训练集和测试集数据**，XGBoost会将数据加载为自定义的矩阵DMatrix。**数据加载完毕后，定义模型训练参数，然后对模型进行训练**，训练过程的输出如下图所示。
+
+```s
+[0]	train-error:0.01443	test-error:0.01614
+[1]	train-error:0.01443	test-error:0.01614
+[2]	train-error:0.01443	test-error:0.01614
+[3]	train-error:0.00860	test-error:0.00993
+[4]	train-error:0.00123	test-error:0.00000
+```
+
+由上图中可以看到，XGBoost训练过程中实时输出了训练集和测试集的错误率评估结果。随着训练的进行，训练集和测试集的错误率均在不断下降，说明模型对于特征数据的学习是十分有效的。**最后，模型训练完毕后，即可通过训练好的模型对测试集数据进行预测。**预测代码如下：
+
+```python
+# 模型预测
+preds = model.predict(xgb_test)
+print(preds)
+```
+
+输出：
+
+```
+[0.10455427 0.8036663  0.10455427 ... 0.10285233 0.89609396]
+```
+
+可以看到，预测结果为一个浮点数的数组，其数组大小和测试集的样本数量是一致的。数组中的值均在0~1的区间内，每个值对应一个样本。该值可以看作是模型对于该样本的预测概率，即模型认为该蘑菇是有毒蘑菇的概率。
+
+### 基于XGBoost原生接口的分类
+
+以鸢尾花分类为例：
+
+```python
+from sklearn.datasets import load_iris
+import xgboost as xgb
+from xgboost import plot_importance
+from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+
+# read in the iris data
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1234565)
+dtrain = xgb.DMatrix(X_train, y_train)
+dtest = xgb.DMatrix(X_test, y_test)
+
+params = {
+    'booster': 'gbtree',
+    'objective': 'multi:softmax',
+    'num_class': 3,
+    'gamma': 0.1,
+    'max_depth': 6,  # 每棵树的深度
+    'lambda': 2,
+    'subsample': 0.7,
+    'colsample_bytree': 0.7,
+    'min_child_weight': 3,
+    'silent': 1,
+    'eta': 0.1,
+    'seed': 1000,
+    'nthread': 4
+}
+# 树的棵数
+num_boost_round = 50
+# 训练过程中实时输出评估结果
+watchlist = [(dtrain, 'train'), (dtest, 'test')]
+
+model = xgb.train(params, dtrain, num_boost_round=num_boost_round, evals=watchlist)
+
+# 对测试集进行预测
+dtest = xgb.DMatrix(X_test)
+py_test = model.predict(dtest)
+
+# 计算准确率
+accuracy = (sum(py_test[i] == y_test[i] for i in range(len(y_test))) / len(y_test))
+print("Train Accuracy: %.2f%%" % (100 * accuracy))
+# 另一种计算准确率的方法
+#from sklearn.metrics import accuracy_score
+#py01_test = [round(value) for value in py_test]  # 进行四舍五入的操作--变成0.1(算是设定阈值的符号函数)
+#train_accuracy = accuracy_score(y_test, py01_test)  # 使用sklearn进行比较正确率
+#print("Train Accuracy: %.2f%%" % (train_accuracy * 100.0))
+
+# 显示重要特征
+plot_importance(model)
+plt.show()
+
+# 画出第i棵树
+xgb.plot_tree(model, num_trees=0)
+plt.show()
+```
+
+输出预测正确率：`Train Accuracy: 96.67%`
+
+特征重要性：
+
+![feature-importance-1](pic/feature-importance-1.png)
+
+第1棵树的图：
+
+![tree-pic-1.png](pic/tree-pic-1.png)
+
+### 基于XGBoost原生接口的回归
+
+回归的例子没找到，我就造了一个逻辑回归的，但其实还是二分类，但实际应用中，二分类用的比较多，那就用这个例子吧。当然你可以自己造一个回归的例子。
+
+![data-pic-2](pic/data-pic-2.png)
+
+```python
+# -*- coding=utf-8 -*-
+import numpy as np
+import matplotlib.pyplot as plt
+import xgboost as xgb
+from xgboost import plot_importance
+from sklearn.model_selection import train_test_split
+
+
+# train data
+def get_train_data(data_size=100):
+    data_label = np.zeros((2*data_size, 1))
+    # class 1
+    x1 = np.reshape(np.random.normal(2, 1, data_size), (data_size, 1))
+    y1 = np.reshape(np.random.normal(3, 1, data_size), (data_size, 1))
+    data_train = np.concatenate((x1, y1), axis=1)
+    data_label[0:data_size, :] = 0
+    # class 2
+    x2 = np.reshape(np.random.normal(1, 1, data_size), (data_size, 1))
+    y2 = np.reshape(np.random.normal(0.5, 1, data_size), (data_size, 1))
+    data_train = np.concatenate((data_train, np.concatenate((x2, y2), axis=1)), axis=0)
+    data_label[data_size:2*data_size, :] = 1
+
+    return data_train, data_label
+
+
+# show data distribution
+def plot_data(X_train, y_train, X_test):
+    index_y01_train = (y_train >= 0.5)[:, 0]
+    plt.figure()
+    plt.plot(X_train[index_y01_train, 0], X_train[index_y01_train, 1], 'g.',
+             X_train[~index_y01_train, 0], X_train[~index_y01_train, 1], 'b*',
+             X_test[:, 0], X_test[:, 1], 'rs')
+    plt.legend(['class1', 'class0', 'test_data'])
+    plt.title('Distribution')
+    plt.grid(True)
+    plt.xlabel('axis1')
+    plt.ylabel('axis2')
+    plt.show()
+
+
+# plot predict res
+def plot_predict_data(X_train_py1, X_train_py0, X_test_py1, X_test_py0):
+    plt.figure()
+
+    plt.plot(X_train_py1[:, 0], X_train_py1[:, 1], 'g.',
+             X_train_py0[:, 0], X_train_py0[:, 1], 'b*',
+             X_test_py1[:, 0], X_test_py1[:, 1], 'ro',
+             X_test_py0[:, 0], X_test_py0[:, 1], 'rs')
+    plt.legend(['class1', 'class0', 'predict1', 'predict0'])
+    plt.title('Predict res')
+    plt.grid(True)
+    plt.xlabel('axis1')
+    plt.ylabel('axis2')
+    plt.show()
+
+
+# main function
+if __name__ == '__main__':
+    data_size = 100
+    X, y = get_train_data(data_size)  # train data generate
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1234565)
+    print(X_train.shape)
+    print(X_test.shape)
+    print(y_train.shape)
+    print(y_test.shape)
+    plot_data(X_train, y_train, X_test)  # plot
+
+    dtrain = xgb.DMatrix(X_train, y_train)
+    dtest = xgb.DMatrix(X_test, y_test)
+
+    # data training
+    param = {'booster': 'gbtree',
+             'eta': 0.1,
+             'max_depth': 3,
+             'objective': 'binary:logistic'}
+    num_boost_round = 5
+
+    # 训练过程中实时输出评估结果
+    watchlist = [(dtrain, 'train'), (dtest, 'test')]
+    model = xgb.train(param, dtrain, num_boost_round=num_boost_round, evals=watchlist)
+
+    # make prediction
+    dtest = xgb.DMatrix(X_test)
+    py_test = model.predict(dtest)
+
+    # 计算准确率
+    py_test[py_test >= 0.5] = 1
+    py_test[py_test < 0.5] = 0
+    accuracy = (sum(py_test[i] == y_test[i] for i in range(len(y_test))) / len(y_test))
+    print("Train Accuracy: %.2f%%" % (100 * accuracy))
+
+    # plot prediction result
+    index_py01_train = (y_train >= 0.5)[:, 0]
+    X_train_py1 = X_train[index_py01_train, :]
+    X_train_py0 = X_train[~index_py01_train, :]
+
+    index_py01_test = py_test >= 0.5
+    X_test_py1 = X_test[index_py01_test, :]
+    X_test_py0 = X_test[~index_py01_test, :]
+
+    plot_predict_data(X_train_py1, X_train_py0, X_test_py1, X_test_py0)
+
+    # 显示重要特征
+    plot_importance(model)
+    plt.show()
+
+    # 画出第i棵树
+    for i in range(num_boost_round):
+        xgb.plot_tree(model, num_trees=i)
+        plt.show()
+
+```
+
+输出预测正确率：`Train Accuracy: 90.00%`
+
+![result-2](pic/result-2.png)
+
+特征重要性：
+
+![feature-importance-2](pic/feature-importance-2.png)
+
+第一棵树的图：
+
+![tree-pic-2](pic/tree-pic-2.png)
+
+### 基于Scikit-learn接口的分类
+
+还是以鸢尾花分类为例：
+
+```python
+# 基于XGBoost原生接口的分类
+from sklearn.datasets import load_iris
+import xgboost as xgb
+from xgboost import plot_importance
+from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+
+# read in the iris data
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1234565)
+
+# 训练模型
+model = xgb.XGBClassifier(max_depth=5, learning_rate=0.1, n_estimators=160, silent=True, objective='multi:softmax')
+model.fit(X_train, y_train)
+
+# 对测试集进行预测
+py_test = model.predict(X_test)
+
+# 计算准确率
+accuracy = (sum(py_test[i] == y_test[i] for i in range(len(y_test))) / len(y_test))
+print("Train Accuracy: %.2f%%" % (100 * accuracy))
+
+# 显示重要特征
+plot_importance(model)
+plt.show()
+
+# 画出第i棵树
+xgb.plot_tree(model, num_trees=0)
+plt.show()
+```
+
+输出预测正确率：`Train Accuracy: 96.67%`
+
+特征重要性：
+
+![feature-importance-3](pic/feature-importance-3.png)
+
+第1棵树的图：
+
+![tree-pic-3](pic/tree-pic-3.png)
+
+
+
+### 基于Scikit-learn接口的回归
+
+回归的例子没找到，我就造了一个逻辑回归的，但其实还是二分类，但实际应用中，二分类用的比较多，那就用这个例子吧。当然你可以自己造一个回归的例子。
+
+![data-pic-4](pic/data-pic-4.png)
+
+```python
+# -*- coding=utf-8 -*-
+import numpy as np
+import matplotlib.pyplot as plt
+import xgboost as xgb
+from xgboost import plot_importance
+from sklearn.model_selection import train_test_split
+
+
+# train data
+def get_train_data(data_size=100):
+    data_label = np.zeros((2*data_size, 1))
+    # class 1
+    x1 = np.reshape(np.random.normal(2, 1, data_size), (data_size, 1))
+    y1 = np.reshape(np.random.normal(3, 1, data_size), (data_size, 1))
+    data_train = np.concatenate((x1, y1), axis=1)
+    data_label[0:data_size, :] = 0
+    # class 2
+    x2 = np.reshape(np.random.normal(1, 1, data_size), (data_size, 1))
+    y2 = np.reshape(np.random.normal(0.5, 1, data_size), (data_size, 1))
+    data_train = np.concatenate((data_train, np.concatenate((x2, y2), axis=1)), axis=0)
+    data_label[data_size:2*data_size, :] = 1
+
+    return data_train, data_label
+
+
+# show data distribution
+def plot_data(X_train, y_train, X_test):
+    index_y01_train = (y_train >= 0.5)[:, 0]
+    plt.figure()
+    plt.plot(X_train[index_y01_train, 0], X_train[index_y01_train, 1], 'g.',
+             X_train[~index_y01_train, 0], X_train[~index_y01_train, 1], 'b*',
+             X_test[:, 0], X_test[:, 1], 'rs')
+    plt.legend(['class1', 'class0', 'test_data'])
+    plt.title('Distribution')
+    plt.grid(True)
+    plt.xlabel('axis1')
+    plt.ylabel('axis2')
+    plt.show()
+
+
+# plot predict res
+def plot_predict_data(X_train_py1, X_train_py0, X_test_py1, X_test_py0):
+    plt.figure()
+
+    plt.plot(X_train_py1[:, 0], X_train_py1[:, 1], 'g.',
+             X_train_py0[:, 0], X_train_py0[:, 1], 'b*',
+             X_test_py1[:, 0], X_test_py1[:, 1], 'ro',
+             X_test_py0[:, 0], X_test_py0[:, 1], 'rs')
+    plt.legend(['class1', 'class0', 'predict1', 'predict0'])
+    plt.title('Predict res')
+    plt.grid(True)
+    plt.xlabel('axis1')
+    plt.ylabel('axis2')
+    plt.show()
+
+
+# main function
+if __name__ == '__main__':
+    data_size = 100
+    X, y = get_train_data(data_size)  # train data generate
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1234565)
+    print(X_train.shape)
+    print(X_test.shape)
+    print(y_train.shape)
+    print(y_test.shape)
+    plot_data(X_train, y_train, X_test)  # plot
+
+    model = xgb.XGBRegressor(max_depth=5, learning_rate=0.1, n_estimators=160, silent=True, objective='binary:logistic')
+    model.fit(X_train, y_train)
+
+    # 对测试集进行预测
+    py_test = model.predict(X_test)
+
+    # 计算准确率
+    py_test[py_test >= 0.5] = 1
+    py_test[py_test < 0.5] = 0
+    accuracy = (sum(py_test[i] == y_test[i] for i in range(len(y_test))) / len(y_test))
+    print("Train Accuracy: %.2f%%" % (100 * accuracy))
+
+    # plot prediction result
+    index_py01_train = (y_train >= 0.5)[:, 0]
+    X_train_py1 = X_train[index_py01_train, :]
+    X_train_py0 = X_train[~index_py01_train, :]
+
+    index_py01_test = py_test >= 0.5
+    X_test_py1 = X_test[index_py01_test, :]
+    X_test_py0 = X_test[~index_py01_test, :]
+
+    plot_predict_data(X_train_py1, X_train_py0, X_test_py1, X_test_py0)
+
+    # 显示重要特征
+    plot_importance(model)
+    plt.show()
+
+    # 画出第i棵树
+    xgb.plot_tree(model, num_trees=0)
+    plt.show()
+```
+
+输出预测正确率：`Train Accuracy: 80.00%`
+
+![result-4](pic/result-4.png)
+
+特征重要性：
+
+![feature-importance-4](pic/feature-importance-4.png)
+
+第一棵树的图：
+
+![tree-pic-4](pic/tree-pic-4.png)
 
 # 参考资料
 
@@ -539,6 +1653,7 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 本文主要参考这篇文档。
 
 * [xgboost的原理没你想像的那么难](https://www.jianshu.com/p/7467e616f227)
+* [gitlinux上的博客：XGBoost](http://gitlinux.net/2018-10-29-xgboost/)
 
 本文参考了这篇文档。
 
@@ -554,7 +1669,47 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 
 "XGBoost和GradientBoost的比较"参考这篇文档。
 
+* [XGBoost浅入浅出](http://wepon.me/2016/05/07/XGBoost%E6%B5%85%E5%85%A5%E6%B5%85%E5%87%BA/)
 
+“Xgboost使用经验总结”参考此博客。
+
+* [XGboost: A Scalable Tree Boosting System论文及源码导读](http://mlnote.com/2016/10/05/a-guide-to-xgboost-A-Scalable-Tree-Boosting-System/)
+
+这篇论文适合看懂原理后直接照着这个文章推公式。
+
+* [XGBoost解读(2)--近似分割算法](https://yxzf.github.io/2017/04/xgboost-v2/)
+
+“加权分位点（Weighted Quantile Sketch）”参考了此博客。
+
+* [数据竞赛利器XGBoost常见面试题集锦](https://mp.weixin.qq.com/s/_NCKAon-megJbxzV6w3aYg)
+* [珍藏版 | 20道XGBoost面试题](https://mp.weixin.qq.com/s?__biz=MzI1MzY0MzE4Mg==&mid=2247485159&idx=1&sn=d429aac8370ca5127e1e786995d4e8ec&chksm=e9d01626dea79f30043ab80652c4a859760c1ebc0d602e58e13490bf525ad7608a9610495b3d&scene=21#wechat_redirect)
+
+“XGBoost常见面试题”参考了此博客。
+
+* [机器学习算法中 GBDT 和 XGBOOST 的区别有哪些？](https://www.zhihu.com/question/41354392/answer/124274741)
+
+介绍了xgboost的单机多线程和分布式的代码架构。
+
+* [集成模型Xgboost！机器学习最热研究方向入门，附学习路线图](https://mp.weixin.qq.com/s/uvUN4JiqSb-bS4HAVCDTIQ)
+
+* [史上最详细的XGBoost实战](https://zhuanlan.zhihu.com/p/31182879)
+
+* [xgboost的原生版本与sklearn 接口版本对比](https://blog.csdn.net/PIPIXIU/article/details/80463565)
+
+* [XGBOOST——原生参数解释](https://www.jianshu.com/p/926d1417b72e)
+* [xgboost中的min_child_weight是什么意思?](https://www.zhihu.com/question/68621766)
+* [Explanation of min_child_weight in xgboost algorithm](https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm)
+
+* [python机器学习库xgboost的使用](https://www.jb51.net/article/178952.htm)
+* [Xgboost如何画出树？](https://blog.csdn.net/anshuai_aw1/article/details/82988494)
+* [如何画XGBoost里面的决策树](https://zhuanlan.zhihu.com/p/32943164)
+
+* [Mac安装graphviz环境变量配置](https://blog.csdn.net/w1573007/article/details/80117725?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)
+* [Python中Gradient Boosting Machine(GBM）调参方法详解](https://blog.csdn.net/han_xiaoyang/article/details/52663170)
+* [XGBoost参数调优完全指南（附Python代码）](https://blog.csdn.net/han_xiaoyang/article/details/52665396)
+* [XGBoost数据训练小例子](https://blog.csdn.net/m_buddy/article/details/79341058)
+
+“XGBoost代码实践”参考上述资料。
 
 ===
 
@@ -577,8 +1732,6 @@ GBDT将树f类比于参数，通过f对负梯度进行回归，通过负梯度�
 [XGBoost Documentation](https://xgboost.readthedocs.io/en/latest/)
 
 [左手论文 右手代码 深入理解网红算法XGBoost](https://zhuanlan.zhihu.com/p/91817667)
-
-
 
 [从Boosting到BDT再到GBDT](https://zhuanlan.zhihu.com/p/105990013)
 

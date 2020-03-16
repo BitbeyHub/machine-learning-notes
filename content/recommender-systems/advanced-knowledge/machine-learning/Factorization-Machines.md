@@ -283,9 +283,6 @@ $$
 
 
 
-
-
-
 （2）当为负样本时，损失为
 
 - 标签为[1, 0]
@@ -300,6 +297,7 @@ $$
   $$
   Loss=\text{log}\left(1+\text{exp}(-yf(x))\right)=\text{log}\left(1+\text{exp}(wx)\right)
   $$
+
 
 
 

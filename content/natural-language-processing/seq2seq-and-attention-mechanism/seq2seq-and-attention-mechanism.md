@@ -259,5 +259,7 @@ Seq2Seq 模型分析
 
 [真正的完全图解Seq2Seq Attention模型](https://zhuanlan.zhihu.com/p/40920384)
 
+[从seq2seq到谷歌BERT，浅谈对Attention Mechanism的理解](https://blog.csdn.net/weixin_39671140/article/details/88240612)
+
 
 

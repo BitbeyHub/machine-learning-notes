@@ -36,21 +36,19 @@ c++:
 class Solution {
 public:
     vector<int> printListFromTailToHead(ListNode* head) {
-        stack<int> MyStack;
-        vector<int> ReturnVal;
-        ListNode* p = head;
         
-        while(p!=NULL) {
-            MyStack.push(p->val);
-            p = p->next;
+        stack<int> temp_stack;
+        while(head != nullptr) {
+            temp_stack.push(head->val);
+            head = head->next;
         }
         
-        while(!MyStack.empty()) {
-            ReturnVal.push_back(MyStack.top());
-            MyStack.pop();
+        vector<int> vec;
+        while(!temp_stack.empty()) {
+            vec.push_back(temp_stack.top());
+            temp_stack.pop();
         }
-        
-        return ReturnVal;
+        return vec;
     }
 };
 ```
@@ -121,22 +119,17 @@ c++：
 class Solution {
 public:
     ListNode* ReverseList(ListNode* pHead) {
-        ListNode* pReverseHead = nullptr;
-        ListNode* pNode = pHead;
+        if(pHead == nullptr) return nullptr;
         ListNode* pPrev = nullptr;
-        while(pNode != nullptr) {
-            ListNode* pNext = pNode->next;
-            
-            if(pNext == nullptr) {
-                pReverseHead = pNode; 
-            }
-            
-            pNode->next = pPrev;
-            pPrev = pNode;
-            pNode = pNext;
+        ListNode* pNext = nullptr;
+        while(pHead != nullptr && pHead->next != nullptr) {
+            pNext = pHead->next;
+            pHead->next = pPrev;
+            pPrev = pHead;
+            pHead = pNext;
         }
-        
-        return pReverseHead;
+        pHead->next = pPrev;
+        return pHead;
     }
 };
 ```

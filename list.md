@@ -42,7 +42,11 @@
 
 [BERT4REC：使用Bert进行推荐](https://zhuanlan.zhihu.com/p/97123417)
 
+[AutoInt：基于Multi-Head Self-Attention构造高阶特征](https://zhuanlan.zhihu.com/p/60185134)
 
+[CTR预估模型：DeepFM/Deep&Cross/xDeepFM/AutoInt代码实战与讲解](https://zhuanlan.zhihu.com/p/109933924)
+
+[CTR预估模型有怎样的发展规律？](https://www.zhihu.com/question/363531892/answer/1062392197)重点
 
 # 任务
 

@@ -1,7 +1,7 @@
 # 动态规划
 
 * [返回顶层目录](../../../../SUMMARY.md)
-* [返回上层目录](../jianzhi-offer.md)
+* [返回上层目录](../leetcode.md)
 
 
 
@@ -115,7 +115,6 @@ c++:
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        
         int dp = nums[0];
         int ret_max = dp;
 
@@ -502,11 +501,11 @@ public:
    2     1         2                 3
 ```
 
-假设n个节点存在二叉排序树的个数是G(n)，令f(i)为以i为根的二叉搜索树的个数，则
+假设$$n$$个节点存在二叉排序树的个数是$$G(n)$$，令$$f(i)$$为以$$i$$为根的二叉搜索树的个数，则
 $$
 G(n)=f(1)+f(2)+f(3)+f(4)+...+f(n)
 $$
-当i为根节点时，其左子树节点个数为i-1个，右子树节点为n-i，则
+当$$i$$为根节点时，其左子树节点个数为$$i-1$$个，右子树节点为$$n-i$$，则
 $$
 f(i)=G(i−1)∗G(n−i)
 $$
@@ -534,7 +533,6 @@ public:
         return dp[n];
     }
 };
-
 ```
 
 [leetcode](https://leetcode-cn.com/problems/unique-binary-search-trees/)
@@ -565,7 +563,7 @@ public:
      3     2     1      1   3      2
     /     /       \                 \
    2     1         2                 3
-注意：实际只需要输出每个可能的书的根结点即可。
+注意：实际只需要输出每个可能的树的根结点即可。
 ```
 
 c++:
@@ -809,31 +807,25 @@ c++:
 class Solution {
 public:
     int maxProduct(vector<int>& nums) {
-        int n = nums.size();
-        if(n == 0){
-            return 0;
-        } else if(n == 1) {
-            return nums[0];
+        int size = nums.size();
+        if(size == 0) return 0;
+
+        int dp_max = nums[0];
+        int dp_min = nums[0];
+        int max_val = nums[0];
+        for(int i = 1; i < size; i++) {
+            int temp = dp_max;
+            dp_max = max(max(dp_max * nums[i], nums[i]), dp_min * nums[i]);
+            dp_min = min(min(temp * nums[i], nums[i]), dp_min * nums[i]);
+            max_val = max(max_val, dp_max);
         }
 
-        int p = nums[0];
-        int maxP = nums[0];
-        int minP = nums[0];
-        
-        for(int i = 1; i < n; i++) {
-            int t = maxP;
-            maxP = max(max(maxP * nums[i], nums[i]), minP *nums[i]);
-            minP = min(min(t * nums[i], nums[i]), minP * nums[i]);
-            p = max(maxP, p);
-        }
-        return p;
+        return max_val;
     }
 };
 ```
 
 [leetcode](https://leetcode-cn.com/problems/maximum-product-subarray/)
-
-
 
 
 
