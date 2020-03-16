@@ -409,7 +409,7 @@ $$s_{k1}$$是特征$$k$$的取值中最小的值$$x_{ik}$$，$$s_{kl}$$是特征
 
 **二阶导数h为权重的解释**：
 
-这里每个数据点的权重$$h_i$$，从图上看可能更明显一些。**为什么每个数据点都用二阶代数$$h_i$$作为权重进行加权分位呢？**
+这里每个数据点的权重$$h_i​$$，从图上看可能更明显一些。**为什么每个数据点都用二阶代数$$h_i​$$作为权重进行加权分位呢？**
 
 因为损失函数还可以写成带权重的形式：
 $$
@@ -418,7 +418,7 @@ $$
 &=\sum_{i=1^n}\frac{1}{2}h_i(f_t(x_i)-g_i/h_i)^2+\Omega(f_t)+\text{Constant}
 \end{aligned}
 $$
-上式就是一个加权平方误差，权重为$$h_i​$$，label 为$$-\frac{g_i}{h_i}​$$。可以看出$$h_i​$$有对loss加权的作用，所以可以将特征$$k​$$的取值权重看成对应的$$h_{i}​$$。
+上式就是一个加权平方误差，权重为$$h_i$$，label 为$$-\frac{g_i}{h_i}$$。可以看出$$h_i$$有对loss加权的作用，所以可以将特征$$k$$的取值权重看成对应的$$h_i$$。
 
 如果损失函数是square loss，即$$Loss(y, \hat{y})=(y-\hat{y})^2$$，则$$h=2$$，那么实际上是不带权。 如果损失函数是log loss，则$$h=pred\cdot (1-pred)$$，这是个开口朝下的一元二次函数，所以最大值在0.5。当$$pred$$在0.5附近，这个值是非常不稳定的，很容易误判，$$h$$作为权重则因此变大，那么直方图划分，这部分就会被切分的更细：
 
@@ -463,9 +463,9 @@ XGBoost 的快还体现在良好的系统设计，体现在几个方面：
 
 * 特征预排序，以column block的结构存于内存中
 * 每个特征会存储指向样本梯度统计值的索引，方便计算一阶导和二阶导数值（instance indices）
-* block 的每个块结构中都采用了稀疏矩阵存储格式（Compressed Sparse Columns Format，CSC）进行存储，一个 block 存储一个或多个特征值
+* block 的每个块结构中都采用了稀疏矩阵存储格式（Compressed Sparse Columns Format，CSC）进行存储，一个block存储一个或多个特征值
 * 缺失特征值将不进行排序
-* 对于列的 blocks，并行的 split finding 算法很容实现
+* 对于列的blocks，并行的split finding算法很容实现
 
 这种块结构存储的特征之间相互独立，方便计算机进行并行计算。在对节点进行分裂时需要选择增益最大的特征作为分裂，这时各个特征的增益计算可以同时进行，这也是 XGBoost 能够实现分布式或者多线程计算的原因。
 
@@ -508,7 +508,7 @@ XGBoost 的快还体现在良好的系统设计，体现在几个方面：
 
 - 支持自定义损失函数（需二阶可导）
 
-  ![user-define-loss-function-example](/Users/momo/Desktop/machine-learning-notes/content/machine-learning/ensemble-learning/pic/user-define-loss-function-example.png)
+  ![user-define-loss-function-example](pic/user-define-loss-function-example.png)
 
 #XGBoost总结
 
@@ -530,7 +530,7 @@ XGBoost 的快还体现在良好的系统设计，体现在几个方面：
 ## XGBoost缺点
 
 1. 每次迭代训练时需要读取整个数据集，耗时耗内存；每轮迭代时，都需要遍历整个训练数据多次。如果把整个训练数据装进内存则会限制训练数据的大小；如果不装进内存，反复地读写训练数据又会消耗非常大的时间。
-2. 使用 Basic Exact Greedy Algorithm 计算最佳分裂节点时需要预先将特征的取值进行排序，排序之后为了保存排序的结果，费时又费内存；需要pre-sorted，这个会耗掉很多的内存空间（2 * #data * # features）。
+2. 使用 Basic Exact Greedy Algorithm 计算最佳分裂节点时需要预先将特征的取值进行排序，排序之后为了保存排序的结果，费时又费内存；需要pre-sorted，这个会耗掉很多的内存空间（2 * data * features）。
 3. 计算分裂节点时需要遍历每一个候选节点，然后计算分裂之后的信息增益，费时；数据分割点上，由于 XGBoost 对不同的数据特征使用 pre-sorted 算法而不同特征其排序顺序是不同的，所以分裂时需要对每个特征单独做依次分割，遍历次数为 (#data * #features) 来将数据分裂到左右子节点上。
 4. 由于 pre-sorted 处理数据，在寻找特征分裂点时（level-wise），会产生大量的cache随机访问。生成决策树是 level-wise 级别的，也就是预先设置好树的深度之后，每一颗树都需要生长到设置的那个深度，这样有些树在某一次分裂之后效果甚至没有提升但仍然会继续划分树枝，然后再次划分….之后就是无用功了，耗时。
 5. 尽管使用了局部近似计算，但是处理粒度还是太细了。
