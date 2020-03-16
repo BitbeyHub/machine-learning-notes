@@ -14,7 +14,7 @@ ps：如果打不开GitBook，则可能需要翻墙，或者阅读GitHub（但Gi
 
 想从微信公众号阅读请关注我的公众号：
 
-![weixin_gongzhonghao](1content/perface/machine-learning-perface/pic/weixin_gongzhonghao.jpg)
+![weixin_gongzhonghao](content/perface/machine-learning-perface/pic/weixin_gongzhonghao.jpg)
 
 ---
 

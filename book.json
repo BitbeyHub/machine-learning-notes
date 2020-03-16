@@ -71,7 +71,7 @@
 			"wechatText": "微信打赏"
 		},
 		"lunr": {
-            "maxIndexSize": 1000000000
+            "maxIndexSize": 10000000000
         }
 	}
 }
