@@ -10,7 +10,7 @@
     "plugins": [
 		"-lunr",
 		"-search",
-		"search-pro",
+		"-search-pro",
 		"katex",
 		"splitter",
 		"sharing",
@@ -69,6 +69,9 @@
 			"button": "赏",
 			"alipayText": "支付宝打赏",
 			"wechatText": "微信打赏"
-		}
+		},
+		"lunr": {
+            "maxIndexSize": 10000000000
+        }
 	}
 }
