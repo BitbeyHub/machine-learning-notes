@@ -145,12 +145,11 @@
 * [支持向量机](content/machine-learning/support-vector-machine/support-vector-machine.md)
 * [集成学习](content/machine-learning/ensemble-learning/ensemble-learning.md)
     * Bagging
-        * [随机森林](content/machine-learning/ensemble-learning/random-forest.md)
+        * [随机森林](content/machine-learning/ensemble-learning/random-forest/random-forest.md)
     * Boosting
-        * [AdaBoost](content/machine-learning/ensemble-learning/AdaBoost.md)
-            * [BoostingTree](content/machine-learning/ensemble-learning/BoostingTree.md)
+        * [AdaBoost](content/machine-learning/ensemble-learning/adaboost/AdaBoost.md)
         * GradientBoosting
-            * [GBDT](content/machine-learning/ensemble-learning/GBDT.md)
+            * [GBDT](content/machine-learning/ensemble-learning/gbdt/GBDT.md)
             * [XGBoost](content/machine-learning/ensemble-learning/xgboost/XGBoost.md)
               * [XGBoost理论](content/machine-learning/ensemble-learning/xgboost/XGBoost-theory.md)
               * [XGBoost实践](content/machine-learning/ensemble-learning/xgboost/XGBoost-practice.md)

@@ -1,7 +1,7 @@
 # GBDT
 
-* [返回顶层目录](../../SUMMARY.md)
-* [返回上层目录](ensemble-learning.md)
+* [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../ensemble-learning.md)
 * [GBDT概述](#GBDT概述)
   * [DT：回归树 Regression Decision Tree](#DT：回归树 Regression Decision Tree)
   * [GB：梯度迭代 Gradient Boosting](#GB：梯度迭代 Gradient Boosting)

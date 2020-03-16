@@ -1,7 +1,7 @@
 # AdaBoost
 
-* [返回顶层目录](../../SUMMARY.md)
-* [返回上层目录](ensemble-learning.md)
+* [返回顶层目录](../../../SUMMARY.md)
+* [返回上层目录](../ensemble-learning.md)
 * [AdaBoost概述](#AdaBoost概述)
 * [AdaBoost算法](#AdaBoost算法)
 * [AdaBoost算法的训练误差分析](#AdaBoost算法的训练误差分析)

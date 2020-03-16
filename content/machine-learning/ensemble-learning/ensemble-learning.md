@@ -3,24 +3,14 @@
 * [返回顶层目录](../../SUMMARY.md)
 * [集成学习概述](#集成学习概述)
 * [Bagging](#Bagging)
-  * [随机森林](#随机森林)
+  * [随机森林](random-forest/random-forest.md)
 * [Boosting](#Boosting)
   * [Boosting概述](#Boosting概述)
-  * [AdaBoost](#AdaBoost)
-    * [BoostingTree](#BoostingTree)
+  * [AdaBoost](adaboost/AdaBoost.md)
   * [GradientBoosting](#GradientBoosting)
-    * [GBDT](#GBDT)
-    * [XgBoost](#xgboost/XGBoost.md)
+    * [GBDT](gbdt/GBDT.md)
+    * [XgBoost](xgboost/XGBoost.md)
 * [Stacking](#Stacking)
-
-
-
-
-[集成学习（ensemble learning ）该如何入门？](https://www.zhihu.com/question/29036379)
-
-[《机器学习》笔记-集成学习（8）](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247485821&idx=1&sn=9cb901cb9c5144a1714eed4927c4b609&chksm=f9d157e5cea6def32faea122cf4193a77cfb3397543e95392acd6ec0185a647a42d2eab01ccd&mpshare=1&scene=1&srcid=032606p3UBT1losMDZ9DyjdX#rd)
-
-[如何评价周志华深度森林模型](https://zhuanlan.zhihu.com/p/36621482)
 
 
 
@@ -37,10 +27,6 @@ Bagging就是“Bootstrap aggregating（有放回采样的集成）”的缩写�
 Bagging能防止噪声影响，是因为它的样本是有放回采样，这样子一些特例就很可能不会被采集到，即使采集到，也因为投票而被否决。这样就从样本上防止了过拟合。
 
 Bagging样本的权值是一样的，各分类器的权值也都相等（即一人一票）。
-
-## 随机森林
-
-随机森林的详细描述，点击[随机森林](random-forest.md)跳转至相关章节。
 
 # Boosting
 
@@ -91,28 +77,6 @@ Valiant和 Kearns提出了**弱学习**和**强学习**的概念：一个概念�
 
 AdaBoost的巧妙之处就在于它将这些想法自然且有效地实现在一种算法里。
 
-## AdaBoost
-
-AdaBoost是Boosting算法家族中代表算法。
-
-AdaBoost的详细描述，点击[AdaBoost](AdaBoost.md)跳转至相关章节。
-
-### BoostingTree
-
-AdaBoost与决策树的结合则形成了提升树（boosting tree），AdaBoost使得决策树的准确率大大提高，可与SVM相媲美。
-
-BoostingTree的详细描述，点击[BoostingTree](BoostingTree.md)跳转至相关章节。
-
-## GradientBoosting
-
-### GBDT
-
-GBDT的详细描述，点击[GBDT](GBDT.md)跳转至相关章节。
-
-### XgBoost
-
-XgBoost的详细描述，点击[XgBoost](XgBoost.md)跳转至相关章节。
-
 # Stacking
 
 训练一个模型来组合其他各个模型。首先先训练多个不同的模型，然后再以之前训练的各个模型的输出为输入来训练一个模型，以得到一个最终的输出。使用过stacking之后，发现其实stacking很像神经网络，通过很多模型的输出，构建中间层，最后用逻辑回归讲中间层训练得到最后的结果。
@@ -131,9 +95,13 @@ XgBoost的详细描述，点击[XgBoost](XgBoost.md)跳转至相关章节。
 
 "Stacking"部分参考此博客。
 
-
-
 ===
 
 [带答案面经分享-面试中最常考的树模型！](https://mp.weixin.qq.com/s/1R9IoKnaVVSzHKD2DAjByQ)
+
+[集成学习（ensemble learning ）该如何入门？](https://www.zhihu.com/question/29036379)
+
+[《机器学习》笔记-集成学习（8）](https://mp.weixin.qq.com/s?__biz=MzUyMjE2MTE0Mw==&mid=2247485821&idx=1&sn=9cb901cb9c5144a1714eed4927c4b609&chksm=f9d157e5cea6def32faea122cf4193a77cfb3397543e95392acd6ec0185a647a42d2eab01ccd&mpshare=1&scene=1&srcid=032606p3UBT1losMDZ9DyjdX#rd)
+
+[如何评价周志华深度森林模型](https://zhuanlan.zhihu.com/p/36621482)
 
