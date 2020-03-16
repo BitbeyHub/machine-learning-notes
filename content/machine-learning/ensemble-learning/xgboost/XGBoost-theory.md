@@ -381,3 +381,50 @@ $$
 
 然而，这种划分分位点的方法在实际中可能效果不是很好，所以XGBoost实际采用的是加权分位数的方法做近似划分算法。
 
+### 加权分位点（Weighted Quantile Sketch）
+
+**带权重直方图算法**
+
+由于用暴力枚举来划分分位点的方法在实际中可能效果不是很好，为了优化该问题，XGBoost实际采用的是一种新颖的分布式加权分位点算法，该算法的优点是解决了带权重的直方图算法问题，以及有理论保证。主要用于近似算法中分位点的计算。
+
+实际上，XGBoost不是简单地按照样本个数进行分类，而是以二阶导数值作为权重。
+
+假设分位点为
+$$
+\{s_{k1},s_{k2},...,s_{kl}\}
+$$
+，假设
+$$
+D_k=\{(x_{1k},h_1),(x_{2k},h_2),...,(x_{nk},h_n)\}
+$$
+表示所有样本的第$$k$$个特征值及二阶导数。
+
+![approximate-algorithm-second-order-weights-select-split](pic/approximate-algorithm-second-order-weights-select-split.png)
+
+111
+$$
+|r_k(s_{k,j})-r_k(s_{k,j+1})|<\epsilon,\ s_{k1}=\mathop{\text{min}}_{i}\ x_{ik},\ s_{kl}=\mathop{\text{max}}_{i}\ x_{ik}
+$$
+$$s_{k1}$$是特征$$k$$的取值中最小的值$$x_{ik}$$，$$s_{kl}$$是特征$$k$$的取值中最大的值$$x_{ik}$$，这是分位数缩略图要求**需要保留原序列中的最小值和最大值**。这里$$\epsilon$$是近似因子或者说是扫描步幅，按照步幅$$\epsilon$$挑选出特征$$k$$的取值候选点，组成候选点集。这意味着大概有$$1/\epsilon$$个分位点。
+
+**二阶导数h为权重的解释**：
+
+这里每个数据点的权重$$h_i​$$，从图上看可能更明显一些。**为什么每个数据点都用二阶代数$$h_i​$$作为权重进行加权分位呢？**
+
+因为损失函数还可以写成带权重的形式：
+$$
+\begin{aligned}
+\tilde{L}^{(t)}&=\sum_{i=1}^n\left[ g_if_t(x_i)+\frac{1}{2}h_if^2_t(x_i) \right]+\Omega(f_t)\\
+&=\sum_{i=1^n}\frac{1}{2}h_i(f_t(x_i)-g_i/h_i)^2+\Omega(f_t)+\text{Constant}
+\end{aligned}
+$$
+上式就是一个加权平方误差，权重为$$h_i$$，label 为$$-\frac{g_i}{h_i}$$。可以看出$$h_i$$有对loss加权的作用，所以可以将特征$$k$$的取值权重看成对应的$$h_i$$。
+
+如果损失函数是square loss，即$$Loss(y, \hat{y})=(y-\hat{y})^2$$，则$$h=2$$，那么实际上是不带权。 如果损失函数是log loss，则$$h=pred\cdot (1-pred)$$，这是个开口朝下的一元二次函数，所以最大值在0.5。当$$pred$$在0.5附近，这个值是非常不稳定的，很容易误判，$$h$$作为权重则因此变大，那么直方图划分，这部分就会被切分的更细：
+
+![approximate-algorithm-second-order-weights-select-split-2](pic/approximate-algorithm-second-order-weights-select-split-2.png)
+
+当数据量非常大时，也需要使用quantile summary的方式来近似计算分位点。
+
+在xgboost中，需要根据特征值以及样本的权重分布，近似计算特征值的分位点，实现近似分割算法。近似计算特征值分位点的算法称为：weighted quantile sketch，该算法满足quantile summary通常的两个操作：merge和prune。
+
