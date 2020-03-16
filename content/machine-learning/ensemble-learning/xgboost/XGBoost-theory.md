@@ -401,14 +401,7 @@ $$
 
 ![approximate-algorithm-second-order-weights-select-split](pic/approximate-algorithm-second-order-weights-select-split.png)
 
-则可以定义一个排序函数如下，该Rank函数的输入为某个特征值$$z​$$，计算的是该特征所有可取值中小于$$z​$$的特征值的总权重占总的所有可取值的总权重和的比例，输出为一个比例值，类似于概率密度函数$$f(x)​$$的积分$$F(x)​$$，变化范围由0到1。
-$$
-\begin{aligned}
-&r_k:\mathbb{R}\rightarrow [0,+\infty)\ \text{as}\\
-&r_k(z)=\frac{1}{\sum_{(x,h)\in D_k}h}\sum_{(x,h)\in D_k,x<z}h
-\end{aligned}
-$$
-该函数表示特征值$$k$$小于$$z$$的实例比例。目标就是寻找候选分裂点集$$\{s_{k1}, s_{k2}, ..., s_{kl}\}$$。希望得到的分位点满足如下条件：
+111
 $$
 |r_k(s_{k,j})-r_k(s_{k,j+1})|<\epsilon,\ s_{k1}=\mathop{\text{min}}_{i}\ x_{ik},\ s_{kl}=\mathop{\text{max}}_{i}\ x_{ik}
 $$
