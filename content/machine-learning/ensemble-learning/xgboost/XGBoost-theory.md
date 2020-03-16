@@ -420,7 +420,7 @@ $$
 $$
 上式就是一个加权平方误差，权重为$$h_i$$，label 为$$-\frac{g_i}{h_i}$$。可以看出$$h_i$$有对loss加权的作用，所以可以将特征$$k$$的取值权重看成对应的$$h_{i}$$。
 
-如果损失函数是square loss，即$$Loss(y,\hat{y})=(y−\hat{y})^2$$，则$$h=2$$，那么实际上是不带权。 如果损失函数是log loss，则$$h=pred\cdot (1−pred)$$，这是个开口朝下的一元二次函数，所以最大值在0.5。当$$pred$$在0.5附近，这个值是非常不稳定的，很容易误判，$$h$$作为权重则因此变大，那么直方图划分，这部分就会被切分的更细：
+如果损失函数是square loss，即$$Loss(y,\hat{y})=(y-\hat{y})^2​$$，则$$h=2​$$，那么实际上是不带权。 如果损失函数是log loss，则$$h=pred\cdot (1-pred)​$$，这是个开口朝下的一元二次函数，所以最大值在0.5。当$$pred​$$在0.5附近，这个值是非常不稳定的，很容易误判，$$h​$$作为权重则因此变大，那么直方图划分，这部分就会被切分的更细：
 
 ![approximate-algorithm-second-order-weights-select-split-2](pic/approximate-algorithm-second-order-weights-select-split-2.png)
 
