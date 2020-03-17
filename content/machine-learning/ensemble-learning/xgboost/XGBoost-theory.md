@@ -41,7 +41,7 @@ XGBoost是从决策树一步步发展而来的：
 * 随机森林 ⟶ 对随机森林中的树进行加权平均，而非简单平均⟶ Boosing (Adaboost, GradientBoost)
 * boosting ⟶ 对boosting中的树进行正则化 ⟶ XGBoosting
 
-从这条线一路发展，就能看出为什么XGBoost的优势了。
+从这条线一路发展，就能看出XGBoost的优势了。
 
 
 
@@ -175,7 +175,7 @@ $$
 $$
 把$$f_t, \Omega(f_t)$$写成**树结构的形式**，即把下式带入损失函数中
 $$
-f(x)=w_{q(x)},\quad \Omega(f)=\gamma T+\frac{1}{2}||w||^2
+f(x)=w_{q(x)},\quad \Omega(f)=\gamma T+\frac{1}{2}\lambda||w||^2
 $$
 **注意：**这里出现了$$\gamma$$和$$\lambda$$，这是XGBoost自己定义的，在使用XGBoost时，你可以设定它们的值，显然，$$\gamma$$越大，表示越希望获得结构简单的树，因为此时对较多叶子节点的树的惩罚越大。$$\lambda$$越大也是越希望获得结构简单的树。为什么XGBoost要选择这样的正则化项？很简单，好使！效果好才是真的好。
 
@@ -197,7 +197,7 @@ $$
 则损失函数可以写成按**叶节点**累加的形式：
 $$
 \begin{aligned}
-\tilde{L}^{(t)}&=\sum_{i=1}^n\left[ g_iw_{q(x_i)}+\frac{1}{2}h_iw_{q(x_i)}^2 \right]+\gamma T +\lambda\frac{1}{2}\sum_{j=1}^Tw_j^2\\
+\tilde{L}^{(t)}&=\sum_{i=1}^n\left[ g_iw_{q(x_i)}+\frac{1}{2}h_iw_{q(x_i)}^2 \right]+\gamma T +\frac{1}{2}\lambda\sum_{j=1}^Tw_j^2\\
 &=\sum_{j=1}^T\left[ \left(\sum_{i\in I_j}g_i\right)w_j+\frac{1}{2}\left(\sum_{i\in I_j}h_i+\lambda\right)w^2_j \right]+\gamma T\\
 &=\sum_{j=1}^T\left[ G_jw_j+\frac{1}{2}\left(H_j+\lambda\right)w^2_j \right]+\gamma T\\
 \end{aligned}
@@ -308,7 +308,7 @@ $$
 
 一棵树在该衡量指标下分值越低，说明这个树的结构越好（表示的是损失）。训练数据可能有很多特征，构建一棵树可能有许多种不同的构建形式，我们不可能枚举所有可能的树结构$$q$$来一一计算它的分值。所以主要采用贪心算法来解决这个问题，贪心算法从一个单独树叶开始，迭代地增加分支，直到最后停止。（如何更快地生成树是关键）
 
-因此，对一个叶子结点进行分裂，分裂前后的增益定义为：
+因此，对一个叶子结点进行分裂，分裂前后的增益定义为（**树间和树内的loss是统一的**）：
 $$
 \begin{aligned}
 &\text{Gain}_{\text{split}}\\
@@ -422,7 +422,7 @@ $$s_{k1}$$是特征k的取值中最小的值$$x_{ik}$$，$$s_{kl}$$是特征k的
 $$
 \begin{aligned}
 \tilde{L}^{(t)}&=\sum_{i=1}^n\left[ g_if_t(x_i)+\frac{1}{2}h_if^2_t(x_i) \right]+\Omega(f_t)\\
-&=\sum_{i=1^n}\frac{1}{2}h_i(f_t(x_i)-g_i/h_i)^2+\Omega(f_t)+\text{Constant}
+&=\sum_{i=1}^n\frac{1}{2}h_i(f_t(x_i)-g_i/h_i)^2+\Omega(f_t)+\text{Constant}
 \end{aligned}
 $$
 上式就是一个加权平方误差，权重为hi，label 为-gi/hi。可以看出hi有对loss加权的作用，所以可以将特征k的取值权重看成对应的hi。

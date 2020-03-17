@@ -1043,39 +1043,6 @@ if __name__ == '__main__':
 
 # 参考资料
 
-* [GBDT算法原理与系统设计简介](http://wepon.me/files/gbdt.pdf)
-
-本文主要参考这篇文档。
-
-* [xgboost的原理没你想像的那么难](https://www.jianshu.com/p/7467e616f227)
-* [gitlinux上的博客：XGBoost](http://gitlinux.net/2018-10-29-xgboost/)
-
-本文参考了这篇文档。
-
-* [xgboost导读和实战](https://wenku.baidu.com/view/44778c9c312b3169a551a460.html)
-
-“损失函数求导得最优值”参考了这篇文档。
-
-* [通俗、有逻辑的写一篇说下Xgboost的原理](https://blog.csdn.net/github_38414650/article/details/76061893)
-
-"优化算法"参考了这篇文档。
-
-* [为啥Xgboost比GradientBoost好那么多？](http://sofasofa.io/forum_main_post.php?postid=1000331)
-
-"XGBoost和GradientBoost的比较"参考这篇文档。
-
-* [XGBoost浅入浅出](http://wepon.me/2016/05/07/XGBoost%E6%B5%85%E5%85%A5%E6%B5%85%E5%87%BA/)
-
-“Xgboost使用经验总结”参考此博客。
-
-* [XGboost: A Scalable Tree Boosting System论文及源码导读](http://mlnote.com/2016/10/05/a-guide-to-xgboost-A-Scalable-Tree-Boosting-System/)
-
-这篇论文适合看懂原理后直接照着这个文章推公式。
-
-* [XGBoost解读(2)--近似分割算法](https://yxzf.github.io/2017/04/xgboost-v2/)
-
-“加权分位点（Weighted Quantile Sketch）”参考了此博客。
-
 * [数据竞赛利器XGBoost常见面试题集锦](https://mp.weixin.qq.com/s/_NCKAon-megJbxzV6w3aYg)
 * [珍藏版 | 20道XGBoost面试题](https://mp.weixin.qq.com/s?__biz=MzI1MzY0MzE4Mg==&mid=2247485159&idx=1&sn=d429aac8370ca5127e1e786995d4e8ec&chksm=e9d01626dea79f30043ab80652c4a859760c1ebc0d602e58e13490bf525ad7608a9610495b3d&scene=21#wechat_redirect)
 
@@ -1105,32 +1072,4 @@ if __name__ == '__main__':
 * [XGBoost数据训练小例子](https://blog.csdn.net/m_buddy/article/details/79341058)
 
 “XGBoost代码实践”参考上述资料。
-
-===
-
-[30分钟看懂xgboost的基本原理](https://mp.weixin.qq.com/s/PSs0tdwWCm_6ajD9kQOHMw)
-
-[xgboost 实战以及源代码分析](https://blog.csdn.net/u010159842/article/details/77503930?from=singlemessage)
-
-[XGBoost缺失值引发的问题及其深度分析](https://mp.weixin.qq.com/s/hYuBHHfAGLO3Y0l5t6y94Q)
-
-[灵魂拷问，你看过Xgboost原文吗？](https://zhuanlan.zhihu.com/p/86816771)
-
-[GBDT、XGBoost、LightGBM 的使用及参数调优](https://zhuanlan.zhihu.com/p/33700459)
-
-[详解《XGBoost: A Scalable Tree Boosting System》](https://zhuanlan.zhihu.com/p/89546007)
-
-[XGBoost超详细推导](https://zhuanlan.zhihu.com/p/92837676)
-
-[史上最详细的XGBoost实战](https://zhuanlan.zhihu.com/p/31182879)
-
-[XGBoost Documentation](https://xgboost.readthedocs.io/en/latest/)
-
-[左手论文 右手代码 深入理解网红算法XGBoost](https://zhuanlan.zhihu.com/p/91817667)
-
-[从Boosting到BDT再到GBDT](https://zhuanlan.zhihu.com/p/105990013)
-
-[再从GBDT到XGBoost!](https://zhuanlan.zhihu.com/p/106129630)
-
-[XGBoost从原理到调参](https://zhuanlan.zhihu.com/p/106432182)
 
