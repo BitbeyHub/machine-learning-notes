@@ -255,5 +255,7 @@ top 100 liked questions或者top interview questions
 * [leetcode Top 100 Liked Questions](https://leetcode.com/problemset/top-100-liked-questions/)
 * [leetcode动态规划](https://leetcode.com/tag/dynamic-programming/)
 
+===
 
+[大家都是如何刷 LeetCode 的？](https://www.zhihu.com/question/280279208/answer/685132550)
 

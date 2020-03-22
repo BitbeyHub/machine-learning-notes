@@ -20,3 +20,6 @@
 
 [怎样理解和区分中心极限定理与大数定律？ - 知乎](https://www.zhihu.com/question/22913867/answer/274009483)
 
+
+
+[F分布、t分布、正太分布与卡方分布的联系与区别](https://zhuanlan.zhihu.com/p/42136925)

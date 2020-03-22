@@ -81,15 +81,40 @@ fm.vec_dim
 * 用conda打包，这样可以保证把依赖的库都打包好，不会有环境不一致的问题
 * cython文件是在桌面上的一个文件夹内，cd到该目录下，然后pip安装（pip可以安装本地的包```pip install .```），就会自动把这个文件添加到python环境里
 
-
+**安装方法：**
 
 通过`conda env list`查看环境列表，激活你想安装的conda环境`source activate xxx`。
 
 然后cd到cyhon文件的目录下，进行安装`pip install .`。
 
-通过`conda install -c conda-forge conda-pack`安装打包程序。
+```shell
+Looking in indexes: http://mirrors.momo.com/pypi/simple/
+Processing /data4/recommend_nearby/lu.wei/fm/cython
+Building wheels for collected packages: PySparkFM
+  Building wheel for PySparkFM (setup.py) ... done
+  Stored in directory: /tmp/pip-ephem-wheel-cache-4hx2m394/wheels/d8/6c/d4/645ca5adc6e249f6dc4e303a044be9c8d2aedb804bb0940b4c
+Successfully built PySparkFM
+Installing collected packages: PySparkFM
+Successfully installed PySparkFM-0.0.1
+```
 
-通过`conda pack -n xxx -o xxx.tar.gz`将需要的环境打包，并拷贝到目标机器；
+通过`pip install conda-pack`安装打包程序。
+
+通过`conda pack -o ./luwei_environment.tar.gz`将需要的环境打包。
+
+```shell
+Collecting packages...
+Packing environment at '/home/recommend_nearby/work_space/anaconda3' to './luwei_environment.tar.gz'
+[####                                    ] | 12% Completed | 43.2s
+```
+
+并拷贝到目标机器或者上传到hdfs上
+
+```
+hadoop fs -put ./luwei_environment.tar.gz hdfs://nameservice3/user/recommend_nearby/lu.wei/python3/
+```
+
+
 
 在目标机器上新建目录`mkdir -p $Anaconda/envs/xxx`。
 
